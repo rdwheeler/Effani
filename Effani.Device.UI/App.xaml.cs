@@ -16,7 +16,10 @@ namespace Effani.Device.UI
 		static App()
 		{
 			CompatibilitySettings.UseLightweightThemes = true;
-
+		}
+		private void OnAppStartup_UpdateThemeName(object sender, StartupEventArgs e)
+		{
+			DevExpress.Xpf.Core.ApplicationThemeHelper.UpdateApplicationThemeName();
 		}
 	}
 }

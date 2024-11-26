@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Images" Version="24.1.7" />
+    <PackageReference Include="DevExpress.Wpf.Core" Version="24.1.7" />
+    <PackageReference Include="DevExpress.Wpf.ThemesLW" Version="24.1.7" />
+    
+  </ItemGroup>
+
+</Project>

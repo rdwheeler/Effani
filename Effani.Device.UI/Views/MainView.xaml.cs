@@ -12,10 +12,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Effani.Device.UI.Views
+namespace Effani.Device.UI
 {
 	/// <summary>
-	/// Interaction logic for View1.xaml
+	/// Interaction logic for MainView.xaml
 	/// </summary>
 	public partial class MainView : UserControl
 	{
