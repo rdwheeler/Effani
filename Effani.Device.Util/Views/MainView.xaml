@@ -5,11 +5,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:ViewModels="clr-namespace:Effani.Device.Util.ViewModels"
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.DataContext>
         <ViewModels:MainViewModel/>
     </UserControl.DataContext>
-    <Grid>
-    </Grid>
+	<Grid>
+		<dx:SimpleButton x:Name="generateConfigFiles" Command="{Binding GenerateConfigFilesCommand}" Height="100" Width="226">
+			<dx:SimpleButton.Content>
+				<Grid>
+					<Ellipse Height="80" Width="150" Fill="#FFAFAFF3"/>
+					<TextBlock TextAlignment="Center" VerticalAlignment="Center" FontSize="30">Button</TextBlock>
+				</Grid>
+			</dx:SimpleButton.Content>
+		</dx:SimpleButton>
+	</Grid>
 </UserControl>

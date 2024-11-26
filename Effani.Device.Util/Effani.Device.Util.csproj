@@ -17,4 +17,8 @@
     
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Effani.Device.Control\Effani.Device.Control.csproj" />
+  </ItemGroup>
+
 </Project>
