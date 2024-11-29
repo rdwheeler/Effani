@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
     xmlns:dxco="http://schemas.devexpress.com/winfx/2008/xaml/controls"
     xmlns:local="clr-namespace:Effani.Device.UI"
@@ -11,49 +12,14 @@
     <UserControl.DataContext>
         <local:MainViewModel/>
 	</UserControl.DataContext>
-	<UserControl.Resources>
-		<DataTemplate x:Key="pageContentTemplate">
-			<TextBlock Text="{Binding Text}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-		</DataTemplate>
-		<local:PageStyleSelector x:Key="pageStyleSelector">
-			<local:PageStyleSelector.WelcomePageStyle>
-				<Style TargetType="dxco:WizardPage">
-					<Setter Property="ShowBack" Value="False"/>
-					<Setter Property="Header" Value="Header"/>
-					<Setter Property="HeaderBackground" Value="AliceBlue"/>
-					<Setter Property="ShowSideContent" Value="True"/>
-					<Setter Property="SideContent" Value="Side content"/>
-					<Setter Property="SideContentTemplate">
-						<Setter.Value>
-							<DataTemplate>
-								<Border Background="Cornsilk">
-									<TextBlock Text="{Binding}" VerticalAlignment="Center"/>
-								</Border>
-							</DataTemplate>
-						</Setter.Value>
-					</Setter>
-				</Style>
-			</local:PageStyleSelector.WelcomePageStyle>
-			<local:PageStyleSelector.CommonPageStyle>
-				<Style TargetType="dxco:WizardPage">
-					<Setter Property="Header" Value="{x:Null}"/>
-					<Setter Property="ShowFinish" Value="False"/>
-				</Style>
-			</local:PageStyleSelector.CommonPageStyle>
-			<local:PageStyleSelector.CompletionPageStyle>
-				<Style TargetType="dxco:WizardPage">
-					<Setter Property="Header" Value="{x:Null}"/>
-					<Setter Property="ShowBack" Value="False"/>
-					<Setter Property="ShowNext" Value="False"/>
-					<Setter Property="ShowFinish" Value="True"/>
-					<Setter Property="AllowFinish" Value="True"/>
-				</Style>
-			</local:PageStyleSelector.CompletionPageStyle>
-		</local:PageStyleSelector>
-	</UserControl.Resources>
 	<Grid>
-		<dxco:Wizard ItemsSource="{Binding Pages}"
-                     ItemTemplate="{StaticResource pageContentTemplate}"
-                     ItemContainerStyleSelector="{StaticResource pageStyleSelector}"/>
+		<dx:DXTabControl>
+			<dx:DXTabItem Header="Analyse">
+				<local:Wizard></local:Wizard>
+			</dx:DXTabItem>
+			<dx:DXTabItem Header="Utilities">
+				<local:Utilities></local:Utilities>
+			</dx:DXTabItem>
+		</dx:DXTabControl>
 	</Grid>
 </UserControl>

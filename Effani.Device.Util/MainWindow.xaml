@@ -6,6 +6,6 @@
     xmlns:Views="clr-namespace:Effani.Device.Util.Views"
     Title="MainWindow" Height="800" Width="1000">
     <Grid>
-        <Views:MainView/>
+        <Views:Utilities />
     </Grid>
 </dx:ThemedWindow>

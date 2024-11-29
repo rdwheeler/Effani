@@ -16,7 +16,7 @@ namespace Effani.Device.Util
 		static App()
 		{
 			CompatibilitySettings.UseLightweightThemes = true;
-
+			ApplicationThemeHelper.ApplicationThemeName = LightweightTheme.Office2019Black.Name;
 		}
 	}
 }

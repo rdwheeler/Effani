@@ -1,11 +1,17 @@
-﻿using DevExpress.Mvvm;
+﻿using DevExpress.CodeParser;
+using DevExpress.Mvvm;
+using DevExpress.Mvvm.DataAnnotations;
+using DevExpress.Xpf.Docking;
 using Effani.Device.Control;
 using System;
-using System.ComponentModel;
-using System.IO;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
 
 namespace Effani.Device.Util.ViewModels
 {
@@ -13,144 +19,124 @@ namespace Effani.Device.Util.ViewModels
 	{
 		public MainViewModel()
 		{
-			GenerateConfigFilesCommand = new AsyncCommand(GenerateConfigFiles);
+			_spec = new DeviceConfiguration().GetDeviceSpecification();
+			Axes = new ObservableCollection<AxisSpec>(_spec.Axes);
+			_device = new Effani.Device.Control.Device("COM5");
+			_device.DataReceived += _device_DataRecieved;
 		}
-		async Task GenerateConfigFiles()
+		private void _device_DataRecieved(object sender, Control.Device.DataArgs<string> e)
 		{
-			while (!GenerateConfigFilesCommand.IsCancellationRequested)
-			{
-				var folder = Path.Combine("I:\DriveTrain\Effani\Effani.Device.Util", "Board Configurations/Main Board/sys");
-				WriteConfig(folder);
-				WriteHome(folder);
-			}
+			AddConsoleMessage($"{e.Data}");
 		}
 
-		private void WriteConfig(string folder)
+		[Command]
+		public async Task GenerateConfigFiles()
 		{
-			var configTextBuilder = new StringBuilder();
-			configTextBuilder.Append(@"
-; General
-G90 ; absolute coordinates
-M83 ; relative extruder moves
-M550 P""Effani"" ; set hostname
+			try
+			{
+				var config = new DeviceConfiguration();
+				var fileLocation = config.GenerateConfigFiles(@"I:\DriveTrain\Effani\Effani.Device.Control"); 
+				string messageBoxText = $"Config generated at {fileLocation}";
+				string caption = "Generate Config";
 
-; Network
-M552 S1 ; configure WiFi adapter
-M586 P0 S1 ; configure HTTP
-M586 P1 S1 ; configure FTP
-M586 P2 S1 ; configure Telnet
-
-; Wait a moment for the CAN expansion boards to become available
-G4 S2
-
-; Smart Drivers
-"
-				);
-			var spec = new Specification();
-			var deviceSpec = spec.GetDeviceSpecification("Effani Device");
-			foreach (var x in deviceSpec.Axes)
-			{
-				configTextBuilder.AppendLine($"M569 P{x.DriverPort} S{(x.Driver.Direction == Direction.Forwards ? 1 : 0)} D2 ; {x.Label}");
+				MessageBox.Show(messageBoxText, caption);
 			}
-			configTextBuilder.Append(@"
-
-; Motor Idle Current Reduction
-M906 I30 ; set motor current idle factor
-M84 S30 ; set motor current idle timeout
-
-; Axes
-"
-				);
-			configTextBuilder.Append($"M584");
-			foreach (var x in deviceSpec.Axes)
+			catch (Exception ex)
 			{
-				configTextBuilder.Append($" {x.Designation}{x.DriverPort}");
+				var a = ex;
 			}
-			configTextBuilder.Append($" ; set axis mapping");
-			configTextBuilder.Append($"M350");
-			foreach (var x in deviceSpec.Axes)
-			{
-				configTextBuilder.Append($" {x.Designation}16");
-			}
-			configTextBuilder.Append($" I1 ; configure microstepping with interpolation");
-			configTextBuilder.Append($"M906");
-			foreach (var x in deviceSpec.Axes)
-			{
-				configTextBuilder.Append($" {x.Designation}800");
-			}
-			configTextBuilder.Append($" ; set axis driver currents");
-			configTextBuilder.Append($"M92");
-			foreach (var x in deviceSpec.Axes)
-			{
-				configTextBuilder.Append($" {x.Designation}{x.StepsPerMillimeter}");
-			}
-			configTextBuilder.Append($" ; configure steps per mm");
-			configTextBuilder.Append($"M208");
-			foreach (var x in deviceSpec.Axes)
-			{
-				configTextBuilder.Append($" {x.Designation}{x.Minimum}{x.Maximum}");
-			}
-			configTextBuilder.Append($" ; set minimum and maximum axis limits");
-			configTextBuilder.Append($"M566");
-			foreach (var x in deviceSpec.Axes)
-			{
-				configTextBuilder.Append($" {x.Designation}900");
-			}
-			configTextBuilder.Append($" ; set maximum instantaneous speed changes (mm/min)");
-			configTextBuilder.Append($"M203");
-			foreach (var x in deviceSpec.Axes)
-			{
-				configTextBuilder.Append($" {x.Designation}{x.MaxSpeed}");
-			}
-			configTextBuilder.Append($" ; set maximum speeds (mm/min)");
-			configTextBuilder.Append($"M203");
-			foreach (var x in deviceSpec.Axes)
-			{
-				configTextBuilder.Append($" {x.Designation}500");
-			}
-			configTextBuilder.Append($" ; set accelerations (mm/s^2)");
-			configTextBuilder.Append(@"
-
-; Kinematics
-M669 K0 ; configure Cartesian kinematics
-
-; Endstops
-"
-				);
-			configTextBuilder.Append($"M203");
-			foreach (var x in deviceSpec.Axes)
-			{
-				configTextBuilder.AppendLine($"M574 {x.Designation}{(x.Driver.Endstop.Location == EndstopLocation.LowEnd ? "1" : "2")} P{(x.Driver.Endstop.Signal == PinSignal.High ? null : "!")}{(x.DriverPort.StartsWith("0") ? null : x.DriverPort.First())}io{x.DriverPort.Last()}.in S1");
-			}
-			File.WriteAllBytes(Path.Combine(folder, "config.g"), Encoding.ASCII.GetBytes(configTextBuilder.ToString()));
 		}
-		private void WriteHome(string folder)
+		[Command]
+		public async Task Home(AxisSpec axis)
 		{
-			var spec = new Specification();
-			var deviceSpec = spec.GetDeviceSpecification("Effani Device");
-			for (int i = 0; i < deviceSpec.Axes.Count; i++)
+			var response = _device.Home(axis);
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task PlateUvOn()
+		{
+			var response = _device.PlateUvOn();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task PlateUvOff()
+		{
+			var response = _device.PlateUvOff();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task BiopsyUvOn()
+		{
+			var response = _device.BiopsyUvOn();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task BiopsyUvOff()
+		{
+			var response = _device.BiopsyUvOff();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task ReadDna()
+		{
+			var response = _device.ReadDna();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task ReadNadh()
+		{
+			var response = _device.ReadNadh();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task SetWifi()
+		{
+			try
 			{
-				var homeTextBuilder = new StringBuilder();
-				homeTextBuilder.Append(@"
-; Home
-G28 ; home all axes
-"
-				);
-				var x = deviceSpec.Axes[i];
-				homeTextBuilder.Append(@$"
-G91 ; relative positioning
-var maxTravel = move.axes[{i}].max - move.axes[{i}].min + 5 ; calculate how far {x.Designation} can travel plus 5mm
-G1 H1 {x.Designation}-{(x.Maximum - x.Minimum + 5)} F{x.Driver.Endstop.FirstHomingSpeed} ; coarse home
-G1 {x.Designation}5 F6000 ; move back 5mm
-G1 H1 X-{(x.Maximum - x.Minimum + 5)} F{x.Driver.Endstop.SecondHomingSpeed} ; fine home
-G90 ; absolute positioning
-				");
-				File.WriteAllBytes(Path.Combine(folder, $"home{deviceSpec.Axes[i].Designation}.g"), Encoding.ASCII.GetBytes(homeTextBuilder.ToString()));
+				var ssid = "blah - 2.4Ghz";// ConfigurationManager.AppSettings["wifi-ssid"];
+				var pass = "B4forever!";//ConfigurationManager.AppSettings["wifi-password"];
+				var response = _device.SetWifi(ssid, pass);
+				response.ForEach(m => AddConsoleMessage(m));
+			}
+			catch (Exception ex)
+			{
+				var a = ex;
 			}
 		}
+		[Command]
+		public async Task GetBoardDiagnostics()
+		{
+			try
+			{
+				var response = _device.GetBoardDiagnostics(2);
+				response.ForEach(m => AddConsoleMessage(m));
+			}
+			catch (Exception ex)
+			{
+				var a = ex;
+			}
+		}
+		[Command]
+		public async Task MoveRapid(List<object> parameters)
+		{
+			var axis = (AxisSpec)parameters[0];
+			var distance = (float)parameters[1];
+			var response = _device.Move(axis, distance);
+			AddConsoleMessage(response);
+		}
 
-		public IAsyncCommand GenerateConfigFilesCommand { get; }
+		private void AddConsoleMessage(string message)
+		{
+			while(ConsoleMessages.Count >= 10)
+				ConsoleMessages.RemoveAt(9);
+			ConsoleMessages.Add(message);
+		}
 
-		private const string xDriveAxis = "X";
+		public ObservableCollection<AxisSpec> Axes { get; set; }
+
+		public ObservableCollection<string> ConsoleMessages { get; set; } = new();
+
+		DeviceSpecification _spec;
+		Effani.Device.Control.Device _device;
 	}
 }
