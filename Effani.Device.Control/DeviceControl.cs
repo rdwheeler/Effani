@@ -45,6 +45,29 @@ namespace Effani.Device.Control
 			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
 			return $"Move {axisSpec.Designation} {distance} at {speed}";
 		}
+		public string Move(List<MoveSpec> moveSpecs, float speed)
+		{
+			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
+			Write("G91");
+			Write($"G0 {moveCode} F{speed}");
+			return $"Move {moveCode} at {speed}";
+		}
+		public string MoveClockwiseArc(List<MoveSpec> moveSpecs, float speed)
+		{
+			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
+			Write("G91");
+			Write($"G2 {moveCode} F{speed}");
+			return $"Move {moveCode} at {speed}";
+		}
+		public class MoveSpec
+		{
+			public AxisSpec Axis { get; set; }
+			public float location{ get; set; }
+			public string ToGode()
+			{
+				return $"{Axis.Designation}{location}";
+			}
+		}
 		public string GoPercent(Axis axis, float percent, float? speed = null)
 		{
 			var axisSpec = Axes[axis];
@@ -226,15 +249,25 @@ namespace Effani.Device.Control
 			Write($"M140 S{temperature}");
 			return $"Tray heat set to {temperature}C";
 		}
-		public string RemoveFluid(Axis axis, int microLiters)
+		public string RemoveFluid(int microLiters)
 		{
-			var axisSpec = Axes[axis];
-			if (!(axisSpec is AspirateAxis))
-				return $"{axis} is not an aspirate axis";
+			var axisSpec = Axes[Axis.Aspirate1];
+			var axisSpecZ = Axes[Axis.Aspirate1Z];
 			var distance = CalcAspirateTravelMmForMl(microLiters);
 			var result = Move(axisSpec.Axis, distance, Configuration.AspirateSyringeSpeed);
 			if (!result.Equals(OK))
 				return result;
+			return $"{axis} {microLiters} removed";
+		}
+		public string RemoveKoh(int microLiters)
+		{
+			var axisSpec = Axes[Axis.Aspirate2];
+			var axisSpecZ = Axes[Axis.Aspirate2Z];
+			var distance = CalcKohAspirateTravelMmForMl(microLiters);
+			var result1 = Move(axisSpecZ.Axis, Configuration.AspirateTopZTravel, Configuration.AspirateSyringeSpeed);
+			var result2 = Move(axisSpec.Axis, distance, Configuration.AspirateSyringeSpeed);
+			if (!result2.Equals(OK))
+				return result2;
 			return $"{axis} {microLiters} removed";
 		}
 		public void Dispose()
@@ -256,6 +289,12 @@ namespace Effani.Device.Control
 		private float CalcAspirateTravelMmForMl(int microLiters)
 		{
 			var microLitersPerMm = Configuration.AspirateSyringeVolumeMl / Configuration.AspirateSyringeTravelMm / 1000;
+			var ret = (microLitersPerMm * microLiters) * -1;
+			return microLitersPerMm;
+		}
+		private float CalcKohAspirateTravelMmForMl(int microLiters)
+		{
+			var microLitersPerMm = Configuration.AspirateKohSyringeVolumeMl / Configuration.AspirateKohSyringeTravelMm / 1000;
 			var ret = (microLitersPerMm * microLiters) * -1;
 			return microLitersPerMm;
 		}

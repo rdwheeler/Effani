@@ -16,7 +16,7 @@ namespace Effani.Device.UI
 		static App()
 		{
 			//CompatibilitySettings.UseLightweightThemes = true;
-			ApplicationThemeHelper.ApplicationThemeName = Theme.Office2019DarkGray.Name;
+			ApplicationThemeHelper.ApplicationThemeName = Theme.MetropolisDark.Name;
 		}
 		private void OnAppStartup_UpdateThemeName(object sender, StartupEventArgs e)
 		{

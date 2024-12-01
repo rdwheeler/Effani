@@ -7,7 +7,7 @@ namespace Effani.Device.Process
 	public class AlignWellToAxis(Axis axis, Well well, DeviceControl device) : Command(device)
 	{
 
-		public override void Execute()
+		public override void Run()
 		{
 			var axisSpec = Device.Axes[_axis] as LocatedAxis;
 			if (axisSpec is null)

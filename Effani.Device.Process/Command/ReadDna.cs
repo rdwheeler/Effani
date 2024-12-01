@@ -6,7 +6,7 @@ namespace Effani.Device.Process
 {
 	public class ReadDna(DeviceControl device) : Command(device)
 	{
-		public override void Execute()
+		public override void Run()
 		{
 			Device.LaserDnaOn();
 			Task.Delay(Device.Configuration.OpticalSensorDwell);

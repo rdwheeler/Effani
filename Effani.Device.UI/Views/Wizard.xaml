@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:dxco="http://schemas.devexpress.com/winfx/2008/xaml/controls"
 			 xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+			 xmlns:lc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+			xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:Effani.Device.UI" 
 			 xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
 			 mc:Ignorable="d" 
@@ -17,71 +19,98 @@
 			<Setter Property="Margin" Value="0,10,0,0" />
 		</Style>
 	</UserControl.Resources>
-	<StackPanel Orientation="Horizontal">
-		<dx:BackgroundPanel BorderThickness="1" Width="400">
-			<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-				<ListBox ItemsSource="{Binding ConsoleMessages}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<TextBlock Text="{Binding}" TextWrapping="WrapWithOverflow"></TextBlock>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
-			</ScrollViewer>
-		</dx:BackgroundPanel>
-		<dxco:Wizard Cancel="Wizard_Cancel" AnimationType="Fade" FontSize="20">
-			<dxco:WelcomeWizardPage AllowNext="{Binding AccountAndNumberOfTestsComplete}">
-				<dx:BackgroundPanel BorderThickness="2" Margin="30">
-					<StackPanel>
-						<TextBlock FontSize="40" Text="Effani Assay"/>
-						<dxe:TextEdit NullText="Enter Effani your account name" Text="{Binding Path=AccountName}"/>
-						<dxe:SpinEdit NullText="Enter the number of animals being tested" EditValue="{Binding Path=NumberOfTests}" Increment="1" MinValue="0" MaxValue="360" AllowSpinOnMouseWheel="True" />
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="6*" />
+			<ColumnDefinition Width="6*" />
+		</Grid.ColumnDefinitions>
+		<DockPanel Grid.Column="0">
+			<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Activity Log"/>
+			<Border BorderThickness="1" BorderBrush="DimGray" Margin="0,5,0,0">
+				<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+					<ListBox ItemsSource="{Binding ConsoleMessages}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock FontSize="12" Text="{Binding}" TextWrapping="WrapWithOverflow"></TextBlock>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</ScrollViewer>
+			</Border>
+		</DockPanel>
+		<dxco:Wizard x:Name="wizard" Grid.Column="1" VerticalAlignment="Stretch" Next="Wizard_Next" Cancel="Wizard_Cancel" AnimationType="Fade" Margin="20,0,0,0" FontSize="17">
+			<dxco:WelcomeWizardPage x:Name="GatherParametersPage" AllowNext="{Binding AccountAndNumberOfTestsComplete}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="2*" />
+						<ColumnDefinition Width="6*" />
+						<ColumnDefinition Width="2*" />
+					</Grid.ColumnDefinitions>
+					<StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Effani Assay"/>
+						<TextBlock TextWrapping="WrapWithOverflow" Text="Effani Account Name" Margin="0,15,0,0"/>
+						<dxe:TextEdit NullText="Enter your Effani account name" Text="{Binding AccountName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock TextWrapping="WrapWithOverflow" Text="Number of animals to be tested" Margin="0,15,0,0"/>
+						<dxe:SpinEdit Width="80" EditValue="{Binding NumberOfTests, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="0"
+						EditValueType="{x:Type sys:Int32}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" IsFloatValue="False" Mask="d0" MinValue="1" MaxValue="360" AllowSpinOnMouseWheel="True" />
 					</StackPanel>
-				</dx:BackgroundPanel>
+				</Grid>
 			</dxco:WelcomeWizardPage>
-			<dxco:WizardPage Loaded="LoadFluidSystemPage_Loaded">
-				<StackPanel>
-					<TextBlock FontSize="40" Text="Load Fluid System"/>
-					<TextBlock Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeld according to the pump's label. Press Next when all syringes have been loaded."/>
-					<TextBlock Text="Press Next To Continue"/>
+			<dxco:WizardPage x:Name="LoadFluidSystemPage">
+				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label. Press Next when all syringes have been loaded."/>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage>
-				<StackPanel Loaded="LoadSampleTraysPage_Loaded">
-					<TextBlock FontSize="40" Text="Load Sample Trays"/>
-					<TextBlock Text="Load sample trays into the sample tray carriage. Press Next when all trays have been loaded."/>
-					<TextBlock Text="Press Next To Continue"/>
+			<dxco:WizardPage x:Name="LoadSampleTraysPage">
+				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Sample Trays"/>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="Load sample trays into the sample tray carriage. Press Next when all trays have been loaded."/>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage Loaded="PreparationPage_Loaded" AllowNext="{Binding PreparationComplete}">
-				<StackPanel>
-					<TextBlock FontSize="40" Text="Preparation"/>
-					<TextBlock Text="“Priming fluid delivery..."/>
-					<TextBlock Text="Press Next To Continue"/>
+			<dxco:WizardPage x:Name="PreparationPage" AllowNext="{Binding PreparationComplete}">
+				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Preparation"/>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="The Next button will be enabled when assay preparation is complete."/>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage Loaded="LoadingSamplesPage_Loaded">
-				<StackPanel>
-					<TextBlock FontSize="40" Text="Sample Loading"/>
-					<TextBlock Text="Press Next To Continue"/>
+			<dxco:WizardPage x:Name="LoadingSamplesPage" AllowNext="{DXBinding 'CurrentLoadingSample == null'}">
+				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Sample Loading"/>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="Open the sample loading door and place a biopsy needle in the needle receptical. Latch the needle in place, close the door, and press the Load Sample button below."/>
+					<StackPanel Orientation="Vertical">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock TextWrapping="WrapWithOverflow" Text="Sample ID for " Margin="0,5,0,0"/>
+							<TextBlock Margin="0,5,0,0" Text="{Binding CurrentLoadingSample.Label}"/>
+						</StackPanel>
+						<dxe:TextEdit NullText="Enter sample identifier" Text="{Binding CurrentLoadingSample.SampleId}"/>
+					</StackPanel>
+					<dxe:CameraControl x:Name="camera">
+					</dxe:CameraControl>
+					<StackPanel Orientation="Horizontal">
+						<dx:SimpleButton Command="{Binding LoadSampleCommand}" Content="Load Sample"></dx:SimpleButton>
+						<dx:SimpleButton Command="{Binding CancelCommand}" IsEnabled="{Binding CurrentSampleLoaded}" Content="Invalidate" ToolTip="Invalidate this sample. It will be skipped during testing."></dx:SimpleButton>
+						<dx:SimpleButton Command="{Binding NextSampleCommand}" IsEnabled="{Binding CurrentSampleLoaded}" Content="Accept" ToolTip="Accept this sample for testing."></dx:SimpleButton>
+					</StackPanel>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="Press Next when all samples are loaded"/>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage Loaded="AssayPage_Loaded">
-				<StackPanel>
-					<TextBlock FontSize="40" Text="Assay"/>
-					<TextBlock Text="Press Next To Continue"/>
+			<dxco:WizardPage x:Name="AssayPage">
+				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay"/>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="Press Next To Continue"/>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage Loaded="CleanUpPage_Loaded">
-				<StackPanel>
-					<TextBlock FontSize="40" Text="Clean Up"/>
-					<TextBlock Text="Press Next To Continue"/>
+			<dxco:WizardPage x:Name="CleanUpPage">
+				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Clean Up"/>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="Press Next To Continue"/>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage Loaded="AssayConcludedPage_Loaded" ShowBack="False" ShowCancel="False">
-				<StackPanel>
-					<TextBlock FontSize="40" Text="Assay Concluded"/>
-					<TextBlock Text="Assay Results"/>
+			<dxco:WizardPage x:Name="AssayConcludedPage" ShowBack="False" ShowCancel="False">
+				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Concluded"/>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="Assay Results"/>
 					<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
 						<ListBox ItemsSource="{Binding ConsoleMessages}" Background="Transparent" BorderThickness="0" IsTabStop="False">
 							<ListBox.ItemTemplate>
@@ -94,5 +123,5 @@
 				</StackPanel>
 			</dxco:WizardPage>
 		</dxco:Wizard>
-	</StackPanel>
+	</Grid>
 </UserControl>

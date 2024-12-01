@@ -1,4 +1,6 @@
-﻿using DevExpress.Xpf.Core;
+﻿using DevExpress.Xpf.Controls;
+using DevExpress.Xpf.Core;
+using DevExpress.Xpf.Editors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,42 +26,49 @@ namespace Effani.Device.UI
         public Wizard()
         {
             InitializeComponent();
-			_viewModel = DataContext as MainViewModel;
+			camera.DeviceInfo = camera.GetAvailableDevices().FirstOrDefault(c => c.Name == "Integrated Webcam");
+			Loaded += Wizard_Loaded;
 		}
 
+		private void Wizard_Loaded(object sender, RoutedEventArgs e)
+		{
+			var viewModel = DataContext as MainViewModel;
+			viewModel.FirstPageLoaded();
+		}
+
+		private void Wizard_Next(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			var page = wizard.SelectedItem as WizardPage;
+
+			var viewModel = DataContext as MainViewModel;
+			switch (page.Name)
+			{
+				case "GatherParametersPage":
+					viewModel.LoadFluidSystemPageStart();
+					break;
+				case "LoadFluidSystemPage":
+					viewModel.LoadSampleTraysPageStart();
+					break;
+				case "LoadSampleTraysPage":
+					viewModel.PreparationPageStart();
+					break;
+				case "PreparationPage":
+					viewModel.LoadingSamplesPageStart();
+					break;
+				case "LoadingSamplesPage":
+					viewModel.AssayPageStart();
+					break;
+				case "AssayPage":
+					viewModel.CleanUpPageStart();
+					break;
+				case "CleanUpPage":
+					viewModel.AssayConcludedPageStart();
+					break;
+			}
+		}
 		private void Wizard_Cancel(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			e.Cancel = (DXMessageBox.Show("Cancel assay and terminate test?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No);
+			e.Cancel = (DXMessageBox.Show("Are you sure you want to cancel this test?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No);
 		}
-		private void LoadFluidSystemPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			_viewModel.LoadFluidSystemPageLoaded();
-		}
-		private void LoadSampleTraysPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			_viewModel.LoadSampleTraysPageLoaded();
-		}
-		private void PreparationPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			_viewModel.PreparationPageLoaded();
-		}
-		private void LoadingSamplesPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			_viewModel.LoadingSamplesPageLoaded();
-		}
-		private void AssayPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			_viewModel.AssayPageLoaded();
-		}
-		private void CleanUpPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			_viewModel.CleanUpPageLoaded();
-		}
-		private void AssayConcludedPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			_viewModel.AssayConcludedPageLoaded();
-		}
-
-		MainViewModel _viewModel;
 	}
 }

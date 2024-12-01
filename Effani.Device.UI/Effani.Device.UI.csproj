@@ -21,11 +21,29 @@
 		<PackageReference Include="DevExpress.Wpf.Themes.Office2016White" Version="24.1.7" />
 		<PackageReference Include="DevExpress.Wpf.Themes.All" Version="24.1.7" />
 		<PackageReference Include="DevExpress.Win.BonusSkins" Version="24.1.7" />
+		<PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="4.0.50">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Effani.Device.Control\Effani.Device.Control.csproj" />
 	  <ProjectReference Include="..\Effani.Device.Process\Effani.Device.Process.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="App.config">
+	    <TransformOnBuild>true</TransformOnBuild>
+	  </None>
+	  <None Update="App.Debug.config">
+	    <IsTransformFile>true</IsTransformFile>
+	    <DependentUpon>App.config</DependentUpon>
+	  </None>
+	  <None Update="App.Release.config">
+	    <IsTransformFile>true</IsTransformFile>
+	    <DependentUpon>App.config</DependentUpon>
+	  </None>
 	</ItemGroup>
 
 </Project>

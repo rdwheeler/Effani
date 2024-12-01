@@ -6,7 +6,7 @@ namespace Effani.Device.Process
 {
 	public class SetTrayTemperature(float temperature, DeviceControl device) : Command(device)
 	{
-		public override void Execute()
+		public override void Run()
 		{
 			Result = Device.SetTrayTemperature(_temperature);
 		}

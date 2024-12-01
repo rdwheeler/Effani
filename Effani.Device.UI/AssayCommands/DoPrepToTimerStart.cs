@@ -8,7 +8,7 @@ namespace Effani.Device.UI
 {
 	public class DoPrepToTimerStart(Assay assay, DeviceControl device) : Command(device)
 	{
-		public override void Execute()
+		public override void Run()
 		{
 			_statusMessages.Add($"Prapareing assay...");
 			foreach (var fluidLine in Assay.Device.FluidAxes)

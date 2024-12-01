@@ -7,7 +7,7 @@ namespace Effani.Device.Process
 	public class AlignWellToLocation(Coordinate location, Well well, DeviceControl device) : Command(device)
 	{
 
-		public override void Execute()
+		public override void Run()
 		{
 			var x = location.X - _well.Location.X;
 			var y = location.Y - _well.Location.Y;

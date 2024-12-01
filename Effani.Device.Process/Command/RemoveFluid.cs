@@ -6,7 +6,7 @@ namespace Effani.Device.Process
 {
 	public class RemoveFluid(Axis axis, int microLiters, DeviceControl device) : Command(device)
 	{
-		public override void Execute()
+		public override void Run()
 		{
 			Result = Device.RemoveFluid(Axis, MicroLiters);
 		}

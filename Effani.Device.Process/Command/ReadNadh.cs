@@ -6,7 +6,7 @@ namespace Effani.Device.Process
 {
 	public class ReadNadh(DeviceControl device) : Command(device)
 	{
-		public override void Execute()
+		public override void Run()
 		{
 			Device.LaserNadhOn();
 			Task.Delay(Device.Configuration.OpticalSensorDwell);
