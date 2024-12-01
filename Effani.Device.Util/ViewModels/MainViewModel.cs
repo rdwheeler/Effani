@@ -91,30 +91,16 @@ namespace Effani.Device.Util.ViewModels
 		[Command]
 		public async Task SetWifi()
 		{
-			try
-			{
-				var ssid = "blah - 2.4Ghz";// ConfigurationManager.AppSettings["wifi-ssid"];
-				var pass = "B4forever!";//ConfigurationManager.AppSettings["wifi-password"];
-				var response = _device.SetWifi(ssid, pass);
-				response.ForEach(m => AddConsoleMessage(m));
-			}
-			catch (Exception ex)
-			{
-				var a = ex;
-			}
+			var ssid = "blah - 2.4Ghz";// ConfigurationManager.AppSettings["wifi-ssid"];
+			var pass = "B4forever!";//ConfigurationManager.AppSettings["wifi-password"];
+			var response = _device.SetWifi(ssid, pass);
+			AddConsoleMessage(response);
 		}
 		[Command]
 		public async Task GetBoardDiagnostics()
 		{
-			try
-			{
-				var response = _device.GetBoardDiagnostics(2);
-				response.ForEach(m => AddConsoleMessage(m));
-			}
-			catch (Exception ex)
-			{
-				var a = ex;
-			}
+			var response = _device.GetBoardDiagnostics(2);
+			AddConsoleMessage(response);
 		}
 		[Command]
 		public async Task MoveRapid(List<object> parameters)

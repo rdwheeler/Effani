@@ -1,6 +1,6 @@
 ﻿namespace Effani.Device.Control
 {
-	public partial class Device
+	public partial class DeviceControl
 	{
 		public class DataArgs<T> : EventArgs
 		{

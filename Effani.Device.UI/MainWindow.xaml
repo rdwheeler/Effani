@@ -5,7 +5,7 @@
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxco="http://schemas.devexpress.com/winfx/2008/xaml/controls"
     xmlns:local="clr-namespace:Effani.Device.UI"
-    Title="MainWindow" WindowKind="Tabbed" 
+    Title="Effani Device" WindowStyle="ToolWindow" WindowKind="Tabbed" 
 	WindowStartupLocation="CenterScreen" 
 	WindowState="Maximized"
 	Height="800" Width="1000">

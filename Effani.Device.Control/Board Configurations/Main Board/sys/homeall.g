@@ -1,5 +1,11 @@
 M98 P"homeX.g" ; home TableX axis
 M98 P"homeY.g" ; home TableY axis
+M98 P"homeZ.g" ; home BiopsyPri axis
+M98 P"homeU.g" ; home BiopsySec axis
+M98 P"homeV.g" ; home Aspirate1 axis
+M98 P"homeW.g" ; home Aspirate1Z axis
+M98 P"homeA.g" ; home Aspirate2 axis
+M98 P"homeB.g" ; home Aspirate2Z axis
 M98 P"homeD.g" ; home Dna1 axis
 M98 P"homeC.g" ; home Dna2 axis
 M98 P"home'a.g" ; home Koh2 axis

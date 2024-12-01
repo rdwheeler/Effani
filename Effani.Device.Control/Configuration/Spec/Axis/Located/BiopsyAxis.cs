@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace Effani.Device.Control
 {
-	public class BiopsyAxis : AxisSpec
+	public class BiopsyAxis : LocatedAxis
 	{
-		public BiopsyAxis(Axis axis, int board, int port)
-			: base(axis, board, port)
+		public BiopsyAxis(Axis axis, int board, int port, Coordinate location)
+			: base(axis, board, port, location)
 		{
 			Maximum = 200;
 			StepsPerMillimeter = 533.33f;

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Effani.Device.Control", "Ef
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Effani.Device.Console", "Effani.Device.Console\Effani.Device.Console.csproj", "{E505D5A2-37E1-4BF1-A8D1-FAC6E2E87042}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Effani.Device.Util", "Effani.Device.Util\Effani.Device.Util.csproj", "{F79733F0-1348-46CB-855E-96F836DEAC24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Effani.Device.Process", "Effani.Device.Process\Effani.Device.Process.csproj", "{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{E505D5A2-37E1-4BF1-A8D1-FAC6E2E87042}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E505D5A2-37E1-4BF1-A8D1-FAC6E2E87042}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E505D5A2-37E1-4BF1-A8D1-FAC6E2E87042}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F79733F0-1348-46CB-855E-96F836DEAC24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F79733F0-1348-46CB-855E-96F836DEAC24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F79733F0-1348-46CB-855E-96F836DEAC24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F79733F0-1348-46CB-855E-96F836DEAC24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

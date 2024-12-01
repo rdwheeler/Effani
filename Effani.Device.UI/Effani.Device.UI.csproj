@@ -25,6 +25,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Effani.Device.Control\Effani.Device.Control.csproj" />
+	  <ProjectReference Include="..\Effani.Device.Process\Effani.Device.Process.csproj" />
 	</ItemGroup>
 
 </Project>

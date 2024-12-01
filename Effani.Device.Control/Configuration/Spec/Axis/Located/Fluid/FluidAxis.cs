@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace Effani.Device.Control
 {
-	public class FluidAxis : AxisSpec
+	public class FluidAxis : LocatedAxis
 	{
-		public FluidAxis(Axis axis, int board, int port)
-			: base(axis, board, port)
+		public FluidAxis(Axis axis, int board, int port, Coordinate location)
+			: base(axis, board, port, location)
 		{
 			Maximum = 150;
 			StepsPerMillimeter = 1259.84f;

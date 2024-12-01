@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DevExpress.Images" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Win.Design" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Wpf.Core" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Wpf.ThemesLW" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Mvvm.CodeGenerators" Version="22.1.*-*" />
+		<PackageReference Include="DevExpress.Wpf.Controls" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Wpf.Reporting" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Wpf.Themes.Office2016White" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Wpf.Themes.All" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Win.BonusSkins" Version="24.1.7" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Effani.Device.Control\Effani.Device.Control.csproj" />
+	  <ProjectReference Include="..\Effani.Device.Process\Effani.Device.Process.csproj" />
+	</ItemGroup>
+
+</Project>

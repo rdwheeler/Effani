@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace Effani.Device.Control
 {
-	public class AspirateAxis : AxisSpec
+	public class AspirateAxis : LocatedAxis
 	{
-		public AspirateAxis(Axis axis, int board, int port)
-			: base(axis, board, port)
+		public AspirateAxis(Axis axis, int board, int port, Coordinate location)
+			: base(axis, board, port, location)
 		{
 			Maximum = 150;
 			StepsPerMillimeter = 2133.33f;

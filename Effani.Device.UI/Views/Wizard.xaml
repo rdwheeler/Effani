@@ -4,52 +4,95 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:dxco="http://schemas.devexpress.com/winfx/2008/xaml/controls"
-             xmlns:local="clr-namespace:Effani.Device.UI"
-             mc:Ignorable="d" 
+			 xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:local="clr-namespace:Effani.Device.UI" 
+			 xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+			 mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<DataTemplate x:Key="pageContentTemplate">
-			<TextBlock Text="{Binding Text}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-		</DataTemplate>
-		<local:PageStyleSelector x:Key="pageStyleSelector">
-			<local:PageStyleSelector.WelcomePageStyle>
-				<Style TargetType="dxco:WizardPage">
-					<Setter Property="ShowBack" Value="False"/>
-					<Setter Property="Header" Value="Header"/>
-					<Setter Property="HeaderBackground" Value="AliceBlue"/>
-					<Setter Property="ShowSideContent" Value="True"/>
-					<Setter Property="SideContent" Value="Side content"/>
-					<Setter Property="SideContentTemplate">
-						<Setter.Value>
-							<DataTemplate>
-								<Border Background="Cornsilk">
-									<TextBlock Text="{Binding}" VerticalAlignment="Center"/>
-								</Border>
-							</DataTemplate>
-						</Setter.Value>
-					</Setter>
-				</Style>
-			</local:PageStyleSelector.WelcomePageStyle>
-			<local:PageStyleSelector.CommonPageStyle>
-				<Style TargetType="dxco:WizardPage">
-					<Setter Property="Header" Value="{x:Null}"/>
-					<Setter Property="ShowFinish" Value="False"/>
-				</Style>
-			</local:PageStyleSelector.CommonPageStyle>
-			<local:PageStyleSelector.CompletionPageStyle>
-				<Style TargetType="dxco:WizardPage">
-					<Setter Property="Header" Value="{x:Null}"/>
-					<Setter Property="ShowBack" Value="False"/>
-					<Setter Property="ShowNext" Value="False"/>
-					<Setter Property="ShowFinish" Value="True"/>
-					<Setter Property="AllowFinish" Value="True"/>
-				</Style>
-			</local:PageStyleSelector.CompletionPageStyle>
-		</local:PageStyleSelector>
+		<Style TargetType="{x:Type dxe:TextEdit}">
+			<Setter Property="Margin" Value="0,10,0,0" />
+		</Style>
+		<Style TargetType="{x:Type dxe:SpinEdit}">
+			<Setter Property="Margin" Value="0,10,0,0" />
+		</Style>
 	</UserControl.Resources>
-	<Grid>
-		<dxco:Wizard ItemsSource="{Binding Pages}"
-                     ItemTemplate="{StaticResource pageContentTemplate}"
-                     ItemContainerStyleSelector="{StaticResource pageStyleSelector}"/>
-	</Grid>
+	<StackPanel Orientation="Horizontal">
+		<dx:BackgroundPanel BorderThickness="1" Width="400">
+			<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+				<ListBox ItemsSource="{Binding ConsoleMessages}" Background="Transparent" BorderThickness="0" IsTabStop="False">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding}" TextWrapping="WrapWithOverflow"></TextBlock>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</ScrollViewer>
+		</dx:BackgroundPanel>
+		<dxco:Wizard Cancel="Wizard_Cancel" AnimationType="Fade" FontSize="20">
+			<dxco:WelcomeWizardPage AllowNext="{Binding AccountAndNumberOfTestsComplete}">
+				<dx:BackgroundPanel BorderThickness="2" Margin="30">
+					<StackPanel>
+						<TextBlock FontSize="40" Text="Effani Assay"/>
+						<dxe:TextEdit NullText="Enter Effani your account name" Text="{Binding Path=AccountName}"/>
+						<dxe:SpinEdit NullText="Enter the number of animals being tested" EditValue="{Binding Path=NumberOfTests}" Increment="1" MinValue="0" MaxValue="360" AllowSpinOnMouseWheel="True" />
+					</StackPanel>
+				</dx:BackgroundPanel>
+			</dxco:WelcomeWizardPage>
+			<dxco:WizardPage Loaded="LoadFluidSystemPage_Loaded">
+				<StackPanel>
+					<TextBlock FontSize="40" Text="Load Fluid System"/>
+					<TextBlock Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeld according to the pump's label. Press Next when all syringes have been loaded."/>
+					<TextBlock Text="Press Next To Continue"/>
+				</StackPanel>
+			</dxco:WizardPage>
+			<dxco:WizardPage>
+				<StackPanel Loaded="LoadSampleTraysPage_Loaded">
+					<TextBlock FontSize="40" Text="Load Sample Trays"/>
+					<TextBlock Text="Load sample trays into the sample tray carriage. Press Next when all trays have been loaded."/>
+					<TextBlock Text="Press Next To Continue"/>
+				</StackPanel>
+			</dxco:WizardPage>
+			<dxco:WizardPage Loaded="PreparationPage_Loaded" AllowNext="{Binding PreparationComplete}">
+				<StackPanel>
+					<TextBlock FontSize="40" Text="Preparation"/>
+					<TextBlock Text="“Priming fluid delivery..."/>
+					<TextBlock Text="Press Next To Continue"/>
+				</StackPanel>
+			</dxco:WizardPage>
+			<dxco:WizardPage Loaded="LoadingSamplesPage_Loaded">
+				<StackPanel>
+					<TextBlock FontSize="40" Text="Sample Loading"/>
+					<TextBlock Text="Press Next To Continue"/>
+				</StackPanel>
+			</dxco:WizardPage>
+			<dxco:WizardPage Loaded="AssayPage_Loaded">
+				<StackPanel>
+					<TextBlock FontSize="40" Text="Assay"/>
+					<TextBlock Text="Press Next To Continue"/>
+				</StackPanel>
+			</dxco:WizardPage>
+			<dxco:WizardPage Loaded="CleanUpPage_Loaded">
+				<StackPanel>
+					<TextBlock FontSize="40" Text="Clean Up"/>
+					<TextBlock Text="Press Next To Continue"/>
+				</StackPanel>
+			</dxco:WizardPage>
+			<dxco:WizardPage Loaded="AssayConcludedPage_Loaded" ShowBack="False" ShowCancel="False">
+				<StackPanel>
+					<TextBlock FontSize="40" Text="Assay Concluded"/>
+					<TextBlock Text="Assay Results"/>
+					<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+						<ListBox ItemsSource="{Binding ConsoleMessages}" Background="Transparent" BorderThickness="0" IsTabStop="False">
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding}" TextWrapping="WrapWithOverflow"></TextBlock>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</ScrollViewer>
+				</StackPanel>
+			</dxco:WizardPage>
+		</dxco:Wizard>
+	</StackPanel>
 </UserControl>
