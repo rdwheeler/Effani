@@ -233,7 +233,7 @@ G90 ; absolute positioning
 		{
 			var ret = new List<AxisSpec>();
 			ret.Add(new BiopsyAxis(Axis.Biopsy, 0, 2, BiopsyLocation));
-			ret.Add(new ShortZAxis(Axis.BiopsySec, 0, 3));
+			ret.Add(new ShortZAxis(Axis.BiopsyEject, 0, 3));
 
 			return ret;
 		}

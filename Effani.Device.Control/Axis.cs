@@ -13,7 +13,7 @@ namespace Effani.Device.Control
 		[Display(ShortName = "Z")]
 		Biopsy,
 		[Display(ShortName = "U")]
-		BiopsySec,
+		BiopsyEject,
 		[Display(ShortName = "V")]
 		AspirateFluid,
 		[Display(ShortName = "W")]

@@ -21,8 +21,8 @@
 	</UserControl.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="6*" />
-			<ColumnDefinition Width="6*" />
+			<ColumnDefinition Width="4*" />
+			<ColumnDefinition Width="8*" />
 		</Grid.ColumnDefinitions>
 		<DockPanel Grid.Column="0">
 			<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Activity Log"/>
@@ -56,110 +56,114 @@
 					</StackPanel>
 				</Grid>
 			</dxco:WelcomeWizardPage>
-			<dxco:WizardPage x:Name="LoadFluidSystemPage">
-				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+			<dxco:WizardPage ShowBack="False" x:Name="LoadFluidSystemPage">
+				<StackPanel MaxWidth="800" HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
 					<TextBlock TextWrapping="WrapWithOverflow" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label. Press Next when all syringes have been loaded."/>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage x:Name="LoadSampleTraysPage">
+			<dxco:WizardPage ShowBack="False" x:Name="LoadSampleTraysPage">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Sample Trays"/>
 					<TextBlock TextWrapping="WrapWithOverflow" Text="Load sample trays into the sample tray carriage. Press Next when all trays have been loaded."/>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage x:Name="PreparationPage" AllowNext="{Binding PreparationComplete}">
+			<dxco:WizardPage ShowBack="False" x:Name="PreparationPage" AllowNext="{Binding PreparationComplete}">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Preparation"/>
 					<TextBlock TextWrapping="WrapWithOverflow" Text="The Next button will be enabled when assay preparation is complete."/>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage x:Name="LoadingSamplesPage" AllowNext="{DXBinding 'CurrentLoadingSample == null'}">
+			<dxco:WizardPage ShowBack="False" x:Name="LoadingSamplesPage" AllowNext="{DXBinding 'CurrentLoadingSample == null'}">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Sample Loading"/>
-					<TextBlock TextWrapping="WrapWithOverflow" Text="Open the sample loading door and place a biopsy needle in the needle receptical. Latch the needle in place, close the door, and press the Load Sample button below."/>
-					<StackPanel Orientation="Vertical">
-						<StackPanel Orientation="Horizontal">
-							<TextBlock TextWrapping="WrapWithOverflow" Text="Sample ID for " Margin="0,5,0,0"/>
-							<TextBlock Margin="0,5,0,0" Text="{Binding CurrentLoadingSample.Label}"/>
+					<StackPanel Visibility="{DXBinding 'CurrentLoadingSample != null ? $Visibility.Visible : $Visibility.Collapsed'}">
+						<TextBlock Visibility="{DXBinding 'CurrentLoadingSample.Loaded ? $Visibility.Collapsed : $Visibility.Visible'}" TextWrapping="WrapWithOverflow" Text="Open the sample loading door and place a biopsy needle in the needle receptical. Latch the needle in place, close the door, and press the Load Sample button below."/>
+						<dx:SimpleButton Padding="40" Margin="40" HorizontalAlignment="Center" Content="Load Sample" FontSize="25" Command="{Binding LoadSampleCommand}" Visibility="{DXBinding 'CurrentLoadingSample.Loaded ? $Visibility.Collapsed : $Visibility.Visible'}"/>
+						<StackPanel Orientation="Vertical" Margin="0,10,0,0" Visibility="{DXBinding 'CurrentLoadingSample.Loaded ? $Visibility.Visible : $Visibility.Collapsed'}">
+							<StackPanel Orientation="Horizontal">
+								<TextBlock TextWrapping="WrapWithOverflow" Text="Enter a sample identifier for " Margin="0,5,0,0"/>
+								<TextBlock Margin="0,5,0,0" Text="{Binding CurrentLoadingSample.Label}"/>
+								<TextBlock Margin="0,5,0,0" Text=" to continue."/>
+							</StackPanel>
+							<dxe:TextEdit NullText="Enter sample identifier" Text="{Binding CurrentLoadingSample.SampleId}" IsEnabled="{DXBinding '!CurrentLoadingSample.Canceled'}"/>
+							<StackPanel Margin="0,20,0,0" Visibility="{DXBinding 'CurrentLoadingSample.SampleId != null ? $Visibility.Visible : $Visibility.Collapsed'}">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="7*" />
+										<ColumnDefinition Width="3*" />
+									</Grid.ColumnDefinitions>
+									<dxe:CameraControl Grid.Column="0" HorizontalAlignment="Left" Width="800" x:Name="camera" Visibility="{DXBinding 'CurrentLoadingSample.Loaded ? $Visibility.Visible : $Visibility.Collapsed'}">
+									</dxe:CameraControl>
+									<StackPanel Grid.Column="1" Margin="20,0,0,0" Orientation="Vertical" HorizontalAlignment="Left">
+										<TextBlock TextWrapping="WrapWithOverflow" Text="Ensure the sample is loaded correctly and press Invalidate if not. Press Accept to load the next sample."/>
+										<dx:SimpleButton FontSize="25" Margin="0,20,0,0" Command="{Binding CancelCommand}" Content="Invalidate" ToolTip="Invalidate this sample. It will be skipped during testing."/>
+										<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding AcceptSampleCommand}" Content="Accept" ToolTip="Accept this sample for testing."/>
+									</StackPanel>
+								</Grid>
+							</StackPanel>
 						</StackPanel>
-						<dxe:TextEdit NullText="Enter sample identifier" Text="{Binding CurrentLoadingSample.SampleId}"/>
 					</StackPanel>
-					<dxe:CameraControl x:Name="camera">
-					</dxe:CameraControl>
-					<StackPanel Orientation="Horizontal">
-						<dx:SimpleButton Command="{Binding LoadSampleCommand}" Content="Load Sample"></dx:SimpleButton>
-						<dx:SimpleButton Command="{Binding CancelCommand}" IsEnabled="{Binding CurrentSampleLoaded}" Content="Invalidate" ToolTip="Invalidate this sample. It will be skipped during testing."></dx:SimpleButton>
-						<dx:SimpleButton Command="{Binding NextSampleCommand}" IsEnabled="{Binding CurrentSampleLoaded}" Content="Accept" ToolTip="Accept this sample for testing."></dx:SimpleButton>
-					</StackPanel>
-					<TextBlock TextWrapping="WrapWithOverflow" Text="Press Next when all samples are loaded"/>
+					<TextBlock FontSize="25" Margin="0,20,0,0" TextWrapping="WrapWithOverflow" Text="All samples are loaded. Press Next to continue." Visibility="{DXBinding 'CurrentLoadingSample == null ? $Visibility.Visible : $Visibility.Collapsed'}"/>
 				</StackPanel>
 			</dxco:WizardPage>
 			<dxco:WizardPage x:Name="AssayPage">
-				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+				<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay In Progress"/>
-					<Grid>
+					<Grid HorizontalAlignment="Stretch">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="3*" />
-							<ColumnDefinition Width="3*" />
-							<ColumnDefinition Width="3*" />
-							<ColumnDefinition Width="3*" />
+							<ColumnDefinition Width="5*" />
+							<ColumnDefinition Width="5*" />
+							<ColumnDefinition Width="5*" />
+							<ColumnDefinition Width="5*" />
 						</Grid.ColumnDefinitions>
-						<DockPanel Grid.Column="0">
+						<DockPanel HorizontalAlignment="Stretch" Grid.Column="0">
 							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Loaded"/>
-							<Border BorderThickness="1" BorderBrush="DimGray" Margin="0,5,0,0">
-								<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-									<ListBox ItemsSource="{Binding SamplesLoaded}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-										<ListBox.ItemTemplate>
-											<DataTemplate>
-												<TextBlock FontSize="12" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
-											</DataTemplate>
-										</ListBox.ItemTemplate>
-									</ListBox>
-								</ScrollViewer>
-							</Border>
+							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+								<ListBox ItemsSource="{Binding Assay.SamplesLoaded}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+							</ScrollViewer>
 						</DockPanel>
 						<DockPanel Grid.Column="1">
 							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Preparing"/>
-							<Border BorderThickness="1" BorderBrush="DimGray" Margin="0,5,0,0">
-								<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-									<ListBox ItemsSource="{Binding SamplesInPreparation}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-										<ListBox.ItemTemplate>
-											<DataTemplate>
-												<TextBlock FontSize="12" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
-											</DataTemplate>
-										</ListBox.ItemTemplate>
-									</ListBox>
-								</ScrollViewer>
-							</Border>
+							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+								<ListBox ItemsSource="{Binding Assay.SamplesInPreparation}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+							</ScrollViewer>
 						</DockPanel>
 						<DockPanel Grid.Column="2">
 							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Testing NADH"/>
-							<Border BorderThickness="1" BorderBrush="DimGray" Margin="0,5,0,0">
-								<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-									<ListBox ItemsSource="{Binding SamplesInNadh}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-										<ListBox.ItemTemplate>
-											<DataTemplate>
-												<TextBlock FontSize="12" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
-											</DataTemplate>
-										</ListBox.ItemTemplate>
-									</ListBox>
-								</ScrollViewer>
-							</Border>
+							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+								<ListBox ItemsSource="{Binding Assay.SamplesInNadh}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+							</ScrollViewer>
 						</DockPanel>
 						<DockPanel Grid.Column="3">
 							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Testing DNA"/>
-							<Border BorderThickness="1" BorderBrush="DimGray" Margin="0,5,0,0">
-								<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-									<ListBox ItemsSource="{Binding SamplesInDna}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-										<ListBox.ItemTemplate>
-											<DataTemplate>
-												<TextBlock FontSize="12" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
-											</DataTemplate>
-										</ListBox.ItemTemplate>
-									</ListBox>
-								</ScrollViewer>
-							</Border>
+							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+								<ListBox ItemsSource="{Binding Assay.SamplesInDna}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+							</ScrollViewer>
 						</DockPanel>
 					</Grid>
 				</StackPanel>
@@ -167,13 +171,16 @@
 			<dxco:WizardPage x:Name="CleanUpPage">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Clean Up"/>
-					<TextBlock TextWrapping="WrapWithOverflow" Text="Press Next To Continue"/>
+					<TextBlock Margin="0,10,0,0" TextWrapping="WrapWithOverflow" Text="Remove all fluid containers."/>
+					<TextBlock Margin="0,10,0,0" TextWrapping="WrapWithOverflow" Text="Remove sample plates."/>
+					<TextBlock Margin="0,10,0,0" TextWrapping="WrapWithOverflow" Text="Remove sample biopsy needles."/>
+					<TextBlock Margin="0,20,0,0" FontSize="25" TextWrapping="WrapWithOverflow" Text="Press Next To Continue"/>
 				</StackPanel>
 			</dxco:WizardPage>
 			<dxco:WizardPage x:Name="AssayConcludedPage" ShowBack="False" ShowCancel="False">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Concluded"/>
-					<TextBlock TextWrapping="WrapWithOverflow" Text="Assay Results"/>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="{DXBinding '`Test results written to` + ResultsFilePath'}"/>
 				</StackPanel>
 			</dxco:WizardPage>
 		</dxco:Wizard>

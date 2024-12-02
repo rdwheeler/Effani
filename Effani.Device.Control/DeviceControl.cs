@@ -121,7 +121,7 @@ namespace Effani.Device.Control
 			Write($"G28 {axisSpec.Designation}");
 			return $"Homed {axisSpec.Label}";
 		}
-		public string Home(List<Axis> axes)
+		public string Home(Axis[] axes)
 		{
 			var codes = String.Join(' ', axes.Select(a => Axes[a].Designation));
 			Write($"G28 {codes}");

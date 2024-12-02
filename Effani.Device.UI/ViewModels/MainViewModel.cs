@@ -10,7 +10,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -191,16 +193,20 @@ namespace Effani.Device.UI
 		}
 
 		[Command]
-		public async Task NextSample()
+		public async Task AcceptSample()
 		{
-			var currentIndex = CurrentLoadingSample is null ? 0 : SampleLoadingCollection.IndexOf(CurrentLoadingSample);
+			CurrentLoadingSample.TestMediaTimer1h.Start();
+			CurrentLoadingSample.TestMediaTimer2h.Start();
+			CurrentLoadingSample.TestMediaTimer3h.Start();
+			CurrentLoadingSample.TestMediaTimer4h.Start();
+			Assay.SamplesLoaded.Add(CurrentLoadingSample);
+			var currentIndex = SampleLoadingCollection.IndexOf(CurrentLoadingSample);
 			CurrentLoadingSample = SampleLoadingCollection.ElementAtOrDefault(currentIndex + 1);
 			if(CurrentLoadingSample is not null)
 			{
 				AddConsoleMessage($"Preparing {CurrentLoadingSample.Well.Label} for sample loading");
 				_processEngine.AddCommand(new AlignWellToAxis(Axis.Biopsy, CurrentLoadingSample.Well, _device));
 			}
-			RaisePropertyChanged(nameof(CurrentSampleLoaded));
 		}
 		[Command]
 		public async Task LoadSample()
@@ -212,12 +218,6 @@ namespace Effani.Device.UI
 			_processEngine.AddCommand(new EmitCo2(_device));
 			_processEngine.AddCommand(new AlignWellToLocation(_device.Configuration.CameraLocation, CurrentLoadingSample.Well, _device));
 			CurrentLoadingSample.Loaded = true;
-			CurrentLoadingSample.TestMediaTimer1h.Start();
-			CurrentLoadingSample.TestMediaTimer2h.Start();
-			CurrentLoadingSample.TestMediaTimer3h.Start();
-			CurrentLoadingSample.TestMediaTimer4h.Start();
-			RaisePropertyChanged(nameof(CurrentSampleLoaded));
-			SamplesLoaded.Add(CurrentLoadingSample);
 		}
 
 		[Command]
@@ -233,7 +233,7 @@ namespace Effani.Device.UI
 		public void LoadFluidSystemPageStart()
 		{
 			AddConsoleMessage("Prompting to load fluid system");
-			_processEngine.AddCommand(new Goto(Axis.DnaReagent1, _device));
+			_processEngine.AddCommand(new HomeAll(_device));
 		}
 		public void LoadSampleTraysPageStart()
 		{
@@ -278,9 +278,24 @@ namespace Effani.Device.UI
 		}
 		public void CleanUpPageStart()
 		{
+			var results = new StringBuilder();
+			results.AppendLine(AccountName);
+			results.AppendLine($"Low NADH:{Assay.LowNadh}");
+			results.AppendLine($"High NADH:{Assay.HighNadh}");
+			results.AppendLine($"1 µg DNA:{Assay.Microgram1Dna}");
+			results.AppendLine($"0.25 µg DNA:{Assay.MicrogramDna25Dna}");
+			results.AppendLine($"0.0625 µg DNA:{Assay.MicrogramDna0625Dna}");
+			results.AppendLine($"0 µg DNA:{Assay.Microgram0Dna}");
+			foreach (var well in Assay.WellTests)
+				results.AppendLine($"{well.SampleId} {well.Label} DNA:{well.DnaValue} {String.Join(' ', well.TimeValues.Select(t => $"T{t.Key}:{t.Value}"))}");
+			File.WriteAllText(ResultsFilePath, results.ToString());
+
+			Assay.Dispose();
+			Assay = null;
 		}
 		public void AssayConcludedPageStart()
 		{
+			AddConsoleMessage("Assay concluded");
 		}
 		public void Dispose()
 		{
@@ -383,6 +398,7 @@ namespace Effani.Device.UI
 				if (_accountName == value)
 					return;
 				_accountName = value;
+				ResultsFilePath = Path.Combine(Environment.CurrentDirectory, $"Results {value} {DateTime.Now.ToShortDateString()}.effani");
 				RaisePropertyChanged(nameof(AccountName));
 				RaisePropertyChanged(nameof(AccountAndNumberOfTestsComplete));
 			}
@@ -431,18 +447,10 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(AssayTerminated));
 			}
 		}
-		public bool CurrentSampleLoaded => CurrentLoadingSample?.Loaded == true;
 		public Assay Assay { get; private set; }
+		public string ResultsFilePath { get; set; }
 
 		public ObservableCollection<string> ConsoleMessages { get; set; } = new();
-
-		public ObservableCollection<TestWell> SamplesLoaded => Assay.SamplesLoaded;
-
-		public ObservableCollection<TestWell> SamplesInPreparation => Assay.SamplesInPreparation;
-
-		public ObservableCollection<TestWell> SamplesInNadh => Assay.SamplesInNadh;
-
-		public ObservableCollection<TestWell> SamplesInDna => Assay.SamplesInDna;
 
 		DeviceControl _device;
 		ProcessEngine _processEngine = new ProcessEngine();

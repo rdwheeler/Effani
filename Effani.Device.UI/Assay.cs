@@ -309,7 +309,7 @@ namespace Effani.Device.UI
 		public float LowNadh { get; set; }
 		[DisplayName("High NADH")]
 		public float HighNadh { get; set; }
-		[DisplayName("1 µg")]
+		[DisplayName("1 µg DNA")]
 		public float Microgram1Dna { get; set; }
 		[DisplayName("0.25 µg DNA")]
 		public float MicrogramDna25Dna { get; set; }
