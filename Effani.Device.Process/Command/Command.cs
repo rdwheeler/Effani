@@ -11,13 +11,18 @@ namespace Effani.Device.Process
 	{
 		public void Execute()
 		{
-			if(!Device.Configuration.BypassDeviceCommands)
-				Run();
+			if(Device.Configuration.BypassDeviceCommands > 0)
+			{
+				Task.Delay(Device.Configuration.BypassDeviceCommands);
+			}
 			else
-				Result = $"{GetType().Name} Bypassed";
+			{
+				Run();
+			}
 		}
-		public abstract void Run();
+
+		protected abstract string Run();
 		public DeviceControl Device { get; } = device;
-		public string Result { get; protected set; }
+		public abstract string Result { get; protected set; }
 	}
 }

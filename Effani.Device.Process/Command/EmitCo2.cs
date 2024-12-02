@@ -6,9 +6,12 @@ namespace Effani.Device.Process
 {
 	public class EmitCo2(DeviceControl device) : Command(device)
 	{
-		public override void Run()
+		protected override string Run()
 		{
 			Result = Device.EmitCo2(Device.Configuration.Co2Dwell);
+			return Result;
 		}
+
+		public override string Result { get; protected set; } = $"CO2 emitted";
 	}
 }

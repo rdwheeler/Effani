@@ -45,6 +45,16 @@ namespace Effani.Device.Control
 			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
 			return $"Move {axisSpec.Designation} {distance} at {speed}";
 		}
+
+		public string MoveRelative(Axis axis, float distance, float? speed = null)
+		{
+			var axisSpec = Axes[axis];
+			if (!speed.HasValue)
+				speed = axisSpec.MaxSpeed;
+			Write("G91");
+			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
+			return $"Move {axisSpec.Designation} {distance} at {speed}";
+		}
 		public string Move(List<MoveSpec> moveSpecs, float speed)
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
@@ -58,15 +68,6 @@ namespace Effani.Device.Control
 			Write("G91");
 			Write($"G2 {moveCode} F{speed}");
 			return $"Move {moveCode} at {speed}";
-		}
-		public class MoveSpec
-		{
-			public AxisSpec Axis { get; set; }
-			public float location{ get; set; }
-			public string ToGode()
-			{
-				return $"{Axis.Designation}{location}";
-			}
 		}
 		public string GoPercent(Axis axis, float percent, float? speed = null)
 		{
@@ -93,11 +94,38 @@ namespace Effani.Device.Control
 			Write($"G0 {axisSpec.Designation}{location} F{speed}");
 			return $"Move {axisSpec.Designation} to {location} at {speed}";
 		}
+		public string TableGoTo(float x, float y, float? speed = null)
+		{
+
+			var xaxis = Axes[Axis.TableX];
+			var yaxis = Axes[Axis.TableY];
+
+			if (!speed.HasValue)
+				speed = Math.Min(xaxis.MaxSpeed, yaxis.MaxSpeed);
+
+			if (x < xaxis.Minimum || x > xaxis.Maximum ||
+				y < yaxis.Minimum || y > yaxis.Maximum)
+				return "Location out of range";
+
+			Write("G90");
+			Write($"G0 {xaxis.Designation}{x} {yaxis.Designation}{y} F{speed}");
+			return $"Move table to {x}.{y} at {speed}";
+		}
+		public string TableGoTo(Coordinate location, float? speed = null)
+		{
+			return TableGoTo(location, speed);
+		}
 		public string Home(Axis axis)
 		{
 			var axisSpec = Axes[axis];
 			Write($"G28 {axisSpec.Designation}");
 			return $"Homed {axisSpec.Label}";
+		}
+		public string Home(List<Axis> axes)
+		{
+			var codes = String.Join(' ', axes.Select(a => Axes[a].Designation));
+			Write($"G28 {codes}");
+			return $"Homed {codes}";
 		}
 		public void ApplyConfig()
 		{
@@ -208,22 +236,22 @@ namespace Effani.Device.Control
 		}
 		public string LaserDnaOn()
 		{
-			Write($"M42 P2 S1");
+			Write($"M42 P3 S1");
 			return "Laser DNA on";
 		}
 		public string LaserDnaOff()
 		{
-			Write($"M42 P2 S0");
+			Write($"M42 P3 S0");
 			return "Laser DNA off";
 		}
 		public string LaserNadhOn()
 		{
-			Write($"M42 P3 S1");
+			Write($"M42 P2 S1");
 			return "Laser NADH on";
 		}
 		public string LaserNadhOff()
 		{
-			Write($"M42 P3 S0");
+			Write($"M42 P2 S0");
 			return "Laser NADH off";
 		}
 		public string EmitCo2(int miliseconds)
@@ -251,24 +279,58 @@ namespace Effani.Device.Control
 		}
 		public string RemoveFluid(int microLiters)
 		{
-			var axisSpec = Axes[Axis.Aspirate1];
-			var axisSpecZ = Axes[Axis.Aspirate1Z];
+			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel, 10);
+			DoStir();
+
 			var distance = CalcAspirateTravelMmForMl(microLiters);
-			var result = Move(axisSpec.Axis, distance, Configuration.AspirateSyringeSpeed);
-			if (!result.Equals(OK))
-				return result;
-			return $"{axis} {microLiters} removed";
+			Move(Axis.AspirateFluid, distance, Configuration.AspirateSyringeSpeed);
+			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 10);
+
+			return $"{microLiters} of fluid removed";
+		}
+		private void DoStir()
+		{
+			Move(Axis.TableY, Configuration.WellWidth * 0.8f, 50); // move near well edge
+			int count = 0;
+			while(count <= 5)
+			{
+				//arc to right edge
+				var rightMultiAxis = new List<MoveSpec>();
+				rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
+				rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
+				rightMultiAxis.Add(new MoveSpec(Axes[Axis.AspirateFluidZ], (Configuration.WellDepth * 0.9f) * -1));
+				MoveClockwiseArc(rightMultiAxis, Configuration.AspirateSyringeSpeed);
+				//arc to bottom edge
+				var bottomMultiAxis = new List<MoveSpec>();
+				bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
+				bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
+				bottomMultiAxis.Add(new MoveSpec(Axes[Axis.AspirateFluidZ], (Configuration.WellDepth * 0.8f) * -1));
+				MoveClockwiseArc(rightMultiAxis, Configuration.AspirateSyringeSpeed);
+				//arc to left edge
+				var leftMultiAxis = new List<MoveSpec>();
+				leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
+				leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f)));
+				leftMultiAxis.Add(new MoveSpec(Axes[Axis.AspirateFluidZ], (Configuration.WellDepth * 0.9f) * -1));
+				MoveClockwiseArc(rightMultiAxis, Configuration.AspirateSyringeSpeed);
+				//arc to top edge
+				var topMultiAxis = new List<MoveSpec>();
+				topMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
+				topMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
+				topMultiAxis.Add(new MoveSpec(Axes[Axis.AspirateFluidZ], (Configuration.WellDepth * 0.9f) * -1));
+				MoveClockwiseArc(rightMultiAxis, Configuration.AspirateSyringeSpeed);
+				count++;
+			}
 		}
 		public string RemoveKoh(int microLiters)
 		{
-			var axisSpec = Axes[Axis.Aspirate2];
-			var axisSpecZ = Axes[Axis.Aspirate2Z];
+			Move(Axis.AspirateKohZ, Configuration.AspirateTopZTravel, 10);
+			DoStir();
+
 			var distance = CalcKohAspirateTravelMmForMl(microLiters);
-			var result1 = Move(axisSpecZ.Axis, Configuration.AspirateTopZTravel, Configuration.AspirateSyringeSpeed);
-			var result2 = Move(axisSpec.Axis, distance, Configuration.AspirateSyringeSpeed);
-			if (!result2.Equals(OK))
-				return result2;
-			return $"{axis} {microLiters} removed";
+			Move(Axis.AspirateKoh, distance, Configuration.AspirateSyringeSpeed);
+			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 10);
+
+			return $"{microLiters} of KOH removed";
 		}
 		public void Dispose()
 		{

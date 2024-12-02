@@ -21,8 +21,8 @@ namespace Effani.Device.UI
 			foreach (var wellTest in Assay.DnaBaselineWells)
 			{
 				_statusMessages.Add($"Dispensing {Assay.Config.DnaVolume}µg DNA reagent to {wellTest.Well.Label}");
-				Assay.Engine.AddCommand(new AlignWellToAxis(Axis.Dna1, wellTest.Well, Assay.Device));
-				Assay.Engine.AddCommand(new EmitFluid(Axis.Dna1, Assay.Config.DnaVolume, Assay.Device));
+				Assay.Engine.AddCommand(new AlignWellToAxis(Axis.DnaReagent1, wellTest.Well, Assay.Device));
+				Assay.Engine.AddCommand(new EmitFluid(Axis.DnaReagent1, Assay.Config.DnaVolume, Assay.Device));
 			}
 			_statusMessages.Add($"Starting DNA baseline timer ({Assay.BaselineTimer.Interval / 1000} seconds)");
 			Assay.BaselineTimer.Start();

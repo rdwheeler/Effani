@@ -77,6 +77,10 @@
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding PlateUvOffCommand}" Content="Plate UV Off" />
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding BiopsyUvOnCommand}" Content="Biopsy UV On" />
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding BiopsyUvOffCommand}" Content="Biopsy UV Off" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserNadhOnCommand}" Content="NADH Laser On" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserNadhOffCommand}" Content="NADH Laser Off" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserDNAOnCommand}" Content="DNA Laser On" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserDNAOffCommand}" Content="DNA Laser Off" />
 					</StackPanel>
 				</dx:DXTabItem>
 				<dx:DXTabItem Header="Control Board">
@@ -86,7 +90,8 @@
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="0" Content="Diagnostics 0" />
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="1" Content="Diagnostics 1" />
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="2" Content="Diagnostics 2" />
-						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding ApplyConfigCommand}" Content="Appy Config" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding EnableCommandsCommand}" Content="Enable Commands" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding DisableCommandsCommand}" Content="Disable Commands" />
 					</StackPanel>
 				</dx:DXTabItem>
 			</dx:DXTabControl>

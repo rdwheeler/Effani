@@ -6,12 +6,15 @@ namespace Effani.Device.Process
 {
 	public class ReadDna(DeviceControl device) : Command(device)
 	{
-		public override void Run()
+		protected override string Run()
 		{
 			Device.LaserDnaOn();
 			Task.Delay(Device.Configuration.OpticalSensorDwell);
 			Result = Device.ReadDna();
 			Device.LaserDnaOff();
+			return Result;
 		}
+
+		public override string Result { get; protected set; } = "DNA read";
 	}
 }

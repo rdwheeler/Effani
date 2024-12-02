@@ -97,8 +97,71 @@
 			</dxco:WizardPage>
 			<dxco:WizardPage x:Name="AssayPage">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay"/>
-					<TextBlock TextWrapping="WrapWithOverflow" Text="Press Next To Continue"/>
+					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay In Progress"/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="3*" />
+							<ColumnDefinition Width="3*" />
+							<ColumnDefinition Width="3*" />
+							<ColumnDefinition Width="3*" />
+						</Grid.ColumnDefinitions>
+						<DockPanel Grid.Column="0">
+							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Loaded"/>
+							<Border BorderThickness="1" BorderBrush="DimGray" Margin="0,5,0,0">
+								<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+									<ListBox ItemsSource="{Binding SamplesLoaded}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock FontSize="12" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</ListBox>
+								</ScrollViewer>
+							</Border>
+						</DockPanel>
+						<DockPanel Grid.Column="1">
+							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Preparing"/>
+							<Border BorderThickness="1" BorderBrush="DimGray" Margin="0,5,0,0">
+								<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+									<ListBox ItemsSource="{Binding SamplesInPreparation}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock FontSize="12" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</ListBox>
+								</ScrollViewer>
+							</Border>
+						</DockPanel>
+						<DockPanel Grid.Column="2">
+							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Testing NADH"/>
+							<Border BorderThickness="1" BorderBrush="DimGray" Margin="0,5,0,0">
+								<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+									<ListBox ItemsSource="{Binding SamplesInNadh}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock FontSize="12" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</ListBox>
+								</ScrollViewer>
+							</Border>
+						</DockPanel>
+						<DockPanel Grid.Column="3">
+							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Testing DNA"/>
+							<Border BorderThickness="1" BorderBrush="DimGray" Margin="0,5,0,0">
+								<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+									<ListBox ItemsSource="{Binding SamplesInDna}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock FontSize="12" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</ListBox>
+								</ScrollViewer>
+							</Border>
+						</DockPanel>
+					</Grid>
 				</StackPanel>
 			</dxco:WizardPage>
 			<dxco:WizardPage x:Name="CleanUpPage">
@@ -111,15 +174,6 @@
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Concluded"/>
 					<TextBlock TextWrapping="WrapWithOverflow" Text="Assay Results"/>
-					<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-						<ListBox ItemsSource="{Binding ConsoleMessages}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-							<ListBox.ItemTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding}" TextWrapping="WrapWithOverflow"></TextBlock>
-								</DataTemplate>
-							</ListBox.ItemTemplate>
-						</ListBox>
-					</ScrollViewer>
 				</StackPanel>
 			</dxco:WizardPage>
 		</dxco:Wizard>

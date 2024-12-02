@@ -2,6 +2,7 @@
 using DevExpress.Mvvm.DataAnnotations;
 using Effani.Device.Control;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -79,10 +80,7 @@ namespace Effani.Device.UI
 			DnaTimer.Elapsed -= DnaTimer_Elapsed;
 		}
 
-		public float Time1Value { get; set; }
-		public float Time2Value { get; set; }
-		public float Time3Value { get; set; }
-		public float Time4Value { get; set; }
+		public Dictionary<int, float> TimeValues = new();
 		public float DnaValue { get; set; }
 		bool _canceled = false;
 		public bool Canceled

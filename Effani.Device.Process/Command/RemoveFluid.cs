@@ -4,13 +4,16 @@ using System.Linq;
 
 namespace Effani.Device.Process
 {
-	public class RemoveFluid(Axis axis, int microLiters, DeviceControl device) : Command(device)
+	public class RemoveFluid(int microLiters, DeviceControl device) : Command(device)
 	{
-		public override void Run()
+		protected override string Run()
 		{
-			Result = Device.RemoveFluid(Axis, MicroLiters);
+			Result = Device.RemoveFluid(MicroLiters);
+			return Result;
 		}
-		public Axis Axis { get; } = axis;
+
+		public override string Result { get; protected set; } = $"Fluid removed";
+
 		public int MicroLiters { get; } = microLiters;
 	}
 }

@@ -11,21 +11,21 @@ namespace Effani.Device.Control
 		[Display(ShortName = "Y")]
 		TableY,
 		[Display(ShortName = "Z")]
-		BiopsyPri,
+		Biopsy,
 		[Display(ShortName = "U")]
 		BiopsySec,
 		[Display(ShortName = "V")]
-		Aspirate1,
+		AspirateFluid,
 		[Display(ShortName = "W")]
-		Aspirate1Z,
+		AspirateFluidZ,
 		[Display(ShortName = "A")]
-		Aspirate2,
+		AspirateKoh,
 		[Display(ShortName = "B")]
-		Aspirate2Z,
+		AspirateKohZ,
 		[Display(ShortName = "D")]
-		Dna1,
+		DnaReagent1,
 		[Display(ShortName = "C")]
-		Dna2,
+		DnaReagent2,
 		[Display(ShortName = "'b")]
 		Koh1,
 		[Display(ShortName = "'a")]

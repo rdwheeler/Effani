@@ -1,4 +1,5 @@
-﻿using DevExpress.Mvvm;
+﻿using DevExpress.CodeParser;
+using DevExpress.Mvvm;
 using DevExpress.Mvvm.CodeGenerators;
 using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Xpf.Core;
@@ -110,6 +111,40 @@ namespace Effani.Device.UI
 			AddConsoleMessage($"NADH: {response}");
 			Mouse.OverrideCursor = Cursors.Arrow;
 		}
+		[Command]
+		public async Task LaserNadhOn()
+		{
+			var response = _device.LaserNadhOn();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task LaserNadhOff()
+		{
+			var response = _device.LaserNadhOff();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task LaserDnaOn()
+		{
+			var response = _device.LaserDnaOn();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task LaserDnaOff()
+		{
+			var response = _device.LaserDnaOff();
+			AddConsoleMessage(response);
+		}
+		[Command]
+		public async Task EnableCommands()
+		{
+			_device.Configuration.BypassDeviceCommands = 2;
+		}
+		[Command]
+		public async Task DisableCommands()
+		{
+			_device.Configuration.BypassDeviceCommands = 0;
+		}
 
 		[Command]
 		public async Task SetWifi()
@@ -163,7 +198,7 @@ namespace Effani.Device.UI
 			if(CurrentLoadingSample is not null)
 			{
 				AddConsoleMessage($"Preparing {CurrentLoadingSample.Well.Label} for sample loading");
-				_processEngine.AddCommand(new AlignWellToAxis(Axis.BiopsyPri, CurrentLoadingSample.Well, _device));
+				_processEngine.AddCommand(new AlignWellToAxis(Axis.Biopsy, CurrentLoadingSample.Well, _device));
 			}
 			RaisePropertyChanged(nameof(CurrentSampleLoaded));
 		}
@@ -182,6 +217,7 @@ namespace Effani.Device.UI
 			CurrentLoadingSample.TestMediaTimer3h.Start();
 			CurrentLoadingSample.TestMediaTimer4h.Start();
 			RaisePropertyChanged(nameof(CurrentSampleLoaded));
+			SamplesLoaded.Add(CurrentLoadingSample);
 		}
 
 		[Command]
@@ -197,6 +233,7 @@ namespace Effani.Device.UI
 		public void LoadFluidSystemPageStart()
 		{
 			AddConsoleMessage("Prompting to load fluid system");
+			_processEngine.AddCommand(new Goto(Axis.DnaReagent1, _device));
 		}
 		public void LoadSampleTraysPageStart()
 		{
@@ -209,6 +246,7 @@ namespace Effani.Device.UI
 			if (Assay != null)
 			{
 				Assay.PreparationComplete -= Assay_PreparationComplete;
+				Assay.PreparationComplete -= Assay_PreparationComplete;
 				Assay.Terminated -= Assay_Terminated;
 				Assay.StatusMessages.CollectionChanged -= StatusMessages_CollectionChanged;
 				Assay.Dispose();
@@ -217,16 +255,18 @@ namespace Effani.Device.UI
 			Assay = new Assay(_device, NumberOfTests, _processEngine);
 			Assay.StatusMessages.CollectionChanged += StatusMessages_CollectionChanged;
 			Assay.PreparationComplete += Assay_PreparationComplete;
+			Assay.AssayComplete += Assay_AssayComplete;
 			Assay.Terminated += Assay_Terminated;
 			Task.Run(() => Assay.DoPrepToTimerStart());
 		}
+
 		public void LoadingSamplesPageStart()
 		{
 			AddConsoleMessage("Prompting to load samples");
 			SampleLoadingCollection.AddRange(Assay.TestWells1);
 			SampleLoadingCollection.AddRange(Assay.TestWells2);
 			CurrentLoadingSample = SampleLoadingCollection.First();
-			_processEngine.AddCommand(new AlignWellToAxis(Axis.BiopsyPri, CurrentLoadingSample.Well, _device));
+			_processEngine.AddCommand(new AlignWellToAxis(Axis.Biopsy, CurrentLoadingSample.Well, _device));
 		}
 		public void FirstPageLoaded()
 		{
@@ -279,6 +319,14 @@ namespace Effani.Device.UI
 			Application.Current.Dispatcher.Invoke(() =>
 			{
 				PreparationComplete = true;
+			});
+		}
+
+		private void Assay_AssayComplete(object sender, EventArgs e)
+		{
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				AssayComplete = true;
 			});
 		}
 
@@ -355,6 +403,20 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(PreparationComplete));
 			}
 		}
+		public bool AssayComplete
+		{
+			get
+			{
+				return _assayComplete;
+			}
+			set
+			{
+				if (_assayComplete == value)
+					return;
+				_assayComplete = value;
+				RaisePropertyChanged(nameof(AssayComplete));
+			}
+		}
 		public bool AssayTerminated
 		{
 			get
@@ -374,9 +436,18 @@ namespace Effani.Device.UI
 
 		public ObservableCollection<string> ConsoleMessages { get; set; } = new();
 
+		public ObservableCollection<TestWell> SamplesLoaded => Assay.SamplesLoaded;
+
+		public ObservableCollection<TestWell> SamplesInPreparation => Assay.SamplesInPreparation;
+
+		public ObservableCollection<TestWell> SamplesInNadh => Assay.SamplesInNadh;
+
+		public ObservableCollection<TestWell> SamplesInDna => Assay.SamplesInDna;
+
 		DeviceControl _device;
 		ProcessEngine _processEngine = new ProcessEngine();
 		bool _preparationComplete;
+		bool _assayComplete;
 		TestWell _currentLoadingSample;
 		bool _assayTerminated;
 	}

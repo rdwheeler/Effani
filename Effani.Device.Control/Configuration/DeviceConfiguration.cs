@@ -134,12 +134,12 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine("\r\n; Actuators");
 			configTextBuilder.AppendLine(@"M950 P0 C""out1"" ; plate UV" );
 			configTextBuilder.AppendLine(@"M950 P1 C""out3"" ; needle UV");
-			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; DNA laser");
-			configTextBuilder.AppendLine(@"M950 P3 C""out1"" ; NADH laser");
+			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
+			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
 			configTextBuilder.AppendLine(@"M950 P4 C""out5"" ; CO2");
 			configTextBuilder.AppendLine("\r\n; Sensors");
-			configTextBuilder.AppendLine(@"M308 S0 P""1.io6.in"" Y""linear-analog"" A""DNAsensor"" F0 B0 C10 ; DNA optical sensor");
-			configTextBuilder.AppendLine(@"M308 S1 P""2.io6.in"" Y""linear-analog"" A""NADHsensor"" F0 B0 C10 ; NADH optical sensor");
+			configTextBuilder.AppendLine(@"M308 S0 P""1.io6.in"" Y""linear-analog"" A""DNAsensor"" F0 B0 C1 ; DNA optical sensor");
+			configTextBuilder.AppendLine(@"M308 S1 P""2.io6.in"" Y""linear-analog"" A""NADHsensor"" F0 B0 C1 ; NADH optical sensor");
 			configTextBuilder.AppendLine(@"M308 S3 P""1.temp0"" Y""thermistor"" A""Tray Heater"" T100000 B4725 C7.06e-8 ; configure tray heat sensor");
 			configTextBuilder.AppendLine("\r\n; Heaters");
 			configTextBuilder.AppendLine(@"M950 H0 C""1.out0"" T0 ; create tray heater");
@@ -188,8 +188,8 @@ G90 ; absolute positioning
 			DeviceSpecification.Axes.Add(tabley);
 			DeviceSpecification.Axes.AddRange(GetBioposyAxes());
 			DeviceSpecification.Axes.AddRange(GetAspirateAxes());
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Dna1, 1, 3, Dna1Location));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Dna2, 1, 4, Dna2Location));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent1, 1, 3, Dna1Location));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent2, 1, 4, Dna2Location));
 			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh2, 2, 0, Koh2Location));
 			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh1, 2, 1, Koh1Location));
 			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh2, 2, 2, Nadh2Location));
@@ -232,7 +232,7 @@ G90 ; absolute positioning
 		private List<AxisSpec> GetBioposyAxes()
 		{
 			var ret = new List<AxisSpec>();
-			ret.Add(new BiopsyAxis(Axis.BiopsyPri, 0, 2, BiopsyLocation));
+			ret.Add(new BiopsyAxis(Axis.Biopsy, 0, 2, BiopsyLocation));
 			ret.Add(new ShortZAxis(Axis.BiopsySec, 0, 3));
 
 			return ret;
@@ -240,10 +240,10 @@ G90 ; absolute positioning
 		private List<AxisSpec> GetAspirateAxes()
 		{
 			var ret = new List<AxisSpec>();
-			ret.Add(new AspirateAxis(Axis.Aspirate1, 0, 4, Aspirate1Location));
-			ret.Add(new ShortZAxis(Axis.Aspirate1Z, 1, 0));
-			ret.Add(new AspirateAxis(Axis.Aspirate2, 1, 1, Aspirate2Location));
-			ret.Add(new ShortZAxis(Axis.Aspirate2Z, 1, 2));
+			ret.Add(new AspirateAxis(Axis.AspirateFluid, 0, 4, AspirateFluidLocation));
+			ret.Add(new ShortZAxis(Axis.AspirateFluidZ, 1, 0));
+			ret.Add(new AspirateAxis(Axis.AspirateKoh, 1, 1, AspirateKohLocation));
+			ret.Add(new ShortZAxis(Axis.AspirateKohZ, 1, 2));
 
 			return ret;
 		}
@@ -266,6 +266,9 @@ G90 ; absolute positioning
 		}
 		private void SetConfigValues()
 		{
+			FluidSyringeHomePosition = GetConfigValue<float>(nameof(FluidSyringeHomePosition));
+			AspirateFluidSyringeHomePosition = GetConfigValue<float>(nameof(AspirateFluidSyringeHomePosition));
+			AspirateKohSyringeHomePosition = GetConfigValue<float>(nameof(AspirateKohSyringeHomePosition));
 			PlateCapacity = GetConfigValue<float>(nameof(PlateCapacity));
 			TrayTemperature = GetConfigValue<float>(nameof(TrayTemperature));
 			FluidSyringeVolumeMl = GetConfigValue<float>(nameof(FluidSyringeVolumeMl));
@@ -276,8 +279,8 @@ G90 ; absolute positioning
 			AspirateSyringeSpeed = GetConfigValue<float>(nameof(AspirateSyringeSpeed));
 			AspirateTopZTravel = GetConfigValue<float>(nameof(AspirateTopZTravel));
 			CameraLocation = GetCoordinateConfigValue(nameof(CameraLocation));
-			Aspirate1Location = GetCoordinateConfigValue(nameof(Aspirate1Location));
-			Aspirate2Location = GetCoordinateConfigValue(nameof(Aspirate2Location));
+			AspirateFluidLocation = GetCoordinateConfigValue(nameof(AspirateFluidLocation));
+			AspirateKohLocation = GetCoordinateConfigValue(nameof(AspirateKohLocation));
 			Dna1Location = GetCoordinateConfigValue(nameof(Dna1Location));
 			Dna2Location = GetCoordinateConfigValue(nameof(Dna2Location));
 			Koh1Location = GetCoordinateConfigValue(nameof(Koh1Location));
@@ -305,6 +308,7 @@ G90 ; absolute positioning
 			BaselineProcessingDwell = GetConfigValue<int>(nameof(BaselineProcessingDwell));
 			DnaVolume = GetConfigValue<int>(nameof(DnaVolume));
 			NadhVolume = GetConfigValue<int>(nameof(NadhVolume));
+			KohVolume = GetConfigValue<int>(nameof(KohVolume));
 			OpticalSensorDwell = GetConfigValue<int>(nameof(OpticalSensorDwell));
 			SensorReadDwell = GetConfigValue<int>(nameof(SensorReadDwell));
 			Co2Dwell = GetConfigValue<int>(nameof(Co2Dwell));
@@ -316,16 +320,24 @@ G90 ; absolute positioning
 			KohAspirationVolume = GetConfigValue<int>(nameof(KohAspirationVolume));
 			DnaAspirationVolume = GetConfigValue<int>(nameof(DnaAspirationVolume));
 			DnaAspirationVolume = GetConfigValue<int>(nameof(DnaAspirationVolume));
-			BypassDeviceCommands = GetConfigValue<bool>(nameof(BypassDeviceCommands));
+			BypassDeviceCommands = GetConfigValue<int>(nameof(BypassDeviceCommands));
 			AspirateKohSyringeVolumeMl = GetConfigValue<float>(nameof(AspirateKohSyringeVolumeMl));
 			AspirateKohSyringeTravelMm = GetConfigValue<float>(nameof(AspirateKohSyringeTravelMm));
 			AspirateSyringeSpeed = GetConfigValue<float>(nameof(AspirateSyringeSpeed));
 			WellWidth = GetConfigValue<float>(nameof(WellWidth));
 			WellDepth = GetConfigValue<float>(nameof(WellDepth));
+			CleanUpAspirationVolume = GetConfigValue<int>(nameof(CleanUpAspirationVolume));
+			BiopsyHomePosition = GetConfigValue<int>(nameof(BiopsyHomePosition));
+			BiopsyEjectHomePosition = GetConfigValue<int>(nameof(BiopsyEjectHomePosition));
 		}
 
-		public bool BypassDeviceCommands { get; set; }
+		public int BypassDeviceCommands { get; set; } // zero for no, one for yes, more than one for a n millisecond pause when bypassing
 		public bool TerminateOnSensorFailure { get; set; }
+		public float FluidSyringeHomePosition { get; set; }
+		public float AspirateFluidSyringeHomePosition { get; set; }
+		public float AspirateKohSyringeHomePosition { get; set; }
+		public float BiopsyHomePosition { get; set; }
+		public float BiopsyEjectHomePosition { get; set; }
 		public float WellWidth { get; set; } // mm of width of sample well
 		public float WellDepth { get; set; } // mm of width of sample well
 		public float PlateCapacity { get; set; } // number of sample plates this device can accomodate
@@ -341,8 +353,8 @@ G90 ; absolute positioning
 		public float AspirateTopZTravel { get; set; } // total mm aspirate axes will descend/ascend to top of well
 		public float AspirateStirSpeed { get; set; } // speed at which aspirate will move during stirring
 		public Coordinate CameraLocation { get; set; }
-		public Coordinate Aspirate1Location { get; set; }
-		public Coordinate Aspirate2Location { get; set; }
+		public Coordinate AspirateFluidLocation { get; set; }
+		public Coordinate AspirateKohLocation { get; set; }
 		public Coordinate Dna1Location { get; set; }
 		public Coordinate Dna2Location { get; set; }
 		public Coordinate Koh1Location { get; set; }
@@ -367,6 +379,7 @@ G90 ; absolute positioning
 		public float BiopsyZTravel { get; set; } // mm biopsy Z axes will descend/ascend
 		public float BiospsyZSpeed { get; set; } // speed at which the biopsy Z axis should descend/ascend
 		public int FluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
+		public int KohVolume { get; set; } // microliters dispensed by KOH pump
 		public int DnaVolume { get; set; } // microliters dispensed by DNA pump
 		public int NadhVolume { get; set; } // microliters dispensed by NADH pump
 		public int OpticalSensorDwell { get; set; } // total milliseconds to activate laser and read sensor
@@ -377,8 +390,9 @@ G90 ; absolute positioning
 		public int TestMediaTimerPeriod { get; set; } // seconds the test media timers will wait - 1h
 		public int KohTimerPeriod { get; set; } // milliseconds the KOH timer will wait - 4hs
 		public int DnaTimerPeriod { get; set; } // seconds the DNA timer will wait
-		public int KohAspirationVolume { get; set; } // microliters withdraw for KOH
-		public int DnaAspirationVolume { get; set; } // microliters withdraw for DNA
+		public int KohAspirationVolume { get; set; } // microliters withdraw for before KOH injection
+		public int DnaAspirationVolume { get; set; } // microliters withdraw for before DNA reagent injection
+		public int CleanUpAspirationVolume { get; set; } // microliters withdraw for clean up
 		public int BaselineProcessingDwell { get; set; } // ammount of milliseconds baseline processing will wait
 
 		public DeviceSpecification? DeviceSpecification { get; private set; }
