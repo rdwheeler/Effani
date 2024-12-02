@@ -30,6 +30,7 @@ namespace Effani.Device.UI
 			_processEngine = new ProcessEngine();
 			_processEngine.DataReceived += ProcessEngine_DataReceived;
 			Axes = new ObservableCollection<AxisSpec>(_device.Configuration.DeviceSpecification.Axes);
+			Assay = new Assay(_device, _processEngine);
 		}
 
 		#region Commands
@@ -199,7 +200,7 @@ namespace Effani.Device.UI
 			CurrentLoadingSample.TestMediaTimer2h.Start();
 			CurrentLoadingSample.TestMediaTimer3h.Start();
 			CurrentLoadingSample.TestMediaTimer4h.Start();
-			Assay.SamplesLoaded.Add(CurrentLoadingSample);
+			SamplesLoaded.Add(CurrentLoadingSample);
 			var currentIndex = SampleLoadingCollection.IndexOf(CurrentLoadingSample);
 			CurrentLoadingSample = SampleLoadingCollection.ElementAtOrDefault(currentIndex + 1);
 			if(CurrentLoadingSample is not null)
@@ -243,21 +244,49 @@ namespace Effani.Device.UI
 		}
 		public void PreparationPageStart()
 		{
-			if (Assay != null)
-			{
-				Assay.PreparationComplete -= Assay_PreparationComplete;
-				Assay.PreparationComplete -= Assay_PreparationComplete;
-				Assay.Terminated -= Assay_Terminated;
-				Assay.StatusMessages.CollectionChanged -= StatusMessages_CollectionChanged;
-				Assay.Dispose();
-				Assay = null;
-			}
-			Assay = new Assay(_device, NumberOfTests, _processEngine);
+			Assay.Initialize(NumberOfTests);
 			Assay.StatusMessages.CollectionChanged += StatusMessages_CollectionChanged;
 			Assay.PreparationComplete += Assay_PreparationComplete;
-			Assay.AssayComplete += Assay_AssayComplete;
+			Assay.TestInKohPhase += Assay_TestInKohPhase;
+			Assay.TestInDnaPhase += Assay_TestInDnaPhase;
+			Assay.TestComplete += Assay_TestComplete;
 			Assay.Terminated += Assay_Terminated;
 			Task.Run(() => Assay.DoPrepToTimerStart());
+		}
+
+		private void Assay_TestComplete(object sender, DeviceControl.DataArgs<TestWell> e)
+		{
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				SamplesLoaded.Remove(e.Data);
+				SamplesInKoh.Remove(e.Data);
+				SamplesInDna.Remove(e.Data);
+				SamplesComplete.Add(e.Data);
+				if(SamplesLoaded.Count() == 0 && SamplesInKoh.Count() == 0 && SamplesInDna.Count() == 0)
+				{
+					AddConsoleMessage("Assay complete");
+					AssayComplete = true;
+				}
+			});
+		}
+
+		private void Assay_TestInDnaPhase(object sender, DeviceControl.DataArgs<TestWell> e)
+		{
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				SamplesLoaded.Remove(e.Data);
+				SamplesInKoh.Remove(e.Data);
+				SamplesInDna.Add(e.Data);
+			});
+		}
+
+		private void Assay_TestInKohPhase(object sender, DeviceControl.DataArgs<TestWell> e)
+		{
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				SamplesLoaded.Remove(e.Data);
+				SamplesInKoh.Add(e.Data);
+			});
 		}
 
 		public void LoadingSamplesPageStart()
@@ -337,14 +366,6 @@ namespace Effani.Device.UI
 			});
 		}
 
-		private void Assay_AssayComplete(object sender, EventArgs e)
-		{
-			Application.Current.Dispatcher.Invoke(() =>
-			{
-				AssayComplete = true;
-			});
-		}
-
 		private void StatusMessages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
             foreach (var message in e.NewItems.OfType<string>())
@@ -398,7 +419,7 @@ namespace Effani.Device.UI
 				if (_accountName == value)
 					return;
 				_accountName = value;
-				ResultsFilePath = Path.Combine(Environment.CurrentDirectory, $"Results {value} {DateTime.Now.ToShortDateString()}.effani");
+				ResultsFilePath = Path.Combine(Environment.CurrentDirectory, $"Results {value} {DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.effani");
 				RaisePropertyChanged(nameof(AccountName));
 				RaisePropertyChanged(nameof(AccountAndNumberOfTestsComplete));
 			}
@@ -451,6 +472,10 @@ namespace Effani.Device.UI
 		public string ResultsFilePath { get; set; }
 
 		public ObservableCollection<string> ConsoleMessages { get; set; } = new();
+		public ObservableCollection<TestWell> SamplesLoaded { get; set; } = new();
+		public ObservableCollection<TestWell> SamplesInKoh { get; set; } = new();
+		public ObservableCollection<TestWell> SamplesInDna { get; set; } = new();
+		public ObservableCollection<TestWell> SamplesComplete { get; set; } = new();
 
 		DeviceControl _device;
 		ProcessEngine _processEngine = new ProcessEngine();

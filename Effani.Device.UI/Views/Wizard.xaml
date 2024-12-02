@@ -110,7 +110,7 @@
 			<dxco:WizardPage x:Name="AssayPage">
 				<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay In Progress"/>
-					<Grid HorizontalAlignment="Stretch">
+					<Grid HorizontalAlignment="Stretch" Visibility="{DXBinding 'AssayComplete ? $Visibility.Collapsed : $Visibility.Visible'}">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="5*" />
 							<ColumnDefinition Width="5*" />
@@ -120,7 +120,7 @@
 						<DockPanel HorizontalAlignment="Stretch" Grid.Column="0">
 							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Loaded"/>
 							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-								<ListBox ItemsSource="{Binding Assay.SamplesLoaded}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+								<ListBox ItemsSource="{Binding SamplesLoaded}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
 											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
@@ -130,9 +130,9 @@
 							</ScrollViewer>
 						</DockPanel>
 						<DockPanel Grid.Column="1">
-							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Preparing"/>
+							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Preparing Sample"/>
 							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-								<ListBox ItemsSource="{Binding Assay.SamplesInPreparation}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+								<ListBox ItemsSource="{Binding SamplesInKoh}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
 											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
@@ -142,9 +142,9 @@
 							</ScrollViewer>
 						</DockPanel>
 						<DockPanel Grid.Column="2">
-							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Testing NADH"/>
+							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Testing DNA"/>
 							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-								<ListBox ItemsSource="{Binding Assay.SamplesInNadh}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+								<ListBox ItemsSource="{Binding SamplesInDna}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
 											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
@@ -154,9 +154,9 @@
 							</ScrollViewer>
 						</DockPanel>
 						<DockPanel Grid.Column="3">
-							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Testing DNA"/>
+							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Complete"/>
 							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-								<ListBox ItemsSource="{Binding Assay.SamplesInDna}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+								<ListBox ItemsSource="{Binding SamplesComplete}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
 											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
@@ -166,6 +166,7 @@
 							</ScrollViewer>
 						</DockPanel>
 					</Grid>
+					<TextBlock FontSize="25" Margin="0,20,0,0" TextWrapping="WrapWithOverflow" Text="Assay complete. Press Next to continue." Visibility="{DXBinding 'AssayComplete ? $Visibility.Visible : $Visibility.Collapsed'}"/>
 				</StackPanel>
 			</dxco:WizardPage>
 			<dxco:WizardPage x:Name="CleanUpPage">
@@ -180,7 +181,7 @@
 			<dxco:WizardPage x:Name="AssayConcludedPage" ShowBack="False" ShowCancel="False">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Concluded"/>
-					<TextBlock TextWrapping="WrapWithOverflow" Text="{DXBinding '`Test results written to` + ResultsFilePath'}"/>
+					<TextBlock TextWrapping="WrapWithOverflow" Text="{DXBinding '`Test results written to ` + ResultsFilePath'}"/>
 				</StackPanel>
 			</dxco:WizardPage>
 		</dxco:Wizard>
