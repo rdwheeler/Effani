@@ -45,8 +45,6 @@ M83 ; relative extruder moves
 M550 P""Effani"" ; set hostname
 
 ; Network
-M552 S0
-M587 S""blah - 2.4Ghz"" P""B4forever!""
 M552 S1 ; configure WiFi adapter
 M586 P0 S1 ; configure HTTP
 M586 P1 S1 ; configure FTP
@@ -140,12 +138,25 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine("\r\n; Sensors");
 			configTextBuilder.AppendLine(@"M308 S0 P""1.io6.in"" Y""linear-analog"" A""DNAsensor"" F0 B0 C1 ; DNA optical sensor");
 			configTextBuilder.AppendLine(@"M308 S1 P""2.io6.in"" Y""linear-analog"" A""NADHsensor"" F0 B0 C1 ; NADH optical sensor");
-			configTextBuilder.AppendLine(@"M308 S3 P""1.temp0"" Y""thermistor"" A""Tray Heater"" T100000 B4725 C7.06e-8 ; configure tray heat sensor");
+			configTextBuilder.AppendLine(@"M308 S3 P""2.temp0"" Y""thermistor"" A""Tray Heater"" T100000 B4725 C7.06e-8 ; configure tray heat sensor");
 			configTextBuilder.AppendLine("\r\n; Heaters");
-			configTextBuilder.AppendLine(@"M950 H0 C""1.out0"" T0 ; create tray heater");
-			configTextBuilder.AppendLine(@"M140 P0 H0 ; configure bed heater to use the heater^");
-			configTextBuilder.AppendLine($"M143 H0 P0 T0 C0 S{TrayTemperature} A0 ; configure heater monitor");
+			configTextBuilder.AppendLine(@"M950 H0 C""1.out0"" T3 ; create tray heater");
+			configTextBuilder.AppendLine($"M143 H0 P0 T0 C0 S100 A0 ; configure heater monitor");
 			configTextBuilder.AppendLine(@"M307 H0 R2.43 D5.5 E1.35 K0.56 B1 ; configure model of heater");
+			configTextBuilder.AppendLine(@"M950 H1 C""1.out1"" T3 ; create tray heater");
+			configTextBuilder.AppendLine($"M143 H1 P0 T1 C0 S100 A0 ; configure heater monitor");
+			configTextBuilder.AppendLine(@"M307 H1 R2.43 D5.5 E1.35 K0.56 B1 ; configure model of heater");
+			configTextBuilder.AppendLine(@"M950 H2 C""2.out0"" T3 ; create tray heater");
+			configTextBuilder.AppendLine($"M143 H2 P0 T2 C0 S100 A0 ; configure heater monitor");
+			configTextBuilder.AppendLine(@"M307 H2 R2.43 D5.5 E1.35 K0.56 B1 ; configure model of heater");
+			configTextBuilder.AppendLine(@"M950 H3 C""2.out1"" T3 ; create tray heater");
+			configTextBuilder.AppendLine($"M143 H3 P0 T3 C0 S100 A0 ; configure heater monitor");
+			configTextBuilder.AppendLine(@"M307 H3 R2.43 D5.5 E1.35 K0.56 B1 ; configure model of heater");
+			configTextBuilder.AppendLine("\r\n; Heated beds");
+			configTextBuilder.AppendLine(@"M140 P0 H0 ; configure bed heater to use the heater^");
+			configTextBuilder.AppendLine(@"M140 P1 H1 ; configure bed heater to use the heater^");
+			configTextBuilder.AppendLine(@"M140 P2 H2 ; configure bed heater to use the heater^");
+			configTextBuilder.AppendLine(@"M140 P3 H3 ; configure bed heater to use the heater^");
 
 			File.WriteAllBytes(Path.Combine(folder, "config.g"), Encoding.ASCII.GetBytes(configTextBuilder.ToString()));
 		}
@@ -159,7 +170,7 @@ M669 K0 ; configure Cartesian kinematics
 "
 				);
 				var x = DeviceSpecification.Axes[i];
-				var direction = x.Driver.Direction == Direction.Forwards ? null : "-";
+				var direction = x.Driver.Endstop.Location == EndstopLocation.HighEnd ? null : "-";
 				var distance = x.Maximum - x.Minimum + 5;
 				homeTextBuilder.Append(@$"
 G91 ; relative positioning
@@ -182,8 +193,8 @@ G90 ; absolute positioning
 		{
 			DeviceSpecification = new DeviceSpecification();
 			DeviceSpecification.DeviceName = DeviceSpecification.Label;
-			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 312, EndstopLocation.LowEnd, direction: Direction.Backwards));
-			var tabley = new TableAxis(Axis.TableY, 0, 1, 364, EndstopLocation.LowEnd, direction: Direction.Backwards);
+			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 1000, EndstopLocation.LowEnd, direction: Direction.Forwards));
+			var tabley = new TableAxis(Axis.TableY, 0, 1, 1000, EndstopLocation.LowEnd, direction: Direction.Backwards);
 			tabley.Driver.Endstop.FirstHomingSpeed = 1000;
 			DeviceSpecification.Axes.Add(tabley);
 			DeviceSpecification.Axes.AddRange(GetBioposyAxes());
@@ -195,18 +206,18 @@ G90 ; absolute positioning
 			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh2, 2, 2, Nadh2Location));
 			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh1, 2, 3, Nadh1Location));
 			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Basal2, 2, 4, Basal2Location));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Basal1, 3, 0, Basal1Location));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Basal1, 1, 5, Basal1Location));
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(0, 0)));
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(1, 0)));
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(0, 1)));
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(1, 1)));
 			Plate currentPlate = DeviceSpecification.Plates[0];
-			var wellNumberInPlate = 0;
+			var wellIndexInPlate = 0;
 			for (int index = 0; index < PlateCapacity * TestWellsPerPlate; index++)
 			{
-				for (int x = 0; x < HorizontalWellCount; x++)
+				for (int y = 0; y < VerticalWellCount; y++)
 				{
-					for (int y = 0; y < VerticalWellCount; y++)
+					for (int x = 0; x < HorizontalWellCount; x++)
 					{
 						var location = new Coordinate(
 							(x * WellOffset.X) + (currentPlate.Index.X * PlateOffset.X), 
@@ -214,18 +225,18 @@ G90 ; absolute positioning
 						new Well(currentPlate, x, y, location);
 					}
 				}
-				if (wellNumberInPlate == TestWellsPerPlate - 1)
+				if (wellIndexInPlate == TestWellsPerPlate - 1)
 				{
 					if(currentPlate == DeviceSpecification.Plates.Last())
 						break;
 
-					wellNumberInPlate = 0;
+					wellIndexInPlate = 0;
 					currentPlate = DeviceSpecification.Plates
 						.ElementAt(DeviceSpecification.Plates.IndexOf(currentPlate) + 1);
 				}
 				else
 				{
-					wellNumberInPlate++;
+					wellIndexInPlate++;
 				}
 			}
 		}

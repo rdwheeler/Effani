@@ -13,6 +13,10 @@ namespace Effani.Device.Control
 			Plate = plate;
 			Location = location;
 		}
+		public override string ToString()
+		{
+			return Label;
+		}
 		public Coordinate Location { get; private set; }
 		public Plate Plate { get; private set; }
 		public int X { get; private set; }

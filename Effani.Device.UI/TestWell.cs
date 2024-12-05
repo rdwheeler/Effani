@@ -1,5 +1,4 @@
 ﻿using DevExpress.Mvvm;
-using DevExpress.Mvvm.DataAnnotations;
 using Effani.Device.Control;
 using System;
 using System.Collections.Generic;
@@ -12,11 +11,13 @@ namespace Effani.Device.UI
 {
 	public class TestWell : ViewModelBase, IDisposable
 	{
-		public TestWell(DeviceConfiguration deviceConfiguration, Well well, EventHandler<DataArgs<int>> testMediaTimerCallback, EventHandler<DataArgs<int>> kohTimerCallback, EventHandler<DataArgs<int>> dnaTimerCallback)
+		#region Constructors
+		public TestWell(DeviceConfiguration deviceConfiguration, Well well, int testIndex, EventHandler<DataArgs<int>> testMediaTimerCallback, EventHandler<DataArgs<int>> kohTimerCallback, EventHandler<DataArgs<int>> dnaTimerCallback)
 		{
 			_dnaTimerCallback = dnaTimerCallback;
 			_kohTimerCallback = kohTimerCallback;
 			_testMediaTimerCallback = testMediaTimerCallback;
+			TestIndex = testIndex;
 			Well = well;
 			TestMediaTimer1h = new Timer(deviceConfiguration.TestMediaTimerPeriod) { AutoReset = false };
 			TestMediaTimer2h = new Timer(deviceConfiguration.TestMediaTimerPeriod * 2) { AutoReset = false };
@@ -32,37 +33,9 @@ namespace Effani.Device.UI
 			KohTimer.Elapsed += KohTimer_Elapsed;
 			DnaTimer.Elapsed += DnaTimer_Elapsed;
 		}
+		#endregion
 
-		private void DnaTimer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			Task.Run(() => _dnaTimerCallback.Invoke(this, new DataArgs<int>(0)));
-		}
-
-		private void KohTimer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			Task.Run(() => _kohTimerCallback.Invoke(this, new DataArgs<int>(0)));
-		}
-
-		private void TestMediaTimer4h_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(4)));
-		}
-
-		private void TestMediaTimer3h_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(3)));
-		}
-
-		private void TestMediaTimer2h_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(2)));
-		}
-
-		private void TestMediaTimer1h_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(1)));
-		}
-
+		#region Public methods
 		public void Dispose()
 		{
 			TestMediaTimer1h.Stop();
@@ -79,10 +52,36 @@ namespace Effani.Device.UI
 			KohTimer.Elapsed -= KohTimer_Elapsed;
 			DnaTimer.Elapsed -= DnaTimer_Elapsed;
 		}
+		#endregion
 
-		public Dictionary<int, float> TimeValues = new();
-		public float DnaValue { get; set; }
-		bool _canceled = false;
+		#region Private methods
+		private void DnaTimer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Task.Run(() => _dnaTimerCallback.Invoke(this, new DataArgs<int>(0)));
+		}
+		private void KohTimer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Task.Run(() => _kohTimerCallback.Invoke(this, new DataArgs<int>(0)));
+		}
+		private void TestMediaTimer1h_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(1)));
+		}
+		private void TestMediaTimer2h_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(2)));
+		}
+		private void TestMediaTimer3h_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(3)));
+		}
+		private void TestMediaTimer4h_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(4)));
+		}
+		#endregion
+
+		#region Properties
 		public bool Canceled
 		{
 			get
@@ -97,8 +96,11 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(Canceled));
 			}
 		}
-		bool _loaded = false;
-		public bool Loaded
+		public Timer DnaTimer { get; set; }
+		public float DnaValue { get; set; }
+		public Timer KohTimer { get; set; }
+		public string Label => Well.Label;
+		public bool LoadedOntoTray
 		{
 			get
 			{
@@ -109,12 +111,9 @@ namespace Effani.Device.UI
 				if (_loaded == value)
 					return;
 				_loaded = value;
-				RaisePropertyChanged(nameof(Loaded));
+				RaisePropertyChanged(nameof(LoadedOntoTray));
 			}
 		}
-		public Well Well { get; private set; }
-		public string Label => Well.Label;
-		string _sampleId;
 		public string SampleId
 		{
 			get
@@ -129,17 +128,22 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(SampleId));
 			}
 		}
-
 		public Timer TestMediaTimer1h { get; set; }
-
 		public Timer TestMediaTimer2h { get; set; }
 		public Timer TestMediaTimer3h { get; set; }
 		public Timer TestMediaTimer4h { get; set; }
-		public Timer KohTimer { get; set; }
-		public Timer DnaTimer { get; set; }
+		public Well Well { get; private set; }
+		public int TestIndex { get; }
+		#endregion
 
-		readonly EventHandler<DataArgs<int>> _testMediaTimerCallback;
-		readonly EventHandler<DataArgs<int>> _kohTimerCallback;
+		#region Fields
+		bool _canceled = false;
 		readonly EventHandler<DataArgs<int>> _dnaTimerCallback;
+		readonly EventHandler<DataArgs<int>> _kohTimerCallback;
+		bool _loaded = false;
+		string _sampleId;
+		readonly EventHandler<DataArgs<int>> _testMediaTimerCallback;
+		public Dictionary<int, float> TimeValues = new();
+		#endregion
 	}
 }

@@ -1,9 +1,7 @@
-﻿using DevExpress.Xpf.Core;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
+﻿using DevExpress.Mvvm.POCO;
+using DevExpress.Xpf.Core;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Windows;
 
 namespace Effani.Device.UI
@@ -15,12 +13,38 @@ namespace Effani.Device.UI
 	{
 		static App()
 		{
-			//CompatibilitySettings.UseLightweightThemes = true;
+
+			AppHost = Host.CreateDefaultBuilder()
+				.ConfigureServices((hostContext, services) =>
+				{
+					services.AddSingleton<IDeviceService, DeviceService>();
+					services.AddSingleton<MainWindow>();
+					services.AddSingleton<MainView>();
+					services.AddSingleton<UtilitiesView>();
+				})
+				.Build();
+
 			ApplicationThemeHelper.ApplicationThemeName = Theme.MetropolisDark.Name;
 		}
-		private void OnAppStartup_UpdateThemeName(object sender, StartupEventArgs e)
+
+		protected override async void OnStartup(StartupEventArgs e)
 		{
+			await AppHost!.StopAsync();
+
+			var startupForm = AppHost.Services.GetRequiredService<MainWindow>();
+			startupForm.Show();
+
+			base.OnStartup(e);
+
 			DevExpress.Xpf.Core.ApplicationThemeHelper.UpdateApplicationThemeName();
 		}
+		protected override async void OnExit(ExitEventArgs e)
+		{
+			await AppHost!.StopAsync();
+
+			base.OnExit(e);
+		}
+
+		public static IHost AppHost { get; private set; }
 	}
 }

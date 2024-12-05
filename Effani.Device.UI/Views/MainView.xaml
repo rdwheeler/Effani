@@ -9,16 +9,13 @@
     xmlns:dxco="http://schemas.devexpress.com/winfx/2008/xaml/controls"
     xmlns:local="clr-namespace:Effani.Device.UI"
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.DataContext>
-        <local:MainViewModel/>
-	</UserControl.DataContext>
 	<Grid>
 		<dx:DXTabControl>
 			<dx:DXTabItem Header="Analyse">
 				<local:Wizard></local:Wizard>
 			</dx:DXTabItem>
 			<dx:DXTabItem Header="Utilities">
-				<local:Utilities></local:Utilities>
+				<local:UtilitiesView></local:UtilitiesView>
 			</dx:DXTabItem>
 		</dx:DXTabControl>
 	</Grid>

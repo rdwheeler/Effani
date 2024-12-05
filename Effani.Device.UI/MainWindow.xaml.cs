@@ -20,9 +20,10 @@ namespace Effani.Device.UI
 	/// </summary>
 	public partial class MainWindow : ThemedWindow
 	{
-		public MainWindow()
+		public MainWindow(IDeviceService deviceService)
 		{
 			InitializeComponent();
+			DataContext = new MainViewModel(deviceService);
 		}
 	}
 }

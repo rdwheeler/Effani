@@ -21,24 +21,44 @@ namespace Effani.Device.Process
 			thread.Join();
 		}
 
-		public bool AddCommand(Command command, bool startProcessing = true)
+		public bool QueueCommands(CommandPacket commandPacket, bool startProcessing = true)
 		{
-			CommandQueue.Enqueue(command);
-			if (startProcessing)
-				return ExecuteProcess();
-			return false;
-		}
-		public string AddCommandAndGetResult(Command command, bool startProcessing = true)
-		{
-			AddCommand(command);
-
-			for(var x = 0; x < 100; x++)
+			ProcessingLock.EnterWriteLock();
+			try
 			{
-				if (command.Result is not null)
-					return command.Result;
-				Thread.Sleep(100);
+				CommandPacketQueue.Enqueue(commandPacket);
+				if (startProcessing)
+					return ExecuteProcess();
+				return false;
 			}
-			return null;
+			finally
+			{
+				ProcessingLock.ExitWriteLock();
+			}
+		}
+
+		public bool QueueCommand(Command command, bool startProcessing = true)
+		{
+			return QueueCommands(new CommandPacket([command]), startProcessing);
+		}
+
+		public string ExecuteCommandsAndGetResult(CommandPacket commandPacket, bool startProcessing = true)
+		{
+			ProcessingLock.EnterWriteLock();
+			try
+			{
+				for (int i = 0; i < commandPacket.Commands.Count() - 1; i++) // presume last command is the one we want results from
+				{
+					commandPacket.Commands[i].Execute();
+				}
+				var readCommand = commandPacket.Commands.Last();
+				readCommand.Execute();
+				return readCommand.Result;
+			}
+			finally
+			{
+				ProcessingLock.ExitWriteLock();
+			}
 		}
 		public void Dispose()
 		{
@@ -58,11 +78,14 @@ namespace Effani.Device.Process
 		{
 			try
 			{
-				while (CommandQueue.TryDequeue(out var command))
+				while (CommandPacketQueue.TryDequeue(out var commandPacket))
 				{
-					command.Execute();
-					if (!String.IsNullOrEmpty(command.Result))
-						EnqueueMessage(command.Result);
+					foreach(var command in commandPacket.Commands)
+					{
+						command.Execute();
+						if (!String.IsNullOrEmpty(command.Result))
+							EnqueueMessage(command.Result);
+					}
 				}
 				TerminateProcess();
 			}
@@ -91,12 +114,13 @@ namespace Effani.Device.Process
 			}
 		}
 
-		public ConcurrentQueue<Command> CommandQueue { get; set; } = new();
-		public ConcurrentQueue<string> Messages { get; set; } = new();
+		public ConcurrentQueue<CommandPacket> CommandPacketQueue { get; } = new();
+		public ConcurrentQueue<string> Messages { get; } = new();
+		public ReaderWriterLockSlim ProcessingLock { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
 		public event EventHandler<DataArgs<string>>? DataReceived;
 
-		Thread _processThread;
-		Thread _publishThread;
+		Thread? _processThread;
+		Thread? _publishThread;
 	}
 }

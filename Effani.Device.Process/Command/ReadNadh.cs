@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Effani.Device.Process
 {
-	public class ReadNadh(DeviceControl device) : Command(device)
+	public class ReadNadh(DeviceControl device) : ReadCommand(device)
 	{
 		protected override string Run()
 		{

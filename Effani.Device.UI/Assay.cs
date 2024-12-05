@@ -31,7 +31,7 @@ namespace Effani.Device.UI
 			{
 				if (currentTest == numberOfTests + 6)
 					break;
-				var result = new TestWell(Config, well, TestMediaTimer_Elapsed, KohTimer_Elapsed, DnaTimer_Elapsed);
+				var result = new TestWell(Config, well, currentTest, TestMediaTimer_Elapsed, KohTimer_Elapsed, DnaTimer_Elapsed);
 				WellTests.Add(result);
 				currentTest++;
 			}       
@@ -52,15 +52,21 @@ namespace Effani.Device.UI
 				foreach(var fluidLine in Device.FluidAxes)
 				{
 					StatusMessages.Add($"Priming {fluidLine.Label}");
-					Engine.AddCommand(new AlignWasteToPump(fluidLine.Axis, Device));
-					Engine.AddCommand(new EmitFluid(fluidLine.Axis, Config.FluidPrimingVolume, Device));
+					Engine.QueueCommands(new CommandPacket(
+					[
+						new AlignWasteToPump(fluidLine.Axis, Device),
+						new EmitFluid(fluidLine.Axis, Config.FluidPrimingVolume, Device)
+					]));
 				}
 				StatusMessages.Add($"Establishing baselines...");
 				foreach(var wellTest in DnaBaselineWells)
 				{
 					StatusMessages.Add($"Dispensing {Config.DnaVolume}µg DNA reagent to {wellTest.Well.Label}");
-					Engine.AddCommand(new AlignWellToAxis(Axis.DnaReagent1, wellTest.Well, Device));
-					Engine.AddCommand(new EmitFluid(Axis.DnaReagent1, Config.DnaVolume, Device));
+					Engine.QueueCommands(new CommandPacket(
+					[
+						new AlignWellToAxis(Axis.DnaReagent1, wellTest.Well, Device),
+						new EmitFluid(Axis.DnaReagent1, Config.DnaVolume, Device),
+					]));
 				}
 				var baselineTimerStarted = DateTime.Now;
 				StatusMessages.Add($"Starting DNA baseline timer ({BaselineTimer.Interval / 1000} seconds)");
@@ -68,8 +74,11 @@ namespace Effani.Device.UI
 				foreach(var wellTest in NadhBaselineWells)
 				{
 					StatusMessages.Add($"Dispensing {Config.NadhVolume}µg NADH to {wellTest.Well.Label}");
-					Engine.AddCommand(new AlignWellToAxis(Axis.Nadh1, wellTest.Well, Device));
-					Engine.AddCommand(new EmitFluid(Axis.Nadh1, Config.NadhVolume, Device));
+					Engine.QueueCommands(new CommandPacket(
+					[
+						new AlignWellToAxis(Axis.Nadh1, wellTest.Well, Device),
+						new EmitFluid(Axis.Nadh1, Config.NadhVolume, Device),
+					]));
 				}
 
 				StatusMessages.Add($"Reading NADH baselines...");
@@ -94,7 +103,7 @@ namespace Effani.Device.UI
 				_doingPrepToBaselineTimerStart = false;
 			}
 		}
-		private void DoPrepAfterBaselineTimerElapsed()
+		private void TakeReadingsAfterBaselineTimerElapsed()
 		{
 			try
 			{
@@ -139,7 +148,6 @@ namespace Effani.Device.UI
 		}
 		public void DoAssay()
 		{
-			_samplesNotLoaded = false;
 			StatusMessages.Add($"Beginning assay...");
 		}
 		public void Dispose()
@@ -151,8 +159,11 @@ namespace Effani.Device.UI
 		private float GetReading(Well well, Coordinate location, string readingName, Command readCommand)
 		{
 			StatusMessages.Add($"Reading {readingName} for {well.Label}");
-			Engine.AddCommand(new AlignWellToLocation(location, well, Device));
-			var result = Engine.AddCommandAndGetResult(readCommand);
+			var result = Engine.ExecuteCommandsAndGetResult(new CommandPacket(
+			[
+				new AlignWellToLocation(location, well, Device),
+				readCommand
+			]));
 			if (result is null)
 			{
 				TerminateOnSensorFailure($"Timeout reading {readingName} for {well.Label}");
@@ -182,19 +193,12 @@ namespace Effani.Device.UI
 		}
 		private void BaselineTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			DoPrepAfterBaselineTimerElapsed();
+			TakeReadingsAfterBaselineTimerElapsed();
 		}
 		private void TestMediaTimer_Elapsed(object sender, DataArgs<int> e)
 		{
 			if (_processTerminating)
 				return;
-
-			while (_samplesNotLoaded)
-			{
-				if (_processTerminating)
-					return;
-				Task.Delay(3000);
-			}
 
 			_testMediaTimerLock.Wait();
 
@@ -209,27 +213,33 @@ namespace Effani.Device.UI
 					case 1:
 						TestInKohPhase?.Invoke(this, new DataArgs<TestWell>(testWell));
 						StatusMessages.Add($"Adding test media to {testWell.Label}");
-						// remove fluid from well
-						Engine.AddCommand(new AlignWellToAxis(Axis.AspirateFluid, testWell.Well, Device));
-						Engine.AddCommand(new RemoveFluid(Config.TestMediaAspirationVolume, Device));
-						Engine.AddCommand(new AlignWasteToPump(Axis.AspirateFluid, Device));
-						Engine.AddCommand(new EmptyAspirateFluid(Device));
-						// add NADH to well
 						Axis nadhAxis = testWell.Well.Plate.Index.X == 0 ? Axis.Nadh1 : Axis.Nadh2;
-						Engine.AddCommand(new AlignWellToAxis(nadhAxis, testWell.Well, Device));
-						Engine.AddCommand(new EmitFluid(nadhAxis, Config.NadhVolume, Device));
+						Engine.QueueCommands(new CommandPacket(
+						[
+							// remove fluid from well
+							new AlignWellToAxis(Axis.AspirateFluid, testWell.Well, Device),
+							new RemoveFluid(Config.TestMediaAspirationVolume, Device),
+							new AlignWasteToPump(Axis.AspirateFluid, Device),
+							new EmptyAspirateFluid(Device),
+							// add NADH to well
+							new AlignWellToAxis(nadhAxis, testWell.Well, Device),
+							new EmitFluid(nadhAxis, Config.NadhVolume, Device),
+						]));
 						break;
 					case 4:
 						StatusMessages.Add($"Adding KOH media to {testWell.Label}");
-						// remove fluid from well
-						Engine.AddCommand(new AlignWellToAxis(Axis.AspirateFluid, testWell.Well, Device));
-						Engine.AddCommand(new RemoveFluid(Config.KohAspirationVolume, Device));
-						Engine.AddCommand(new AlignWasteToPump(Axis.AspirateFluid, Device));
-						Engine.AddCommand(new EmptyAspirateFluid(Device));
-						// add KOH to well
 						Axis kohAxis = testWell.Well.Plate.Index.X == 0 ? Axis.Koh1 : Axis.Koh2;
-						Engine.AddCommand(new AlignWellToAxis(kohAxis, testWell.Well, Device));
-						Engine.AddCommand(new EmitFluid(kohAxis, Config.KohVolume, Device));
+						Engine.QueueCommands(new CommandPacket(
+						[
+							// remove fluid from well
+							new AlignWellToAxis(Axis.AspirateFluid, testWell.Well, Device),
+							new RemoveFluid(Config.KohAspirationVolume, Device),
+							new AlignWasteToPump(Axis.AspirateFluid, Device),
+							new EmptyAspirateFluid(Device),
+							// add KOH to well
+							new AlignWellToAxis(kohAxis, testWell.Well, Device),
+							new EmitFluid(kohAxis, Config.KohVolume, Device),
+						]));
 						testWell.KohTimer.Start();
 						break;
 				}
@@ -255,17 +265,20 @@ namespace Effani.Device.UI
 				var testWell = sender as TestWell;
 				TestInDnaPhase?.Invoke(this, new DataArgs<TestWell>(testWell));
 				StatusMessages.Add($"Adding DNA assay media to {testWell.Label}");
-				// remove KOH from well
-				Engine.AddCommand(new AlignWellToAxis(Axis.AspirateKoh, testWell.Well, Device));
-				Engine.AddCommand(new RemoveKoh(Config.DnaAspirationVolume, Device));
-				Engine.AddCommand(new AlignWasteToPump(Axis.AspirateKoh, Device));
-				Engine.AddCommand(new EmptyAspirateKoh(Device));
-				// add DNA reagent to well
 				Axis dnaAxis = testWell.Well.Plate.Index.X == 0 ? Axis.DnaReagent1 : Axis.DnaReagent2;
-				Engine.AddCommand(new AlignWellToAxis(dnaAxis, testWell.Well, Device));
-				Engine.AddCommand(new EmitFluid(dnaAxis, Config.DnaVolume, Device));
+				Engine.QueueCommands(new CommandPacket(
+				[
+					// remove KOH from well
+					new AlignWellToAxis(Axis.AspirateKoh, testWell.Well, Device),
+					new RemoveKoh(Config.DnaAspirationVolume, Device),
+					new AlignWasteToPump(Axis.AspirateKoh, Device),
+					new EmptyAspirateKoh(Device),
+					// add DNA reagent to well
+					new AlignWellToAxis(dnaAxis, testWell.Well, Device),
+					new EmitFluid(dnaAxis, Config.DnaVolume, Device),
+				]));
 				testWell.DnaTimer.Start();
-			}
+}
 			catch(Exception ex)
 			{
 				Terminate($"Error preparing DNA: {ex.Message}");
@@ -286,10 +299,13 @@ namespace Effani.Device.UI
 					return;
 				testWell.TimeValues.Add(e.Data, timeReading);
 				// remove remaining fluid from well
-				Engine.AddCommand(new AlignWellToAxis(Axis.AspirateFluid, testWell.Well, Device));
-				Engine.AddCommand(new RemoveFluid(Config.CleanUpAspirationVolume, Device));
-				Engine.AddCommand(new AlignWasteToPump(Axis.AspirateFluid, Device));
-				Engine.AddCommand(new EmptyAspirateFluid(Device));
+				Engine.QueueCommands(new CommandPacket(
+				[
+					new AlignWellToAxis(Axis.AspirateFluid, testWell.Well, Device),
+					new RemoveFluid(Config.CleanUpAspirationVolume, Device),
+					new AlignWasteToPump(Axis.AspirateFluid, Device),
+					new EmptyAspirateFluid(Device),
+				]));
 
 				TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell));
 			}
@@ -342,7 +358,6 @@ namespace Effani.Device.UI
 		int _baselineWellCount => DnaBaselineWells.Count() + NadhBaselineWells.Count();
 		int _testWellCount => WellTests.Count - _baselineWellCount;
 		bool _doingPrepToBaselineTimerStart;
-		bool _samplesNotLoaded = true;
 		bool _processTerminating;
 		SemaphoreSlim _testMediaTimerLock = new SemaphoreSlim(1, 1);
 		SemaphoreSlim _kohTimerLock = new SemaphoreSlim(1, 1);

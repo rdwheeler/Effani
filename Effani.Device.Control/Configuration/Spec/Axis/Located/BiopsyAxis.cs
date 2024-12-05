@@ -14,7 +14,7 @@ namespace Effani.Device.Control
 			Driver = new DriverSpec(Label)
 			{
 				Current = 1500,
-				Direction = Direction.Backwards,
+				Direction = Direction.Forwards,
 				Endstop = new EndstopSpec(Label)
 				{
 					SensorPort = $"{(board > 0 ? board : null)}.io{port}.in",

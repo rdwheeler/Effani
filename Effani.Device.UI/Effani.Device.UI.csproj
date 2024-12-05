@@ -21,6 +21,8 @@
 		<PackageReference Include="DevExpress.Wpf.Themes.Office2016White" Version="24.1.7" />
 		<PackageReference Include="DevExpress.Wpf.Themes.All" Version="24.1.7" />
 		<PackageReference Include="DevExpress.Win.BonusSkins" Version="24.1.7" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="4.0.50">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

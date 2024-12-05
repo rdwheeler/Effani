@@ -33,7 +33,12 @@ namespace Effani.Device.UI
 		private void Wizard_Loaded(object sender, RoutedEventArgs e)
 		{
 			var viewModel = DataContext as MainViewModel;
-			viewModel.FirstPageLoaded();
+			viewModel.AdvanceWizardPage += ViewModel_AdvanceWizardPage;
+			viewModel.PageStartFirstPage();
+		}
+		private void ViewModel_AdvanceWizardPage(object sender, EventArgs e)
+		{
+			wizard.GoNext();
 		}
 
 		private void Wizard_Next(object sender, System.ComponentModel.CancelEventArgs e)
@@ -44,25 +49,22 @@ namespace Effani.Device.UI
 			switch (page.Name)
 			{
 				case "GatherParametersPage":
-					viewModel.LoadFluidSystemPageStart();
+					viewModel.PageStartLoadFluidSystem();
 					break;
 				case "LoadFluidSystemPage":
-					viewModel.LoadSampleTraysPageStart();
+					viewModel.PageStartLoadSampleTrays();
 					break;
 				case "LoadSampleTraysPage":
-					viewModel.PreparationPageStart();
-					break;
-				case "PreparationPage":
-					viewModel.LoadingSamplesPageStart();
+					viewModel.PageStartLoadingSamples();
 					break;
 				case "LoadingSamplesPage":
-					viewModel.AssayPageStart();
+					viewModel.PageStartAssay();
 					break;
 				case "AssayPage":
-					viewModel.CleanUpPageStart();
+					viewModel.PageStartCleanUp();
 					break;
 				case "CleanUpPage":
-					viewModel.AssayConcludedPageStart();
+					viewModel.PageStartAssayConcluded();
 					break;
 			}
 		}

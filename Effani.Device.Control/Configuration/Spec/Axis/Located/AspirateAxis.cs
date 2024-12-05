@@ -13,6 +13,7 @@ namespace Effani.Device.Control
 			MaxSpeed = 2280;
 			Driver = new DriverSpec(Label)
 			{
+				Direction.Forwards,
 				Endstop = new EndstopSpec(Label)
 				{
 					SensorPort = $"{(board > 0 ? board : null)}.io{port}.in",
