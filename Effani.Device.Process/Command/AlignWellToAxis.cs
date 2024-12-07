@@ -8,16 +8,18 @@ namespace Effani.Device.Process
 	{
 
 		protected override string Run()
-		{
-			var axisSpec = Device.Axes[_axis] as LocatedAxis;
-			if (axisSpec is null)
+        {
+            if (!Device.Axes.TryGetValue(axis, out var axisSpec))
+                return "Unknown axis";
+            var locatedAxis = axisSpec as LocatedAxis;
+			if (locatedAxis is null)
 			{
 				return $"{_axis} not found as locatable axis";
 			}
-			var x = axisSpec.Location.X - _well.Location.X;
-			var y = axisSpec.Location.Y - _well.Location.Y;
+			var x = locatedAxis.Location.X - _well.Location.X;
+			var y = locatedAxis.Location.Y - _well.Location.Y;
 			Device.TableGoTo(x, y);
-			Result =  $"{_well.Label} aligned with {axisSpec.Label}";
+			Result =  $"{_well.Label} aligned with {locatedAxis.Label}";
 			return Result;
 		}
 

@@ -12,7 +12,7 @@ namespace Effani.Device.UI
 	{
 		public DeviceService()
 		{
-			_device = new DeviceControl("COM5");
+			_device = new DeviceControl();
 			_processEngine = new ProcessEngine();
 		}
 

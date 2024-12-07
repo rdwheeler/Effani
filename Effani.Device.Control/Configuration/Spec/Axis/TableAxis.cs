@@ -16,9 +16,9 @@ namespace Effani.Device.Control
 				Current = 1700,
 				Direction = direction,
 				Endstop = new EndstopSpec($"{Label} Endstop")
-				{
-					SensorPort = $"{(board > 0 ? board : null)}.io{port}.in",
-					Signal = PinSignal.Low,
+                {
+                    SensorPort = $"{(board > 0 ? board + "." : null)}io{port}.in",
+                    Signal = PinSignal.Low,
 					Location = endstopLocation,
 					FirstHomingSpeed = 1800
 				}

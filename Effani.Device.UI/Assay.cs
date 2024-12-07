@@ -1,4 +1,5 @@
-﻿using Effani.Device.Control;
+﻿using DevExpress.Xpf.CodeView;
+using Effani.Device.Control;
 using Effani.Device.Process;
 using System;
 using System.Collections.Generic;
@@ -49,15 +50,17 @@ namespace Effani.Device.UI
 			try
 			{
 				StatusMessages.Add($"Preparing assay...");
+
+                var packet = new CommandPacket();
+                packet.Commands.AddRange([new AlignTableForWaste(Device)]);
 				foreach(var fluidLine in Device.FluidAxes)
 				{
 					StatusMessages.Add($"Priming {fluidLine.Label}");
-					Engine.QueueCommands(new CommandPacket(
-					[
-						new AlignWasteToPump(fluidLine.Axis, Device),
-						new EmitFluid(fluidLine.Axis, Config.FluidPrimingVolume, Device)
-					]));
-				}
+                    packet.Commands.AddRange([
+                        new EmitFluid(fluidLine.Axis, Config.FluidPrimingVolume, Device)]);
+                }
+				Engine.QueueCommands(packet);
+
 				StatusMessages.Add($"Establishing baselines...");
 				foreach(var wellTest in DnaBaselineWells)
 				{
@@ -195,6 +198,11 @@ namespace Effani.Device.UI
 		{
 			TakeReadingsAfterBaselineTimerElapsed();
 		}
+        public enum FluidType
+        {
+            General = 0,
+            Koh = 1
+        }
 		private void TestMediaTimer_Elapsed(object sender, DataArgs<int> e)
 		{
 			if (_processTerminating)
@@ -214,32 +222,30 @@ namespace Effani.Device.UI
 						TestInKohPhase?.Invoke(this, new DataArgs<TestWell>(testWell));
 						StatusMessages.Add($"Adding test media to {testWell.Label}");
 						Axis nadhAxis = testWell.Well.Plate.Index.X == 0 ? Axis.Nadh1 : Axis.Nadh2;
-						Engine.QueueCommands(new CommandPacket(
-						[
-							// remove fluid from well
-							new AlignWellToAxis(Axis.AspirateFluid, testWell.Well, Device),
-							new RemoveFluid(Config.TestMediaAspirationVolume, Device),
-							new AlignWasteToPump(Axis.AspirateFluid, Device),
-							new EmptyAspirateFluid(Device),
+                        var packet1 = new CommandPacket();
+                        // remove fluid from well
+                        packet1.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.TestMediaAspirationVolume));
+                        packet1.Commands.AddRange(
+                        [
 							// add NADH to well
-							new AlignWellToAxis(nadhAxis, testWell.Well, Device),
-							new EmitFluid(nadhAxis, Config.NadhVolume, Device),
-						]));
+                            new AlignWellToAxis(nadhAxis, testWell.Well, Device),
+                            new EmitFluid(nadhAxis, Config.NadhVolume, Device),
+                        ]);
+						Engine.QueueCommands(packet1);
 						break;
 					case 4:
 						StatusMessages.Add($"Adding KOH media to {testWell.Label}");
 						Axis kohAxis = testWell.Well.Plate.Index.X == 0 ? Axis.Koh1 : Axis.Koh2;
-						Engine.QueueCommands(new CommandPacket(
-						[
-							// remove fluid from well
-							new AlignWellToAxis(Axis.AspirateFluid, testWell.Well, Device),
-							new RemoveFluid(Config.KohAspirationVolume, Device),
-							new AlignWasteToPump(Axis.AspirateFluid, Device),
-							new EmptyAspirateFluid(Device),
+                        var packet2 = new CommandPacket();
+                        // remove fluid from well
+                        packet2.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.KohAspirationVolume));
+                        packet2.Commands.AddRange(
+                        [
 							// add KOH to well
 							new AlignWellToAxis(kohAxis, testWell.Well, Device),
-							new EmitFluid(kohAxis, Config.KohVolume, Device),
-						]));
+                            new EmitFluid(kohAxis, Config.KohVolume, Device),
+                        ]);
+                        Engine.QueueCommands(packet2);
 						testWell.KohTimer.Start();
 						break;
 				}
@@ -266,17 +272,16 @@ namespace Effani.Device.UI
 				TestInDnaPhase?.Invoke(this, new DataArgs<TestWell>(testWell));
 				StatusMessages.Add($"Adding DNA assay media to {testWell.Label}");
 				Axis dnaAxis = testWell.Well.Plate.Index.X == 0 ? Axis.DnaReagent1 : Axis.DnaReagent2;
-				Engine.QueueCommands(new CommandPacket(
-				[
-					// remove KOH from well
-					new AlignWellToAxis(Axis.AspirateKoh, testWell.Well, Device),
-					new RemoveKoh(Config.DnaAspirationVolume, Device),
-					new AlignWasteToPump(Axis.AspirateKoh, Device),
-					new EmptyAspirateKoh(Device),
+                var packet = new CommandPacket();
+                // remove KOH from well
+                packet.Commands.AddRange(GetAspirationCommands(FluidType.Koh, testWell, Config.DnaAspirationVolume));
+                packet.Commands.AddRange(
+                [
 					// add DNA reagent to well
 					new AlignWellToAxis(dnaAxis, testWell.Well, Device),
-					new EmitFluid(dnaAxis, Config.DnaVolume, Device),
-				]));
+                    new EmitFluid(dnaAxis, Config.DnaVolume, Device),
+                ]);
+                Engine.QueueCommands(packet);
 				testWell.DnaTimer.Start();
 }
 			catch(Exception ex)
@@ -298,14 +303,11 @@ namespace Effani.Device.UI
 				if (_processTerminating)
 					return;
 				testWell.TimeValues.Add(e.Data, timeReading);
-				// remove remaining fluid from well
-				Engine.QueueCommands(new CommandPacket(
-				[
-					new AlignWellToAxis(Axis.AspirateFluid, testWell.Well, Device),
-					new RemoveFluid(Config.CleanUpAspirationVolume, Device),
-					new AlignWasteToPump(Axis.AspirateFluid, Device),
-					new EmptyAspirateFluid(Device),
-				]));
+                // remove remaining fluid from well
+                var packet = new CommandPacket();
+                // remove KOH from well
+                packet.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.CleanUpAspirationVolume));
+                Engine.QueueCommands(packet);
 
 				TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell));
 			}
@@ -317,9 +319,39 @@ namespace Effani.Device.UI
 			{
 				_dnaTimerLock.Release();
 			}
-		}
+        }
+        private List<Command> GetAspirationCommands(FluidType fluidType, TestWell testWell, int volume)
+        {
+            //var axis = fluidType switch
+            //{
+            //    FluidType.General => Axis.AspirateFluid,
+            //    FluidType.Koh => Axis.AspirateKoh
+            //};
+            var axis = Axis.AspirateKoh;
+            //Command removeCommand = fluidType switch
+            //{
+            //    FluidType.General => new RemoveFluid(Config.CleanUpAspirationVolume, Device),
+            //    FluidType.Koh => new RemoveKoh(Config.CleanUpAspirationVolume, Device),
+            //    _ => null
+            //};
+            Command removeCommand = new RemoveKoh(volume, Device);
+            //Command emptyCommand = fluidType switch
+            //{
+            //    FluidType.General => new EmptyAspirateFluid(Device),
+            //    FluidType.Koh => new EmptyAspirateKoh(Device),
+            //    _ => null
+            //};
+            Command emptyCommand = new EmptyAspirateKoh(Device);
+            var ret = new List<Command>();
+            ret.Add(new AlignWellToAxis(axis, testWell.Well, Device));
+            ret.Add(removeCommand);
+            ret.Add(new AlignTableForWaste(Device));
+            ret.Add(emptyCommand);
 
-		public string AccountName { get; set; }
+            return ret;
+        }
+
+        public string AccountName { get; set; }
 		public DateTime CreatedOn { get; set; }
         public int NumberOfSamples { get; set; }
 		[DisplayName("Low NADH")]

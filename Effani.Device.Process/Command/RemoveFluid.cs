@@ -7,7 +7,7 @@ namespace Effani.Device.Process
 	public class RemoveFluid(int microLiters, DeviceControl device) : Command(device)
 	{
 		protected override string Run()
-		{
+        {
 			Result = Device.RemoveFluid(MicroLiters);
 			return Result;
 		}

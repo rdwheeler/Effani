@@ -6,10 +6,11 @@ namespace Effani.Device.Control
 {
 	public partial class DeviceControl : IDisposable
 	{
-		public DeviceControl(string portName)
+		public DeviceControl()
 		{
+			Configuration = new DeviceConfiguration();
 			_serialPort = new SerialPort();
-			_serialPort.PortName = portName; // SetPortName(_serialPort.PortName);
+			_serialPort.PortName = $"COM{Configuration.ComPortNumber}";
 			_serialPort.BaudRate = 9600; // SetPortBaudRate(_serialPort.BaudRate);
 			_serialPort.Parity = Parity.None; // SetPortParity(_serialPort.Parity);
 			_serialPort.DataBits = 8; // SetPortDataBits(_serialPort.DataBits);
@@ -19,7 +20,6 @@ namespace Effani.Device.Control
 			_serialPort.WriteTimeout = 500;
 			_serialPort.DataReceived += _serialPort_DataReceived;
 
-			Configuration = new DeviceConfiguration();
 			Axes = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => v);
 
 			_publishThread = new Thread(PublishReadData);
@@ -34,12 +34,12 @@ namespace Effani.Device.Control
 			string message = _serialPort.ReadExisting();
 			if(!String.IsNullOrEmpty(message))
 				ReadData.Enqueue(message);
-		}
-
-		public string Move(Axis axis, float distance, float? speed = null)
-		{
-			var axisSpec = Axes[axis];
-			if (!speed.HasValue)
+        }
+        public string Move(Axis axis, float distance, float? speed = null)
+        {
+            if (!Axes.TryGetValue(axis, out var axisSpec))
+                return "Unknown axis";
+            if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
 			Write("G91");
 			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
@@ -47,9 +47,10 @@ namespace Effani.Device.Control
 		}
 
 		public string MoveRelative(Axis axis, float distance, float? speed = null)
-		{
-			var axisSpec = Axes[axis];
-			if (!speed.HasValue)
+        {
+            if (!Axes.TryGetValue(axis, out var axisSpec))
+                return "Unknown axis";
+            if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
 			Write("G91");
 			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
@@ -70,9 +71,10 @@ namespace Effani.Device.Control
 			return $"Move {moveCode} at {speed}";
 		}
 		public string GoPercent(Axis axis, float percent, float? speed = null)
-		{
-			var axisSpec = Axes[axis];
-			if (!speed.HasValue)
+        {
+            if (!Axes.TryGetValue(axis, out var axisSpec))
+                return "Unknown axis";
+            if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
 			var location = (axisSpec.Maximum - axisSpec.Minimum) * (percent / 100);
 			if(location < axisSpec.Minimum)
@@ -84,9 +86,10 @@ namespace Effani.Device.Control
 			return $"Move {axisSpec.Designation} to {location} ({percent}%) at {speed}";
 		}
 		public string GoTo(Axis axis, float location, float? speed = null)
-		{
-			var axisSpec = Axes[axis];
-			if (location < axisSpec.Minimum || location > axisSpec.Maximum)
+        {
+            if (!Axes.TryGetValue(axis, out var axisSpec))
+                return "Unknown axis";
+            if (location < axisSpec.Minimum || location > axisSpec.Maximum)
 				return "Location out of range";
 			if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
@@ -96,7 +99,6 @@ namespace Effani.Device.Control
 		}
 		public string TableGoTo(float x, float y, float? speed = null)
 		{
-
 			var xaxis = Axes[Axis.TableX];
 			var yaxis = Axes[Axis.TableY];
 
@@ -117,7 +119,8 @@ namespace Effani.Device.Control
 		}
 		public string Home(Axis axis)
 		{
-			var axisSpec = Axes[axis];
+            if (!Axes.TryGetValue(axis, out var axisSpec))
+                return "Unknown axis";
 			Write($"G28 {axisSpec.Designation}");
 			return $"Homed {axisSpec.Label}";
 		}
@@ -126,8 +129,13 @@ namespace Effani.Device.Control
 			var codes = String.Join(' ', axes.Select(a => Axes[a].Designation));
 			Write($"G28 {codes}");
 			return $"Homed {codes}";
-		}
-		public void ApplyConfig()
+        }
+        public string HomeAll()
+        {
+            Write($"G28");
+            return $"Homed all";
+        }
+        public void ApplyConfig()
 		{
 			Write($"M98 P\"config.g\"");
 		}
@@ -139,10 +147,26 @@ namespace Effani.Device.Control
 			return "SetWifi";
 		}
 		public string GetBoardDiagnostics(int boardId)
-		{
-			Write($"M122 B{boardId}");
-			return "GetBoardDiagnostics";
-		}
+        {
+            try
+            {
+                _suspendSerialPortReading = true;
+                string recievedValue = null;
+                SerialDataReceivedEventHandler dataRecieved = (sender, e) =>
+                {
+                    recievedValue = _serialPort.ReadExisting();
+                };
+                _serialPort.DataReceived += dataRecieved;
+                Write($"M122 B{boardId}");
+                Task.Delay(5000);
+                _serialPort.DataReceived -= dataRecieved;
+                return recievedValue;
+            }
+            finally
+            {
+                _suspendSerialPortReading = false;
+            }
+        }
 		public string ReadDna()
 		{
 			try
@@ -262,9 +286,10 @@ namespace Effani.Device.Control
 			return $"CO2 emitted for {miliseconds} miliseconds";
 		}
 		public string EmitFluid(Axis axis, int microLiters)
-		{
-			var axisSpec = Axes[axis];
-			if(!(axisSpec is FluidAxis))
+        {
+            if (!Axes.TryGetValue(axis, out var axisSpec))
+                return "Unknown axis";
+            if (!(axisSpec is FluidAxis))
 				return $"{axis} is not a fluid axis";
 			var distance = CalcFluidTravelMmForMl(microLiters);
 			var result = Move(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
@@ -346,19 +371,19 @@ namespace Effani.Device.Control
 		{
 			var microLitersPerMm = Configuration.FluidSyringeVolumeMl / Configuration.FluidSyringeLength / 1000;
 			var ret = microLitersPerMm * microLiters;
-			return microLitersPerMm;
+			return ret;
 		}
 		private float CalcAspirateTravelMmForMl(int microLiters)
 		{
 			var microLitersPerMm = Configuration.AspirateSyringeVolumeMl / Configuration.AspirateSyringeTravelMm / 1000;
 			var ret = (microLitersPerMm * microLiters) * -1;
-			return microLitersPerMm;
+			return ret;
 		}
 		private float CalcKohAspirateTravelMmForMl(int microLiters)
 		{
 			var microLitersPerMm = Configuration.AspirateKohSyringeVolumeMl / Configuration.AspirateKohSyringeTravelMm / 1000;
 			var ret = (microLitersPerMm * microLiters) * -1;
-			return microLitersPerMm;
+			return ret;
 		}
 		private void Write(string data)
 		{

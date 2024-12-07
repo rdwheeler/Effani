@@ -7,21 +7,23 @@ namespace Effani.Device.Control
 	{
 		public AspirateAxis(Axis axis, int board, int port, Coordinate location)
 			: base(axis, board, port, location)
-		{
-			Maximum = 150;
-			StepsPerMillimeter = 2133.33f;
-			MaxSpeed = 2280;
-			Driver = new DriverSpec(Label)
-			{
-				Direction.Forwards,
-				Endstop = new EndstopSpec(Label)
-				{
-					SensorPort = $"{(board > 0 ? board : null)}.io{port}.in",
-					Signal = PinSignal.Low,
-					Location = EndstopLocation.LowEnd,
-					FirstHomingSpeed = 1000
-				}
-			};
-		}
+        {
+            Maximum = 200;
+            MaxSpeed = 600;
+            StepsPerMillimeter = 1260f;
+            Acceleration = 500;
+            Driver = new DriverSpec(Label)
+            {
+                Current = 1500,
+                Direction = Direction.Backwards,
+                Endstop = new EndstopSpec(Label)
+                {
+                    SensorPort = $"{(board > 0 ? board + "." : null)}io{port}.in",
+                    Signal = PinSignal.Low,
+                    Location = EndstopLocation.LowEnd,
+                    FirstHomingSpeed = 400
+                }
+            };
+        }
 	}
 }

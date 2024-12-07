@@ -2,6 +2,7 @@
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.CodeGenerators;
 using DevExpress.Mvvm.DataAnnotations;
+using DevExpress.Xpf.CodeView;
 using DevExpress.Xpf.Core;
 using Effani.Device.Control;
 using Effani.Device.Process;
@@ -185,10 +186,25 @@ namespace Effani.Device.UI
 				AddConsoleMessage(message);
 			}
 		}
-		#endregion
+        int emitFluidVolume;
+        #endregion
 
-		#region Properties
-		public bool AccountAndNumberOfTestsComplete => !String.IsNullOrEmpty(AccountName) && NumberOfTests != 0;
+        #region Properties
+        public int EmitFluidVolume
+        {
+            get => emitFluidVolume;
+            set
+            {
+                if (emitFluidVolume == value)
+                {
+                    return;
+                }
+
+                emitFluidVolume = value;
+                RaisePropertyChanged(nameof(EmitFluidVolume));
+            }
+        }
+        public bool AccountAndNumberOfTestsComplete => !String.IsNullOrEmpty(AccountName) && NumberOfTests != 0;
 		public string AccountName
 		{
 			get
@@ -333,8 +349,18 @@ namespace Effani.Device.UI
 		}
 		[Command]
 		public void FluidLoaded()
-		{
-			AdvanceWizardPage?.Invoke(this, new EventArgs());
+        {
+            //AddConsoleMessage($"Priming fluid pumps");
+            //_processEngine.ProcessingLock.EnterWriteLock();
+            //var packet = new CommandPacket();
+            //packet.Commands.AddRange([new AlignTableForWaste(_device)]);
+            //foreach (var pump in _device.FluidAxes)
+            //{
+            //    packet.Commands.AddRange([new PrimeFluidPump(pump.Axis, _device.Configuration.FluidPrimingVolume, _device)]);
+            //}
+            //_processEngine.QueueCommands(packet);
+
+            AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
 		[Command]
 		public void InjectSample()
@@ -384,7 +410,7 @@ namespace Effani.Device.UI
 			try
 			{
 				var fileLocation = _device.Configuration
-					.GenerateConfigFiles(@"I:\DriveTrain\Effani\Effani.Device.Control");
+					.GenerateConfigFiles("C:");
 				string messageBoxText = $"Config generated at {fileLocation}";
 				string caption = "Generate Config";
 
@@ -398,13 +424,37 @@ namespace Effani.Device.UI
 
 		[Command]
 		public async Task AlignToFirstWell(AxisSpec axisSpec)
-		{
-			var plate = _device.Configuration.DeviceSpecification.Plates
-				.FirstOrDefault(p => p.Index.X == 1 && p.Index.Y == 0);
+        {
+            var plate = _device.Configuration.DeviceSpecification.Plates.First();
 			_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, plate.Wells.First(), _device));
-		}
+        }
 
-		[Command]
+        [Command]
+        public async Task AlignToLastWell(AxisSpec axisSpec)
+        {
+            var plate = _device.Configuration.DeviceSpecification.Plates.Last(p => p.Wells.Count() > 0);
+            _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, plate.Wells.Last(), _device));
+        }
+
+        [Command]
+        public async Task EmitFluid(AxisSpec axisSpec)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            var plate = _device.Configuration.DeviceSpecification.Plates
+                .FirstOrDefault(p => p.Index.X == 0 && p.Index.Y == 0);
+            _processEngine.QueueCommand(new EmitFluid(axisSpec.Axis, EmitFluidVolume, _device));
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        [Command]
+        public async Task HomeAll()
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            _processEngine.QueueCommand(new HomeAll(_device));
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        [Command]
 		public async Task ApplyConfig()
 		{
 			_device.ApplyConfig();
@@ -460,9 +510,9 @@ namespace Effani.Device.UI
 			var response = _device.ReadNadh();
 			AddConsoleMessage($"NADH: {response}");
 			Mouse.OverrideCursor = Cursors.Arrow;
-		}
+        }
 
-		[Command]
+        [Command]
 		public async Task LaserNadhOn()
 		{
 			var response = _device.LaserNadhOn();

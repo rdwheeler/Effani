@@ -8,18 +8,21 @@ namespace Effani.Device.Control
 		public ShortZAxis(Axis axis, int board, int port)
 			: base(axis, board, port)
 		{
-			Maximum = 43;
-			StepsPerMillimeter = 533.33f;
-			MaxSpeed = 2280;
+			Maximum = 35;
+			StepsPerMillimeter = 6400f;
+			MaxSpeed = 3;
+            Acceleration = 3;
 			Driver = new DriverSpec(Label)
 			{
+                Current = 600,
 				Direction = Direction.Forwards,
 				Endstop = new EndstopSpec(Label)
-				{
-					SensorPort = $"{(board > 0 ? board : null)}.io{port}.in",
-					Signal = PinSignal.Low,
+                {
+                    SensorPort = $"{(board > 0 ? board + "." : null)}io{port}.in",
+                    Signal = PinSignal.Low,
 					Location = EndstopLocation.LowEnd,
-					FirstHomingSpeed = 600
+					FirstHomingSpeed = 3,
+                    SecondHomingSpeed = 3
 				}
 			};
 		}

@@ -58,7 +58,7 @@ G4 S4
 				);
 			foreach (var x in DeviceSpecification.Axes)
 			{
-				configTextBuilder.AppendLine($"M569 P{x.DriverPort} S{(x.Driver.Direction == Direction.Forwards ? 1 : 0)} D2 ; {x.Label}");
+				configTextBuilder.AppendLine($"M569 P{x.DriverPort} S{(x.Driver.Direction == Direction.Forwards ? 1 : 0)} D2 ; {x.Label} {x.Designation}");
 			}
 			configTextBuilder.Append(@"
 
@@ -125,11 +125,16 @@ M669 K0 ; configure Cartesian kinematics
 ; Endstops
 "
 				);
-			foreach (var x in DeviceSpecification.Axes)
-			{
-				configTextBuilder.AppendLine($"M574 {x.Designation}{(x.Driver.Endstop.Location == EndstopLocation.LowEnd ? "1" : "2")} P\"{(x.Driver.Endstop.Signal == PinSignal.High ? null : "!")}{(x.DriverPort.StartsWith("0") ? null : (x.DriverPort.First()) + ".")}io{x.DriverPort.Last()}.in\" S1");
-			}
-			configTextBuilder.AppendLine("\r\n; Actuators");
+			//foreach (var x in DeviceSpecification.Axes)
+			//{
+			//	configTextBuilder.AppendLine($"M574 {x.Designation}{(x.Driver.Endstop.Location == EndstopLocation.LowEnd ? "1" : "2")} P\"{(x.Driver.Endstop.Signal == PinSignal.High ? null : "!")}{(x.DriverPort.StartsWith("0") ? null : (x.DriverPort.First()) + ".")}io{x.DriverPort.Last()}.in\" S1");
+            //}
+            foreach (var x in DeviceSpecification.Axes)
+            {
+                configTextBuilder.AppendLine($"M574 {x.Designation}{(x.Driver.Endstop.Location == EndstopLocation.LowEnd ? "1" : "2")} P\"{(x.Driver.Endstop.Signal == PinSignal.High ? null : "!")}{x.Driver.Endstop.SensorPort}\" S1");
+            }
+            var t = configTextBuilder.ToString();
+            configTextBuilder.AppendLine("\r\n; Actuators");
 			configTextBuilder.AppendLine(@"M950 P0 C""out1"" ; plate UV" );
 			configTextBuilder.AppendLine(@"M950 P1 C""out3"" ; needle UV");
 			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
@@ -138,7 +143,7 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine("\r\n; Sensors");
 			configTextBuilder.AppendLine(@"M308 S0 P""1.io6.in"" Y""linear-analog"" A""DNAsensor"" F0 B0 C1 ; DNA optical sensor");
 			configTextBuilder.AppendLine(@"M308 S1 P""2.io6.in"" Y""linear-analog"" A""NADHsensor"" F0 B0 C1 ; NADH optical sensor");
-			configTextBuilder.AppendLine(@"M308 S3 P""2.temp0"" Y""thermistor"" A""Tray Heater"" T100000 B4725 C7.06e-8 ; configure tray heat sensor");
+			configTextBuilder.AppendLine(@"M308 S3 P""2.temp0"" Y""thermistor"" A""Tray Heater"" T100000 B3950 ; configure tray heat sensor");
 			configTextBuilder.AppendLine("\r\n; Heaters");
 			configTextBuilder.AppendLine(@"M950 H0 C""1.out0"" T3 ; create tray heater");
 			configTextBuilder.AppendLine($"M143 H0 P0 T0 C0 S100 A0 ; configure heater monitor");
@@ -179,7 +184,7 @@ G1 {x.Designation}5 F6000 ; move back 5mm
 G1 H1 {x.Designation}{direction}{distance} F{x.Driver.Endstop.SecondHomingSpeed} ; fine home
 G90 ; absolute positioning
 				");
-				File.WriteAllBytes(Path.Combine(folder, $"home{DeviceSpecification.Axes[i].Designation}.g"), Encoding.ASCII.GetBytes(homeTextBuilder.ToString()));
+				File.WriteAllBytes(Path.Combine(folder, $"home{x.Designation}.g"), Encoding.ASCII.GetBytes(homeTextBuilder.ToString()));
 			}
 			var homeAllBuilder = new StringBuilder();
 			foreach (var x in DeviceSpecification.Axes)
@@ -193,50 +198,48 @@ G90 ; absolute positioning
 		{
 			DeviceSpecification = new DeviceSpecification();
 			DeviceSpecification.DeviceName = DeviceSpecification.Label;
-			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 1000, EndstopLocation.LowEnd, direction: Direction.Forwards));
-			var tabley = new TableAxis(Axis.TableY, 0, 1, 1000, EndstopLocation.LowEnd, direction: Direction.Backwards);
-			tabley.Driver.Endstop.FirstHomingSpeed = 1000;
+			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 335, EndstopLocation.LowEnd, direction: Direction.Forwards));
+			var tabley = new TableAxis(Axis.TableY, 0, 1, 516, EndstopLocation.LowEnd, direction: Direction.Backwards);
+			tabley.Driver.Endstop.FirstHomingSpeed = 400;
 			DeviceSpecification.Axes.Add(tabley);
 			DeviceSpecification.Axes.AddRange(GetBioposyAxes());
 			DeviceSpecification.Axes.AddRange(GetAspirateAxes());
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent1, 1, 3, Dna1Location));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent2, 1, 4, Dna2Location));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh2, 2, 0, Koh2Location));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent1, 1, 4, Dna1Location)); // moved
 			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh1, 2, 1, Koh1Location));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh2, 2, 2, Nadh2Location));
 			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh1, 2, 3, Nadh1Location));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Basal2, 2, 4, Basal2Location));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Basal1, 1, 5, Basal1Location));
+            var basal1 = new FluidAxis(Axis.Basal1, 0, 5, Basal1Location);
+            basal1.Driver.Endstop.SensorPort = ($"1.io0.in");
+            DeviceSpecification.Axes.Add(basal1); // moved
+			//DeviceSpecification.Axes.Add(new FluidAxis(Axis.Basal2, 2, 4, Basal2Location));
+			//DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh2, 2, 2, Nadh2Location));
+			//DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh2, 2, 0, Koh2Location));
+			//DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent2, 1, 4, Dna2Location));
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(0, 0)));
-			DeviceSpecification.Plates.Add(new Plate(new Coordinate(1, 0)));
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(0, 1)));
-			DeviceSpecification.Plates.Add(new Plate(new Coordinate(1, 1)));
+			//DeviceSpecification.Plates.Add(new Plate(new Coordinate(1, 0)));
+			//DeviceSpecification.Plates.Add(new Plate(new Coordinate(1, 1)));
 			Plate currentPlate = DeviceSpecification.Plates[0];
-			var wellIndexInPlate = 0;
 			for (int index = 0; index < PlateCapacity * TestWellsPerPlate; index++)
 			{
-				for (int y = 0; y < VerticalWellCount; y++)
-				{
-					for (int x = 0; x < HorizontalWellCount; x++)
+				for (int y = 1; y < VerticalWellCount; y++) // skip first well row
+                {
+					for (int x = 0; x < HorizontalWellCount; x++) // skip first well row
 					{
+                        var baseX = FirstWellLocation.X + x;
+                        var baseY = FirstWellLocation.Y + y;
 						var location = new Coordinate(
-							(x * WellOffset.X) + (currentPlate.Index.X * PlateOffset.X), 
-							(y * WellOffset.Y) + (currentPlate.Index.Y * PlateOffset.Y));
+							((x * WellOffset.X) + baseX) + (currentPlate.Index.X * PlateOffset.X), 
+							((y * WellOffset.Y) + baseY) + (currentPlate.Index.Y * PlateOffset.Y));
 						new Well(currentPlate, x, y, location);
 					}
 				}
-				if (wellIndexInPlate == TestWellsPerPlate - 1)
+				if (currentPlate.Wells.Count() == TestWellsPerPlate)
 				{
 					if(currentPlate == DeviceSpecification.Plates.Last())
 						break;
 
-					wellIndexInPlate = 0;
 					currentPlate = DeviceSpecification.Plates
 						.ElementAt(DeviceSpecification.Plates.IndexOf(currentPlate) + 1);
-				}
-				else
-				{
-					wellIndexInPlate++;
 				}
 			}
 		}
@@ -244,17 +247,17 @@ G90 ; absolute positioning
 		{
 			var ret = new List<AxisSpec>();
 			ret.Add(new BiopsyAxis(Axis.Biopsy, 0, 2, BiopsyLocation));
-			ret.Add(new ShortZAxis(Axis.BiopsyEject, 0, 3));
+			//ret.Add(new ShortZAxis(Axis.BiopsyEject, 0, 3));
 
 			return ret;
 		}
 		private List<AxisSpec> GetAspirateAxes()
 		{
 			var ret = new List<AxisSpec>();
-			ret.Add(new AspirateAxis(Axis.AspirateFluid, 0, 4, AspirateFluidLocation));
-			ret.Add(new ShortZAxis(Axis.AspirateFluidZ, 1, 0));
+			//ret.Add(new AspirateAxis(Axis.AspirateFluid, 0, 4, AspirateFluidLocation));
+			//ret.Add(new ShortZAxis(Axis.AspirateFluidZ, 1, 0));
 			ret.Add(new AspirateAxis(Axis.AspirateKoh, 1, 1, AspirateKohLocation));
-			ret.Add(new ShortZAxis(Axis.AspirateKohZ, 1, 2));
+			//ret.Add(new ShortZAxis(Axis.AspirateKohZ, 1, 2));
 
 			return ret;
 		}
@@ -338,17 +341,19 @@ G90 ; absolute positioning
 			WellWidth = GetConfigValue<float>(nameof(WellWidth));
 			WellDepth = GetConfigValue<float>(nameof(WellDepth));
 			CleanUpAspirationVolume = GetConfigValue<int>(nameof(CleanUpAspirationVolume));
-			BiopsyHomePosition = GetConfigValue<int>(nameof(BiopsyHomePosition));
-			BiopsyEjectHomePosition = GetConfigValue<int>(nameof(BiopsyEjectHomePosition));
-		}
+            BiopsyEjectHomePosition = GetConfigValue<int>(nameof(BiopsyEjectHomePosition));
+            ComPortNumber = GetConfigValue<int>(nameof(ComPortNumber));
+            BiospsyLoadingLocation = GetConfigValue<int>(nameof(BiospsyLoadingLocation));
+            FirstWellLocation = GetCoordinateConfigValue(nameof(FirstWellLocation));
+        }
 
 		public int BypassDeviceCommands { get; set; } // zero for no, one for yes, more than one for a n millisecond pause when bypassing
 		public bool TerminateOnSensorFailure { get; set; }
 		public float FluidSyringeHomePosition { get; set; }
 		public float AspirateFluidSyringeHomePosition { get; set; }
 		public float AspirateKohSyringeHomePosition { get; set; }
-		public float BiopsyHomePosition { get; set; }
-		public float BiopsyEjectHomePosition { get; set; }
+		public float BiospsyLoadingLocation { get; set; } // location biopsy needle should be at for loading
+        public float BiopsyEjectHomePosition { get; set; }
 		public float WellWidth { get; set; } // mm of width of sample well
 		public float WellDepth { get; set; } // mm of width of sample well
 		public float PlateCapacity { get; set; } // number of sample plates this device can accomodate
@@ -405,7 +410,9 @@ G90 ; absolute positioning
 		public int DnaAspirationVolume { get; set; } // microliters withdraw for before DNA reagent injection
 		public int CleanUpAspirationVolume { get; set; } // microliters withdraw for clean up
 		public int BaselineProcessingDwell { get; set; } // ammount of milliseconds baseline processing will wait
+        public int ComPortNumber { get; set; }
+        public Coordinate FirstWellLocation { get; set; }
 
-		public DeviceSpecification? DeviceSpecification { get; private set; }
+        public DeviceSpecification? DeviceSpecification { get; private set; }
 	}
 }
