@@ -9,7 +9,7 @@ namespace Effani.Device.Control
 			: base(axis, board, port, location)
         {
             Maximum = 200;
-            MaxSpeed = 600;
+            MaxSpeed = 1000;
             StepsPerMillimeter = 1260f;
 			Driver = new DriverSpec(Label)
 			{
@@ -20,8 +20,8 @@ namespace Effani.Device.Control
                     SensorPort = $"{(board > 0 ? board + "." : null)}io{port}.in",
                     Signal = PinSignal.High,
 					Location = EndstopLocation.LowEnd,
-					FirstHomingSpeed = 400
-				}
+					FirstHomingSpeed = 1000
+                }
 			};
 		}
 	}

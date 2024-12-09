@@ -8,11 +8,7 @@ namespace Effani.Device.Process
 	{
 		protected override string Run()
 		{
-            foreach (var axisSpec in Device.Axes.Values)
-            {
-                Device.Home(axisSpec.Axis);
-            }
-			//Device.HomeAll();
+            Device.Home(Device.Axes.Values.Select(x => x.Axis).ToArray());
 			foreach(var fluidLine in Device.FluidAxes)
 			{
 				Device.GoTo(fluidLine.Axis, Device.Configuration.FluidSyringeHomePosition);

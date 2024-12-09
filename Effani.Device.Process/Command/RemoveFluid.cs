@@ -15,5 +15,5 @@ namespace Effani.Device.Process
 		public override string Result { get; protected set; } = $"Fluid removed";
 
 		public int MicroLiters { get; } = microLiters;
-	}
+    }
 }

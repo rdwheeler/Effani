@@ -8,9 +8,9 @@ namespace Effani.Device.Control
         public AspirateZAxis(Axis axis, int board, int port)
             : base(axis, board, port)
         {
-            Maximum = 90;
+            Maximum = 60;
             MaxSpeed = 600;
-            StepsPerMillimeter = 1260f;
+            StepsPerMillimeter = 3200f;
             Driver = new DriverSpec(Label)
             {
                 Current = 1500,
@@ -18,9 +18,9 @@ namespace Effani.Device.Control
                 Endstop = new EndstopSpec(Label)
                 {
                     SensorPort = $"{(board > 0 ? board + "." : null)}io{port}.in",
-                    Signal = PinSignal.High,
+                    Signal = PinSignal.Low,
                     Location = EndstopLocation.LowEnd,
-                    FirstHomingSpeed = 1000
+                    FirstHomingSpeed = 600
                 }
             };
         }

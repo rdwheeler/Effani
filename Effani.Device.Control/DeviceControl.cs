@@ -52,7 +52,7 @@ namespace Effani.Device.Control
                 return "Unknown axis";
             if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
-			Write("G91");
+			Write("G90");
 			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
 			return $"Move {axisSpec.Designation} {distance} at {speed}";
 		}
@@ -115,7 +115,7 @@ namespace Effani.Device.Control
 		}
 		public string TableGoTo(Coordinate location, float? speed = null)
 		{
-			return TableGoTo(location, speed);
+			return TableGoTo(location.X, location.Y, speed);
 		}
 		public string Home(Axis axis)
 		{
@@ -126,7 +126,7 @@ namespace Effani.Device.Control
 		}
 		public string Home(Axis[] axes)
 		{
-			var codes = String.Join(' ', axes.Select(a => Axes[a].Designation));
+			var codes = String.Join(null, axes.Select(a => Axes[a].Designation));
 			Write($"G28 {codes}");
 			return $"Homed {codes}";
         }
@@ -250,13 +250,13 @@ namespace Effani.Device.Control
 		}
 		public string BiopsyUvOn()
 		{
-			Write($"M42 P1 S1");
-			return "Biopsy UV on";
-		}
-		public string BiopsyUvOff()
-		{
 			Write($"M42 P1 S0");
-			return "Biopsy UV off";
+			return "Biopsy UV on";
+        }
+        public string BiopsyUvOff()
+		{
+			Write($"M42 P1 S1"); // needle UV uses voltage to signal off state because its a dimmer
+            return "Biopsy UV off";
 		}
 		public string LaserDnaOn()
 		{
@@ -293,7 +293,8 @@ namespace Effani.Device.Control
 				return $"{axis} is not a fluid axis";
 			var distance = CalcFluidTravelMmForMl(microLiters);
 			var result = Move(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
-			if(!result.Equals(OK))
+            Write($"G4 P5000");
+            if (!result.Equals(OK))
 				return result;
 			return $"{microLiters} {axis} emitted";
 		}
@@ -307,11 +308,12 @@ namespace Effani.Device.Control
 			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel, 10);
 			DoStir();
 
-			var distance = CalcAspirateTravelMmForMl(microLiters);
+			var distance = CalcFluidAspirateTravelMmForMl(microLiters);
 			Move(Axis.AspirateFluid, distance, Configuration.AspirateSyringeSpeed);
+            Write($"G4 P5000");
 			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 10);
 
-			return $"{microLiters} of fluid removed";
+            return $"{microLiters} of fluid removed";
 		}
 		private void DoStir()
 		{
@@ -353,9 +355,10 @@ namespace Effani.Device.Control
 
 			var distance = CalcKohAspirateTravelMmForMl(microLiters);
 			Move(Axis.AspirateKoh, distance, Configuration.AspirateSyringeSpeed);
+            Write($"G4 P5000");
 			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 10);
 
-			return $"{microLiters} of KOH removed";
+            return $"{microLiters} of KOH removed";
 		}
 		public void Dispose()
 		{
@@ -369,11 +372,11 @@ namespace Effani.Device.Control
 
 		private float CalcFluidTravelMmForMl(int microLiters)
 		{
-			var microLitersPerMm = Configuration.FluidSyringeVolumeMl / Configuration.FluidSyringeLength / 1000;
+			var microLitersPerMm = Configuration.FluidSyringeVolumeMl / Configuration.FluidSyringeLength / 1000 * Configuration.FluidDispensationAdjustmentFactor;
 			var ret = microLitersPerMm * microLiters;
 			return ret;
 		}
-		private float CalcAspirateTravelMmForMl(int microLiters)
+		private float CalcFluidAspirateTravelMmForMl(int microLiters)
 		{
 			var microLitersPerMm = Configuration.AspirateSyringeVolumeMl / Configuration.AspirateSyringeTravelMm / 1000;
 			var ret = (microLitersPerMm * microLiters) * -1;

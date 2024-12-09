@@ -4,6 +4,7 @@ using DevExpress.Mvvm.CodeGenerators;
 using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Xpf.CodeView;
 using DevExpress.Xpf.Core;
+using DevExpress.XtraScheduler.Commands;
 using Effani.Device.Control;
 using Effani.Device.Process;
 using System;
@@ -46,7 +47,7 @@ namespace Effani.Device.UI
 		public void PageStartFirstPage()
 		{
 			AddConsoleMessage("Collecting test parameters");
-		}
+        }
 		public void PageStartLoadFluidSystem()
 		{
 			Assay.Initialize(NumberOfTests);
@@ -57,25 +58,24 @@ namespace Effani.Device.UI
 			Assay.TestComplete += Assay_TestComplete;
 			Assay.Terminated += Assay_Terminated;
 			AddConsoleMessage("Prompting to load fluid system");
-			_processEngine.QueueCommand(new TurnOnTrayHeat(_device));
-			_processEngine.QueueCommand(new HomeAll(_device));
+            if (DoHome)
+            {
+                _processEngine.QueueCommand(new TurnOnTrayHeat(_device));
+                _processEngine.QueueCommands(new CommandPacket([
+                    new UvBiopsyOff(_device),
+                    new HomeAll(_device),
+                    new TableToTrayLoadingLocation(_device)
+                ]));
+            }
 		}
 		public void PageStartLoadSampleTrays()
 		{
 			AddConsoleMessage("Prompting to load sample trays");
-		}
-		public void PageStartLoadingSamples()
+        }
+        public void PageStartLoadingSamples()
 		{
+            Assay._kohTimerLock.Wait(); // hold koh timer lock until all samples loaded since we can only have one aspiration needle right now
 			AddConsoleMessage("Prompting to load samples");
-            //_processEngine.QueueCommands(new CommandPacket([
-            //    new AlignWellToAxis(Axis.Biopsy, plate.Wells.First(), _device),
-            //    new AxisGoto(Axis.Biopsy, _device.Configuration.BiopsyTravel, _device),
-            //    new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyZTravel, _device),
-            //    new EmitCo2(_device),
-            //    new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
-            //    new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation, _device),
-            //    new AlignWellToLocation(_device.Configuration.CameraLocation,  well, _device)
-            //]));
             SampleLoadingCollection.AddRange(Assay.TestWells1);
 			SampleLoadingCollection.AddRange(Assay.TestWells2);
 			CurrentLoadingSample = SampleLoadingCollection.First();
@@ -181,8 +181,11 @@ namespace Effani.Device.UI
 		{
 			var currentIndex = SampleLoadingCollection.IndexOf(CurrentLoadingSample);
 			CurrentLoadingSample = SampleLoadingCollection.ElementAtOrDefault(currentIndex + 1);
-			if(CurrentLoadingSample == null)
-				AdvanceWizardPage?.Invoke(this, null);
+            if (CurrentLoadingSample == null)
+            {
+                Assay._kohTimerLock.Release();
+                AdvanceWizardPage?.Invoke(this, null);
+            }
 		}
 		private void ProcessEngine_DataReceived(object sender, DeviceControl.DataArgs<string> e)
 		{
@@ -346,12 +349,14 @@ namespace Effani.Device.UI
 		#region Commands
 		[Command]
 		public void AcceptSample()
-		{
-			_processEngine.ProcessingLock.ExitWriteLock();
-			CurrentLoadingSample.TestMediaTimer1h.Start();
-			CurrentLoadingSample.TestMediaTimer2h.Start();
-			CurrentLoadingSample.TestMediaTimer3h.Start();
-			CurrentLoadingSample.TestMediaTimer4h.Start();
+        {
+            var packet = new CommandPacket();
+            packet.Commands.Add(new AlignWellToAxis(Axis.Basal1, CurrentLoadingSample.Well, _device));
+            packet.Commands.Add(new EmitFluid(Axis.Basal1, _device.Configuration.BasalVolume, _device));
+            _processEngine.QueueCommands(packet);
+
+            _processEngine.ProcessingLock.ExitWriteLock();
+			CurrentLoadingSample.NadhTimer1h.Start();
 			SamplesLoaded.Add(CurrentLoadingSample);
 			UnloadedTestsCount--;
 			PrepareNextSampleForLoading();
@@ -359,15 +364,17 @@ namespace Effani.Device.UI
 		[Command]
 		public void FluidLoaded()
         {
-            //AddConsoleMessage($"Priming fluid pumps");
-            //_processEngine.ProcessingLock.EnterWriteLock();
-            //var packet = new CommandPacket();
-            //packet.Commands.AddRange([new AlignTableForWaste(_device)]);
-            //foreach (var pump in _device.FluidAxes)
-            //{
-            //    packet.Commands.AddRange([new PrimeFluidPump(pump.Axis, _device.Configuration.FluidPrimingVolume, _device)]);
-            //}
-            //_processEngine.QueueCommands(packet);
+            AddConsoleMessage($"Priming fluid pumps");
+            AddConsoleMessage("Priming fluid");
+            if (DoPrime)
+            {
+                var packet = new CommandPacket();
+                foreach (var axis in _device.FluidAxes)
+                {
+                    packet.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.FluidPrimingVolume, _device));
+                }
+                _processEngine.QueueCommands(packet);
+            }
 
             AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
@@ -378,7 +385,9 @@ namespace Effani.Device.UI
 			_processEngine.ProcessingLock.EnterWriteLock();
 			_processEngine.QueueCommands(new CommandPacket([
 				new AlignWellToAxis(Axis.Biopsy, CurrentLoadingSample.Well, _device),
+                new UvBiopsyOn(_device),
                 new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation + _device.Configuration.BiopsyTravel, _device),
+                new UvBiopsyOff(_device),
                 new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition + _device.Configuration.BiopsyZTravel, _device),
                 new EmitCo2(_device),
                 new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
@@ -435,11 +444,36 @@ namespace Effani.Device.UI
 			}
 		}
 
-		[Command]
+        [Command]
+        public async Task AlignPrime(AxisSpec axisSpec)
+        {
+            if (axisSpec is FluidAxis)
+            {
+                _processEngine.QueueCommands(new CommandPacket([
+                    new HomeAxis(axisSpec.Axis, _device),
+                    new AxisGoto(axisSpec.Axis, _device.Configuration.FluidSyringeHomePosition, _device),
+                ]));
+            }
+        }
+        [Command]
 		public async Task AlignToFirstWell(AxisSpec axisSpec)
         {
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
             var well = plate.Wells.First();
+            _currentWell = well;
+            _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
+        }
+        [Command]
+        public async Task AlignToNextWell(AxisSpec axisSpec)
+        {
+            var plate = _device.Configuration.DeviceSpecification.Plates.First();
+            if (_currentWell == null)
+                _currentWell = plate.Wells.First();
+            var nextIndex = plate.Wells.IndexOf(_currentWell) + 1;
+            if (plate.Wells.Count - 1 < nextIndex)
+                return;
+            var well = plate.Wells[nextIndex];
+            _currentWell = well;
             _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
         }
 
@@ -448,6 +482,7 @@ namespace Effani.Device.UI
         {
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
             var well = plate.Wells.Last();
+            _currentWell = well;
             _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
         }
 
@@ -458,6 +493,14 @@ namespace Effani.Device.UI
             var plate = _device.Configuration.DeviceSpecification.Plates
                 .FirstOrDefault(p => p.Index.X == 0 && p.Index.Y == 0);
             _processEngine.QueueCommand(new EmitFluid(axisSpec.Axis, EmitFluidVolume, _device));
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        [Command]
+        public async Task AspirateKoh(AxisSpec axisSpec)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            _processEngine.QueueCommand(new RemoveKoh(EmitFluidVolume, _device));
             Mouse.OverrideCursor = Cursors.Arrow;
         }
 
@@ -487,7 +530,9 @@ namespace Effani.Device.UI
                 new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
                 new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation, _device),
                 new AlignWellToAxis(Axis.Biopsy, plate.Wells.First(), _device),
+                new UvBiopsyOn(_device),
                 new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation + _device.Configuration.BiopsyTravel, _device),
+                new UvBiopsyOff(_device),
                 new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition + _device.Configuration.BiopsyZTravel, _device),
                 new EmitCo2(_device),
                 new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
@@ -570,6 +615,17 @@ namespace Effani.Device.UI
             var well = plate.Wells.First();
             _processEngine.QueueCommand(new AlignWellToLocation(_device.Configuration.DnaLaserLocation, well, _device));
         }
+        [Command]
+        public void PrimeFluid()
+        {
+            AddConsoleMessage($"Priming fluid pumps");
+            var packet = new CommandPacket();
+            foreach (var axis in _device.FluidAxes)
+            {
+                packet.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.FluidPrimingVolume, _device));
+            }
+            _processEngine.QueueCommands(packet);
+        }
 
         [Command]
 		public async Task LaserNadhOn()
@@ -651,9 +707,13 @@ namespace Effani.Device.UI
 		{
 			var axisSpec = (AxisSpec)parameters[0];
 			var distance = (float)parameters[1];
-			var response = _device.Move(axisSpec.Axis, distance);
+			var response = _device.MoveRelative(axisSpec.Axis, distance);
 			AddConsoleMessage(response);
 		}
 		#endregion
-	}
+
+        private bool DoHome = true;
+        private bool DoPrime = true;
+        private Well _currentWell;
+    }
 }

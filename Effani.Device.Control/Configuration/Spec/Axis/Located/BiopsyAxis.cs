@@ -9,7 +9,7 @@ namespace Effani.Device.Control
 			: base(axis, board, port, location)
         {
             Maximum = 200;
-            MaxSpeed = 400;
+            MaxSpeed = 1000;
             StepsPerMillimeter = 3200f;
             Driver = new DriverSpec(Label)
 			{

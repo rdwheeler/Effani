@@ -137,7 +137,8 @@ M669 K0 ; configure Cartesian kinematics
             configTextBuilder.AppendLine("\r\n; Actuators");
 			configTextBuilder.AppendLine(@"M950 P0 C""out1"" ; plate UV" );
 			configTextBuilder.AppendLine(@"M950 P1 C""out3"" ; needle UV");
-			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
+            //configTextBuilder.AppendLine(@"M42 P1 S1 ; needle UV"); // needle UV uses voltage to signal off state because its a dimmer
+            configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
 			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
 			configTextBuilder.AppendLine(@"M950 P4 C""out5"" ; CO2");
 			configTextBuilder.AppendLine("\r\n; Sensors");
@@ -222,9 +223,9 @@ G90 ; absolute positioning
 			Plate currentPlate = DeviceSpecification.Plates[0];
 			for (int index = 0; index < PlateCapacity * TestWellsPerPlate; index++)
 			{
-				for (int y = 1; y < VerticalWellCount; y++) // skip first well row
+				for (int y = 0; y < VerticalWellCount; y++)
                 {
-					for (int x = 0; x < HorizontalWellCount; x++) // skip first well row
+					for (int x = 0; x < HorizontalWellCount; x++)
 					{
                         var baseX = FirstWellLocation.X + (PlateOffset.X * currentPlate.Index.X);
                         var baseY = FirstWellLocation.Y + (PlateOffset.Y * currentPlate.Index.Y);
@@ -346,7 +347,10 @@ G90 ; absolute positioning
 			CleanUpAspirationVolume = GetConfigValue<int>(nameof(CleanUpAspirationVolume));
             BiopsyEjectHomePosition = GetConfigValue<int>(nameof(BiopsyEjectHomePosition));
             ComPortNumber = GetConfigValue<int>(nameof(ComPortNumber));
+            BasalVolume = GetConfigValue<int>(nameof(BasalVolume));
             BiospsyLoadingLocation = GetConfigValue<int>(nameof(BiospsyLoadingLocation));
+            FluidDispensationAdjustmentFactor = GetConfigValue<float>(nameof(FluidDispensationAdjustmentFactor));
+            TrayLoadingLocation = GetCoordinateConfigValue(nameof(TrayLoadingLocation));
             FirstWellLocation = GetCoordinateConfigValue(nameof(FirstWellLocation));
         }
 
@@ -401,7 +405,8 @@ G90 ; absolute positioning
 		public int KohVolume { get; set; } // microliters dispensed by KOH pump
 		public int DnaVolume { get; set; } // microliters dispensed by DNA pump
 		public int NadhVolume { get; set; } // microliters dispensed by NADH pump
-		public int OpticalSensorDwell { get; set; } // total milliseconds to activate laser and read sensor
+        public int BasalVolume { get; set; } // microliters dispensed by Basal pump
+        public int OpticalSensorDwell { get; set; } // total milliseconds to activate laser and read sensor
 		public int SensorReadDwell { get; set; } // total milliseconds to wait for a sensor reading to be reported
 		public int Co2Dwell { get; set; } // total milliseconds to activate CO2
 		public int TestMediaAspirationVolume { get; set; } // microliters withdraw from baseline
@@ -414,7 +419,9 @@ G90 ; absolute positioning
 		public int CleanUpAspirationVolume { get; set; } // microliters withdraw for clean up
 		public int BaselineProcessingDwell { get; set; } // ammount of milliseconds baseline processing will wait
         public int ComPortNumber { get; set; }
+        public float FluidDispensationAdjustmentFactor { get; set; }
         public Coordinate FirstWellLocation { get; set; }
+        public Coordinate TrayLoadingLocation { get; set; }
 
         public DeviceSpecification? DeviceSpecification { get; private set; }
 	}
