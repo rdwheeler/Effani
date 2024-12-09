@@ -279,10 +279,10 @@ namespace Effani.Device.Control
 			return "Laser NADH off";
 		}
 		public string EmitCo2(int miliseconds)
-		{
-			Write($"M42 P4 S1");
-			Task.Delay(miliseconds);
-			Write($"M42 P4 S0");
+        {
+            Write($"M42 P4 S1");
+            Write($"G4 P{miliseconds}");
+            Write($"M42 P4 S0");
 			return $"CO2 emitted for {miliseconds} miliseconds";
 		}
 		public string EmitFluid(Axis axis, int microLiters)
@@ -389,7 +389,8 @@ namespace Effani.Device.Control
 		{
 			if(!_serialPort.IsOpen)
 				_serialPort.Open();
-			_serialPort.WriteLine($"{data}");
+            _serialPort.WriteLine($"M400");
+            _serialPort.WriteLine($"{data}");
 		}
 		private void PublishReadData()
 		{
@@ -407,8 +408,9 @@ namespace Effani.Device.Control
 		public Dictionary<Axis, AxisSpec> Axes { get; private set; }
 
 		public List<AxisSpec> FluidAxes => Axes.Values.Where(x => x is FluidAxis).ToList();
+        public List<AxisSpec> ZAxes => Axes.Values.Where(x => x is BiopsyZAxis).ToList();
 
-		SerialPort _serialPort;
+        SerialPort _serialPort;
 		Thread _publishThread;
 		bool _suspendSerialPortReading = false;
 		const string OK = "ok";

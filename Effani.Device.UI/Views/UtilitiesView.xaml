@@ -36,17 +36,29 @@
                     <dxe:SpinEdit Width="80" MaxHeight="40" EditValue="{Binding ElementName=tabControl, Path=DataContext.EmitFluidVolume, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="200"
 						EditValueType="{x:Type sys:Int32}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" IsFloatValue="False" Mask="d0" AllowSpinOnMouseWheel="True" />
                     <dx:SimpleButton CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding ElementName=tabControl, Path=DataContext.EmitFluidCommand}" CommandParameter="{Binding}" Content="Emit Fluid" />
-                    <dx:SimpleButton Width="50" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="-10">
+                    <dx:SimpleButton Width="50" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="-100">
 						<Button.CommandParameter>
 							<MultiBinding Converter="{StaticResource PassThroughConverter}">
 								<Binding/>
 								<Binding>
 									<Binding.Source>
-										<sys:Single>-10</sys:Single>
+										<sys:Single>-100</sys:Single>
 									</Binding.Source>
 								</Binding>
 							</MultiBinding>
 						</Button.CommandParameter>
+                    </dx:SimpleButton>
+                    <dx:SimpleButton Width="50" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="-10">
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                <Binding/>
+                                <Binding>
+                                    <Binding.Source>
+                                        <sys:Single>-10</sys:Single>
+                                    </Binding.Source>
+                                </Binding>
+                            </MultiBinding>
+                        </Button.CommandParameter>
                     </dx:SimpleButton>
                     <dx:SimpleButton Width="50" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="-1">
                         <Button.CommandParameter>
@@ -83,8 +95,20 @@
 								</Binding>
 							</MultiBinding>
 						</Button.CommandParameter>
-					</dx:SimpleButton>
-				</StackPanel>
+                    </dx:SimpleButton>
+                    <dx:SimpleButton Width="50" CornerRadius="5" FontSize="14" Padding="10" Margin="5" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="100">
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                <Binding/>
+                                <Binding>
+                                    <Binding.Source>
+                                        <sys:Single>100</sys:Single>
+                                    </Binding.Source>
+                                </Binding>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </dx:SimpleButton>
+                </StackPanel>
 			</DataTemplate>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -92,8 +116,14 @@
 		<StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
 			<dx:DXTabControl>
 				<dx:DXTabItem Header="Sensors">
-					<StackPanel Orientation="Horizontal">
-						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding ReadDnaCommand}" Content="Read DNA" />
+                    <StackPanel Orientation="Horizontal">
+                        <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding AlignToDnaLaserCommand}" Content="Align DNA" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserDnaOnCommand}" Content="DNA Laser On" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserDnaOffCommand}" Content="DNA Laser Off" />
+                        <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding ReadDnaCommand}" Content="Read DNA" />
+                        <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding AlignToNadhLaserCommand}" Content="Align NADH" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserNadhOnCommand}" Content="NADH Laser On" />
+						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserNadhOffCommand}" Content="NADH Laser Off" />
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding ReadNadhCommand}" Content="Read NADH" />
 					</StackPanel>
 				</dx:DXTabItem>
@@ -103,15 +133,13 @@
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding PlateUvOffCommand}" Content="Plate UV Off" />
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding BiopsyUvOnCommand}" Content="Biopsy UV On" />
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding BiopsyUvOffCommand}" Content="Biopsy UV Off" />
-						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserNadhOnCommand}" Content="NADH Laser On" />
-						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserNadhOffCommand}" Content="NADH Laser Off" />
-						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserDnaOnCommand}" Content="DNA Laser On" />
-						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding LaserDnaOffCommand}" Content="DNA Laser Off" />
 					</StackPanel>
 				</dx:DXTabItem>
 				<dx:DXTabItem Header="Control Board">
                     <StackPanel Orientation="Horizontal">
                         <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding HomeAllCommand}" Content="Home All" />
+                        <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding AlignForWasteCommand}" Content="Align For Waste" />
+                        <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding InjectSampleTestCommand}" Content="Inject Sample" />
                         <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding GenerateConfigFilesCommand}" Content="Generate Config" />
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding SetWifiCommand}" Content="Set Wifi" />
 						<dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="0" Content="Diagnostics 0" />

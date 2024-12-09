@@ -11,7 +11,6 @@ namespace Effani.Device.Control
             Maximum = 200;
             MaxSpeed = 600;
             StepsPerMillimeter = 1260f;
-            Acceleration = 500;
 			Driver = new DriverSpec(Label)
 			{
 				Current = 1500,

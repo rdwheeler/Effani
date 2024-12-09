@@ -3,28 +3,26 @@ using System.Linq;
 
 namespace Effani.Device.Control
 {
-	public class ShortZAxis : AxisSpec
+	public class BiopsyZAxis : AxisSpec
 	{
-		public ShortZAxis(Axis axis, int board, int port)
+		public BiopsyZAxis(Axis axis, int board, int port)
 			: base(axis, board, port)
 		{
-			Maximum = 35;
-			StepsPerMillimeter = 6400f;
-			MaxSpeed = 3;
-            Acceleration = 3;
+			Maximum = 100;
+			StepsPerMillimeter = 3200f;
+			MaxSpeed = 400;
 			Driver = new DriverSpec(Label)
 			{
-                Current = 600,
-				Direction = Direction.Forwards,
+                Current = 1500,
+				Direction = Direction.Backwards,
 				Endstop = new EndstopSpec(Label)
                 {
                     SensorPort = $"{(board > 0 ? board + "." : null)}io{port}.in",
                     Signal = PinSignal.Low,
 					Location = EndstopLocation.LowEnd,
-					FirstHomingSpeed = 3,
-                    SecondHomingSpeed = 3
-				}
+                    FirstHomingSpeed = 1000
+                }
 			};
-		}
-	}
+        }
+    }
 }

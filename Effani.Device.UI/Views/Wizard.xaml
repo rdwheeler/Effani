@@ -187,7 +187,7 @@
 										<TextBlock TextWrapping="WrapWithOverflow" Text="Ensure the sample is loaded correctly. Press Reload or Skip if not. Press Accept to load the next sample."/>
 										<dx:SimpleButton FontSize="25" Margin="0,20,0,0" Command="{Binding AcceptSampleCommand}" Content="Accept" ToolTip="Accept this sample for testing."/>
 										<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding RetrySampleCommand}" Content="Reload" ToolTip="Reload this sample."/>
-										<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding SkipSampleCommand}" Content="Skip" ToolTip="Skip thesting this animal."/>
+										<!--<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding SkipSampleCommand}" Content="Skip" ToolTip="Skip thesting this animal."/>-->
 										<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Stretch" Command="{Binding SkipRemainingCommand}">
 											<dx:SimpleButton.Content>
 												<StackPanel>
@@ -264,7 +264,7 @@
 					</Grid>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage ShowNext="False" ShowBack="False" ShowCancel="False" ShowFinish="False" x:Name="CleanUpPage">
+			<dxco:WizardPage ShowNext="True" ShowBack="False" ShowCancel="False" ShowFinish="False" x:Name="CleanUpPage">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Clean Up"/>
 					<TextBlock Margin="0,10,0,0" TextWrapping="WrapWithOverflow" Text="Remove all fluid containers."/>

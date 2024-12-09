@@ -145,7 +145,7 @@ namespace Effani.Device.UI
 			}
 			finally
 			{
-				PreparationComplete?.Invoke(this, EventArgs.Empty);				
+				PreparationComplete?.Invoke(this, EventArgs.Empty);
 			}
 
 		}
@@ -220,7 +220,7 @@ namespace Effani.Device.UI
 				{
 					case 1:
 						TestInKohPhase?.Invoke(this, new DataArgs<TestWell>(testWell));
-						StatusMessages.Add($"Adding test media to {testWell.Label}");
+						StatusMessages.Add($"Adding NADH to {testWell.Label}");
 						Axis nadhAxis = testWell.Well.Plate.Index.X == 0 ? Axis.Nadh1 : Axis.Nadh2;
                         var packet1 = new CommandPacket();
                         // remove fluid from well

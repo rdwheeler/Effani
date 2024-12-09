@@ -67,7 +67,16 @@ namespace Effani.Device.UI
 		public void PageStartLoadingSamples()
 		{
 			AddConsoleMessage("Prompting to load samples");
-			SampleLoadingCollection.AddRange(Assay.TestWells1);
+            //_processEngine.QueueCommands(new CommandPacket([
+            //    new AlignWellToAxis(Axis.Biopsy, plate.Wells.First(), _device),
+            //    new AxisGoto(Axis.Biopsy, _device.Configuration.BiopsyTravel, _device),
+            //    new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyZTravel, _device),
+            //    new EmitCo2(_device),
+            //    new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
+            //    new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation, _device),
+            //    new AlignWellToLocation(_device.Configuration.CameraLocation,  well, _device)
+            //]));
+            SampleLoadingCollection.AddRange(Assay.TestWells1);
 			SampleLoadingCollection.AddRange(Assay.TestWells2);
 			CurrentLoadingSample = SampleLoadingCollection.First();
 		}
@@ -369,8 +378,12 @@ namespace Effani.Device.UI
 			_processEngine.ProcessingLock.EnterWriteLock();
 			_processEngine.QueueCommands(new CommandPacket([
 				new AlignWellToAxis(Axis.Biopsy, CurrentLoadingSample.Well, _device),
-				new EmitCo2(_device),
-				new AlignWellToLocation(_device.Configuration.CameraLocation, CurrentLoadingSample.Well, _device)
+                new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation + _device.Configuration.BiopsyTravel, _device),
+                new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition + _device.Configuration.BiopsyZTravel, _device),
+                new EmitCo2(_device),
+                new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
+                new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation, _device),
+                new AlignWellToLocation(_device.Configuration.CameraLocation, CurrentLoadingSample.Well, _device)
 			]));
 			CurrentLoadingSample.LoadedOntoTray = true;
 		}
@@ -426,14 +439,16 @@ namespace Effani.Device.UI
 		public async Task AlignToFirstWell(AxisSpec axisSpec)
         {
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
-			_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, plate.Wells.First(), _device));
+            var well = plate.Wells.First();
+            _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
         }
 
         [Command]
         public async Task AlignToLastWell(AxisSpec axisSpec)
         {
-            var plate = _device.Configuration.DeviceSpecification.Plates.Last(p => p.Wells.Count() > 0);
-            _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, plate.Wells.Last(), _device));
+            var plate = _device.Configuration.DeviceSpecification.Plates.First();
+            var well = plate.Wells.Last();
+            _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
         }
 
         [Command]
@@ -451,6 +466,34 @@ namespace Effani.Device.UI
         {
             Mouse.OverrideCursor = Cursors.Wait;
             _processEngine.QueueCommand(new HomeAll(_device));
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        [Command]
+        public async Task AlignForWaste()
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            _processEngine.QueueCommand(new AlignTableForWaste(_device));
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        [Command]
+        public async Task InjectSampleTest()
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            var plate = _device.Configuration.DeviceSpecification.Plates.First();
+            var well = plate.Wells.First();
+            _processEngine.QueueCommands(new CommandPacket([
+                new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
+                new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation, _device),
+                new AlignWellToAxis(Axis.Biopsy, plate.Wells.First(), _device),
+                new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation + _device.Configuration.BiopsyTravel, _device),
+                new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition + _device.Configuration.BiopsyZTravel, _device),
+                new EmitCo2(_device),
+                new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
+                new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation, _device),
+                new AlignWellToLocation(_device.Configuration.CameraLocation,  well, _device)
+            ]));
             Mouse.OverrideCursor = Cursors.Arrow;
         }
 
@@ -510,6 +553,22 @@ namespace Effani.Device.UI
 			var response = _device.ReadNadh();
 			AddConsoleMessage($"NADH: {response}");
 			Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        [Command]
+        public async Task AlignToNadhLaser()
+        {
+            var plate = _device.Configuration.DeviceSpecification.Plates.First();
+            var well = plate.Wells.First();
+            _processEngine.QueueCommand(new AlignWellToLocation(_device.Configuration.NadhLaserLocation, well, _device));
+        }
+
+        [Command]
+        public async Task AlignToDnaLaser()
+        {
+            var plate = _device.Configuration.DeviceSpecification.Plates.First();
+            var well = plate.Wells.First();
+            _processEngine.QueueCommand(new AlignWellToLocation(_device.Configuration.DnaLaserLocation, well, _device));
         }
 
         [Command]
