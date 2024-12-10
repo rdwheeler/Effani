@@ -92,6 +92,7 @@ namespace Effani.Device.Process
 			catch (Exception ex)
 			{
 				Messages.Enqueue(ex.Message);
+                TerminateProcess();
 			}
 		}
 		private void PublishMessages()

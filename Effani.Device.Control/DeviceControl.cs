@@ -41,7 +41,7 @@ namespace Effani.Device.Control
                 return "Unknown axis";
             if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
-			Write("G91");
+			Write("G90");
 			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
 			return $"Move {axisSpec.Designation} {distance} at {speed}";
 		}
@@ -52,14 +52,14 @@ namespace Effani.Device.Control
                 return "Unknown axis";
             if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
-			Write("G90");
+			Write("G91");
 			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
 			return $"Move {axisSpec.Designation} {distance} at {speed}";
 		}
 		public string Move(List<MoveSpec> moveSpecs, float speed)
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
-			Write("G91");
+			Write("G90");
 			Write($"G0 {moveCode} F{speed}");
 			return $"Move {moveCode} at {speed}";
 		}
@@ -67,7 +67,8 @@ namespace Effani.Device.Control
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
 			Write("G91");
-			Write($"G2 {moveCode} F{speed}");
+            var formula = $"G2 {moveCode} R4.5 F{speed}";
+            Write(formula);
 			return $"Move {moveCode} at {speed}";
 		}
 		public string GoPercent(Axis axis, float percent, float? speed = null)
@@ -158,7 +159,6 @@ namespace Effani.Device.Control
                 };
                 _serialPort.DataReceived += dataRecieved;
                 Write($"M122 B{boardId}");
-                Task.Delay(5000);
                 _serialPort.DataReceived -= dataRecieved;
                 return recievedValue;
             }
@@ -178,8 +178,8 @@ namespace Effani.Device.Control
 					recievedValue = _serialPort.ReadExisting();
 				};
 				_serialPort.DataReceived += dataRecieved;
+                Write($"G4 P{Configuration.SensorReadDwell}");
 				Write($"M308 S0");
-				Task.Delay(Configuration.SensorReadDwell);
 				_serialPort.DataReceived -= dataRecieved;
 				if (!String.IsNullOrEmpty(recievedValue))
 				{
@@ -208,28 +208,32 @@ namespace Effani.Device.Control
 			{
 				_suspendSerialPortReading = true;
 				string recievedValue = null;
-				SerialDataReceivedEventHandler dataRecieved = (sender, e) =>
+                _ = _serialPort.ReadExisting(); // clear buffer
+                SerialDataReceivedEventHandler dataRecieved = (sender, e) =>
 				{
 					recievedValue = _serialPort.ReadExisting();	
 				};
 				_serialPort.DataReceived += dataRecieved;
-				Write($"M308 S1");
-				Task.Delay(Configuration.SensorReadDwell);
-				_serialPort.DataReceived -= dataRecieved;
-				if (!String.IsNullOrEmpty(recievedValue))
-				{
-					try
-					{
-						var afterReading = recievedValue.Split("reading ")[1];
-						var firstNumber = afterReading.Split(',')[0];
-						if (float.TryParse(firstNumber, out var readingValue))
-							recievedValue = readingValue.ToString();
-					}
-					catch
-					{
-						recievedValue = $"Could not parse response of: {recievedValue}";
-					}
-				}
+                Write($"G4 P{Configuration.SensorReadDwell}");
+                //Write($"M409 K""sensors.analog[);
+                Write($"M308 S1");
+                var count = 720;
+                while (recievedValue == null && count > 0)
+                {
+                    Task.Delay(1000).Wait();
+                    count--;
+                    if (!String.IsNullOrEmpty(recievedValue))
+                    {
+                        var afterReading = recievedValue.Split("reading ")[1];
+                        var firstNumber = afterReading.Split(',')[0];
+                        if (float.TryParse(firstNumber, out var readingValue))
+                        {
+                            recievedValue = readingValue.ToString();
+                            return recievedValue;
+                        }
+                    }
+                }
+                _serialPort.DataReceived -= dataRecieved;
 				return recievedValue;
 			}
 			finally
@@ -280,6 +284,7 @@ namespace Effani.Device.Control
 		}
 		public string EmitCo2(int miliseconds)
         {
+            Write($"G4 P1000");
             Write($"M42 P4 S1");
             Write($"G4 P{miliseconds}");
             Write($"M42 P4 S0");
@@ -292,7 +297,7 @@ namespace Effani.Device.Control
             if (!(axisSpec is FluidAxis))
 				return $"{axis} is not a fluid axis";
 			var distance = CalcFluidTravelMmForMl(microLiters);
-			var result = Move(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
+			var result = MoveRelative(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
             Write($"G4 P5000");
             if (!result.Equals(OK))
 				return result;
@@ -306,55 +311,56 @@ namespace Effani.Device.Control
 		public string RemoveFluid(int microLiters)
 		{
 			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel, 10);
-			DoStir();
+			DoStir(Axes[Axis.AspirateFluidZ]);
 
 			var distance = CalcFluidAspirateTravelMmForMl(microLiters);
-			Move(Axis.AspirateFluid, distance, Configuration.AspirateSyringeSpeed);
+            MoveRelative(Axis.AspirateFluid, distance, Configuration.AspirateSyringeSpeed);
             Write($"G4 P5000");
 			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 10);
 
             return $"{microLiters} of fluid removed";
 		}
-		private void DoStir()
+		private void DoStir(AxisSpec axis)
 		{
-			Move(Axis.TableY, Configuration.WellWidth * 0.8f, 50); // move near well edge
-			int count = 0;
-			while(count <= 5)
-			{
-				//arc to right edge
-				var rightMultiAxis = new List<MoveSpec>();
-				rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
-				rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
-				rightMultiAxis.Add(new MoveSpec(Axes[Axis.AspirateFluidZ], (Configuration.WellDepth * 0.9f) * -1));
-				MoveClockwiseArc(rightMultiAxis, Configuration.AspirateSyringeSpeed);
-				//arc to bottom edge
-				var bottomMultiAxis = new List<MoveSpec>();
-				bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
-				bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
-				bottomMultiAxis.Add(new MoveSpec(Axes[Axis.AspirateFluidZ], (Configuration.WellDepth * 0.8f) * -1));
-				MoveClockwiseArc(rightMultiAxis, Configuration.AspirateSyringeSpeed);
-				//arc to left edge
-				var leftMultiAxis = new List<MoveSpec>();
-				leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
-				leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f)));
-				leftMultiAxis.Add(new MoveSpec(Axes[Axis.AspirateFluidZ], (Configuration.WellDepth * 0.9f) * -1));
-				MoveClockwiseArc(rightMultiAxis, Configuration.AspirateSyringeSpeed);
-				//arc to top edge
-				var topMultiAxis = new List<MoveSpec>();
-				topMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
-				topMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
-				topMultiAxis.Add(new MoveSpec(Axes[Axis.AspirateFluidZ], (Configuration.WellDepth * 0.9f) * -1));
-				MoveClockwiseArc(rightMultiAxis, Configuration.AspirateSyringeSpeed);
-				count++;
-			}
+			MoveRelative(Axis.TableY, Configuration.WellWidth * 0.8f, 50); // move near well edge
+            MoveRelative(axis.Axis, Configuration.WellDepth * 0.8f, 50); // move near well edge
+   //         int count = 0;
+			//while(count <= 5)
+			//{
+			//	//arc to right edge
+			//	var rightMultiAxis = new List<MoveSpec>();
+			//	rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
+			//	rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
+			//	rightMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.9f)));
+			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
+			//	//arc to bottom edge
+			//	var bottomMultiAxis = new List<MoveSpec>();
+			//	bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
+			//	bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
+			//	bottomMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.9f)));
+			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
+			//	//arc to left edge
+			//	var leftMultiAxis = new List<MoveSpec>();
+			//	leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
+			//	leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f)));
+			//	leftMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.2f)));
+			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
+			//	//arc to top edge
+			//	var topMultiAxis = new List<MoveSpec>();
+			//	topMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
+			//	topMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
+			//	topMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.9f)));
+			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
+			//	count++;
+			//}
 		}
 		public string RemoveKoh(int microLiters)
 		{
 			Move(Axis.AspirateKohZ, Configuration.AspirateTopZTravel, 10);
-			DoStir();
+			DoStir(Axes[Axis.AspirateKohZ]);
 
 			var distance = CalcKohAspirateTravelMmForMl(microLiters);
-			Move(Axis.AspirateKoh, distance, Configuration.AspirateSyringeSpeed);
+			MoveRelative(Axis.AspirateKoh, distance, Configuration.AspirateSyringeSpeed);
             Write($"G4 P5000");
 			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 10);
 
@@ -401,7 +407,7 @@ namespace Effani.Device.Control
 			{
 				DataReceived?.Invoke(this, new DataArgs<string>(message));
 			}
-			Task.Delay(500);
+			Task.Delay(500).Wait();
 		}
 
 		public event EventHandler<DataArgs<string>>? DataReceived;

@@ -223,7 +223,7 @@ G90 ; absolute positioning
 			Plate currentPlate = DeviceSpecification.Plates[0];
 			for (int index = 0; index < PlateCapacity * TestWellsPerPlate; index++)
 			{
-				for (int y = 0; y < VerticalWellCount; y++)
+				for (int y = 1; y < VerticalWellCount; y++)
                 {
 					for (int x = 0; x < HorizontalWellCount; x++)
 					{

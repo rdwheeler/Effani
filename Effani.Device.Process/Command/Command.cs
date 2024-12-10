@@ -13,7 +13,7 @@ namespace Effani.Device.Process
 		{
 			if(Device.Configuration.BypassDeviceCommands > 0)
 			{
-				Task.Delay(Device.Configuration.BypassDeviceCommands);
+				Task.Delay(Device.Configuration.BypassDeviceCommands).Wait();
 			}
 			else
 			{

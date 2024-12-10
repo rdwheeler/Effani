@@ -48,7 +48,7 @@ namespace Effani.Device.UI
 		{
 			_doingPrepToBaselineTimerStart = true;
 
-			try
+            try
 			{
 				StatusMessages.Add($"Preparing assay...");
 
@@ -111,7 +111,7 @@ namespace Effani.Device.UI
 				{
 					if (_processTerminating)
 						return;
-					Task.Delay(1000);
+					Task.Delay(1000).Wait();
 				}
 				var reading1 = GetReading(DnaBaselineWells[0].Well, Config.DnaLaserLocation, "1 µg DNA", new ReadDna(Device));
 				if (_processTerminating)

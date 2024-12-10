@@ -9,7 +9,6 @@ namespace Effani.Device.Process
 		protected override string Run()
 		{
 			Device.LaserDnaOn();
-			Task.Delay(Device.Configuration.OpticalSensorDwell);
 			Result = Device.ReadDna();
 			Device.LaserDnaOff();
 			return Result;

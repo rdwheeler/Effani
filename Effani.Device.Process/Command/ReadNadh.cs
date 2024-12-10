@@ -9,7 +9,6 @@ namespace Effani.Device.Process
 		protected override string Run()
 		{
 			Device.LaserNadhOn();
-			Task.Delay(Device.Configuration.OpticalSensorDwell);
 			Result = Device.ReadNadh();
 			Device.LaserNadhOff();
 			return Result;

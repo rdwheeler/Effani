@@ -229,8 +229,8 @@ namespace Effani.Device.UI
 					return;
 				_accountName = value;
 				ResultsFilePath = Path.Combine(
-					Environment.CurrentDirectory,
-					$"Results {value} {DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.effani");
+                    "C:\\Users\\rwx3101\\",
+                    $"Results {value} {DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.effani");
 				RaisePropertyChanged(nameof(AccountName));
 				RaisePropertyChanged(nameof(AccountAndNumberOfTestsComplete));
 			}
@@ -344,10 +344,14 @@ namespace Effani.Device.UI
 		bool _preparationComplete;
 		int _unloadedTestsCount;
 		ProcessEngine _processEngine;
-		#endregion
 
-		#region Commands
-		[Command]
+        private bool DoHome = true;
+        private bool DoPrime = true;
+        private Well _currentWell;
+        #endregion
+
+        #region Commands
+        [Command]
 		public void AcceptSample()
         {
             var packet = new CommandPacket();
@@ -452,6 +456,13 @@ namespace Effani.Device.UI
                 _processEngine.QueueCommands(new CommandPacket([
                     new HomeAxis(axisSpec.Axis, _device),
                     new AxisGoto(axisSpec.Axis, _device.Configuration.FluidSyringeHomePosition, _device),
+                ]));
+            }
+            if (axisSpec is AspirateAxis)
+            {
+                _processEngine.QueueCommands(new CommandPacket([
+                    new HomeAxis(axisSpec.Axis, _device),
+                    new AxisGoto(axisSpec.Axis, _device.Configuration.AspirateKohSyringeHomePosition, _device),
                 ]));
             }
         }
@@ -711,9 +722,5 @@ namespace Effani.Device.UI
 			AddConsoleMessage(response);
 		}
 		#endregion
-
-        private bool DoHome = true;
-        private bool DoPrime = true;
-        private Well _currentWell;
     }
 }
