@@ -28,7 +28,7 @@ namespace Effani.Device.UI
 			_device = deviceService.GetDevice();
 			_device.DataReceived += Device_DataRecieved;
 			_processEngine = deviceService.GetProcessEngine();
-			_processEngine.DataReceived += ProcessEngine_DataReceived;
+			_processEngine.MessageReceived += ProcessEngine_DataReceived;
 			Axes = new ObservableCollection<AxisSpec>(_device.Configuration.DeviceSpecification.Axes);
 		}
 		#endregion

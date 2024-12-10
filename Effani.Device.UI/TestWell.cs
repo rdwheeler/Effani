@@ -61,11 +61,11 @@ namespace Effani.Device.UI
 		#region Private methods
 		private void DnaTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _dnaTimerCallback.Invoke(this, new DataArgs<int>(0)));
+			Task.Run(() => _dnaTimerCallback.Invoke(this, new DataArgs<int>(7)));
 		}
 		private void KohTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _kohTimerCallback.Invoke(this, new DataArgs<int>(0)));
+			Task.Run(() => _kohTimerCallback.Invoke(this, new DataArgs<int>(6)));
         }
         private void NadahTimer1h_Elapsed(object sender, ElapsedEventArgs e)
         {

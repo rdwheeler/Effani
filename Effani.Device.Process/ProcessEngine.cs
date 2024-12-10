@@ -5,6 +5,12 @@ namespace Effani.Device.Process
 {
 	public class ProcessEngine : IDisposable
 	{
+		public ProcessEngine()
+		{
+			_dataPumpThread = new Thread(PublishData);
+			_dataPumpThread.Start();
+		}
+
 		public bool ExecuteProcess()
 		{
 			if (_processThread is not null)
@@ -42,23 +48,11 @@ namespace Effani.Device.Process
 			return QueueCommands(new CommandPacket([command]), startProcessing);
 		}
 
-		public string ExecuteCommandsAndGetResult(CommandPacket commandPacket, bool startProcessing = true)
+		public bool QueueCommandsForResult(CommandPacket commandPacket, bool startProcessing = true)
 		{
-			ProcessingLock.EnterWriteLock();
-			try
-			{
-				for (int i = 0; i < commandPacket.Commands.Count() - 1; i++) // presume last command is the one we want results from
-				{
-					commandPacket.Commands[i].Execute();
-				}
-				var readCommand = commandPacket.Commands.Last();
-				readCommand.Execute();
-				return readCommand.Result;
-			}
-			finally
-			{
-				ProcessingLock.ExitWriteLock();
-			}
+			var lastCommand = commandPacket.Commands.Last();
+			ReadTokens.TryAdd(lastCommand.ResultDataToken.Key, lastCommand.ResultDataToken.Value);
+			return QueueCommands(commandPacket, startProcessing);
 		}
 		public void Dispose()
 		{
@@ -71,6 +65,11 @@ namespace Effani.Device.Process
 			{
 				_processThread.Join();
 				_processThread = null;
+			}
+			if (_dataPumpThread is not null)
+			{
+				_dataPumpThread.Join();
+				_dataPumpThread = null;
 			}
 		}
 
@@ -99,11 +98,26 @@ namespace Effani.Device.Process
 		{
 			while (Messages.TryDequeue(out var message))
 			{
-				DataReceived?.Invoke(this, new DataArgs<string>(message));
+				MessageReceived?.Invoke(this, new DataArgs<string>(message));
 			}
 			var thread = _publishThread;
 			_publishThread = null;
 			thread.Join();
+		}
+		private void PublishData()
+		{
+			while (Data.TryDequeue(out var message))
+			{
+				foreach(var token in ReadTokens.ToList())
+				{
+					if (message.Contains(token.Value))
+					{
+						DataReceived?.Invoke(this, new DataArgs<KeyValuePair<string, string>>(new KeyValuePair<string, string>(token.Key, message)));
+						ReadTokens.TryRemove(token);
+					}
+				}
+			}
+			Task.Delay(500).Wait();
 		}
 		private void EnqueueMessage(string message)
 		{
@@ -117,11 +131,15 @@ namespace Effani.Device.Process
 
 		public ConcurrentQueue<CommandPacket> CommandPacketQueue { get; } = new();
 		public ConcurrentQueue<string> Messages { get; } = new();
+		public ConcurrentQueue<string> Data { get; } = new();
+		public ConcurrentDictionary<string, string> ReadTokens { get; } = new();
 		public ReaderWriterLockSlim ProcessingLock { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
-		public event EventHandler<DataArgs<string>>? DataReceived;
+		public event EventHandler<DataArgs<string>>? MessageReceived;
+		public event EventHandler<DataArgs<KeyValuePair<string, string>>>? DataReceived;
 
 		Thread? _processThread;
+		Thread? _dataPumpThread;
 		Thread? _publishThread;
 	}
 }

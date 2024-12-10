@@ -30,7 +30,7 @@ namespace Effani.Device.UI
 			_device = deviceService.GetDevice();
 			_device.DataReceived += Device_DataRecieved;
 			_processEngine = deviceService.GetProcessEngine();
-			_processEngine.DataReceived += ProcessEngine_DataReceived;
+			_processEngine.MessageReceived += ProcessEngine_DataReceived;
 			Axes = new ObservableCollection<AxisSpec>(_device.Configuration.DeviceSpecification.Axes);
 			Assay = new Assay(_device, _processEngine);
 		}
@@ -99,7 +99,7 @@ namespace Effani.Device.UI
 			results.AppendLine($"0.25 µg DNA:{Assay.MicrogramDna25Dna}");
 			results.AppendLine($"0.0625 µg DNA:{Assay.MicrogramDna0625Dna}");
 			results.AppendLine($"0 µg DNA:{Assay.Microgram0Dna}");
-			foreach (var well in Assay.WellTests)
+			foreach (var well in Assay.TestWells)
 				results.AppendLine(
 					$"{well.SampleId} {well.Label} DNA:{well.DnaValue} {String.Join(' ', well.TimeValues.Select(t => $"T{t.Key}:{t.Value}"))}");
 			File.WriteAllText(ResultsFilePath, results.ToString());

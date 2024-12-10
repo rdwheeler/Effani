@@ -18,19 +18,20 @@ namespace Effani.Device.Control
 			_serialPort.Handshake = Handshake.None; // SetPortHandshake(_serialPort.Handshake);
 			_serialPort.ReadTimeout = 500;
 			_serialPort.WriteTimeout = 500;
-			_serialPort.DataReceived += _serialPort_DataReceived;
 
 			Axes = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => v);
 
-			_publishThread = new Thread(PublishReadData);
+			_publishThread = new Thread(InitializeReadData);
 			_publishThread.Start();
 		}
 
+		private void InitializeReadData()
+		{
+			_serialPort.DataReceived += _serialPort_DataReceived;
+			PublishReadData();
+		}
 		private void _serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
-			if(_suspendSerialPortReading)
-				return;
-
 			string message = _serialPort.ReadExisting();
 			if(!String.IsNullOrEmpty(message))
 				ReadData.Enqueue(message);
@@ -169,77 +170,15 @@ namespace Effani.Device.Control
         }
 		public string ReadDna()
 		{
-			try
-			{
-				_suspendSerialPortReading = true;
-				string recievedValue = null;
-				SerialDataReceivedEventHandler dataRecieved = (sender, e) =>
-				{
-					recievedValue = _serialPort.ReadExisting();
-				};
-				_serialPort.DataReceived += dataRecieved;
-                Write($"G4 P{Configuration.SensorReadDwell}");
-				Write($"M308 S0");
-				_serialPort.DataReceived -= dataRecieved;
-				if (!String.IsNullOrEmpty(recievedValue))
-				{
-					try
-					{
-						var afterReading = recievedValue.Split("reading ")[1];
-						var firstNumber = afterReading.Split(',')[0];
-						if (float.TryParse(firstNumber, out var readingValue))
-							recievedValue = readingValue.ToString();
-					}
-					catch
-					{
-						recievedValue = $"Could not parse response of: {recievedValue}";
-					}
-				}
-				return recievedValue;
-			}
-			finally
-			{
-				_suspendSerialPortReading = false;
-			}
+            Write($"G4 P{Configuration.SensorReadDwell}");
+			Write($"M308 S0");
+			return "Read DNA";
 		}
 		public string ReadNadh()
 		{
-			try
-			{
-				_suspendSerialPortReading = true;
-				string recievedValue = null;
-                _ = _serialPort.ReadExisting(); // clear buffer
-                SerialDataReceivedEventHandler dataRecieved = (sender, e) =>
-				{
-					recievedValue = _serialPort.ReadExisting();	
-				};
-				_serialPort.DataReceived += dataRecieved;
-                Write($"G4 P{Configuration.SensorReadDwell}");
-                //Write($"M409 K""sensors.analog[);
-                Write($"M308 S1");
-                var count = 720;
-                while (recievedValue == null && count > 0)
-                {
-                    Task.Delay(1000).Wait();
-                    count--;
-                    if (!String.IsNullOrEmpty(recievedValue))
-                    {
-                        var afterReading = recievedValue.Split("reading ")[1];
-                        var firstNumber = afterReading.Split(',')[0];
-                        if (float.TryParse(firstNumber, out var readingValue))
-                        {
-                            recievedValue = readingValue.ToString();
-                            return recievedValue;
-                        }
-                    }
-                }
-                _serialPort.DataReceived -= dataRecieved;
-				return recievedValue;
-			}
-			finally
-			{
-				_suspendSerialPortReading = false;
-			}
+            Write($"G4 P{Configuration.SensorReadDwell}");
+            Write($"M308 S1");
+			return "Read NADH";
 		}
 
 		public string PlateUvOn()
@@ -421,8 +360,6 @@ namespace Effani.Device.Control
 
         SerialPort _serialPort;
 		Thread _publishThread;
-		bool _suspendSerialPortReading = false;
-		const string OK = "ok";
 
 	}
 }
