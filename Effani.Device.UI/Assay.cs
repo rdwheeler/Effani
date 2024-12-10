@@ -112,22 +112,22 @@ namespace Effani.Device.UI
 						return;
 					Task.Delay(1000).Wait();
 				}
-				var reading1 = GetReading(DnaBaselineWells[0].Well, Config.DnaLaserLocation, "1 µg DNA", new ReadDna(Device));
+				GetReading(DnaBaselineWells[0].Well, Config.DnaLaserLocation, "1 µg DNA", new ReadDna(Device));
 				if (_processTerminating)
 					return;
 				Microgram1Dna = reading1;
 
-				var reading2 = GetReading(DnaBaselineWells[1].Well, Config.DnaLaserLocation, "0.25 µg DNA", new ReadDna(Device));
+				GetReading(DnaBaselineWells[1].Well, Config.DnaLaserLocation, "0.25 µg DNA", new ReadDna(Device));
 				if (_processTerminating)
 					return;
 				MicrogramDna25Dna = reading2;
 
-				var reading3 = GetReading(DnaBaselineWells[2].Well, Config.DnaLaserLocation, "0.0625 µg DNA", new ReadDna(Device));
+				GetReading(DnaBaselineWells[2].Well, Config.DnaLaserLocation, "0.0625 µg DNA", new ReadDna(Device));
 				if (_processTerminating)
 					return;
 				MicrogramDna0625Dna = reading3;
 
-				var reading4 = GetReading(DnaBaselineWells[3].Well, Config.DnaLaserLocation, "0 µg DNA", new ReadDna(Device));
+				GetReading(DnaBaselineWells[3].Well, Config.DnaLaserLocation, "0 µg DNA", new ReadDna(Device));
 				if (_processTerminating)
 					return;
 				Microgram0Dna = reading4;
