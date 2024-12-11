@@ -491,9 +491,9 @@ namespace Effani.Device.UI
         [Command]
 		public async Task AlignToFirstWell(AxisSpec axisSpec)
         {
-            CurrentWell = well;
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
             var well = plate.Wells.First();
+            CurrentWell = well;
             _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
         }
         [Command]

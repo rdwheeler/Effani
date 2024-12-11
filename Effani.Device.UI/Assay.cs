@@ -112,25 +112,21 @@ namespace Effani.Device.UI
 						return;
 					Task.Delay(1000).Wait();
 				}
-				GetReading(DnaBaselineWells[0].Well, Config.DnaLaserLocation, "1 µg DNA", new ReadDna(Device));
+                SendReadingCommand(DnaBaselineWells[0].Well, Config.DnaLaserLocation, "1 µg DNA", new ReadDna(Device), nameof(Microgram1Dna));
 				if (_processTerminating)
 					return;
-				Microgram1Dna = reading1;
 
-				GetReading(DnaBaselineWells[1].Well, Config.DnaLaserLocation, "0.25 µg DNA", new ReadDna(Device));
+                SendReadingCommand(DnaBaselineWells[1].Well, Config.DnaLaserLocation, "0.25 µg DNA", new ReadDna(Device), nameof(MicrogramDna25Dna));
 				if (_processTerminating)
 					return;
-				MicrogramDna25Dna = reading2;
 
-				GetReading(DnaBaselineWells[2].Well, Config.DnaLaserLocation, "0.0625 µg DNA", new ReadDna(Device));
+                SendReadingCommand(DnaBaselineWells[2].Well, Config.DnaLaserLocation, "0.0625 µg DNA", new ReadDna(Device), nameof(MicrogramDna0625Dna));
 				if (_processTerminating)
 					return;
-				MicrogramDna0625Dna = reading3;
 
-				GetReading(DnaBaselineWells[3].Well, Config.DnaLaserLocation, "0 µg DNA", new ReadDna(Device));
+                SendReadingCommand(DnaBaselineWells[3].Well, Config.DnaLaserLocation, "0 µg DNA", new ReadDna(Device), nameof(Microgram0Dna));
 				if (_processTerminating)
 					return;
-				Microgram0Dna = reading4;
 				StatusMessages.Add($"Assay preparation complete");
             }
             catch (IOException ex)
@@ -169,8 +165,8 @@ namespace Effani.Device.UI
 			]));
 		}
 
-		private const string DnaLaserReadingKey = "";
-		private const string NadhLaserReadingKey = "";
+		private const string DnaLaserReadingKey = "1.io6.in";
+		private const string NadhLaserReadingKey = "2.io6.in";
 		private const string HighNadhName = "HighNadh";
 		private const string LowNadhName = "LowNadh";
 		private void Engine_DataReceived(object sender, DataArgs<KeyValuePair<string, string>> e)
