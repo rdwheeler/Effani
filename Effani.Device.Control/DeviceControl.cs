@@ -150,23 +150,15 @@ namespace Effani.Device.Control
 		}
 		public string GetBoardDiagnostics(int boardId)
         {
-            try
+            string recievedValue = null;
+            SerialDataReceivedEventHandler dataRecieved = (sender, e) =>
             {
-                _suspendSerialPortReading = true;
-                string recievedValue = null;
-                SerialDataReceivedEventHandler dataRecieved = (sender, e) =>
-                {
-                    recievedValue = _serialPort.ReadExisting();
-                };
-                _serialPort.DataReceived += dataRecieved;
-                Write($"M122 B{boardId}");
-                _serialPort.DataReceived -= dataRecieved;
-                return recievedValue;
-            }
-            finally
-            {
-                _suspendSerialPortReading = false;
-            }
+                recievedValue = _serialPort.ReadExisting();
+            };
+            _serialPort.DataReceived += dataRecieved;
+            Write($"M122 B{boardId}");
+            _serialPort.DataReceived -= dataRecieved;
+            return recievedValue;
         }
 		public string ReadDna()
 		{
@@ -238,8 +230,6 @@ namespace Effani.Device.Control
 			var distance = CalcFluidTravelMmForMl(microLiters);
 			var result = MoveRelative(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
             Write($"G4 P5000");
-            if (!result.Equals(OK))
-				return result;
 			return $"{microLiters} {axis} emitted";
 		}
 		public string SetTrayTemperature(float temperature)

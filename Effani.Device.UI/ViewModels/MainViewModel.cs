@@ -30,7 +30,7 @@ namespace Effani.Device.UI
 			_device = deviceService.GetDevice();
 			_device.DataReceived += Device_DataRecieved;
 			_processEngine = deviceService.GetProcessEngine();
-			_processEngine.MessageReceived += ProcessEngine_DataReceived;
+			_processEngine.MessageReceived += ProcessEngine_MessageReceived;
 			Axes = new ObservableCollection<AxisSpec>(_device.Configuration.DeviceSpecification.Axes);
 			Assay = new Assay(_device, _processEngine);
 		}
@@ -176,6 +176,7 @@ namespace Effani.Device.UI
 		private void Device_DataRecieved(object sender, Control.DeviceControl.DataArgs<string> e)
 		{
 			AddConsoleMessage($"{e.Data}");
+			File.AppendAllLines(LogFilePath, new string[] { $"{GetShortNow()} {e.Data}" });
 		}
 		private void PrepareNextSampleForLoading()
 		{
@@ -187,9 +188,10 @@ namespace Effani.Device.UI
                 AdvanceWizardPage?.Invoke(this, null);
             }
 		}
-		private void ProcessEngine_DataReceived(object sender, DeviceControl.DataArgs<string> e)
+		private void ProcessEngine_MessageReceived(object sender, DeviceControl.DataArgs<string> e)
 		{
 			AddConsoleMessage($"{e.Data}");
+			File.AppendAllLines(LogFilePath, new string[] { $"{GetShortNow()} {e.Data}" });
 		}
 		private void StatusMessages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
@@ -197,6 +199,10 @@ namespace Effani.Device.UI
 			{
 				AddConsoleMessage(message);
 			}
+		}
+		private string GetShortNow()
+		{
+			return $"{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}";
 		}
         int emitFluidVolume;
         #endregion
@@ -228,9 +234,10 @@ namespace Effani.Device.UI
 				if (_accountName == value)
 					return;
 				_accountName = value;
-				ResultsFilePath = Path.Combine(
-                    "C:\\Users\\rwx3101\\",
-                    $"Results {value} {DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.effani");
+				ResultsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    $"Results {value} {GetShortNow()}.effani");
+				LogFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+					$"Log {value} {GetShortNow()}.txt");
 				RaisePropertyChanged(nameof(AccountName));
 				RaisePropertyChanged(nameof(AccountAndNumberOfTestsComplete));
 			}
@@ -311,11 +318,26 @@ namespace Effani.Device.UI
 			}
 		}
 		public string ResultsFilePath { get; set; }
+		public string LogFilePath { get; set; }
 		public List<TestWell> SampleLoadingCollection { get; set; } = new();
 		public ObservableCollection<TestWell> SamplesComplete { get; set; } = new();
 		public ObservableCollection<TestWell> SamplesInDna { get; set; } = new();
 		public ObservableCollection<TestWell> SamplesInKoh { get; set; } = new();
 		public ObservableCollection<TestWell> SamplesLoaded { get; set; } = new();
+		public Well CurrentWell
+		{
+			get
+			{
+				if (_currentWell == null && _device is not null)
+					_currentWell = _device.Configuration.DeviceSpecification.Plates.FirstOrDefault()?.Wells.FirstOrDefault();
+				return _currentWell;
+			}
+			set
+			{
+				_currentWell = value;
+				RaisePropertyChanged(nameof(CurrentWell));
+			}
+		}
 		public int UnloadedTestsCount
 		{
 			get
@@ -347,11 +369,11 @@ namespace Effani.Device.UI
 
         private bool DoHome = true;
         private bool DoPrime = true;
-        private Well _currentWell;
-        #endregion
+		private Well _currentWell;
+		#endregion
 
-        #region Commands
-        [Command]
+		#region Commands
+		[Command]
 		public void AcceptSample()
         {
             var packet = new CommandPacket();
@@ -469,22 +491,22 @@ namespace Effani.Device.UI
         [Command]
 		public async Task AlignToFirstWell(AxisSpec axisSpec)
         {
+            CurrentWell = well;
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
             var well = plate.Wells.First();
-            _currentWell = well;
             _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
         }
         [Command]
         public async Task AlignToNextWell(AxisSpec axisSpec)
         {
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
-            if (_currentWell == null)
-                _currentWell = plate.Wells.First();
-            var nextIndex = plate.Wells.IndexOf(_currentWell) + 1;
+            if (CurrentWell == null)
+                CurrentWell = plate.Wells.First();
+            var nextIndex = plate.Wells.IndexOf(CurrentWell) + 1;
             if (plate.Wells.Count - 1 < nextIndex)
                 return;
             var well = plate.Wells[nextIndex];
-            _currentWell = well;
+            CurrentWell = well;
             _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
         }
 
@@ -493,7 +515,7 @@ namespace Effani.Device.UI
         {
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
             var well = plate.Wells.Last();
-            _currentWell = well;
+            CurrentWell = well;
             _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
         }
 
@@ -535,12 +557,11 @@ namespace Effani.Device.UI
         public async Task InjectSampleTest()
         {
             Mouse.OverrideCursor = Cursors.Wait;
-            var plate = _device.Configuration.DeviceSpecification.Plates.First();
-            var well = plate.Wells.First();
+			var well = CurrentWell;
             _processEngine.QueueCommands(new CommandPacket([
                 new AxisGoto(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
                 new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation, _device),
-                new AlignWellToAxis(Axis.Biopsy, plate.Wells.First(), _device),
+                new AlignWellToAxis(Axis.Biopsy, well, _device),
                 new UvBiopsyOn(_device),
                 new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation + _device.Configuration.BiopsyTravel, _device),
                 new UvBiopsyOff(_device),
