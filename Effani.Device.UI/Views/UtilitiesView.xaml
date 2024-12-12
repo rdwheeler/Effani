@@ -160,6 +160,7 @@
                         <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding InjectSampleTestCommand}" Content="Inject Sample" />
                         <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding PrimeFluidCommand}" Content="Prime Fluid" />
                         <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding AspirateKohCommand}" Content="Aspirate KOH" />
+                        <dx:SimpleButton Width="120" CornerRadius="5" FontSize="14" Padding="5" Margin="5" Command="{Binding EmptyKohCommand}" Content="Empty KOH" />
                     </StackPanel>
                 </dx:DXTabItem>
                 <dx:DXTabItem Header="Control Board">

@@ -130,7 +130,7 @@
 					</StackPanel>
 				</Grid>
 			</dxco:WelcomeWizardPage>
-			<dxco:WizardPage ShowFinish="False" ShowBack="False" ShowNext="False" x:Name="LoadFluidSystemPage">
+			<dxco:WizardPage ShowFinish="False" ShowBack="False" ShowNext="True" x:Name="LoadFluidSystemPage">
 				<StackPanel MaxWidth="800" HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
 					<TextBlock TextWrapping="WrapWithOverflow" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label."/>
@@ -144,7 +144,7 @@
 					</dx:SimpleButton>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage ShowFinish="False" ShowBack="False" ShowNext="False" x:Name="LoadSampleTraysPage">
+			<dxco:WizardPage ShowFinish="False" ShowBack="False" ShowNext="True" x:Name="LoadSampleTraysPage">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Sample Trays"/>
 					<TextBlock TextWrapping="WrapWithOverflow" Text="Open the door on the right and load sample trays into the sample tray carriage."/>
@@ -158,7 +158,7 @@
 					</dx:SimpleButton>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage SideContentTemplate="{StaticResource sideContentTemplate}" ShowFinish="False" ShowNext="False" ShowBack="False" x:Name="LoadingSamplesPage" AllowNext="{DXBinding 'CurrentLoadingSample == null'}" ShowSideContent="True">
+			<dxco:WizardPage SideContentTemplate="{StaticResource sideContentTemplate}" ShowFinish="False" ShowNext="True" ShowBack="False" x:Name="LoadingSamplesPage" AllowNext="{DXBinding 'CurrentLoadingSample == null'}" ShowSideContent="True">
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Sample Loading"/>
 					<StackPanel Visibility="{DXBinding 'CurrentLoadingSample != null ? $Visibility.Visible : $Visibility.Collapsed'}">
@@ -203,7 +203,7 @@
 					</StackPanel>
 				</StackPanel>
 			</dxco:WizardPage>
-			<dxco:WizardPage SideContentTemplate="{StaticResource sideContentTemplate}" ShowFinish="False" ShowBack="False" ShowNext="False" x:Name="AssayPage">
+			<dxco:WizardPage SideContentTemplate="{StaticResource sideContentTemplate}" ShowFinish="False" ShowBack="False" ShowNext="True" x:Name="AssayPage">
 				<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 					<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Status"/>
 					<Grid HorizontalAlignment="Stretch" Visibility="{DXBinding 'AssayComplete ? $Visibility.Collapsed : $Visibility.Visible'}">

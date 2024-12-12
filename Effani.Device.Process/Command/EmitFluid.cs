@@ -16,5 +16,5 @@ namespace Effani.Device.Process
 
 		public Axis Axis { get; } = axis;
 		public int MicroLiters { get; } = microLiters;
-	}
+    }
 }

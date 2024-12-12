@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.IO.Ports;
 using System.Linq;
+using System.Text;
 
 namespace Effani.Device.Control
 {
@@ -27,14 +28,18 @@ namespace Effani.Device.Control
 
 		private void InitializeReadData()
 		{
-			_serialPort.DataReceived += _serialPort_DataReceived;
+			_serialPort.DataReceived += SerialPort_DataReceived;
 			PublishReadData();
 		}
-		private void _serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+		private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
 			string message = _serialPort.ReadExisting();
-			if(!String.IsNullOrEmpty(message))
-				ReadData.Enqueue(message);
+            if (!String.IsNullOrEmpty(message))
+            {
+                ReadData.Enqueue(message);
+                if (_saveResponses)
+                    _responses.Enqueue(message);
+            }
         }
         public string Move(Axis axis, float distance, float? speed = null)
         {
@@ -150,27 +155,21 @@ namespace Effani.Device.Control
 		}
 		public string GetBoardDiagnostics(int boardId)
         {
-            string recievedValue = null;
-            SerialDataReceivedEventHandler dataRecieved = (sender, e) =>
-            {
-                recievedValue = _serialPort.ReadExisting();
-            };
-            _serialPort.DataReceived += dataRecieved;
-            Write($"M122 B{boardId}");
-            _serialPort.DataReceived -= dataRecieved;
-            return recievedValue;
+            return Write($"M122 B{boardId}", STR_diagKey);
         }
-		public string ReadDna()
+        private const string STR_diagKey = "=== Diag";
+        private const string STR_sensorKey = "Sensor";
+        public string ReadDna()
 		{
             Write($"G4 P{Configuration.SensorReadDwell}");
-			Write($"M308 S0");
-			return "Read DNA";
+			var response = Write($"M308 S0", STR_sensorKey);
+			return response;
 		}
 		public string ReadNadh()
 		{
             Write($"G4 P{Configuration.SensorReadDwell}");
-            Write($"M308 S1");
-			return "Read NADH";
+            var response = Write($"M308 S1", STR_sensorKey);
+			return response;
 		}
 
 		public string PlateUvOn()
@@ -251,8 +250,8 @@ namespace Effani.Device.Control
 		}
 		private void DoStir(AxisSpec axis)
 		{
-			MoveRelative(Axis.TableY, Configuration.WellWidth * 0.8f, 50); // move near well edge
-            MoveRelative(axis.Axis, Configuration.WellDepth * 0.8f, 50); // move near well edge
+			MoveRelative(Axis.TableY, Configuration.WellWidth * -0.8f, 100); // move near well edge
+            MoveRelative(axis.Axis, Configuration.WellDepth * 0.8f, 100); // move near well edge
    //         int count = 0;
 			//while(count <= 5)
 			//{
@@ -285,17 +284,23 @@ namespace Effani.Device.Control
 		}
 		public string RemoveKoh(int microLiters)
 		{
-			Move(Axis.AspirateKohZ, Configuration.AspirateTopZTravel, 10);
+			Move(Axis.AspirateKohZ, Configuration.AspirateTopZTravel, 100);
 			DoStir(Axes[Axis.AspirateKohZ]);
 
 			var distance = CalcKohAspirateTravelMmForMl(microLiters);
 			MoveRelative(Axis.AspirateKoh, distance, Configuration.AspirateSyringeSpeed);
-            Write($"G4 P5000");
-			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 10);
+            Write($"G4 P1000");
+			Move(Axis.AspirateKohZ, Configuration.AspirateTopZTravel * -1, 100);
 
             return $"{microLiters} of KOH removed";
-		}
-		public void Dispose()
+        }
+        public string Pause(int miliseconds)
+        {
+            Write($"G4 P{miliseconds}");
+
+            return $"Pausing for {miliseconds}";
+        }
+        public void Dispose()
 		{
 			_serialPort.Close();
 			if(_publishThread is not null)
@@ -319,17 +324,65 @@ namespace Effani.Device.Control
 		}
 		private float CalcKohAspirateTravelMmForMl(int microLiters)
 		{
-			var microLitersPerMm = Configuration.AspirateKohSyringeVolumeMl / Configuration.AspirateKohSyringeTravelMm / 1000;
+            var microLitersPerMm = 0.06f;// (Configuration.AspirateKohSyringeVolumeMl * 1000) / Configuration.AspirateKohSyringeTravelMm;
 			var ret = (microLitersPerMm * microLiters) * -1;
 			return ret;
 		}
-		private void Write(string data)
+		private string? Write(string data, string responseKey = null)
 		{
 			if(!_serialPort.IsOpen)
 				_serialPort.Open();
+
+            _responses.Clear();
+            _saveResponses = true;
             _serialPort.WriteLine($"M400");
-            _serialPort.WriteLine($"{data}");
-		}
+            WaitForResponse();
+            if (responseKey == null)
+            {
+                _saveResponses = false;
+                _serialPort.WriteLine($"{data}");
+                return null;
+            }
+            else
+            {
+                _serialPort.WriteLine($"{data}");
+                var ret = GetResponse(responseKey);
+                return ret;
+            }
+        }
+        private void WaitForResponse()
+        {
+            while (!_responses.TryDequeue(out var response))
+            {
+                var a = response;
+                Task.Delay(50).Wait();
+            }
+            _responses.Clear();
+        }
+        private string GetResponse(string responseKey = null)
+        {
+            var ret = new StringBuilder();
+
+            string firstResponse = null;
+            while (firstResponse == null)
+            {
+                if (_responses.TryDequeue(out var response) && response.Contains(responseKey))
+                {
+                    firstResponse = response.Substring(response.IndexOf(response));
+                    break;
+                }
+                Task.Delay(50).Wait();
+            }
+            ret.Append(firstResponse);
+            while (_responses.TryDequeue(out var response))
+            {
+                ret.Append(response);
+                Task.Delay(500).Wait();
+            }
+            _saveResponses = false;
+
+            return ret.ToString();
+        }
 		private void PublishReadData()
 		{
 			while(ReadData.TryDequeue(out var message))
@@ -348,8 +401,9 @@ namespace Effani.Device.Control
 		public List<AxisSpec> FluidAxes => Axes.Values.Where(x => x is FluidAxis).ToList();
         public List<AxisSpec> ZAxes => Axes.Values.Where(x => x is BiopsyZAxis).ToList();
 
+        public bool _saveResponses;
         SerialPort _serialPort;
 		Thread _publishThread;
-
-	}
+        ConcurrentQueue<string> _responses = new();
+    }
 }

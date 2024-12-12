@@ -74,7 +74,6 @@ namespace Effani.Device.UI
         }
         public void PageStartLoadingSamples()
 		{
-            Assay._kohTimerLock.Wait(); // hold koh timer lock until all samples loaded since we can only have one aspiration needle right now
 			AddConsoleMessage("Prompting to load samples");
             SampleLoadingCollection.AddRange(Assay.TestWells1);
 			SampleLoadingCollection.AddRange(Assay.TestWells2);
@@ -148,7 +147,7 @@ namespace Effani.Device.UI
 						{
 							AddConsoleMessage("Assay complete");
 							AssayComplete = true;
-							AdvanceWizardPage?.Invoke(this, null);
+							//AdvanceWizardPage?.Invoke(this, null);
 						}
 					});
 		}
@@ -184,8 +183,7 @@ namespace Effani.Device.UI
 			CurrentLoadingSample = SampleLoadingCollection.ElementAtOrDefault(currentIndex + 1);
             if (CurrentLoadingSample == null)
             {
-                Assay._kohTimerLock.Release();
-                AdvanceWizardPage?.Invoke(this, null);
+                //AdvanceWizardPage?.Invoke(this, null);
             }
 		}
 		private void ProcessEngine_MessageReceived(object sender, DeviceControl.DataArgs<string> e)
@@ -367,9 +365,15 @@ namespace Effani.Device.UI
 		int _unloadedTestsCount;
 		ProcessEngine _processEngine;
 
-        private bool DoHome = true;
-        private bool DoPrime = true;
-		private Well _currentWell;
+        private bool DoHome = false;
+        private bool DoPrime = false;
+        private bool DoPrep = true;
+        public static bool LoadStandardFluids = true;
+        public static bool DoNadhTimerSteps = true;
+        public static bool DoTestMediaTimerSteps = true;
+        public static bool DoKohTimerSteps = true;
+        public static bool DoDnaTimerSteps = false;
+        private Well _currentWell;
 		#endregion
 
 		#region Commands
@@ -379,10 +383,11 @@ namespace Effani.Device.UI
             var packet = new CommandPacket();
             packet.Commands.Add(new AlignWellToAxis(Axis.Basal1, CurrentLoadingSample.Well, _device));
             packet.Commands.Add(new EmitFluid(Axis.Basal1, _device.Configuration.BasalVolume, _device));
-            _processEngine.QueueCommands(packet);
+            packet.Commands.Add(new StartTimer(CurrentLoadingSample.NadhTimer1h, "NADH 1h", _device));
+            _processEngine.QueuePriorityCommands(packet);
 
-            _processEngine.ProcessingLock.ExitWriteLock();
-			CurrentLoadingSample.NadhTimer1h.Start();
+            _processEngine.ProcessHighPriority = false;
+
 			SamplesLoaded.Add(CurrentLoadingSample);
 			UnloadedTestsCount--;
 			PrepareNextSampleForLoading();
@@ -402,14 +407,16 @@ namespace Effani.Device.UI
                 _processEngine.QueueCommands(packet);
             }
 
-            AdvanceWizardPage?.Invoke(this, new EventArgs());
+            //AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
 		[Command]
 		public void InjectSample()
 		{
 			AddConsoleMessage($"Injecting sample to {CurrentLoadingSample.Well.Label}");
-			_processEngine.ProcessingLock.EnterWriteLock();
-			_processEngine.QueueCommands(new CommandPacket([
+
+            _processEngine.ProcessHighPriority = true;
+
+			_processEngine.QueuePriorityCommands(new CommandPacket([
 				new AlignWellToAxis(Axis.Biopsy, CurrentLoadingSample.Well, _device),
                 new UvBiopsyOn(_device),
                 new AxisGoto(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation + _device.Configuration.BiopsyTravel, _device),
@@ -431,17 +438,19 @@ namespace Effani.Device.UI
 		}
 		[Command]
 		public void SkipSample()
-		{
-			_processEngine.ProcessingLock.ExitWriteLock();
-			AddConsoleMessage($"Skipping sample in {CurrentLoadingSample.Well.Label}");
+        {
+            _processEngine.ProcessHighPriority = false;
+
+            AddConsoleMessage($"Skipping sample in {CurrentLoadingSample.Well.Label}");
 			CurrentLoadingSample.Canceled = true;
 			PrepareNextSampleForLoading();
 		}
 		[Command]
 		public void SkipRemaining()
-		{
-			_processEngine.ProcessingLock.ExitWriteLock();
-			if (CurrentLoadingSample is not null)
+        {
+            _processEngine.ProcessHighPriority = false;
+
+            if (CurrentLoadingSample is not null)
 				AddConsoleMessage($"Skipping samples after number {CurrentLoadingSample.TestIndex}, {CurrentLoadingSample.SampleId}, {CurrentLoadingSample.Label}");
 			CurrentLoadingSample = null; // triggers the loading process is complete
 			AdvanceWizardPage?.Invoke(this, new EventArgs());
@@ -449,8 +458,9 @@ namespace Effani.Device.UI
 		[Command]
 		public void TraysLoaded()
 		{
-			new System.Threading.Thread(() => Assay.DoPrepToTimerStart()).Start();
-			AdvanceWizardPage?.Invoke(this, new EventArgs());
+            if (DoPrep)
+			    new System.Threading.Thread(() => Assay.DoPrepToTimerStart()).Start();
+			//AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
 		[Command]
 		public async Task GenerateConfigFiles()
@@ -526,6 +536,14 @@ namespace Effani.Device.UI
             var plate = _device.Configuration.DeviceSpecification.Plates
                 .FirstOrDefault(p => p.Index.X == 0 && p.Index.Y == 0);
             _processEngine.QueueCommand(new EmitFluid(axisSpec.Axis, EmitFluidVolume, _device));
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        [Command]
+        public async Task EmptyKoh(AxisSpec axisSpec)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            _processEngine.QueueCommand(new EmptyAspirateKoh(_device));
             Mouse.OverrideCursor = Cursors.Arrow;
         }
 

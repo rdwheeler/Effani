@@ -14,6 +14,8 @@ namespace Effani.Device.Process
         {
             _dataPumpThread = new Thread(PublishData);
             _dataPumpThread.Start();
+            _processThread = new Thread(ProcessCommands);
+            _processThread.Start();
         }
 
         public event EventHandler<DataArgs<KeyValuePair<string, string>>>? DataReceived;
@@ -34,16 +36,31 @@ namespace Effani.Device.Process
         {
             try
             {
-                while (CommandPacketQueue.TryDequeue(out var commandPacket))
+                while(true)
                 {
-                    foreach (var command in commandPacket.Commands)
+                    while (PriorityCommandPacketQueue.TryDequeue(out var commandPacket))
                     {
-                        command.Execute();
-                        if (!String.IsNullOrEmpty(command.Result))
-                            EnqueueMessage(command.Result);
+                        foreach (var command in commandPacket.Commands)
+                        {
+                            command.Execute();
+                            if (!String.IsNullOrEmpty(command.Result))
+                                EnqueueMessage(command.Result);
+                        }
                     }
+                    while (!ProcessHighPriority && CommandPacketQueue.TryDequeue(out var commandPacket))
+                    {
+                        foreach (var command in commandPacket.Commands)
+                        {
+                            command.Execute();
+                            if (!String.IsNullOrEmpty(command.Result))
+                                EnqueueMessage(command.Result);
+                        }
+                        if (PriorityCommandPacketQueue.Any())
+                            break;
+                    }
+                    Thread.Sleep(500);
+                    //TerminateProcess();
                 }
-                TerminateProcess();
             }
             catch (Exception ex)
             {
@@ -64,7 +81,7 @@ namespace Effani.Device.Process
                     }
                 }
             }
-            Task.Delay(500).Wait();
+            Task.Delay(1000).Wait();
         }
         private void PublishMessages()
         {
@@ -72,9 +89,9 @@ namespace Effani.Device.Process
             {
                 MessageReceived?.Invoke(this, new DataArgs<string>(message));
             }
-            var thread = _publishThread;
-            _publishThread = null;
-            thread.Join();
+            //var thread = _publishThread;
+            //_publishThread = null;
+            //thread.Join();
         }
 
         public void Dispose()
@@ -98,40 +115,52 @@ namespace Effani.Device.Process
 
         public bool ExecuteProcess()
         {
-            if (_processThread is not null)
-                return false;
+            //if (_processThread is not null)
+            //    return false;
 
-            _processThread = new Thread(ProcessCommands);
-            _processThread.Start();
+            //_processThread = new Thread(ProcessCommands);
+            //_processThread.Start();
+
             return true;
         }
 
-        public bool QueueCommand(Command command, bool startProcessing = true)
+        public bool QueueCommand(Command command)
         {
-            return QueueCommands(new CommandPacket([command]), startProcessing);
+            return QueueCommands(new CommandPacket([command]));
         }
 
-        public bool QueueCommands(CommandPacket commandPacket, bool startProcessing = true)
+        public bool QueueCommands(CommandPacket commandPacket)
         {
-            ProcessingLock.EnterWriteLock();
-            try
-            {
                 CommandPacketQueue.Enqueue(commandPacket);
-                if (startProcessing)
-                    return ExecuteProcess();
                 return false;
-            }
-            finally
-            {
-                ProcessingLock.ExitWriteLock();
-            }
+        }
+        public bool QueuePriorityCommands(CommandPacket commandPacket)
+        {
+            PriorityCommandPacketQueue.Enqueue(commandPacket);
+            Task.Delay(1000).Wait();
+            return false;
         }
 
-        public bool QueueCommandsForResult(CommandPacket commandPacket, bool startProcessing = true)
+        public string QueueCommandsForResult(CommandPacket commandPacket)
         {
-            var lastCommand = commandPacket.Commands.Last();
-            ReadTokens.TryAdd(lastCommand.ResultDataToken.Key, lastCommand.ResultDataToken.Value);
-            return QueueCommands(commandPacket, startProcessing);
+            QueueCommands(commandPacket);
+            return null;
+
+            //ProcessingLock.EnterWriteLock();
+            //try
+            //{
+            //    for (int i = 0; i < commandPacket.Commands.Count() - 1; i++) // presume last command is the one we want results from
+            //    {
+            //        commandPacket.Commands[i].Execute();
+            //    }
+            //    var readCommand = commandPacket.Commands.Last();
+            //    readCommand.Execute();
+            //    return readCommand.Result;
+            //}
+            //finally
+            //{
+            //    ProcessingLock.ExitWriteLock();
+            //}
         }
         public void TerminateProcess()
         {
@@ -141,9 +170,10 @@ namespace Effani.Device.Process
         }
 
         public ConcurrentQueue<CommandPacket> CommandPacketQueue { get; } = new();
+        public ConcurrentQueue<CommandPacket> PriorityCommandPacketQueue { get; } = new();
         public ConcurrentQueue<string> Data { get; } = new();
         public ConcurrentQueue<string> Messages { get; } = new();
-        public ReaderWriterLockSlim ProcessingLock { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        public bool ProcessHighPriority { get; set; }
         public ConcurrentDictionary<string, string> ReadTokens { get; } = new();
     }
 }

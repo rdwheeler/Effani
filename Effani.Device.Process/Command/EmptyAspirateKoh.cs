@@ -8,10 +8,7 @@ namespace Effani.Device.Process
 		protected override string Run()
 		{
 			var axisSpec = Device.Axes[Axis.AspirateKoh] as AspirateAxis;
-			var x = axisSpec.Location.X - Device.Configuration.WasteLocation.X;
-			var y = axisSpec.Location.Y - Device.Configuration.WasteLocation.Y;
-			Device.TableGoTo(x, y);
-			Device.GoTo(Axis.AspirateFluid, axisSpec.Maximum);
+			Device.Move(Axis.AspirateKoh, Device.Configuration.AspirateKohSyringeHomePosition);
 			Result =  $"{axisSpec.Label} emptied";
 			return Result;
 		}
