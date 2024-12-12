@@ -25,7 +25,7 @@
 			<DockPanel Width="600" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 				<TextBlock DockPanel.Dock="Top" TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Status"/>
 				<Border Margin="0,10,0,20" Padding="10" BorderThickness="1" BorderBrush="Gray">
-					<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{DXBinding 'AssayComplete ? $Visibility.Collapsed : $Visibility.Visible'}">
+					<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="5*" />
 							<ColumnDefinition Width="5*" />
@@ -35,10 +35,10 @@
 						<DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="0">
 							<TextBlock Margin="0,0,0,10" TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Loaded"/>
 							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-								<ListBox ItemsSource="{Binding SamplesLoaded}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+                                <ListBox ItemsSource="{Binding DataContext.SamplesLoaded, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+                                            <TextBlock FontSize="15" Text="{DXBinding 'SampleId + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
 										</DataTemplate>
 									</ListBox.ItemTemplate>
 								</ListBox>
@@ -47,10 +47,10 @@
 						<DockPanel Grid.Column="1">
 							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Preparing Sample"/>
 							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-								<ListBox ItemsSource="{Binding SamplesInKoh}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+                                <ListBox ItemsSource="{Binding DataContext.SamplesInKoh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+                                            <TextBlock FontSize="15" Text="{DXBinding 'SampleId + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
 										</DataTemplate>
 									</ListBox.ItemTemplate>
 								</ListBox>
@@ -59,10 +59,10 @@
 						<DockPanel Grid.Column="2">
 							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Testing DNA"/>
 							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-								<ListBox ItemsSource="{Binding SamplesInDna}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+                                <ListBox ItemsSource="{Binding DataContext.SamplesInDna, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+                                            <TextBlock FontSize="15" Text="{DXBinding 'SampleId + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
 										</DataTemplate>
 									</ListBox.ItemTemplate>
 								</ListBox>
@@ -71,10 +71,10 @@
 						<DockPanel Grid.Column="3">
 							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Complete"/>
 							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-								<ListBox ItemsSource="{Binding SamplesComplete}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
+                                <ListBox ItemsSource="{Binding DataContext.SamplesComplete, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+                                            <TextBlock FontSize="15" Text="{DXBinding 'SampleId + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
 										</DataTemplate>
 									</ListBox.ItemTemplate>
 								</ListBox>
@@ -219,7 +219,7 @@
 								<ListBox ItemsSource="{Binding SamplesLoaded}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+                                            <TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
 										</DataTemplate>
 									</ListBox.ItemTemplate>
 								</ListBox>
@@ -231,7 +231,7 @@
 								<ListBox ItemsSource="{Binding SamplesInKoh}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+                                            <TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
 										</DataTemplate>
 									</ListBox.ItemTemplate>
 								</ListBox>
@@ -243,7 +243,7 @@
 								<ListBox ItemsSource="{Binding SamplesInDna}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+                                            <TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
 										</DataTemplate>
 									</ListBox.ItemTemplate>
 								</ListBox>
@@ -255,7 +255,7 @@
 								<ListBox ItemsSource="{Binding SamplesComplete}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<TextBlock FontSize="15" Text="{Binding SampleId}" TextWrapping="WrapWithOverflow"></TextBlock>
+											<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
 										</DataTemplate>
 									</ListBox.ItemTemplate>
 								</ListBox>

@@ -262,10 +262,10 @@ namespace Effani.Device.UI
                         // add NADH to well
                         new AlignWellToAxis(nadhAxis, testWell.Well, Device),
                         new EmitFluid(nadhAxis, Config.NadhVolume, Device),
-                        new StartTimer(testWell.TestMediaTimer1h, $"{testWell.Label} Test Media", Device),
-                        new StartTimer(testWell.TestMediaTimer2h, $"{testWell.Label} Test Media", Device),
-                        new StartTimer(testWell.TestMediaTimer3h, $"{testWell.Label} Test Media", Device),
-                        new StartTimer(testWell.TestMediaTimer4h, $"{testWell.Label} Test Media", Device)
+                        new StartTimer(testWell.TestMediaTimer1h, $"{testWell.Label} Test Media2h", Device),
+                        new StartTimer(testWell.TestMediaTimer2h, $"{testWell.Label} Test Media3h", Device),
+                        new StartTimer(testWell.TestMediaTimer3h, $"{testWell.Label} Test Media4h", Device),
+                        new StartTimer(testWell.TestMediaTimer4h, $"{testWell.Label} Test Media5h", Device)
                     ]);
 
                     Engine.QueueCommands(packet1);
@@ -305,25 +305,25 @@ namespace Effani.Device.UI
                 }
 				switch (e.Data)
 				{
-					case 1:
+					case 2:
                         var timeReading1 = GetCommandsResult(testWell.Well, Config.NadhLaserLocation, $"NADH {e.Data}", new ReadNadh(Device), $"TimeValue{e.Data}");
                         if (_processTerminating)
                             return;
                         testWell.TimeValues.Add(e.Data, timeReading1);
                         break;
-                    case 2:
+                    case 3:
                         var timeReading2 = GetCommandsResult(testWell.Well, Config.NadhLaserLocation, $"NADH {e.Data}", new ReadNadh(Device), $"TimeValue{e.Data}");
                         if (_processTerminating)
                             return;
                         testWell.TimeValues.Add(e.Data, timeReading2);
                         break;
-                    case 3:
+                    case 4:
                         var timeReading3 = GetCommandsResult(testWell.Well, Config.NadhLaserLocation, $"NADH {e.Data}", new ReadNadh(Device), $"TimeValue{e.Data}");
                         if (_processTerminating)
                             return;
                         testWell.TimeValues.Add(e.Data, timeReading3);
                         break;
-                    case 4:
+                    case 5:
                         var timeReading4 = GetCommandsResult(testWell.Well, Config.NadhLaserLocation, $"NADH {e.Data}", new ReadNadh(Device), $"TimeValue{e.Data}");
                         if (_processTerminating)
                             return;
@@ -379,11 +379,10 @@ namespace Effani.Device.UI
                 }
                 else
                 {
-                    if (!MainViewModel.DoDnaTimerSteps)
-                        TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell));
-                    else
-                        testWell.DnaTimer.Start();
+                    testWell.DnaTimer.Start();
                 }
+                if (!MainViewModel.DoDnaTimerSteps)
+                    TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell));
 
             }
 			catch(Exception ex)

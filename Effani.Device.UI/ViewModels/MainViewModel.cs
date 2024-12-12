@@ -367,8 +367,8 @@ namespace Effani.Device.UI
 
         private bool DoHome = false;
         private bool DoPrime = false;
-        private bool DoPrep = true;
-        public static bool LoadStandardFluids = true;
+        private bool DoPrep = false;
+        public static bool LoadStandardFluids = false;
         public static bool DoNadhTimerSteps = true;
         public static bool DoTestMediaTimerSteps = true;
         public static bool DoKohTimerSteps = true;

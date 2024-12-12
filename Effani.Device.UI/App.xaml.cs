@@ -2,6 +2,9 @@
 using DevExpress.Xpf.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using System;
+using System.IO;
 using System.Windows;
 
 namespace Effani.Device.UI
@@ -13,8 +16,13 @@ namespace Effani.Device.UI
 	{
 		static App()
 		{
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Effani", "Log.txt"),
+                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}", flushToDiskInterval: TimeSpan.FromMilliseconds(500))
+                .CreateLogger();
 
-			AppHost = Host.CreateDefaultBuilder()
+            AppHost = Host.CreateDefaultBuilder()
 				.ConfigureServices((hostContext, services) =>
 				{
 					services.AddSingleton<IDeviceService, DeviceService>();
@@ -41,8 +49,9 @@ namespace Effani.Device.UI
 		protected override async void OnExit(ExitEventArgs e)
 		{
 			await AppHost!.StopAsync();
+            Log.CloseAndFlush();
 
-			base.OnExit(e);
+            base.OnExit(e);
 		}
 
 		public static IHost AppHost { get; private set; }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using Serilog;
+using System.Collections.Concurrent;
 using static Effani.Device.Control.DeviceControl;
 
 namespace Effani.Device.Process
@@ -54,6 +55,7 @@ namespace Effani.Device.Process
                             command.Execute();
                             if (!String.IsNullOrEmpty(command.Result))
                                 EnqueueMessage(command.Result);
+                            Log.Information($"{command.GetType().Name}:{command.Result}");
                         }
                         if (PriorityCommandPacketQueue.Any())
                             break;
@@ -64,6 +66,7 @@ namespace Effani.Device.Process
             }
             catch (Exception ex)
             {
+                Log.Error(ex, "Exception executing command");
                 Messages.Enqueue(ex.Message);
                 TerminateProcess();
             }
