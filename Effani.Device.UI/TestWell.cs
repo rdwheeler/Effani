@@ -12,12 +12,12 @@ namespace Effani.Device.UI
 	public class TestWell : ViewModelBase, IDisposable
 	{
 		#region Constructors
-		public TestWell(DeviceConfiguration deviceConfiguration, Well well, int testIndex, EventHandler<DataArgs<int>> nadhTimerCallback, EventHandler<DataArgs<int>> testMediaTimerCallback, EventHandler<DataArgs<int>> kohTimerCallback, EventHandler<DataArgs<int>> dnaTimerCallback)
+		public TestWell(DeviceConfiguration deviceConfiguration, Well well, int testIndex, EventHandler<DataArgs<int>> nadhTimerCallback, EventHandler<DataArgs<int>> initialReadingsAndAddKohTimerCallback, EventHandler<DataArgs<int>> kohTimerCallback, EventHandler<DataArgs<int>> dnaTimerCallback)
         {
             _nadhTimerCallback = nadhTimerCallback;
             _dnaTimerCallback = dnaTimerCallback;
-			_kohTimerCallback = kohTimerCallback;
-			_testMediaTimerCallback = testMediaTimerCallback;
+			_addDnaTimerCallback = kohTimerCallback;
+			_initialReadingsAndAddKohTimerCallback = initialReadingsAndAddKohTimerCallback;
 			TestIndex = testIndex;
 			Well = well;
             NadhTimer1h = new Timer(TimeSpan.FromMilliseconds(deviceConfiguration.TestMediaTimerPeriod)) { AutoReset = false };
@@ -29,11 +29,11 @@ namespace Effani.Device.UI
 			DnaTimer = new Timer(TimeSpan.FromMilliseconds(deviceConfiguration.DnaTimerPeriod)) { AutoReset = false };
 
             NadhTimer1h.Elapsed += NadahTimer1h_Elapsed;
-            TestMediaTimer1h.Elapsed += TestMediaTimer1h_Elapsed;
+            TestMediaTimer1h.Elapsed += InitialReadingsAndAddKoh1h_Elapsed;
 			TestMediaTimer2h.Elapsed += TestMediaTimer2h_Elapsed;
 			TestMediaTimer3h.Elapsed += TestMediaTimer3h_Elapsed;
 			TestMediaTimer4h.Elapsed += TestMediaTimer4h_Elapsed;
-			KohTimer.Elapsed += KohTimer_Elapsed;
+			KohTimer.Elapsed += AddDnaTimer_Elapsed;
 			DnaTimer.Elapsed += DnaTimer_Elapsed;
 		}
 		#endregion
@@ -49,11 +49,11 @@ namespace Effani.Device.UI
 			DnaTimer.Stop();
 
             NadhTimer1h.Elapsed -= NadahTimer1h_Elapsed;
-            TestMediaTimer1h.Elapsed -= TestMediaTimer1h_Elapsed;
+            TestMediaTimer1h.Elapsed -= InitialReadingsAndAddKoh1h_Elapsed;
 			TestMediaTimer2h.Elapsed -= TestMediaTimer2h_Elapsed;
 			TestMediaTimer3h.Elapsed -= TestMediaTimer3h_Elapsed;
 			TestMediaTimer4h.Elapsed -= TestMediaTimer4h_Elapsed;
-			KohTimer.Elapsed -= KohTimer_Elapsed;
+			KohTimer.Elapsed -= AddDnaTimer_Elapsed;
 			DnaTimer.Elapsed -= DnaTimer_Elapsed;
 		}
 		#endregion
@@ -63,25 +63,25 @@ namespace Effani.Device.UI
         {
             Task.Run(() => _nadhTimerCallback.Invoke(this, new DataArgs<int>(1)));
         }
-        private void TestMediaTimer1h_Elapsed(object sender, ElapsedEventArgs e)
+        private void InitialReadingsAndAddKoh1h_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(2)));
+			Task.Run(() => _initialReadingsAndAddKohTimerCallback.Invoke(this, new DataArgs<int>(2)));
 		}
 		private void TestMediaTimer2h_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(3)));
+			Task.Run(() => _initialReadingsAndAddKohTimerCallback.Invoke(this, new DataArgs<int>(3)));
 		}
 		private void TestMediaTimer3h_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(4)));
+			Task.Run(() => _initialReadingsAndAddKohTimerCallback.Invoke(this, new DataArgs<int>(4)));
 		}
 		private void TestMediaTimer4h_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _testMediaTimerCallback.Invoke(this, new DataArgs<int>(5)));
+			Task.Run(() => _initialReadingsAndAddKohTimerCallback.Invoke(this, new DataArgs<int>(5)));
 		}
-		private void KohTimer_Elapsed(object sender, ElapsedEventArgs e)
+		private void AddDnaTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _kohTimerCallback.Invoke(this, new DataArgs<int>(6)));
+			Task.Run(() => _addDnaTimerCallback.Invoke(this, new DataArgs<int>(6)));
         }
 		private void DnaTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
@@ -149,10 +149,10 @@ namespace Effani.Device.UI
 		bool _canceled = false;
         readonly EventHandler<DataArgs<int>> _nadhTimerCallback;
         readonly EventHandler<DataArgs<int>> _dnaTimerCallback;
-		readonly EventHandler<DataArgs<int>> _kohTimerCallback;
+		readonly EventHandler<DataArgs<int>> _addDnaTimerCallback;
 		bool _loaded = false;
 		string _sampleId;
-		readonly EventHandler<DataArgs<int>> _testMediaTimerCallback;
+		readonly EventHandler<DataArgs<int>> _initialReadingsAndAddKohTimerCallback;
 		public Dictionary<int, float> TimeValues = new();
 
 		#endregion

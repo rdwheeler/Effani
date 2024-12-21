@@ -36,7 +36,7 @@ namespace Effani.Device.UI
 			{
 				if (currentTest == numberOfTests + 6)
 					break;
-				var result = new TestWell(Config, well, currentTest, NadhMediaTimer_Elapsed, TestMediaTimer_Elapsed, KohTimer_Elapsed, DnaTimer_Elapsed);
+				var result = new TestWell(Config, well, currentTest, NadhMediaTimer_Elapsed, InitialReadingsAndAddKohTimer_Elapsed, AddDnaTimer_Elapsed, DnaTimer_Elapsed);
 				TestWells.Add(result);
 				currentTest++;
 			}       
@@ -284,7 +284,7 @@ namespace Effani.Device.UI
                 _nadhTimerLock.Release();
             }
         }
-        private void TestMediaTimer_Elapsed(object sender, DataArgs<int> e)
+        private void InitialReadingsAndAddKohTimer_Elapsed(object sender, DataArgs<int> e)
 		{
 			if (_processTerminating)
 				return;
@@ -339,7 +339,7 @@ namespace Effani.Device.UI
 							// add KOH to well
 							new AlignWellToAxis(kohAxis, testWell.Well, Device),
                             new EmitFluid(kohAxis, Config.KohVolume, Device),
-                            new StartTimer(testWell.KohTimer, $"{testWell.Label} KOH", Device)
+                            //new StartTimer(testWell.KohTimer, $"{testWell.Label} KOH", Device)
                         ]);
                         Engine.QueueCommands(packet2);
 						break;
@@ -354,7 +354,7 @@ namespace Effani.Device.UI
 				_testMediaTimerLock.Release();
 			}
 		}
-		private void KohTimer_Elapsed(object sender, DataArgs<int> e)
+		private void AddDnaTimer_Elapsed(object sender, DataArgs<int> e)
 		{
 			_kohTimerLock.Wait();
             try
@@ -406,11 +406,11 @@ namespace Effani.Device.UI
                     if (_processTerminating)
                         return;
                     testWell.DnaValue = reading;
-                    //// remove remaining fluid from well
-                    //var packet = new CommandPacket();
-                    //// remove KOH from well
-                    //packet.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.CleanUpAspirationVolume));
-                    //Engine.QueueCommands(packet);
+                    // remove remaining fluid from well
+                    var packet = new CommandPacket();
+                    // remove KOH from well
+                    packet.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.CleanUpAspirationVolume));
+                    Engine.QueueCommands(packet);
                 }
 
 				TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell));

@@ -365,10 +365,10 @@ namespace Effani.Device.UI
 		int _unloadedTestsCount;
 		ProcessEngine _processEngine;
 
-        private bool DoHome = false;
-        private bool DoPrime = false;
-        private bool DoPrep = false;
-        public static bool LoadStandardFluids = false;
+        private bool DoHome = true;
+        private bool DoPrime = true;
+        private bool DoPrep = true;
+        public static bool LoadStandardFluids = true;
         public static bool DoNadhTimerSteps = true;
         public static bool DoTestMediaTimerSteps = true;
         public static bool DoKohTimerSteps = true;
