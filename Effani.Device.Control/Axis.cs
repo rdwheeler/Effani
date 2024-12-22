@@ -14,29 +14,29 @@ namespace Effani.Device.Control
 		Biopsy,
 		[Display(ShortName = "U")]
 		BiopsyEject,
-		[Display(ShortName = "V")]
+		[Display(ShortName = "Z")]
 		AspirateKoh,
-		[Display(ShortName = "W")]
+		[Display(ShortName = "U")]
 		AspirateKohZ,
-		[Display(ShortName = "A")]
+		[Display(ShortName = "V")]
 		DnaReagent1,
-		[Display(ShortName = "B")]
+		[Display(ShortName = "W")]
 		Koh1,
-		[Display(ShortName = "C")]
+		[Display(ShortName = "A")]
 		Nadh1,
-		[Display(ShortName = "D")]
+		[Display(ShortName = "B")]
 		Basal1,
-        [Display(ShortName = "'e")]
+        [Display(ShortName = "C")]
         AspirateFluid,
-        [Display(ShortName = "'f")]
+        [Display(ShortName = "D")]
         AspirateFluidZ,
-        [Display(ShortName = "'g")]
+		[Display(ShortName = "X")]
 		DnaReagent2,
-		[Display(ShortName = "'h")]
+		[Display(ShortName = "Y")]
 		Koh2,
-		[Display(ShortName = "'i")]
+		[Display(ShortName = "Z")]
 		Nadh2,
-		[Display(ShortName = "'j")]
+		[Display(ShortName = "U")]
 		Basal2,
 	}
 }

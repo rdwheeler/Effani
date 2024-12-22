@@ -3,14 +3,16 @@ using System.Linq;
 
 namespace Effani.Device.Process
 {
-	public class CommandPacket
+	public class Job
 	{
-        public CommandPacket(Command[]? commands = null)
+        public Job(String description, Command[]? commands = null)
         {
-            if (commands is not null && commands.Any())
+			Description = description;
+			if (commands is not null && commands.Any())
                 Commands.AddRange(commands);
         }
 
         public List<Command> Commands { get; set; } = new List<Command>();
+		String Description { get; set; }
 	}
 }

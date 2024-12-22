@@ -256,9 +256,13 @@ G90 ; absolute positioning
 		private List<AxisSpec> GetAspirateAxes()
 		{
 			var ret = new List<AxisSpec>();
-			//ret.Add(new AspirateAxis(Axis.AspirateFluid, 1, 1, AspirateFluidLocation)); // asperate 2
+			//AspirateAxis fluidAxis = new AspirateAxis(Axis.AspirateFluid, 1, 1, AspirateFluidLocation);
+			//fluidAxis.StartingPosition = AspirateFluidSyringeHomePosition;
+			//ret.Add(fluidAxis); // asperate 2
 			//ret.Add(new AspirateZAxis(Axis.AspirateFluidZ, 1, 2));
-			ret.Add(new AspirateAxis(Axis.AspirateKoh, 0, 4, AspirateKohLocation)); // asperate 1
+			AspirateAxis kohAxis = new AspirateAxis(Axis.AspirateKoh, 0, 4, AspirateKohLocation);
+			kohAxis.StartingPosition = AspirateKohSyringeHomePosition;
+			ret.Add(kohAxis); // asperate 1
             var aspirate1Z = new AspirateZAxis(Axis.AspirateKohZ, 1, 0);
             aspirate1Z.Driver.Endstop.SensorPort = ($"1.io5.in");
             ret.Add(aspirate1Z);
@@ -323,7 +327,7 @@ G90 ; absolute positioning
 			BiopsyZTravel = GetConfigValue<float>(nameof(BiopsyZTravel));
 			BiospsyZSpeed = GetConfigValue<float>(nameof(BiospsyZSpeed));
 			FluidPrimingVolume = GetConfigValue<int>(nameof(FluidPrimingVolume));
-			BaselineProcessingDwell = GetConfigValue<int>(nameof(BaselineProcessingDwell));
+			StandardsProcessingDwell = GetConfigValue<int>(nameof(StandardsProcessingDwell));
 			DnaVolume = GetConfigValue<int>(nameof(DnaVolume));
 			NadhVolume = GetConfigValue<int>(nameof(NadhVolume));
 			KohVolume = GetConfigValue<int>(nameof(KohVolume));
@@ -332,7 +336,7 @@ G90 ; absolute positioning
 			Co2Dwell = GetConfigValue<int>(nameof(Co2Dwell));
 			TestMediaAspirationVolume = GetConfigValue<int>(nameof(TestMediaAspirationVolume));
 			StirringDistance = GetConfigValue<float>(nameof(StirringDistance));
-			TestMediaTimerPeriod = GetConfigValue<int>(nameof(TestMediaTimerPeriod));
+			NadhReadingsTimerPeriod = GetConfigValue<int>(nameof(NadhReadingsTimerPeriod));
 			KohTimerPeriod = GetConfigValue<int>(nameof(KohTimerPeriod));
 			DnaTimerPeriod = GetConfigValue<int>(nameof(DnaTimerPeriod));
 			KohAspirationVolume = GetConfigValue<int>(nameof(KohAspirationVolume));
@@ -349,7 +353,6 @@ G90 ; absolute positioning
             ComPortNumber = GetConfigValue<int>(nameof(ComPortNumber));
             BasalVolume = GetConfigValue<int>(nameof(BasalVolume));
             BiospsyLoadingLocation = GetConfigValue<int>(nameof(BiospsyLoadingLocation));
-            FluidDispensationAdjustmentFactor = GetConfigValue<float>(nameof(FluidDispensationAdjustmentFactor));
             TrayLoadingLocation = GetCoordinateConfigValue(nameof(TrayLoadingLocation));
             FirstWellLocation = GetCoordinateConfigValue(nameof(FirstWellLocation));
         }
@@ -411,15 +414,15 @@ G90 ; absolute positioning
 		public int Co2Dwell { get; set; } // total milliseconds to activate CO2
 		public int TestMediaAspirationVolume { get; set; } // microliters withdraw from baseline
 		public float StirringDistance { get; set; } // total mm to move needle when stirring
-		public int TestMediaTimerPeriod { get; set; } // seconds the test media timers will wait - 1h
+		public int BasalIncubationTimerPeriod { get; set; } // miliseconds of the basal media incubation
+		public int NadhReadingsTimerPeriod { get; set; } // miliseconds between NADH readings
 		public int KohTimerPeriod { get; set; } // milliseconds the KOH timer will wait - 4hs
-		public int DnaTimerPeriod { get; set; } // seconds the DNA timer will wait
+		public int DnaTimerPeriod { get; set; } // miliseconds the DNA timer will wait
 		public int KohAspirationVolume { get; set; } // microliters withdraw for before KOH injection
 		public int DnaAspirationVolume { get; set; } // microliters withdraw for before DNA reagent injection
-		public int CleanUpAspirationVolume { get; set; } // microliters withdraw for clean up
-		public int BaselineProcessingDwell { get; set; } // ammount of milliseconds baseline processing will wait
+		public int CleanUpAspirationVolume { get; set; } // microliters withdrawn for clean up
+		public int StandardsProcessingDwell { get; set; } // milliseconds standards processing will wait
         public int ComPortNumber { get; set; }
-        public float FluidDispensationAdjustmentFactor { get; set; }
         public Coordinate FirstWellLocation { get; set; }
         public Coordinate TrayLoadingLocation { get; set; }
 

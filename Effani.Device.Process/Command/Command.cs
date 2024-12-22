@@ -21,9 +21,9 @@ namespace Effani.Device.Process
 			}
 		}
 
-		protected abstract string Run();
+		protected abstract void Run();
 		public DeviceControl Device { get; } = device;
-		public abstract string Result { get; protected set; }
-		public virtual KeyValuePair<string, string> ResultDataToken { get; set; }
+		public abstract string Description { get; }
+		public string Result { get; set; }
 	}
 }

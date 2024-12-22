@@ -12,11 +12,11 @@ namespace Effani.Device.UI
 	{
 		public DeviceService()
 		{
-			_device = new DeviceControl();
+			_device = new AbalDeviceControl();
 			_processEngine = new ProcessEngine();
 		}
 
-		public DeviceControl GetDevice()
+		public AbalDeviceControl GetDevice()
 		{
 			return _device;
 		}
@@ -25,13 +25,13 @@ namespace Effani.Device.UI
 			return _processEngine;
 		}
 
-		private DeviceControl _device;
+		private AbalDeviceControl _device;
 		private ProcessEngine _processEngine;
 	}
 
 	public interface IDeviceService
 	{
 		ProcessEngine GetProcessEngine();
-		DeviceControl GetDevice();
+		AbalDeviceControl GetDevice();
 	}
 }

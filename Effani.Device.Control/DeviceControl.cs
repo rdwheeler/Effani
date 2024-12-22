@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Effani.Device.Control
 {
-	public partial class DeviceControl : IDisposable
+	public class DeviceControl : IDisposable
 	{
+		#region Constructors
 		public DeviceControl()
 		{
 			Configuration = new DeviceConfiguration();
@@ -20,390 +21,223 @@ namespace Effani.Device.Control
 			_serialPort.ReadTimeout = 500;
 			_serialPort.WriteTimeout = 500;
 
-			Axes = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => v);
-
 			_publishThread = new Thread(InitializeReadData);
 			_publishThread.Start();
 		}
+		#endregion
 
-		private void InitializeReadData()
+		#region Public methods
+		public void AccOff(int accDesignation)
 		{
-			_serialPort.DataReceived += SerialPort_DataReceived;
-			PublishReadData();
+			Write($"M42 P{accDesignation} S0");
 		}
-		private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+		public void AccOn(int accDesignation)
 		{
-			string message = _serialPort.ReadExisting();
-            if (!String.IsNullOrEmpty(message))
-            {
-                ReadData.Enqueue(message);
-                if (_saveResponses)
-                    _responses.Enqueue(message);
-            }
-        }
-        public string Move(Axis axis, float distance, float? speed = null)
-        {
-            if (!Axes.TryGetValue(axis, out var axisSpec))
-                return "Unknown axis";
-            if (!speed.HasValue)
-				speed = axisSpec.MaxSpeed;
-			Write("G90");
-			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
-			return $"Move {axisSpec.Designation} {distance} at {speed}";
+			Write($"M42 P{accDesignation} S1");
 		}
-
-		public string MoveRelative(Axis axis, float distance, float? speed = null)
-        {
-            if (!Axes.TryGetValue(axis, out var axisSpec))
-                return "Unknown axis";
-            if (!speed.HasValue)
-				speed = axisSpec.MaxSpeed;
-			Write("G91");
-			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
-			return $"Move {axisSpec.Designation} {distance} at {speed}";
-		}
-		public string Move(List<MoveSpec> moveSpecs, float speed)
-		{
-			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
-			Write("G90");
-			Write($"G0 {moveCode} F{speed}");
-			return $"Move {moveCode} at {speed}";
-		}
-		public string MoveClockwiseArc(List<MoveSpec> moveSpecs, float speed)
-		{
-			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
-			Write("G91");
-            var formula = $"G2 {moveCode} R4.5 F{speed}";
-            Write(formula);
-			return $"Move {moveCode} at {speed}";
-		}
-		public string GoPercent(Axis axis, float percent, float? speed = null)
-        {
-            if (!Axes.TryGetValue(axis, out var axisSpec))
-                return "Unknown axis";
-            if (!speed.HasValue)
-				speed = axisSpec.MaxSpeed;
-			var location = (axisSpec.Maximum - axisSpec.Minimum) * (percent / 100);
-			if(location < axisSpec.Minimum)
-				location = axisSpec.Minimum;
-			if (location > axisSpec.Maximum)
-				location = axisSpec.Maximum;
-			Write("G90");
-			Write($"G0 {axisSpec.Designation}{location} F{speed}");
-			return $"Move {axisSpec.Designation} to {location} ({percent}%) at {speed}";
-		}
-		public string GoTo(Axis axis, float location, float? speed = null)
-        {
-            if (!Axes.TryGetValue(axis, out var axisSpec))
-                return "Unknown axis";
-            if (location < axisSpec.Minimum || location > axisSpec.Maximum)
-				return "Location out of range";
-			if (!speed.HasValue)
-				speed = axisSpec.MaxSpeed;
-			Write("G90");
-			Write($"G0 {axisSpec.Designation}{location} F{speed}");
-			return $"Move {axisSpec.Designation} to {location} at {speed}";
-		}
-		public string TableGoTo(float x, float y, float? speed = null)
-		{
-			var xaxis = Axes[Axis.TableX];
-			var yaxis = Axes[Axis.TableY];
-
-			if (!speed.HasValue)
-				speed = Math.Min(xaxis.MaxSpeed, yaxis.MaxSpeed);
-
-			if (x < xaxis.Minimum || x > xaxis.Maximum ||
-				y < yaxis.Minimum || y > yaxis.Maximum)
-				return "Location out of range";
-
-			Write("G90");
-			Write($"G0 {xaxis.Designation}{x} {yaxis.Designation}{y} F{speed}");
-			return $"Move table to {x}.{y} at {speed}";
-		}
-		public string TableGoTo(Coordinate location, float? speed = null)
-		{
-			return TableGoTo(location.X, location.Y, speed);
-		}
-		public string Home(Axis axis)
-		{
-            if (!Axes.TryGetValue(axis, out var axisSpec))
-                return "Unknown axis";
-			Write($"G28 {axisSpec.Designation}");
-			return $"Homed {axisSpec.Label}";
-		}
-		public string Home(Axis[] axes)
-		{
-			var codes = String.Join(null, axes.Select(a => Axes[a].Designation));
-			Write($"G28 {codes}");
-			return $"Homed {codes}";
-        }
-        public string HomeAll()
-        {
-            Write($"G28");
-            return $"Homed all";
-        }
-        public void ApplyConfig()
+		public void ApplyConfig()
 		{
 			Write($"M98 P\"config.g\"");
 		}
-		public string SetWifi(string ssid, string password)
-		{
-			Write($"M552 S0");
-			Write($"M587 S\"{ssid}\" P\"{password}\"");
-			Write($"M552 S1");
-			return "SetWifi";
-		}
-		public string GetBoardDiagnostics(int boardId)
-        {
-            return Write($"M122 B{boardId}", STR_diagKey);
-        }
-        private const string STR_diagKey = "=== Diag";
-        private const string STR_sensorKey = "Sensor";
-        public string ReadDna()
-		{
-            Write($"G4 P{Configuration.SensorReadDwell}");
-			var response = Write($"M308 S0", STR_sensorKey);
-			return response;
-		}
-		public string ReadNadh()
-		{
-            Write($"G4 P{Configuration.SensorReadDwell}");
-            var response = Write($"M308 S1", STR_sensorKey);
-			return response;
-		}
-
-		public string PlateUvOn()
-		{
-			Write($"M42 P0 S1");
-			return "Plate UV on";
-		}
-		public string PlateUvOff()
-		{
-			Write($"M42 P0 S0");
-			return "Plate UV off";
-		}
-		public string BiopsyUvOn()
-		{
-			Write($"M42 P1 S0");
-			return "Biopsy UV on";
-        }
-        public string BiopsyUvOff()
-		{
-			Write($"M42 P1 S1"); // needle UV uses voltage to signal off state because its a dimmer
-            return "Biopsy UV off";
-		}
-		public string LaserDnaOn()
-		{
-			Write($"M42 P3 S1");
-			return "Laser DNA on";
-		}
-		public string LaserDnaOff()
-		{
-			Write($"M42 P3 S0");
-			return "Laser DNA off";
-		}
-		public string LaserNadhOn()
-		{
-			Write($"M42 P2 S1");
-			return "Laser NADH on";
-		}
-		public string LaserNadhOff()
-		{
-			Write($"M42 P2 S0");
-			return "Laser NADH off";
-		}
-		public string EmitCo2(int miliseconds)
-        {
-            Write($"G4 P1000");
-            Write($"M42 P4 S1");
-            Write($"G4 P{miliseconds}");
-            Write($"M42 P4 S0");
-			return $"CO2 emitted for {miliseconds} miliseconds";
-		}
-		public string EmitFluid(Axis axis, int microLiters)
-        {
-            if (!Axes.TryGetValue(axis, out var axisSpec))
-                return "Unknown axis";
-            if (!(axisSpec is FluidAxis))
-				return $"{axis} is not a fluid axis";
-			var distance = CalcFluidTravelMmForMl(microLiters);
-			var result = MoveRelative(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
-            Write($"G4 P5000");
-			return $"{microLiters} {axis} emitted";
-		}
-		public string SetTrayTemperature(float temperature)
-		{
-			Write($"M140 S{temperature}");
-			return $"Tray heat set to {temperature}C";
-		}
-		public string RemoveFluid(int microLiters)
-		{
-			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel, 10);
-			DoStir(Axes[Axis.AspirateFluidZ]);
-
-			var distance = CalcFluidAspirateTravelMmForMl(microLiters);
-            MoveRelative(Axis.AspirateFluid, distance, Configuration.AspirateSyringeSpeed);
-            Write($"G4 P5000");
-			Move(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 10);
-
-            return $"{microLiters} of fluid removed";
-		}
-		private void DoStir(AxisSpec axis)
-		{
-			MoveRelative(Axis.TableY, Configuration.WellWidth * -0.8f, 100); // move near well edge
-            MoveRelative(axis.Axis, Configuration.WellDepth * 0.8f, 100); // move near well edge
-   //         int count = 0;
-			//while(count <= 5)
-			//{
-			//	//arc to right edge
-			//	var rightMultiAxis = new List<MoveSpec>();
-			//	rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
-			//	rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
-			//	rightMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.9f)));
-			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
-			//	//arc to bottom edge
-			//	var bottomMultiAxis = new List<MoveSpec>();
-			//	bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
-			//	bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
-			//	bottomMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.9f)));
-			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
-			//	//arc to left edge
-			//	var leftMultiAxis = new List<MoveSpec>();
-			//	leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
-			//	leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f)));
-			//	leftMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.2f)));
-			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
-			//	//arc to top edge
-			//	var topMultiAxis = new List<MoveSpec>();
-			//	topMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
-			//	topMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
-			//	topMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.9f)));
-			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
-			//	count++;
-			//}
-		}
-		public string RemoveKoh(int microLiters)
-		{
-			Move(Axis.AspirateKohZ, Configuration.AspirateTopZTravel, 100);
-			DoStir(Axes[Axis.AspirateKohZ]);
-
-			var distance = CalcKohAspirateTravelMmForMl(microLiters);
-			MoveRelative(Axis.AspirateKoh, distance, Configuration.AspirateSyringeSpeed);
-            Write($"G4 P1000");
-			Move(Axis.AspirateKohZ, Configuration.AspirateTopZTravel * -1, 100);
-
-            return $"{microLiters} of KOH removed";
-        }
-        public string Pause(int miliseconds)
-        {
-            Write($"G4 P{miliseconds}");
-
-            return $"Pausing for {miliseconds}";
-        }
-        public void Dispose()
+		public void Dispose()
 		{
 			_serialPort.Close();
-			if(_publishThread is not null)
+			if (_publishThread is not null)
 			{
 				_publishThread.Join();
 				_publishThread = null;
 			}
 		}
-
-		private float CalcFluidTravelMmForMl(int microLiters)
+		public string GetBoardDiagnostics(int boardId)
 		{
-			var microLitersPerMm = Configuration.FluidSyringeVolumeMl / Configuration.FluidSyringeLength / 1000 * Configuration.FluidDispensationAdjustmentFactor;
-			var ret = microLitersPerMm * microLiters;
-			return ret;
+			return Write($"M122 B{boardId}", STR_diagKey);
 		}
-		private float CalcFluidAspirateTravelMmForMl(int microLiters)
+		public void Home(AxisSpec axisSpec)
 		{
-			var microLitersPerMm = Configuration.AspirateSyringeVolumeMl / Configuration.AspirateSyringeTravelMm / 1000;
-			var ret = (microLitersPerMm * microLiters) * -1;
-			return ret;
+			Write($"G28 {axisSpec.Designation}");
 		}
-		private float CalcKohAspirateTravelMmForMl(int microLiters)
+		public void HomeAll()
 		{
-            var microLitersPerMm = 0.06f;// (Configuration.AspirateKohSyringeVolumeMl * 1000) / Configuration.AspirateKohSyringeTravelMm;
-			var ret = (microLitersPerMm * microLiters) * -1;
-			return ret;
+			Write($"G28");
 		}
-		private string? Write(string data, string responseKey = null)
+		public void Move(List<MoveSpec> moveSpecs, float speed)
 		{
-			if(!_serialPort.IsOpen)
-				_serialPort.Open();
+			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
+			Write("G90");
+			Write($"G0 {moveCode} F{speed}");
+		}
+		public void MoveAbsolute(List<MoveSpec> moveSpecs, float speed)
+		{
+			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
+			Write("G90");
+			var formula = $"G0 {moveCode} F{speed}";
+			Write(formula);
+		}
+		public void MoveAbsolute(AxisSpec axisSpec, float location, float? speed = null)
+		{
+			if (location < axisSpec.Minimum || location > axisSpec.Maximum)
+				return;
 
-            _responses.Clear();
-            _saveResponses = true;
-            _serialPort.WriteLine($"M400");
-            WaitForResponse();
-            if (responseKey == null)
-            {
-                _saveResponses = false;
-                _serialPort.WriteLine($"{data}");
-                return null;
-            }
-            else
-            {
-                _serialPort.WriteLine($"{data}");
-                var ret = GetResponse(responseKey);
-                return ret;
-            }
-        }
-        private void WaitForResponse()
-        {
-            while (!_responses.TryDequeue(out var response))
-            {
-                var a = response;
-                Task.Delay(50).Wait();
-            }
-            _responses.Clear();
-        }
-        private string GetResponse(string responseKey = null)
-        {
-            var ret = new StringBuilder();
+			if (!speed.HasValue)
+				speed = axisSpec.MaxSpeed;
+			Write("G90");
+			Write($"G0 {axisSpec.Designation}{location} F{speed}");
+		}
+		public void MoveToStarting(AxisSpec axisSpec)
+		{
+			var speed = axisSpec.MaxSpeed;
+			Write("G90");
+			Write($"G0 {axisSpec.Designation}{axisSpec.StartingPosition} F{speed}");
+		}
+		public void MoveClockwiseArc(List<MoveSpec> moveSpecs, float speed)
+		{
+			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
+			Write("G91");
+			var formula = $"G2 {moveCode} R4.5 F{speed}";
+			Write(formula);
+		}
+		public void MovePercent(AxisSpec axisSpec, float percent, float? speed = null)
+		{
+			if (!speed.HasValue)
+				speed = axisSpec.MaxSpeed;
+			var location = (axisSpec.Maximum - axisSpec.Minimum) * (percent / 100);
+			if (location < axisSpec.Minimum)
+				location = axisSpec.Minimum;
+			if (location > axisSpec.Maximum)
+				location = axisSpec.Maximum;
 
-            string firstResponse = null;
-            while (firstResponse == null)
-            {
-                if (_responses.TryDequeue(out var response) && response.Contains(responseKey))
-                {
-                    firstResponse = response.Substring(response.IndexOf(response));
-                    break;
-                }
-                Task.Delay(50).Wait();
-            }
-            ret.Append(firstResponse);
-            while (_responses.TryDequeue(out var response))
-            {
-                ret.Append(response);
-                Task.Delay(500).Wait();
-            }
-            _saveResponses = false;
+			Write("G90");
+			Write($"G0 {axisSpec.Designation}{location} F{speed}");
+		}
+		public void MoveRelative(AxisSpec axisSpec, float distance, float? speed = null)
+		{
+			if (!speed.HasValue)
+				speed = axisSpec.MaxSpeed;
 
-            return ret.ToString();
-        }
+			Write("G91");
+			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
+		}
+		public void Pause(int miliseconds)
+		{
+			Write($"G4 P{miliseconds}");
+		}
+		public string ReadSensor(int sensorDesignation, int pause)
+		{
+			if(pause > 0)
+				Pause(pause);
+			var response = Write($"M308 S{sensorDesignation}", STR_sensorKey);
+			return response;
+		}
+		public void SetTrayTemperature(float temperature)
+		{
+			Write($"M140 S{temperature}");
+		}
+		public void SetWifi(string ssid, string password)
+		{
+			Write($"M552 S0");
+			Write($"M587 S\"{ssid}\" P\"{password}\"");
+			Write($"M552 S1");
+		}
+		#endregion
+
+		#region Private methods
+		private string GetResponse(string responseKey = null)
+		{
+			var ret = new StringBuilder();
+
+			string firstResponse = null;
+			while (firstResponse == null)
+			{
+				if (_responses.TryDequeue(out var response) && response.Contains(responseKey))
+				{
+					firstResponse = response.Substring(response.IndexOf(response));
+					break;
+				}
+				Task.Delay(50).Wait();
+			}
+			ret.Append(firstResponse);
+			while (_responses.TryDequeue(out var response))
+			{
+				ret.Append(response);
+				Task.Delay(500).Wait();
+			}
+			_saveResponses = false;
+
+			return ret.ToString();
+		}
+		private void InitializeReadData()
+		{
+			_serialPort.DataReceived += SerialPort_DataReceived;
+			PublishReadData();
+		}
 		private void PublishReadData()
 		{
-			while(ReadData.TryDequeue(out var message))
+			while (ReadData.TryDequeue(out var message))
 			{
 				DataReceived?.Invoke(this, new DataArgs<string>(message));
 			}
 			Task.Delay(500).Wait();
 		}
+		private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+		{
+			string message = _serialPort.ReadExisting();
+			if (!String.IsNullOrEmpty(message))
+			{
+				ReadData.Enqueue(message);
+				if (_saveResponses)
+					_responses.Enqueue(message);
+			}
+		}
+		private void WaitForResponse()
+		{
+			while (!_responses.TryDequeue(out var response))
+			{
+				var a = response;
+				Task.Delay(50).Wait();
+			}
+			_responses.Clear();
+		}
+		private string? Write(string data, string responseKey = null)
+		{
+			if (!_serialPort.IsOpen)
+				_serialPort.Open();
 
-		public event EventHandler<DataArgs<string>>? DataReceived;
+			_responses.Clear();
+			_saveResponses = true;
+			_serialPort.WriteLine($"M400");
+			WaitForResponse();
+			if (responseKey == null)
+			{
+				_saveResponses = false;
+				_serialPort.WriteLine($"{data}");
+				return null;
+			}
+			else
+			{
+				_serialPort.WriteLine($"{data}");
+				var ret = GetResponse(responseKey);
+				return ret;
+			}
+		}
+		#endregion
 
-		public ConcurrentQueue<string> ReadData { get; set; } = new();
+		#region Properties
 		public DeviceConfiguration? Configuration { get; private set; }
-		public Dictionary<Axis, AxisSpec> Axes { get; private set; }
+		public ConcurrentQueue<string> ReadData { get; set; } = new();
+		#endregion
 
-		public List<AxisSpec> FluidAxes => Axes.Values.Where(x => x is FluidAxis).ToList();
-        public List<AxisSpec> ZAxes => Axes.Values.Where(x => x is BiopsyZAxis).ToList();
+		#region Events
+		public event EventHandler<DataArgs<string>>? DataReceived;
+		#endregion
 
-        public bool _saveResponses;
-        SerialPort _serialPort;
+		#region Fields
 		Thread _publishThread;
-        ConcurrentQueue<string> _responses = new();
-    }
+		ConcurrentQueue<string> _responses = new();
+		SerialPort _serialPort;
+		public bool _saveResponses;
+
+		private const string STR_diagKey = "=== Diag";
+		private const string STR_sensorKey = "Sensor";
+		#endregion
+	}
 }

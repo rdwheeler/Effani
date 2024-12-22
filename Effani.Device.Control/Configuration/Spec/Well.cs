@@ -12,6 +12,28 @@ namespace Effani.Device.Control
 			plate.Wells.Add(this);
 			Plate = plate;
 			Location = location;
+			var row = y switch
+			{
+				7 => "A",
+				6 => "B",
+				5 => "C",
+				4 => "D",
+				3 => "E",
+				2 => "F",
+				1 => "G",
+				0 => "H",
+				_ => y.ToString()
+			};
+			var plateRow = plate.Index.Y switch
+			{
+				3 => "A",
+				2 => "B",
+				1 => "C",
+				0 => "D",
+				_ => plate.Index.Y.ToString()
+			};
+
+			Label = $"Well {row}.{x + 1}, plate {plateRow},{plate.Index.X + 1}";
 		}
 		public override string ToString()
 		{

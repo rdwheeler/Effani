@@ -1,6 +1,6 @@
-﻿using Serilog;
+﻿using Effani.Device.Control;
+using Serilog;
 using System.Collections.Concurrent;
-using static Effani.Device.Control.DeviceControl;
 
 namespace Effani.Device.Process
 {
@@ -39,25 +39,25 @@ namespace Effani.Device.Process
             {
                 while(true)
                 {
-                    while (PriorityCommandPacketQueue.TryDequeue(out var commandPacket))
+                    while (PriorityJobQueue.TryDequeue(out var job))
                     {
-                        foreach (var command in commandPacket.Commands)
+                        foreach (var command in job.Commands)
                         {
                             command.Execute();
                             if (!String.IsNullOrEmpty(command.Result))
                                 EnqueueMessage(command.Result);
                         }
                     }
-                    while (!ProcessHighPriority && CommandPacketQueue.TryDequeue(out var commandPacket))
+                    while (!HoldQueueForHighPriorityJob && JobQueue.TryDequeue(out var job))
                     {
-                        foreach (var command in commandPacket.Commands)
+                        foreach (var command in job.Commands)
                         {
                             command.Execute();
                             if (!String.IsNullOrEmpty(command.Result))
                                 EnqueueMessage(command.Result);
                             Log.Information($"{command.GetType().Name}:{command.Result}");
                         }
-                        if (PriorityCommandPacketQueue.Any())
+                        if (PriorityJobQueue.Any())
                             break;
                     }
                     Thread.Sleep(500);
@@ -129,34 +129,34 @@ namespace Effani.Device.Process
 
         public bool QueueCommand(Command command)
         {
-            return QueueCommands(new CommandPacket([command]));
+            return QueueJob(new Job(command.Description, [command]));
         }
 
-        public bool QueueCommands(CommandPacket commandPacket)
+        public bool QueueJob(Job job)
         {
-                CommandPacketQueue.Enqueue(commandPacket);
+                JobQueue.Enqueue(job);
                 return false;
         }
-        public bool QueuePriorityCommands(CommandPacket commandPacket)
+        public bool QueuePriorityJob(Job job)
         {
-            PriorityCommandPacketQueue.Enqueue(commandPacket);
+            PriorityJobQueue.Enqueue(job);
             Task.Delay(1000).Wait();
             return false;
         }
 
-        public string QueueCommandsForResult(CommandPacket commandPacket)
+        public string QueueJobForResult(Job job)
         {
-            QueueCommands(commandPacket);
+            QueueJob(job);
             return null;
 
             //ProcessingLock.EnterWriteLock();
             //try
             //{
-            //    for (int i = 0; i < commandPacket.Commands.Count() - 1; i++) // presume last command is the one we want results from
+            //    for (int i = 0; i < job.Commands.Count() - 1; i++) // presume last command is the one we want results from
             //    {
-            //        commandPacket.Commands[i].Execute();
+            //        job.Commands[i].Execute();
             //    }
-            //    var readCommand = commandPacket.Commands.Last();
+            //    var readCommand = job.Commands.Last();
             //    readCommand.Execute();
             //    return readCommand.Result;
             //}
@@ -172,11 +172,11 @@ namespace Effani.Device.Process
             thread.Join();
         }
 
-        public ConcurrentQueue<CommandPacket> CommandPacketQueue { get; } = new();
-        public ConcurrentQueue<CommandPacket> PriorityCommandPacketQueue { get; } = new();
+        public ConcurrentQueue<Job> JobQueue { get; } = new();
+        public ConcurrentQueue<Job> PriorityJobQueue { get; } = new();
         public ConcurrentQueue<string> Data { get; } = new();
         public ConcurrentQueue<string> Messages { get; } = new();
-        public bool ProcessHighPriority { get; set; }
+        public bool HoldQueueForHighPriorityJob { get; set; }
         public ConcurrentDictionary<string, string> ReadTokens { get; } = new();
     }
 }

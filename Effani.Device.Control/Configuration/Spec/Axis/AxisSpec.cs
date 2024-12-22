@@ -17,6 +17,7 @@ namespace Effani.Device.Control
 		public string? DriverPort { get; set; }
 		public int Minimum { get; set; }
 		public int Maximum { get; set; }
+		public float StartingPosition { get; set; }
 		public float StepsPerMillimeter { get; set; }
 
 		public int MaxSpeed { get; set; } = 500;
