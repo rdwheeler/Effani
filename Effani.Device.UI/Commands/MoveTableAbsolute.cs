@@ -1,9 +1,9 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Linq;
 using System.Reflection.Metadata;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
 	public class MoveTableAbsolute(AbalDeviceControl device, Coordinate coordinate = null) : Command(device)
 	{
@@ -12,11 +12,10 @@ namespace Effani.Device.Process
 			if(Coordinate == null)
 				throw new ApplicationException($"{nameof(Coordinate)} cannot be null in {nameof(MoveTableAbsolute)}");
 
-			(Device as AbalDeviceControl).TableGoTo(coordinate.X, coordinate.Y);
-			Result = $"Table moved to absolute coordinate {coordinate.X},{Coordinate.Y}.";
+			(Device as AbalDeviceControl).TableGoTo(Coordinate.X, Coordinate.Y);
 		}
 
-		public override string Description => $"Move table to absolute coordinate {coordinate.X},{Coordinate.Y}.";
+		public override string Description => $"Move table to absolute coordinate {Coordinate.X},{Coordinate.Y}.";
 
 		public Coordinate Coordinate { get; set; } = coordinate;
 	}

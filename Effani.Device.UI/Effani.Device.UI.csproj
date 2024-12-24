@@ -32,8 +32,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Effani.Device.Control\Effani.Device.Control.csproj" />
-	  <ProjectReference Include="..\Effani.Device.Process\Effani.Device.Process.csproj" />
+	  <ProjectReference Include="..\Drivetrain.Robotics.Control\Drivetrain.Robotics.Control.csproj" />
+	  <ProjectReference Include="..\Drivetrain.Robotics.Process\Drivetrain.Robotics.Process.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

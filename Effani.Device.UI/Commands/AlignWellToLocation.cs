@@ -1,22 +1,22 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Linq;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
-	public class AlignWellToLocation(Coordinate location, Well well, AbalDeviceControl device) : MoveTableAbsolute(device)
+	public class AlignWellToLocation : MoveTableAbsolute
 	{
-
-		protected override void Run()
+		public AlignWellToLocation(Coordinate location, Well well, AbalDeviceControl device) : base(device)
 		{
+			_location = location;
+			_well = well;
 			Coordinate = _well.Location;
-			base.Run();
-			Result =  $"{_well.Label} aligned with {_location.X}.{_location.Y}";
 		}
 
 		public override string Description => $"Aligned {_well.Label} with {_location.X}.{_location.Y}";
 
-		private readonly Coordinate _location = location;
-		private readonly Well _well = well;
+		private readonly Coordinate _location;
+		private readonly Well _well;
+
 	}
 }

@@ -1,8 +1,7 @@
-﻿using Effani.Device.Control;
-using System;
+﻿using Drivetrain.Robotics.Control;
 using System.Linq;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
 	public class MoveToStartingLocations(AbalDeviceControl device) : Command(device)
 	{
@@ -11,13 +10,12 @@ namespace Effani.Device.Process
 			var device = Device as AbalDeviceControl;
 			foreach (var fluidLine in device.FluidAxes)
 			{
-				Device.MoveAbsolute(fluidLine, Device.Configuration.FluidSyringeHomePosition);
+				Device.MoveToStarting(fluidLine);
 			}
 			Device.MoveToStarting(device.Axes[Axis.AspirateFluid]);
 			Device.MoveToStarting(device.Axes[Axis.AspirateKoh]);
             Device.MoveToStarting(device.Axes[Axis.AspirateFluidZ]);
             Device.MoveToStarting(device.Axes[Axis.AspirateKohZ]);
-			Result = $"All axes moved to starting locations.";
 		}
 
 		public override string Description => $"Move all axes to starting locations.";

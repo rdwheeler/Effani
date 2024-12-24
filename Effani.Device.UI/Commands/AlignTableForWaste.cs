@@ -1,10 +1,10 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Linq;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
-	public class AlignTableForWaste(AbalDeviceControl device) : MoveTableAbsolute(device.Configuration.WasteLocation, device)
+	public class AlignTableForWaste(AbalDeviceControl device) : MoveTableAbsolute(device, device.Configuration.WasteLocation)
 	{
 		public override string Description => $"Table aligned for waste disposal.";
 	}

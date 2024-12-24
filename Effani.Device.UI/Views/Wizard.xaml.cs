@@ -26,7 +26,7 @@ namespace Effani.Device.UI
         public Wizard()
         {
             InitializeComponent();
-			camera.DeviceInfo = camera.GetAvailableDevices().FirstOrDefault(c => c.Name == "Integrated Webcam");
+			//camera.DeviceInfo = camera.GetAvailableDevices().FirstOrDefault(c => c.Name == "Integrated Webcam");
 			Loaded += Wizard_Loaded;
 		}
 

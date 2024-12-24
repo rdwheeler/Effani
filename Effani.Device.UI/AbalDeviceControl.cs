@@ -1,9 +1,9 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Effani.Device.Control
+namespace Drivetrain.Robotics.Control
 {
 	public class AbalDeviceControl : DeviceControl
 	{
@@ -53,30 +53,20 @@ namespace Effani.Device.Control
 		}
 		public string ReadDna()
 		{
-			Pause(Configuration.SensorReadDwell);
-			return ReadSensor(0);
+			return ReadSensor(0, Configuration.SensorReadDwell);
 		}
 		public string ReadNadh()
 		{
-			Pause(Configuration.SensorReadDwell);
-			return ReadSensor(1);
+			return ReadSensor(1, Configuration.SensorReadDwell);
 		}
 
-		public void PlateUvOn()
+		public void TraySterilizerOn()
 		{
 			AccOn(0);
 		}
-		public void PlateUvOff()
+		public void TraySterilizerOff()
 		{
 			AccOff(0);
-		}
-		public void BiopsyUvOn()
-		{
-			AccOn(1);
-		}
-		public void BiopsyUvOff()
-		{
-			AccOff(1);
 		}
 		public void LaserDnaOn()
 		{

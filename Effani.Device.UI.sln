@@ -5,11 +5,9 @@ VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Effani.Device.UI", "Effani.Device.UI\Effani.Device.UI.csproj", "{144670CB-6396-488C-A76D-2E03A3B69E78}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Effani.Device.Control", "Effani.Device.Control\Effani.Device.Control.csproj", "{370FBA70-1BEE-42AC-BEBB-D6F6B7606EE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Drivetrain.Robotics.Process", "Drivetrain.Robotics.Process\Drivetrain.Robotics.Process.csproj", "{A4AF5018-9B95-42A8-9315-4E7EA36600F3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Effani.Device.Console", "Effani.Device.Console\Effani.Device.Console.csproj", "{E505D5A2-37E1-4BF1-A8D1-FAC6E2E87042}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Effani.Device.Process", "Effani.Device.Process\Effani.Device.Process.csproj", "{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Drivetrain.Robotics.Control", "Drivetrain.Robotics.Control\Drivetrain.Robotics.Control.csproj", "{0E441D8D-08EB-4546-990E-05BD38D21722}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +19,14 @@ Global
 		{144670CB-6396-488C-A76D-2E03A3B69E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{144670CB-6396-488C-A76D-2E03A3B69E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{144670CB-6396-488C-A76D-2E03A3B69E78}.Release|Any CPU.Build.0 = Release|Any CPU
-		{370FBA70-1BEE-42AC-BEBB-D6F6B7606EE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{370FBA70-1BEE-42AC-BEBB-D6F6B7606EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{370FBA70-1BEE-42AC-BEBB-D6F6B7606EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{370FBA70-1BEE-42AC-BEBB-D6F6B7606EE7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E505D5A2-37E1-4BF1-A8D1-FAC6E2E87042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E505D5A2-37E1-4BF1-A8D1-FAC6E2E87042}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E505D5A2-37E1-4BF1-A8D1-FAC6E2E87042}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E505D5A2-37E1-4BF1-A8D1-FAC6E2E87042}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DEFCFD6-DB6E-447A-B24F-EA1EB2864E33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4AF5018-9B95-42A8-9315-4E7EA36600F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4AF5018-9B95-42A8-9315-4E7EA36600F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4AF5018-9B95-42A8-9315-4E7EA36600F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4AF5018-9B95-42A8-9315-4E7EA36600F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E441D8D-08EB-4546-990E-05BD38D21722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E441D8D-08EB-4546-990E-05BD38D21722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E441D8D-08EB-4546-990E-05BD38D21722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E441D8D-08EB-4546-990E-05BD38D21722}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

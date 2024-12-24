@@ -1,18 +1,17 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Linq;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
-	public class HomeAxis(Axis axis, AbalDeviceControl device) : Home(device)
+	public class HomeAxis : Home
 	{
-		protected override void Run()
+		private readonly Axis _axis;
+
+		public HomeAxis(Axis axis, AbalDeviceControl device) : base(device)
 		{
-			AxisSpec = (Device as AbalDeviceControl).Axes[axis];
-
-			base.Run();
+			_axis = axis;
+			AxisSpec = (Device as AbalDeviceControl).Axes[_axis];
 		}
-
-		private readonly Axis _axis = axis;
 	}
 }

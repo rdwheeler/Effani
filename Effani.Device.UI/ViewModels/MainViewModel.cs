@@ -5,8 +5,9 @@ using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Xpf.CodeView;
 using DevExpress.Xpf.Core;
 using DevExpress.XtraScheduler.Commands;
-using Effani.Device.Control;
-using Effani.Device.Process;
+using Drivetrain.Robotics.Control;
+using Drivetrain.Robotics.Process;
+using Serilog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace Effani.Device.UI
 		{
 			Assay.Initialize(NumberOfTests);
 			Assay.StatusMessages.CollectionChanged += StatusMessages_CollectionChanged;
-			Assay.PreparationComplete += Assay_PreparationComplete;
+			Assay.StandardsComplete += Assay_StandardsComplete;
 			Assay.TestInNadhReadingsPhase += Assay_TestInNadhPhase;
 			Assay.TestInDnaPhase += Assay_TestInDnaPhase;
 			Assay.TestInKohPhase += Assay_TestInKohPhase;
@@ -61,13 +62,13 @@ namespace Effani.Device.UI
             if (DoHome)
             {
                 _processEngine.QueueCommand(new SetTableTemp(_config.TrayTemperature, _device));
-				_processEngine.QueueCommand(new UvBiopsyOff(_device));
 				_processEngine.QueueJob(new Job("Moving all controls to loading positions.", [
 					new HomeAll(_device),
 					new MoveToStartingLocations(_device),
-                    new TableToTrayLoadingLocation(_device)
+                    new TableToTrayLoadingLocation(_device),
+					new NotifyComplete((command) => { NotifyMoveStartigPositionsComplete(); }, "Notify standards establishment complete.", _device)
 				]));
-            }
+			}
 		}
 		public void PageStartLoadSampleTrays()
 		{
@@ -80,7 +81,6 @@ namespace Effani.Device.UI
 		}
 		public void PageStartAssay()
 		{
-			Assay.DoAssay();
 		}
 		public void PageStartAssayConcluded()
 		{
@@ -90,10 +90,17 @@ namespace Effani.Device.UI
 		{
 			var results = new StringBuilder();
 			_processEngine.QueueCommand(new SetTableTemp(0, _device));
+			_processEngine.QueueCommand(new MoveToStartingLocations(_device));
 			results.AppendLine(AccountName);
+			results.AppendLine($"Low NADH:{Assay.LowNadh}");
+			results.AppendLine($"High NADH:{Assay.HighNadh}");
+			results.AppendLine($"1 µg DNA:{Assay.Microgram1Dna}");
+			results.AppendLine($"0.25 µg DNA:{Assay.MicrogramDna25Dna}");
+			results.AppendLine($"0.0625 µg DNA:{Assay.MicrogramDna0625Dna}");
+			results.AppendLine($"0 µg DNA:{Assay.Microgram0Dna}");
 			foreach (var well in Assay.TestWells)
 				results.AppendLine(
-					$"{well.SampleId},{well.Label},Low NADH:{well.LowNadh},High NADH:{well.HighNadh},1 µg DNA:{well.Microgram1Dna},0.25 µg DNA:{well.MicrogramDna25Dna},0.0625 µg DNA:{well.MicrogramDna0625Dna},0 µg DNA:{well.Microgram0Dna},DNA:{well.DnaValue},{String.Join(',', well.TimeValues.Select(t => $"T{t.Key}:{t.Value}"))}");
+					$"{well.SampleId},{well.Label},DNA:{well.DnaValue},{String.Join(',', well.TimeValues.Select(t => $"T{t.Key}:{t.Value}"))}");
 			File.WriteAllText(ResultsFilePath, results.ToString());
 
 			Assay.Dispose();
@@ -113,7 +120,16 @@ namespace Effani.Device.UI
 						ConsoleMessages.Insert(0, $"{DateTime.Now.ToShortTimeString()} {message}");
 					});
 		}
-		private void Assay_PreparationComplete(object sender, EventArgs e)
+		private void NotifyMoveStartigPositionsComplete()
+		{
+			Application.Current.Dispatcher
+				.Invoke(
+					() =>
+					{
+						MoveStartigPositionsComplete = true;
+					});
+		}
+		private void Assay_StandardsComplete(object sender, EventArgs e)
 		{
 			Application.Current.Dispatcher
 				.Invoke(
@@ -140,7 +156,7 @@ namespace Effani.Device.UI
 						{
 							AddConsoleMessage("Assay complete");
 							AssayComplete = true;
-							//AdvanceWizardPage?.Invoke(this, null);
+							AdvanceWizardPage?.Invoke(this, null);
 						}
 					});
 		}
@@ -178,7 +194,6 @@ namespace Effani.Device.UI
 		private void Device_DataRecieved(object sender, DataArgs<string> e)
 		{
 			AddConsoleMessage($"{e.Data}");
-			File.AppendAllLines(LogFilePath, new string[] { $"{GetShortNow()} {e.Data}" });
 		}
 		private void PrepareNextSampleForLoading()
 		{
@@ -186,13 +201,13 @@ namespace Effani.Device.UI
 			CurrentLoadingSample = SampleLoadingCollection.ElementAtOrDefault(currentIndex + 1);
             if (CurrentLoadingSample == null)
             {
-                //AdvanceWizardPage?.Invoke(this, null);
+                AdvanceWizardPage?.Invoke(this, null);
             }
 		}
 		private void ProcessEngine_MessageReceived(object sender, DataArgs<string> e)
 		{
 			AddConsoleMessage($"{e.Data}");
-			File.AppendAllLines(LogFilePath, new string[] { $"{GetShortNow()} {e.Data}" });
+			Log.Information(e.Data);
 		}
 		private void StatusMessages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
@@ -205,25 +220,38 @@ namespace Effani.Device.UI
 		{
 			return $"{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}";
 		}
-        int emitFluidVolume;
-        #endregion
+		#endregion
 
-        #region Properties
-        public int EmitFluidVolume
+		#region Properties
+		public int EmitFluidVolume
         {
-            get => emitFluidVolume;
+            get => _emitFluidVolume;
             set
             {
-                if (emitFluidVolume == value)
+                if (_emitFluidVolume == value)
                 {
                     return;
                 }
 
-                emitFluidVolume = value;
+                _emitFluidVolume = value;
                 RaisePropertyChanged(nameof(EmitFluidVolume));
             }
-        }
-        public bool AccountAndNumberOfTestsComplete => !String.IsNullOrEmpty(AccountName) && NumberOfTests != 0;
+		}
+		public string SendCommandText
+		{
+			get => _sendCommandText;
+			set
+			{
+				if (_sendCommandText == value)
+				{
+					return;
+				}
+
+				_sendCommandText = value;
+				RaisePropertyChanged(nameof(SendCommandText));
+			}
+		}
+		public bool AccountAndNumberOfTestsComplete => !String.IsNullOrEmpty(AccountName) && NumberOfTests != 0;
 		public string AccountName
 		{
 			get
@@ -318,6 +346,20 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(PreparationComplete));
 			}
 		}
+		public bool MoveStartigPositionsComplete
+		{
+			get
+			{
+				return _moveStartigPositionsComplete;
+			}
+			set
+			{
+				if (_moveStartigPositionsComplete == value)
+					return;
+				_moveStartigPositionsComplete = value;
+				RaisePropertyChanged(nameof(MoveStartigPositionsComplete));
+			}
+		}
 		public string ResultsFilePath { get; set; }
 		public string LogFilePath { get; set; }
 		public List<TestWell> SampleLoadingCollection { get; set; } = new();
@@ -369,23 +411,30 @@ namespace Effani.Device.UI
 		bool _preparationComplete;
 		int _unloadedTestsCount;
 		ProcessEngine _processEngine;
+		int _emitFluidVolume;
+		string _sendCommandText;
+		bool _moveStartigPositionsComplete;
 
-        private bool DoHome = false;
-        private bool DoPrime = false;
-        private bool DoPrep = false;
+		private bool DoHome = true;
+        private bool DoPrime = true;
+        private bool DoPrep = true;
         public static bool LoadStandardFluids = false;
         public static bool DoNadhReadings = true;
         public static bool DoTestMediaTimerSteps = true;
         public static bool DoKohTimerSteps = true;
-        public static bool DoDnaTimerSteps = false;
+        public static bool DoDnaTimerSteps = true;
         private Well _currentWell;
 		#endregion
 
 		#region Commands
 		[Command]
 		public void AcceptSample()
-        {
-            _processEngine.HoldQueueForHighPriorityJob = false;
+		{
+			var job = new Job($"{CurrentLoadingSample.Well.Label} sample loaded.");
+			job.Commands.Add(new StartTimer(CurrentLoadingSample.BasalIncubationTimer, $"{CurrentLoadingSample.Well.Label} basal incubation.", _device));
+			_processEngine.QueueJob(job);
+
+			_processEngine.HoldQueueForHighPriorityJob = false;
 
 			SamplesInBasal.Add(CurrentLoadingSample);
 			UnloadedTestsCount--;
@@ -404,7 +453,7 @@ namespace Effani.Device.UI
                 _processEngine.QueueJob(job);
             }
 
-            //AdvanceWizardPage?.Invoke(this, new EventArgs());
+            AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
 		[Command]
 		public void InjectSample()
@@ -417,7 +466,7 @@ namespace Effani.Device.UI
 				new EmitFluid(basalAxis, _device.Configuration.BasalVolume, _device)
 			]));
 			_processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
-				new AlignWellToLocation(_device.Configuration.CameraLocation, CurrentLoadingSample.Well, _device)
+				new AlignWellToLocation(_device.Configuration.BiopsyLocation, CurrentLoadingSample.Well, _device)
 			]));
 			CurrentLoadingSample.LoadedOntoTray = true;
 		}
@@ -445,7 +494,7 @@ namespace Effani.Device.UI
 		{
             if (DoPrep)
 			    new System.Threading.Thread(() => Assay.ProcessStandards()).Start();
-			//AdvanceWizardPage?.Invoke(this, new EventArgs());
+			AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
 		[Command]
 		public async Task GenerateConfigFiles()
@@ -466,22 +515,9 @@ namespace Effani.Device.UI
 		}
 
         [Command]
-        public async Task AlignPrime(AxisSpec axisSpec)
+        public async Task MoveToStart(AxisSpec axisSpec)
         {
-            if (axisSpec is FluidAxis)
-            {
-                _processEngine.QueueJob(new Job([
-                    new HomeAxis(axisSpec.Axis, _device),
-                    new MoveAxisAbsolute(axisSpec.Axis, _device.Configuration.FluidSyringeHomePosition, _device),
-                ]));
-            }
-            if (axisSpec is AspirateAxis)
-            {
-                _processEngine.QueueJob(new Job([
-                    new HomeAxis(axisSpec.Axis, _device),
-                    new MoveAxisAbsolute(axisSpec.Axis, _device.Configuration.AspirateKohSyringeHomePosition, _device),
-                ]));
-            }
+            _processEngine.QueueCommand( new MoveToStartingLocation(axisSpec.Axis, _device));
         }
         [Command]
 		public async Task AlignToFirstWell(AxisSpec axisSpec)
@@ -569,20 +605,15 @@ namespace Effani.Device.UI
         {
             Mouse.OverrideCursor = Cursors.Wait;
 			var well = CurrentWell;
-            _processEngine.QueueJob(new Job([
-                new MoveAxisAbsolute(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
-                new MoveAxisAbsolute(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation, _device),
-                new AlignWellToAxis(Axis.Biopsy, well, _device),
-                new UvBiopsyOn(_device),
-                new MoveAxisAbsolute(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation + _device.Configuration.BiopsyTravel, _device),
-                new UvBiopsyOff(_device),
-                new MoveAxisAbsolute(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition + _device.Configuration.BiopsyZTravel, _device),
-                new EmitCo2(_device),
-                new MoveAxisAbsolute(Axis.BiopsyEject, _device.Configuration.BiopsyEjectHomePosition, _device),
-                new MoveAxisAbsolute(Axis.Biopsy, _device.Configuration.BiospsyLoadingLocation, _device),
-                new AlignWellToLocation(_device.Configuration.CameraLocation,  well, _device)
-            ]));
-            Mouse.OverrideCursor = Cursors.Arrow;
+			var basalAxis = CurrentLoadingSample.Well.Plate.Index.X == 0 ? Axis.Basal1 : Axis.Basal2;
+			_processEngine.QueuePriorityJob(new Job($"Adding Basal media to {CurrentLoadingSample.Label}.", [
+				new AlignWellToAxis(basalAxis, CurrentLoadingSample.Well, _device),
+				new EmitFluid(basalAxis, _device.Configuration.BasalVolume, _device)
+			]));
+			_processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
+				new AlignWellToLocation(_device.Configuration.BiopsyLocation, CurrentLoadingSample.Well, _device)
+			]));
+			Mouse.OverrideCursor = Cursors.Arrow;
         }
 
         [Command]
@@ -594,43 +625,26 @@ namespace Effani.Device.UI
 		[Command]
 		public async Task Home(AxisSpec axisSpec)
 		{
-			_processEngine.QueueCommand(new HomeAxis(axisSpec.Axis, _device));
+			_processEngine.QueueCommand(new Home(_device, axisSpec));
 		}
 
 		[Command]
-		public async Task PlateUvOn()
+		public async Task TraySterilizerOn()
 		{
-			var response = _device.PlateUvOn();
-			AddConsoleMessage(response);
+			_processEngine.QueueCommand(new TraySterilizerOn(_device));
 		}
 
 		[Command]
-		public async Task PlateUvOff()
+		public async Task TraySterilizerOff()
 		{
-			var response = _device.PlateUvOff();
-			AddConsoleMessage(response);
-		}
-
-		[Command]
-		public async Task BiopsyUvOn()
-		{
-			var response = _device.BiopsyUvOn();
-			AddConsoleMessage(response);
-		}
-
-		[Command]
-		public async Task BiopsyUvOff()
-		{
-			var response = _device.BiopsyUvOff();
-			AddConsoleMessage(response);
+			_processEngine.QueueCommand(new TraySterilizerOn(_device));
 		}
 
 		[Command]
 		public async Task ReadDna()
 		{
 			Mouse.OverrideCursor = Cursors.Wait;
-			var response = _device.ReadDna();
-			AddConsoleMessage($"DNA: {response}");
+			_processEngine.QueueCommand(new ReadDna(_device, null));
 			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
@@ -638,8 +652,7 @@ namespace Effani.Device.UI
 		public async Task ReadNadh()
 		{
 			Mouse.OverrideCursor = Cursors.Wait;
-			var response = _device.ReadNadh();
-			AddConsoleMessage($"NADH: {response}");
+			_processEngine.QueueCommand(new ReadNadh(_device, null));
 			Mouse.OverrideCursor = Cursors.Arrow;
         }
 
@@ -660,83 +673,62 @@ namespace Effani.Device.UI
         }
         [Command]
         public void PrimeFluid()
-        {
-            AddConsoleMessage($"Priming fluid pumps");
-            var job = new Job();
-            foreach (var axis in _device.FluidAxes)
-            {
-                packet.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.FluidPrimingVolume, _device));
-            }
-            _processEngine.QueueJob(packet);
-        }
-
+		{
+			var job = new Job("Priming fluid pumps.");
+			foreach (var axis in _device.FluidAxes)
+			{
+				job.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.FluidPrimingVolume, _device));
+			}
+			_processEngine.QueueJob(job);
+		}
         [Command]
 		public async Task LaserNadhOn()
 		{
-			var response = _device.LaserNadhOn();
-			AddConsoleMessage(response);
+			_device.LaserNadhOn();
 		}
-
 		[Command]
 		public async Task LaserNadhOff()
 		{
-			var response = _device.LaserNadhOff();
-			AddConsoleMessage(response);
+			_device.LaserNadhOff();
 		}
-
 		[Command]
 		public async Task LaserDnaOn()
 		{
-			var response = _device.LaserDnaOn();
-			AddConsoleMessage(response);
+			_device.LaserDnaOn();
 		}
-
 		[Command]
 		public async Task LaserDnaOff()
 		{
-			var response = _device.LaserDnaOff();
-			AddConsoleMessage(response);
+			_device.LaserDnaOff();
 		}
-
 		[Command]
 		public async Task EnableCommands()
 		{
-			_device.Configuration.BypassDeviceCommands = 2;
+			_device.Configuration.BypassDeviceCommands = 2000;
 		}
 		[Command]
 		public async Task DisableCommands()
 		{
 			_device.Configuration.BypassDeviceCommands = 0;
 		}
-
 		[Command]
 		public async Task SetWifi()
 		{
-			try
-			{
-				var ssid = ConfigurationManager.AppSettings["wifi-ssid"];
-				var pass = ConfigurationManager.AppSettings["wifi-password"];
-				var response = _device.SetWifi(ssid, pass);
-				AddConsoleMessage(response);
-			}
-			catch (Exception ex)
-			{
-				var a = ex;
-			}
+			var ssid = ConfigurationManager.AppSettings["wifi-ssid"];
+			var pass = ConfigurationManager.AppSettings["wifi-password"];
+			_device.SetWifi(ssid, pass);
 		}
 
 		[Command]
 		public async Task GetBoardDiagnostics(int boardNumber)
 		{
-			try
-			{
-				var response = _device.GetBoardDiagnostics(boardNumber);
-				AddConsoleMessage(response);
-			}
-			catch (Exception ex)
-			{
-				var a = ex;
-			}
+			_processEngine.QueueCommand(new GetBoardDiagnostics(boardNumber, _device));
+		}
+
+		[Command]
+		public async Task Send()
+		{
+			_processEngine.QueueCommand(new SendCommand(_sendCommandText, _device));
 		}
 
 		[Command]
@@ -750,8 +742,7 @@ namespace Effani.Device.UI
 		{
 			var axisSpec = (AxisSpec)parameters[0];
 			var distance = (float)parameters[1];
-			var response = _device.MoveRelative(axisSpec.Axis, distance);
-			AddConsoleMessage(response);
+			_processEngine.QueueCommand(new MoveRelative(distance, _device, axisSpec));
 		}
 		#endregion
     }

@@ -1,18 +1,17 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Linq;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
 	public class RemoveFluid(int microLiters, AbalDeviceControl device) : Command(device)
 	{
 		protected override void Run()
         {
 			(Device as AbalDeviceControl).RemoveFluid(MicroLiters);
-			Result = $"{microLiters}μl of general fluid removed.";
 		}
 
-		public override string Description => $"Remove {microLiters}μl of general fluid.";
+		public override string Description => $"Remove {MicroLiters}μl of general fluid.";
 
 		public int MicroLiters { get; } = microLiters;
 	}

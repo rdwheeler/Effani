@@ -32,7 +32,7 @@ namespace Effani.Device.UI
 				})
 				.Build();
 
-			ApplicationThemeHelper.ApplicationThemeName = Theme.MetropolisDark.Name;
+			ApplicationThemeHelper.ApplicationThemeName = Theme.Win11Dark.Name;
 		}
 
 		protected override async void OnStartup(StartupEventArgs e)

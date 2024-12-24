@@ -1,10 +1,10 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Linq;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
-	public class ReadNadh(AbalDeviceControl device) : ReadSensor(device)
+	public class ReadNadh(AbalDeviceControl device, Action<ReadSensor> resultCallback) : ReadSensor(device, resultCallback)
 	{
 		protected override void Run()
 		{
@@ -16,6 +16,6 @@ namespace Effani.Device.Process
 			device.LaserNadhOff();
 		}
 
-		public override string Description => "Read NADH.";
+		public override string Description => "Read NADH";
 	}
 }

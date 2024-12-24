@@ -1,12 +1,12 @@
 ﻿using DevExpress.Mvvm;
-using Effani.Device.Control;
+using Drivetrain.Robotics.Control;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using static Effani.Device.Control.AbalDeviceControl;
+using static Drivetrain.Robotics.Control.AbalDeviceControl;
 
 namespace Effani.Device.UI
 {
@@ -142,18 +142,6 @@ namespace Effani.Device.UI
 		public Timer NadhReadings3Timer { get; set; }
 		public Timer NadhReadings4Timer { get; set; }
 		public Timer NadhReadings5Timer { get; set; }
-		[DisplayName("Low NADH")]
-		public float LowNadh { get; set; }
-		[DisplayName("High NADH")]
-		public float HighNadh { get; set; }
-		[DisplayName("1 µg DNA")]
-		public float Microgram1Dna { get; set; }
-		[DisplayName("0.25 µg DNA")]
-		public float MicrogramDna25Dna { get; set; }
-		[DisplayName("0.0625 µg DNA")]
-		public float MicrogramDna0625Dna { get; set; }
-		[DisplayName("0 µg DNA")]
-		public float Microgram0Dna { get; set; }
 		public Well Well { get; private set; }
 		public int TestIndex { get; }
 		#endregion

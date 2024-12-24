@@ -1,15 +1,12 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
-	public class EmptyAspirateKoh(AbalDeviceControl device) : EmptyAspirate(device)
+	public class EmptyAspirateKoh : EmptyAspirate
 	{
-
-		protected override void Run()
+		public EmptyAspirateKoh(AbalDeviceControl device) : base(device)
 		{
 			AxisSpec = (Device as AbalDeviceControl).Axes[Axis.AspirateKoh] as AspirateAxis;
-
-			base.Run();
 		}
 	}
 }

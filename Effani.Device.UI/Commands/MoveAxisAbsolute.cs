@@ -1,21 +1,20 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Linq;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
-	public class MoveAxisAbsolute(Axis axis, float position, AbalDeviceControl device) : MoveAbsolute(position, device)
+	public class MoveAxisAbsolute : MoveAbsolute
 	{
-		protected override void Run()
+		public MoveAxisAbsolute(Axis axis, float position, AbalDeviceControl device) : base(position, device)
 		{
+			_device = device;
 			if (!_device.Axes.TryGetValue(axis, out var axisSpec))
-				throw new ApplicationException($"Unknown axis {Axis} in {nameof(MoveAxisAbsolute)}");
+				throw new ApplicationException($"Unknown axis {axis} in {nameof(MoveAxisAbsolute)}");
 
 			AxisSpec = axisSpec;
-			base.Run();
 		}
+		private readonly AbalDeviceControl _device;
 
-		public Axis Axis { get; } = axis;
-		private readonly AbalDeviceControl _device = device;
 	}
 }

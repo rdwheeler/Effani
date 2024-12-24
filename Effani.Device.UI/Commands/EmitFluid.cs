@@ -1,8 +1,8 @@
-﻿using Effani.Device.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Linq;
 
-namespace Effani.Device.Process
+namespace Drivetrain.Robotics.Process
 {
 	public class EmitFluid(Axis axis, int microLiters, AbalDeviceControl device) : Command(device)
 	{
@@ -13,7 +13,6 @@ namespace Effani.Device.Process
 				throw new ApplicationException($"Unknown axis {axis} in {nameof(EmitFluid)}");
 
 			device.EmitFluid(axisSpec, MicroLiters, 3000);
-			Result = $"Emited {microLiters}μl from {axisSpec.Label}.";
 		}
 
 		public override string Description => $"Emit {microLiters}μl from {axisSpec.Label}.";

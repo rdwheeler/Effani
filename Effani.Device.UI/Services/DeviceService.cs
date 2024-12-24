@@ -1,5 +1,5 @@
-﻿using Effani.Device.Control;
-using Effani.Device.Process;
+﻿using Drivetrain.Robotics.Control;
+using Drivetrain.Robotics.Process;
 using System;
 using System.Collections.Generic;
 using System.Linq;
