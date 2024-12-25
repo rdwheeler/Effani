@@ -50,7 +50,14 @@ namespace Effani.Device.UI
 		{
 			_doingPrepToBaselineTimerStart = true;
 
-            try
+			while (!FluidPrimingComplete)
+			{
+				if (_processTerminating)
+					return;
+				Task.Delay(1000).Wait();
+			}
+
+			try
 			{
                 if (MainViewModel.LoadStandardFluids)
                 {
@@ -429,6 +436,7 @@ namespace Effani.Device.UI
 		public AbalDeviceControl Device { get; private set; }
 		public ProcessEngine Engine { get; private set; }
 		public DeviceConfiguration Config => Device.Configuration;
+		public bool FluidPrimingComplete { get; set; }
 
 		public event EventHandler StandardsComplete;
 		public event EventHandler Terminated;

@@ -61,12 +61,13 @@ namespace Effani.Device.UI
 			Assay.Terminated += Assay_Terminated;
             if (DoHome)
             {
+				WaitingMessage = "Waiting for all controls to move to loading positions.";
                 _processEngine.QueueCommand(new SetTableTemp(_config.TrayTemperature, _device));
 				_processEngine.QueueJob(new Job("Moving all controls to loading positions.", [
 					new HomeAll(_device),
 					new MoveToStartingLocations(_device),
                     new TableToTrayLoadingLocation(_device),
-					new NotifyComplete((command) => { NotifyMoveStartigPositionsComplete(); }, "Notify standards establishment complete.", _device)
+					new NotifyComplete((command) => { NotifyMoveStartigPositionsComplete(); }, "Notify move to starting positions complete.", _device)
 				]));
 			}
 		}
@@ -126,7 +127,19 @@ namespace Effani.Device.UI
 				.Invoke(
 					() =>
 					{
+						WaitingMessage = null;
 						MoveStartigPositionsComplete = true;
+					});
+		}
+		private void NotifyFluidPrimingComplete()
+		{
+			Application.Current.Dispatcher
+				.Invoke(
+					() =>
+					{
+						WaitingMessage = null;
+						Assay.
+						FluidPrimingComplete = true;
 					});
 		}
 		private void Assay_StandardsComplete(object sender, EventArgs e)
@@ -360,6 +373,20 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(MoveStartigPositionsComplete));
 			}
 		}
+		public string WaitingMessage
+		{
+			get => _waitingMessage;
+			set
+			{
+				if (_waitingMessage == value)
+				{
+					return;
+				}
+
+				_waitingMessage = value;
+				RaisePropertyChanged(nameof(WaitingMessage));
+			}
+		}
 		public string ResultsFilePath { get; set; }
 		public string LogFilePath { get; set; }
 		public List<TestWell> SampleLoadingCollection { get; set; } = new();
@@ -414,6 +441,8 @@ namespace Effani.Device.UI
 		int _emitFluidVolume;
 		string _sendCommandText;
 		bool _moveStartigPositionsComplete;
+		bool _fluidPrimingComplete;
+		string _waitingMessage;
 
 		private bool DoHome = true;
         private bool DoPrime = true;
@@ -446,11 +475,13 @@ namespace Effani.Device.UI
             if (DoPrime)
             {
                 var job = new Job("Priming fluid pumps.");
+				WaitingMessage = "Waiting for fluid pumps to finish priming.";
                 foreach (var axis in _device.FluidAxes)
                 {
 					job.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.FluidPrimingVolume, _device));
-                }
-                _processEngine.QueueJob(job);
+				}
+				job.Commands.Add(new NotifyComplete((command) => { NotifyFluidPrimingComplete(); }, "Notify fluid priming complete.", _device));
+				_processEngine.QueueJob(job);
             }
 
             AdvanceWizardPage?.Invoke(this, new EventArgs());
