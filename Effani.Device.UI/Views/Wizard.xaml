@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:dxco="http://schemas.devexpress.com/winfx/2008/xaml/controls"
 			 xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-			 xmlns:lc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-			xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:local="clr-namespace:Effani.Device.UI" 
 			 xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+			 xmlns:lc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:Effani.Device.UI" 
 			 mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1200">
 	<UserControl.Resources>
@@ -22,72 +22,9 @@
 			<Setter Property="Padding" Value="3,3,3,8" />
 		</Style>
 		<DataTemplate x:Key="sideContentTemplate">
-			<DockPanel Width="800" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-				<TextBlock DockPanel.Dock="Top" TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Status"/>
-				<Border Margin="0,10,0,20" Padding="10" BorderThickness="1" BorderBrush="Gray">
-					<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="5*" />
-							<ColumnDefinition Width="5*" />
-							<ColumnDefinition Width="5*" />
-							<ColumnDefinition Width="5*" />
-							<ColumnDefinition Width="5*" />
-						</Grid.ColumnDefinitions>
-						<DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="0">
-							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Basal Incubation"/>
-							<ListBox ItemsSource="{Binding DataContext.SamplesInBasal, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-										<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-									</DataTemplate>
-								</ListBox.ItemTemplate>
-							</ListBox>
-						</DockPanel>
-						<DockPanel Grid.Column="1">
-							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="NADH Readings"/>
-							<ListBox ItemsSource="{Binding DataContext.SamplesInNadh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-                                        <TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-									</DataTemplate>
-								</ListBox.ItemTemplate>
-							</ListBox>
-						</DockPanel>
-						<DockPanel Grid.Column="2">
-							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="KOH Treatment"/>
-							<ListBox ItemsSource="{Binding DataContext.SamplesInKoh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-										<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-									</DataTemplate>
-								</ListBox.ItemTemplate>
-							</ListBox>
-						</DockPanel>
-						<DockPanel Grid.Column="3">
-							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="DNA Reading"/>
-                            <ListBox ItemsSource="{Binding DataContext.SamplesInDna, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-										<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-									</DataTemplate>
-								</ListBox.ItemTemplate>
-							</ListBox>
-						</DockPanel>
-						<DockPanel Grid.Column="4">
-							<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Complete"/>
-							<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-                                <ListBox ItemsSource="{Binding DataContext.SamplesComplete, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-									<ListBox.ItemTemplate>
-										<DataTemplate>
-											<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-										</DataTemplate>
-									</ListBox.ItemTemplate>
-								</ListBox>
-							</ScrollViewer>
-						</DockPanel>
-					</Grid>
-				</Border>
-			</DockPanel>
+			<StackPanel Width="1000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+				<local:StatusDisplay></local:StatusDisplay>
+			</StackPanel>
 		</DataTemplate>
 	</UserControl.Resources>
 	<Grid>
@@ -95,20 +32,22 @@
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
 		<DockPanel LastChildFill="True" Grid.Column="1">
-			<TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Text="{Binding WaitingMessage}" Margin="0,0,0,10"></TextBlock>
-			<dxco:Wizard DockPanel.Dock="Bottom" x:Name="wizard" VerticalAlignment="Stretch" Next="Wizard_Next" Cancel="Wizard_Cancel" AnimationType="SlideHorizontal" Margin="20,0,0,0" FontSize="17">
+			<dxco:Wizard DockPanel.Dock="Bottom" x:Name="wizard" VerticalAlignment="Stretch" Next="Wizard_Next" Cancel="Wizard_Cancel" AnimationType="Fade"  Margin="20,0,0,0" FontSize="17">
 				<dxco:Wizard.FooterTemplate>
 					<DataTemplate>
 						<dxco:WizardDialogFooter Height="300">
 							<DockPanel LastChildFill="true">
 								<StackPanel DockPanel.Dock="Right" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-									<dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Content="Previous Step" dxco:Wizard.IsButtonBack="True" />
-									<dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Content="Next Step" dxco:Wizard.IsButtonNext="True" />
-									<dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Content="Cancel All Testing" dxco:Wizard.IsButtonCancel="True"/>
-									<dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Content="Shut Down" dxco:Wizard.IsButtonFinish="True" />
+									<dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Margin="30,0,0,5" Content="Previous Step" dxco:Wizard.IsButtonBack="True" />
+									<dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Margin="30,0,0,5" Content="Next Step" dxco:Wizard.IsButtonNext="True" />
+									<dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Margin="30,0,0,5" Content="Cancel All Testing" dxco:Wizard.IsButtonCancel="True"/>
+									<dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Margin="30,0,0,5" Content="Shut Down" dxco:Wizard.IsButtonFinish="True" />
 								</StackPanel>
 								<DockPanel DockPanel.Dock="Left" LastChildFill="true">
-									<TextBlock DockPanel.Dock="Top" Text="Current Activity" Margin="0,0,0,10"></TextBlock>
+									<StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,10">
+										<TextBlock Text="Running Command: " Margin="0,0,0,3"></TextBlock>
+										<TextBlock Text="{Binding ExecutingCommandText}"></TextBlock>
+									</StackPanel>
 									<ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding ConsoleMessages}" Background="Transparent" BorderThickness="1" IsTabStop="False" VerticalAlignment="Stretch">
 										<ListBox.ItemTemplate>
 											<DataTemplate>
@@ -121,7 +60,7 @@
 						</dxco:WizardDialogFooter>
 					</DataTemplate>
 				</dxco:Wizard.FooterTemplate>
-				<dxco:WelcomeWizardPage ShowFinish="False" ShowCancel="False" x:Name="GatherParametersPage" AllowNext="{DXBinding 'AccountAndNumberOfTestsComplete and MoveStartigPositionsComplete'}">
+				<dxco:WelcomeWizardPage ShowFinish="False" ShowCancel="False" x:Name="GatherParametersPage" AllowNext="{DXBinding 'AccountAndNumberOfTestsComplete'}">
 					<Grid>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="2*" />
@@ -141,8 +80,9 @@
 				<dxco:WizardPage ShowFinish="False" ShowBack="False" ShowNext="False" ShowCancel="False" x:Name="LoadFluidSystemPage">
 					<StackPanel MaxWidth="800" HorizontalAlignment="Center" VerticalAlignment="Center">
 						<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
-						<TextBlock TextWrapping="WrapWithOverflow" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label."/>
-						<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Left" Command="{Binding FluidLoadedCommand}">
+						<TextBlock Text="Waiting for all controls to move into their starting positions..." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Collapsed : $Visibility.Visible'}"></TextBlock>
+						<TextBlock TextWrapping="WrapWithOverflow" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Visible : $Visibility.Collapsed'}"/>
+						<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Left" Command="{Binding FluidLoadedCommand}" IsEnabled="{Binding MoveStartingPositionsComplete}">
 							<dx:SimpleButton.Content>
 								<StackPanel>
 									<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Fluid Loaded</TextBlock>
@@ -170,35 +110,41 @@
 					<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 						<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Sample Loading"/>
 						<StackPanel Visibility="{DXBinding 'CurrentLoadingSample != null ? $Visibility.Visible : $Visibility.Collapsed'}">
-							<StackPanel>
-								<TextBlock Visibility="{DXBinding 'CurrentLoadingSample.LoadedOntoTray ? $Visibility.Collapsed : $Visibility.Visible'}" TextWrapping="WrapWithOverflow" Text="{DXBinding '`Load the sample biopsy for ` + CurrentLoadingSample.Label + `.`'}"/>
-							</StackPanel>
-							<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Left" Content="Load Sample" FontSize="25" Command="{Binding InjectSampleCommand}" Visibility="{DXBinding 'CurrentLoadingSample.LoadedOntoTray ? $Visibility.Collapsed : $Visibility.Visible'}"/>
-							<StackPanel Orientation="Vertical" Margin="0,10,0,0" Visibility="{DXBinding 'CurrentLoadingSample.LoadedOntoTray ? $Visibility.Visible : $Visibility.Collapsed'}">
+							<TextBlock Text="Waiting for standards readings to complete..." Visibility="{DXBinding 'StandardsComplete ? $Visibility.Collapsed : $Visibility.Visible'}"></TextBlock>
+							<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Left" Command="{Binding InjectSampleCommand}" Visibility="{DXBinding 'PreparedToLoadSample | PreparingToLoadSample ? $Visibility.Collapsed : $Visibility.Visible'}" IsEnabled="{Binding StandardsComplete}">
+								<dx:SimpleButton.Content>
+									<StackPanel>
+										<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Load Sample</TextBlock>
+										<TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="{DXBinding '`Press here to start loading a sample into ` + CurrentLoadingSample.Label + `.`'}"/>
+									</StackPanel>
+								</dx:SimpleButton.Content>
+							</dx:SimpleButton>
+							<StackPanel Orientation="Vertical" Margin="0,10,0,0" Visibility="{DXBinding 'PreparedToLoadSample | PreparingToLoadSample ? $Visibility.Visible : $Visibility.Collapsed'}">
 								<StackPanel Orientation="Horizontal">
 									<TextBlock TextWrapping="WrapWithOverflow" Text="Enter a sample identifier for " Margin="0,5,0,0"/>
 									<TextBlock Margin="0,5,0,0" Text="{Binding CurrentLoadingSample.Label}"/>
 									<TextBlock Margin="0,5,0,0" Text=" to continue."/>
 								</StackPanel>
-								<dxe:TextEdit NullText="Enter sample identifier" Text="{Binding CurrentLoadingSample.SampleId}" IsEnabled="{DXBinding '!CurrentLoadingSample.Canceled'}"/>
+								<dxe:TextEdit NullText="Sample identifier" Text="{Binding CurrentLoadingSample.SampleId}" IsEnabled="{DXBinding 'CurrentLoadingSample.Canceled == false'}"/>
 								<StackPanel Margin="0,20,0,0" Visibility="{DXBinding 'CurrentLoadingSample.SampleId != null ? $Visibility.Visible : $Visibility.Collapsed'}">
 									<Grid>
 										<Grid.ColumnDefinitions>
 											<ColumnDefinition Width="7*" />
 											<ColumnDefinition Width="3*" />
 										</Grid.ColumnDefinitions>
-										<!--<dxe:CameraControl Grid.Column="0" HorizontalAlignment="Left" Width="800" x:Name="camera" Visibility="{DXBinding 'CurrentLoadingSample.LoadedOntoTray ? $Visibility.Visible : $Visibility.Collapsed'}" Margin="0,0,20,0">
+										<!--<dxe:CameraControl Grid.Column="0" HorizontalAlignment="Left" Width="800" x:Name="camera" Visibility="{DXBinding 'PreparedToLoadSample ? $Visibility.Visible : $Visibility.Collapsed'}" Margin="0,0,20,0">
 											</dxe:CameraControl>-->
 										<StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-											<TextBlock TextWrapping="WrapWithOverflow" Text="Ensure the sample is loaded correctly. Press Accept to continue."/>
-											<dx:SimpleButton FontSize="25" Margin="0,20,0,0" Command="{Binding AcceptSampleCommand}" Content="Accept" ToolTip="Accept this sample for testing."/>
-											<!--<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding RetrySampleCommand}" Content="Reload" ToolTip="Reload this sample."/>-->
-											<!--<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding SkipSampleCommand}" Content="Skip" ToolTip="Skip thesting this animal."/>-->
-											<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Stretch" Command="{Binding SkipRemainingCommand}">
+											<TextBlock Text="Waiting for sample preparation to complete..." Visibility="{DXBinding '!PreparedToLoadSample ? $Visibility.Visible : $Visibility.Collapsed'}"></TextBlock>
+											<TextBlock TextWrapping="WrapWithOverflow" Text="Ensure the sample is loaded correctly. Press Accept when ready." Visibility="{DXBinding 'PreparedToLoadSample ? $Visibility.Visible : $Visibility.Collapsed'}"/>
+											<dx:SimpleButton FontSize="25" Margin="0,20,0,0" Command="{Binding AcceptSampleCommand}" Content="Accept" ToolTip="Accept this sample for testing." IsEnabled="{Binding 'PreparedToLoadSample'}"/>
+											<!--<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding RetrySampleCommand}" Content="Reload" ToolTip="Reload this sample." IsEnabled="{Binding 'PreparedToLoadSample'}"/>-->
+											<!--<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding SkipSampleCommand}" Content="Skip" ToolTip="Skip thesting this animal." IsEnabled="{Binding 'PreparedToLoadSample'}"/>-->
+											<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Stretch" Command="{Binding SkipRemainingCommand}" IsEnabled="{Binding 'PreparedToLoadSample'}">
 												<dx:SimpleButton.Content>
 													<StackPanel>
 														<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Skip Remaining</TextBlock>
-														<TextBlock TextWrapping="WrapWithOverflow" TextAlignment="Center" VerticalAlignment="Center" Text="{DXBinding '`Remaining ` + UnloadedTestsCount + ` animals will be skipped.`'}" />
+														<TextBlock TextWrapping="WrapWithOverflow" TextAlignment="Center" VerticalAlignment="Center" Text="{DXBinding '`This and the remaining ` + (UnloadedTestsCount - 1) + ` animals will be skipped.`'}" />
 													</StackPanel>
 												</dx:SimpleButton.Content>
 											</dx:SimpleButton>
@@ -209,73 +155,10 @@
 						</StackPanel>
 					</StackPanel>
 				</dxco:WizardPage>
-				<dxco:WizardPage SideContentTemplate="{StaticResource sideContentTemplate}" ShowFinish="False" ShowBack="False" ShowNext="False" ShowCancel="False" x:Name="AssayPage" ShowSideContent="False">
-					<DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-						<TextBlock DockPanel.Dock="Top" TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Status"/>
-						<Border Margin="0,10,0,20" Padding="10" BorderThickness="1" BorderBrush="Gray">
-							<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="5*" />
-									<ColumnDefinition Width="5*" />
-									<ColumnDefinition Width="5*" />
-									<ColumnDefinition Width="5*" />
-									<ColumnDefinition Width="5*" />
-								</Grid.ColumnDefinitions>
-								<DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="0">
-									<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Basal Incubation"/>
-									<ListBox ItemsSource="{Binding DataContext.SamplesInBasal, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-										<ListBox.ItemTemplate>
-											<DataTemplate>
-												<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-											</DataTemplate>
-										</ListBox.ItemTemplate>
-									</ListBox>
-								</DockPanel>
-								<DockPanel Grid.Column="1">
-									<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="NADH Readings"/>
-									<ListBox ItemsSource="{Binding DataContext.SamplesInNadh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-										<ListBox.ItemTemplate>
-											<DataTemplate>
-												<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-											</DataTemplate>
-										</ListBox.ItemTemplate>
-									</ListBox>
-								</DockPanel>
-								<DockPanel Grid.Column="2">
-									<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="KOH Treatment"/>
-									<ListBox ItemsSource="{Binding DataContext.SamplesInKoh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-										<ListBox.ItemTemplate>
-											<DataTemplate>
-												<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-											</DataTemplate>
-										</ListBox.ItemTemplate>
-									</ListBox>
-								</DockPanel>
-								<DockPanel Grid.Column="3">
-									<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="DNA Reading"/>
-									<ListBox ItemsSource="{Binding DataContext.SamplesInDna, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-										<ListBox.ItemTemplate>
-											<DataTemplate>
-												<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-											</DataTemplate>
-										</ListBox.ItemTemplate>
-									</ListBox>
-								</DockPanel>
-								<DockPanel Grid.Column="4">
-									<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Complete"/>
-									<ScrollViewer dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
-										<ListBox ItemsSource="{Binding DataContext.SamplesComplete, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" FontSize="20">
-											<ListBox.ItemTemplate>
-												<DataTemplate>
-													<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Well.Label'}" TextWrapping="WrapWithOverflow"></TextBlock>
-												</DataTemplate>
-											</ListBox.ItemTemplate>
-										</ListBox>
-									</ScrollViewer>
-								</DockPanel>
-							</Grid>
-						</Border>
-					</DockPanel>
+				<dxco:WizardPage SideContentTemplate="{StaticResource sideContentTemplate}" ShowFinish="False" ShowBack="False" ShowNext="True" ShowCancel="False" x:Name="AssayPage" ShowSideContent="False" AllowNext="{Binding AssayComplete}">
+					<StackPanel HorizontalAlignment="Stretch">
+						<local:StatusDisplay></local:StatusDisplay>
+					</StackPanel>
 				</dxco:WizardPage>
 				<dxco:WizardPage ShowNext="True" ShowBack="False" ShowCancel="False" ShowFinish="False" x:Name="CleanUpPage">
 					<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -286,7 +169,7 @@
 						<TextBlock Margin="0,20,0,0" FontSize="25" TextWrapping="WrapWithOverflow" Text="Press Next To Continue"/>
 					</StackPanel>
 				</dxco:WizardPage>
-				<dxco:WizardPage x:Name="AssayConcludedPage" ShowBack="False" ShowCancel="False">
+				<dxco:WizardPage x:Name="AssayConcludedPage" ShowBack="False" ShowNext="False" ShowCancel="False">
 					<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 						<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Concluded"/>
 						<TextBlock TextWrapping="WrapWithOverflow" Text="{DXBinding '`Test results written to ` + ResultsFilePath'}"/>

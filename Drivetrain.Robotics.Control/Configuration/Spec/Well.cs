@@ -5,7 +5,7 @@ namespace Drivetrain.Robotics.Control
 {
 	public class Well : Spec
 	{
-		public Well(Plate plate, int x, int y, Coordinate location) : base($"Well {plate.Index.X}.{plate.Index.Y}.{x}.{y}")
+		public Well(Plate plate, int x, int y, Coordinate location) : base($"Well {plate.Location.X}.{plate.Location.Y}.{x}.{y}")
 		{
 			Y = y;
 			X = x;
@@ -24,16 +24,16 @@ namespace Drivetrain.Robotics.Control
 				0 => "H",
 				_ => y.ToString()
 			};
-			var plateRow = plate.Index.Y switch
+			var plateRow = plate.Location.Y switch
 			{
 				3 => "A",
 				2 => "B",
 				1 => "C",
 				0 => "D",
-				_ => plate.Index.Y.ToString()
+				_ => plate.Location.Y.ToString()
 			};
 
-			Label = $"Well {row}{x + 1}, {plate.Label}";
+			Label = $"{plate.Label}:{row}{x + 1}";
 		}
 		public override string ToString()
 		{

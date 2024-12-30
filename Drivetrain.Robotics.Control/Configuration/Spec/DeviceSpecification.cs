@@ -5,7 +5,7 @@ namespace Drivetrain.Robotics.Control
 {
 	public class DeviceSpecification : Spec
 	{
-		public DeviceSpecification() : base("Effani Device")
+		public DeviceSpecification() : base("ADAM")
 		{
 		}
 		public string DeviceName { get; set; }

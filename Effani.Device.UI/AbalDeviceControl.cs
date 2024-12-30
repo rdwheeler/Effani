@@ -110,8 +110,8 @@ namespace Drivetrain.Robotics.Control
 
 			var distance = CalcFluidAspirateTravelMmForMl(microLiters);
 			MoveRelative(Axis.AspirateFluid, distance, Configuration.AspirateSyringeSpeed);
-			Pause(5000);
-			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 10);
+			Pause(1000);
+			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 100);
 		}
 
 		private float CalcFluidTravelMmForMl(int microLiters)
@@ -134,37 +134,43 @@ namespace Drivetrain.Robotics.Control
 		}
 		private void DoStir(AxisSpec axis)
 		{
-			MoveRelative(Axis.TableY, Configuration.WellWidth * -0.8f, 100); // move near well edge
-			MoveRelative(axis.Axis, Configuration.WellDepth * 0.8f, 100);
-			//         int count = 0;
-			//while(count <= 5)
-			//{
-			//	//arc to right edge
-			//	var rightMultiAxis = new List<MoveSpec>();
-			//	rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
-			//	rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
-			//	rightMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.9f)));
-			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
-			//	//arc to bottom edge
-			//	var bottomMultiAxis = new List<MoveSpec>();
-			//	bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
-			//	bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
-			//	bottomMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.9f)));
-			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
-			//	//arc to left edge
-			//	var leftMultiAxis = new List<MoveSpec>();
-			//	leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f)));
-			//	leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f)));
-			//	leftMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.2f)));
-			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
-			//	//arc to top edge
-			//	var topMultiAxis = new List<MoveSpec>();
-			//	topMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], (Configuration.WellWidth * 0.9f) * -1));
-			//	topMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], (Configuration.WellWidth * 0.9f) * -1));
-			//	topMultiAxis.Add(new MoveSpec(axis, (Configuration.WellDepth * 0.9f)));
-			//	MoveClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
-			//	count++;
-			//}
+			var repetitions = 3;
+			var descentFactor = (Configuration.WellDepth * 0.9f)  / (repetitions * 4);
+			var proximityFactor = (Configuration.WellWidth / 2) * 0.9f;
+			MoveRelative(Axis.TableY, proximityFactor, Configuration.AspirateStirSpeed); // move near well edge
+			while(repetitions > 0)
+			{
+				//arc to right edge and down
+				var rightMultiAxis = new List<MoveSpec>();
+				rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], proximityFactor));
+				rightMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], proximityFactor * -1));
+				rightMultiAxis.Add(new MoveSpec(axis, descentFactor));
+				MoveRelativeClockwiseArc(rightMultiAxis, Configuration.AspirateStirSpeed);
+				//arc to bottom edge and down
+				var bottomMultiAxis = new List<MoveSpec>();
+				bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], proximityFactor * -1));
+				bottomMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], proximityFactor * -1));
+				bottomMultiAxis.Add(new MoveSpec(axis, descentFactor));
+				MoveRelativeClockwiseArc(bottomMultiAxis, Configuration.AspirateStirSpeed);
+				//arc to left edge and down
+				var leftMultiAxis = new List<MoveSpec>();
+				leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], proximityFactor * -1));
+				leftMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], proximityFactor));
+				leftMultiAxis.Add(new MoveSpec(axis, descentFactor));
+				MoveRelativeClockwiseArc(leftMultiAxis, Configuration.AspirateStirSpeed);
+				//arc to top edge and down
+				var topMultiAxis = new List<MoveSpec>();
+				topMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], proximityFactor));
+				topMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], proximityFactor));
+				topMultiAxis.Add(new MoveSpec(axis, descentFactor));
+				MoveRelativeClockwiseArc(topMultiAxis, Configuration.AspirateStirSpeed);
+				repetitions--;
+			}
+			//arc back
+			var backMultiAxis = new List<MoveSpec>();
+			backMultiAxis.Add(new MoveSpec(Axes[Axis.TableX], proximityFactor * -1));
+			backMultiAxis.Add(new MoveSpec(Axes[Axis.TableY], proximityFactor * -1));
+			MoveRelativeCounterClockwiseArc(backMultiAxis, Configuration.AspirateStirSpeed);
 		}
 
 		public Dictionary<Axis, AxisSpec> Axes { get; private set; }

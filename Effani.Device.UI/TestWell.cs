@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows;
 using static Drivetrain.Robotics.Control.AbalDeviceControl;
 
 namespace Effani.Device.UI
@@ -14,23 +15,66 @@ namespace Effani.Device.UI
 	{
 		#region Constructors
 		public TestWell(DeviceConfiguration deviceConfiguration, Well well, int testIndex, EventHandler<DataArgs<int>> basalIncubationTimerCallback, EventHandler<DataArgs<int>> nadhReadingsTimerCallback, EventHandler<DataArgs<int>> kohDwellTimerCallback, EventHandler<DataArgs<int>> dnaIncubationTimerCallback)
-        {
-            _basalIncubationTimerCallback = basalIncubationTimerCallback;
-            _dnaIncubationTimerCallback = dnaIncubationTimerCallback;
+		{
+			_basalIncubationTimerCallback = basalIncubationTimerCallback;
+			_dnaIncubationTimerCallback = dnaIncubationTimerCallback;
 			_kohDwellDnaTimerCallback = kohDwellTimerCallback;
 			_nadhReadingsTimerCallback = nadhReadingsTimerCallback;
+			_timerDescriptionUpdateInterval = deviceConfiguration.TimerDescriptionUpdateInterval;
 			TestIndex = testIndex;
 			Well = well;
-            BasalIncubationTimer = new Timer(TimeSpan.FromMilliseconds(deviceConfiguration.NadhReadingsTimerPeriod)) { AutoReset = false };
-            NadhReadings2Timer = new Timer(TimeSpan.FromMilliseconds(deviceConfiguration.NadhReadingsTimerPeriod)) { AutoReset = false };
-			NadhReadings3Timer = new Timer(TimeSpan.FromMilliseconds(deviceConfiguration.NadhReadingsTimerPeriod * 2)) { AutoReset = false };
-			NadhReadings4Timer = new Timer(TimeSpan.FromMilliseconds(deviceConfiguration.NadhReadingsTimerPeriod * 3)) { AutoReset = false };
-			NadhReadings5Timer = new Timer(TimeSpan.FromMilliseconds(deviceConfiguration.NadhReadingsTimerPeriod * 4)) { AutoReset = false };
-			KohDwellTimer = new Timer(TimeSpan.FromMilliseconds(deviceConfiguration.KohTimerPeriod)) { AutoReset = false };
-			DnaIncubationTimer = new Timer(TimeSpan.FromMilliseconds(deviceConfiguration.DnaTimerPeriod)) { AutoReset = false };
 
-            BasalIncubationTimer.Elapsed += BasalIncubationTimer_Elapsed;
-            NadhReadings2Timer.Elapsed += NadhReadings2Timer_Elapsed;
+			BasalIncubationCount = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings2Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings3Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings4Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings5Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			KohDwellCount = deviceConfiguration.KohTimerPeriod / _timerDescriptionUpdateInterval;
+			DnaIncubationCount = deviceConfiguration.DnaTimerPeriod / _timerDescriptionUpdateInterval;
+		}
+		#endregion
+
+		#region Public methods
+		public void Dispose()
+		{
+			if (BasalIncubationTimer is not null)
+				BasalIncubationTimer.Elapsed -= BasalIncubationTimer_Elapsed;
+			if (NadhReadings2Timer is not null)
+				NadhReadings2Timer.Elapsed -= NadhReadings2Timer_Elapsed;
+			if (NadhReadings3Timer is not null)
+				NadhReadings3Timer.Elapsed -= NadhReadings3Timer_Elapsed;
+			if (NadhReadings4Timer is not null)
+				NadhReadings4Timer.Elapsed -= NadhReadings4Timer_Elapsed;
+			if (NadhReadings5Timer is not null)
+				NadhReadings5Timer.Elapsed -= NadhReadings5Timer_Elapsed;
+			if (KohDwellTimer is not null)
+				KohDwellTimer.Elapsed -= KohDwellTimer_Elapsed;
+			if (DnaIncubationTimer is not null)
+				DnaIncubationTimer.Elapsed -= DnaIncubationTimer_Elapsed;
+
+			BasalIncubationTimer = DisposeTimer(BasalIncubationTimer);
+			NadhReadings2Timer = DisposeTimer(NadhReadings2Timer);
+			NadhReadings3Timer = DisposeTimer(NadhReadings3Timer);
+			NadhReadings4Timer = DisposeTimer(NadhReadings4Timer);
+			NadhReadings5Timer = DisposeTimer(NadhReadings5Timer);
+			KohDwellTimer = DisposeTimer(KohDwellTimer);
+			KohDwellTimer = DisposeTimer(KohDwellTimer);
+			DnaIncubationTimer = DisposeTimer(DnaIncubationTimer);
+		}
+		public void InitializeTimers()
+		{
+			BasalIncubationTimer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
+			NadhReadings2Timer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
+			NadhReadings3Timer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
+			NadhReadings4Timer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
+			NadhReadings5Timer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
+			KohDwellTimer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
+			DnaIncubationTimer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
+
+			SetCurrentTimerDescription(BasalIncubationCount);
+
+			BasalIncubationTimer.Elapsed += BasalIncubationTimer_Elapsed;
+			NadhReadings2Timer.Elapsed += NadhReadings2Timer_Elapsed;
 			NadhReadings3Timer.Elapsed += NadhReadings3Timer_Elapsed;
 			NadhReadings4Timer.Elapsed += NadhReadings4Timer_Elapsed;
 			NadhReadings5Timer.Elapsed += NadhReadings5Timer_Elapsed;
@@ -39,59 +83,181 @@ namespace Effani.Device.UI
 		}
 		#endregion
 
-		#region Public methods
-		public void Dispose()
-		{
-			NadhReadings2Timer.Stop();
-			NadhReadings3Timer.Stop();
-			NadhReadings4Timer.Stop();
-			NadhReadings5Timer.Stop();
-			KohDwellTimer.Stop();
-			DnaIncubationTimer.Stop();
-
-            BasalIncubationTimer.Elapsed -= BasalIncubationTimer_Elapsed;
-            NadhReadings2Timer.Elapsed -= NadhReadings2Timer_Elapsed;
-			NadhReadings3Timer.Elapsed -= NadhReadings3Timer_Elapsed;
-			NadhReadings4Timer.Elapsed -= NadhReadings4Timer_Elapsed;
-			NadhReadings5Timer.Elapsed -= NadhReadings5Timer_Elapsed;
-			KohDwellTimer.Elapsed -= KohDwellTimer_Elapsed;
-			DnaIncubationTimer.Elapsed -= DnaIncubationTimer_Elapsed;
-		}
-		#endregion
-
 		#region Private methods
-        private void BasalIncubationTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Task.Run(() => _basalIncubationTimerCallback.Invoke(this, new DataArgs<int>(1)));
-        }
-        private void NadhReadings2Timer_Elapsed(object sender, ElapsedEventArgs e)
+		private void SetCurrentTimerDescription(int count, string prefix = null)
 		{
-			Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(2)));
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				var timeString = count == 0 ? null : TimeSpan.FromMilliseconds(count * _timerDescriptionUpdateInterval).ToString("c");
+				CurrentTimerDescription = $"{prefix}{timeString}";
+			});
+		}
+		private Timer DisposeTimer(Timer timer)
+		{
+			if (timer is not null)
+			{
+				timer.Stop();
+				timer.Dispose();
+			}
+
+			return null;
+		}
+
+		private void BasalIncubationTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+			if(BasalIncubationTimer is null)
+				return;
+
+			BasalIncubationCount--;
+			if (BasalIncubationCount <= 0)
+			{
+				SetCurrentTimerDescription(0, "1@waiting");
+				BasalIncubationTimer.Elapsed -= BasalIncubationTimer_Elapsed;
+				BasalIncubationTimer = DisposeTimer(BasalIncubationTimer);
+				Task.Run(() => _basalIncubationTimerCallback.Invoke(this, new DataArgs<int>(1)));
+			}
+			else
+			{
+				SetCurrentTimerDescription(BasalIncubationCount);
+				BasalIncubationTimer.Start();
+			}
+		}
+		private void NadhReadings2Timer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			if (NadhReadings2Timer is null)
+				return;
+
+			NadhReadings2Count--;
+			if (NadhReadings2Count <= 0)
+			{
+				SetCurrentTimerDescription(0, "3@waiting");
+				NadhReadings2Timer.Elapsed -= NadhReadings2Timer_Elapsed;
+				NadhReadings2Timer = DisposeTimer(NadhReadings2Timer);
+				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(2)));
+			}
+			else
+			{
+				SetCurrentTimerDescription(NadhReadings2Count, "2@");
+				NadhReadings2Timer.Start();
+			}
 		}
 		private void NadhReadings3Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(3)));
+			if (NadhReadings3Timer is null)
+				return;
+
+			NadhReadings3Count--;
+			if (NadhReadings3Count <= 0)
+			{
+				SetCurrentTimerDescription(0, "4@waiting");
+				NadhReadings3Timer.Elapsed -= NadhReadings3Timer_Elapsed;
+				NadhReadings3Timer = DisposeTimer(NadhReadings3Timer);
+				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(3)));
+			}
+			else
+			{
+				SetCurrentTimerDescription(NadhReadings3Count, "3@");
+				NadhReadings3Timer.Start();
+			}
 		}
 		private void NadhReadings4Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(4)));
+			if (NadhReadings4Timer is null)
+				return;
+
+			NadhReadings4Count--;
+			if (NadhReadings4Count <= 0)
+			{
+				SetCurrentTimerDescription(0, "5@waiting");
+				NadhReadings4Timer.Elapsed -= NadhReadings4Timer_Elapsed;
+				NadhReadings4Timer = DisposeTimer(NadhReadings4Timer);
+				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(4)));
+			}
+			else
+			{
+				SetCurrentTimerDescription(NadhReadings4Count, "4@");
+				NadhReadings4Timer.Start();
+			}
 		}
 		private void NadhReadings5Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(5)));
+			if (NadhReadings5Timer is null)
+				return;
+
+			NadhReadings5Count--;
+			if (NadhReadings5Count <= 0)
+			{
+				SetCurrentTimerDescription(0, "waiting");
+				NadhReadings5Timer.Elapsed -= NadhReadings5Timer_Elapsed;
+				NadhReadings5Timer = DisposeTimer(NadhReadings5Timer);
+				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(5)));
+			}
+			else
+			{
+				SetCurrentTimerDescription(NadhReadings5Count, "5@");
+				NadhReadings5Timer.Start();
+			}
 		}
 		private void KohDwellTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _kohDwellDnaTimerCallback.Invoke(this, new DataArgs<int>(6)));
-        }
+			if (KohDwellTimer is null)
+				return;
+
+			KohDwellCount--;
+			if (KohDwellCount <= 0)
+			{
+				SetCurrentTimerDescription(0, "waiting");
+				KohDwellTimer.Elapsed -= KohDwellTimer_Elapsed;
+				KohDwellTimer = DisposeTimer(KohDwellTimer);
+				Task.Run(() => _kohDwellDnaTimerCallback.Invoke(this, new DataArgs<int>(6)));
+			}
+			else
+			{
+				SetCurrentTimerDescription(KohDwellCount);
+				KohDwellTimer.Start();
+			}
+		}
 		private void DnaIncubationTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Run(() => _dnaIncubationTimerCallback.Invoke(this, new DataArgs<int>(7)));
+			if (DnaIncubationTimer is null)
+				return;
+
+			DnaIncubationCount--;
+			if (DnaIncubationCount <= 0)
+			{
+				SetCurrentTimerDescription(0);
+				DnaIncubationTimer.Elapsed -= DnaIncubationTimer_Elapsed;
+				DnaIncubationTimer = DisposeTimer(DnaIncubationTimer);
+				Task.Run(() => _dnaIncubationTimerCallback.Invoke(this, new DataArgs<int>(7)));
+			}
+			else
+			{
+				SetCurrentTimerDescription(DnaIncubationCount);
+				DnaIncubationTimer.Start();
+			}
 		}
 		#endregion
 
 		#region Properties
-        public bool Canceled
+		#region CurrentTimerDescription
+		public string CurrentTimerDescription
+		{
+			get
+			{
+				return _currentTimerDescription;
+			}
+			set
+			{
+				if (_currentTimerDescription == value)
+					return;
+				_currentTimerDescription = value;
+				RaisePropertyChanged(nameof(CurrentTimerDescription));
+			}
+		}
+		string _currentTimerDescription;
+		#endregion
+		#region Canceled
+		public bool Canceled
 		{
 			get
 			{
@@ -105,24 +271,9 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(Canceled));
 			}
 		}
-		public Timer DnaIncubationTimer { get; set; }
-		public float DnaValue { get; set; }
-		public Timer KohDwellTimer { get; set; }
-		public string Label => Well.Label;
-		public bool LoadedOntoTray
-		{
-			get
-			{
-				return _loaded;
-			}
-			set
-			{
-				if (_loaded == value)
-					return;
-				_loaded = value;
-				RaisePropertyChanged(nameof(LoadedOntoTray));
-			}
-		}
+		bool _canceled = false;
+		#endregion
+		#region SampleId
 		public string SampleId
 		{
 			get
@@ -137,25 +288,36 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(SampleId));
 			}
         }
-        public Timer BasalIncubationTimer { get; set; }
-        public Timer NadhReadings2Timer { get; set; }
+		string _sampleId;
+		#endregion
+		public float DnaValue { get; set; }
+		public string Label => Well.Label;
+		public Timer BasalIncubationTimer { get; set; }
+		public Timer NadhReadings2Timer { get; set; }
 		public Timer NadhReadings3Timer { get; set; }
 		public Timer NadhReadings4Timer { get; set; }
 		public Timer NadhReadings5Timer { get; set; }
+		public Timer KohDwellTimer { get; set; }
+		public Timer DnaIncubationTimer { get; set; }
 		public Well Well { get; private set; }
 		public int TestIndex { get; }
+		public Dictionary<int, float> TimeValues = new();
 		#endregion
 
 		#region Fields
-		bool _canceled = false;
         readonly EventHandler<DataArgs<int>> _basalIncubationTimerCallback;
         readonly EventHandler<DataArgs<int>> _dnaIncubationTimerCallback;
 		readonly EventHandler<DataArgs<int>> _kohDwellDnaTimerCallback;
-		bool _loaded = false;
-		string _sampleId;
 		readonly EventHandler<DataArgs<int>> _nadhReadingsTimerCallback;
-		public Dictionary<int, float> TimeValues = new();
-
+		private int BasalIncubationCount;
+		private int NadhReadings1Count;
+		private int NadhReadings2Count;
+		private int NadhReadings3Count;
+		private int NadhReadings4Count;
+		private int NadhReadings5Count;
+		private int KohDwellCount;
+		private int DnaIncubationCount;
+		int _timerDescriptionUpdateInterval;
 		#endregion
 	}
 }

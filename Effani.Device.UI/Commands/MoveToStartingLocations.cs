@@ -8,14 +8,10 @@ namespace Drivetrain.Robotics.Process
 		protected override void Run()
 		{
 			var device = Device as AbalDeviceControl;
-			foreach (var fluidLine in device.FluidAxes)
+			foreach (var axis in device.Axes.Values)
 			{
-				Device.MoveToStarting(fluidLine);
+				Device.MoveToStarting(axis);
 			}
-			Device.MoveToStarting(device.Axes[Axis.AspirateFluid]);
-			Device.MoveToStarting(device.Axes[Axis.AspirateKoh]);
-            Device.MoveToStarting(device.Axes[Axis.AspirateFluidZ]);
-            Device.MoveToStarting(device.Axes[Axis.AspirateKohZ]);
 		}
 
 		public override string Description => $"Move all axes to starting locations.";

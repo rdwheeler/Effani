@@ -11,6 +11,6 @@ namespace Drivetrain.Robotics.Process
 			(Device as AbalDeviceControl).TableGoTo(Device.Configuration.TrayLoadingLocation);
 		}
 
-		public override string Description => $"Moved table to tray loading location.";
+		public override string Description => $"Move table to tray loading location.";
 	}
 }

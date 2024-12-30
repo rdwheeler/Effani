@@ -10,7 +10,7 @@ namespace Drivetrain.Robotics.Control
 		{
 			Maximum = maximum;
 			StepsPerMillimeter = 3200;
-			MaxSpeed = 300;
+			MaxSpeed = 500;
 			Driver = new DriverSpec(Label)
 			{
 				Current = 1700,
@@ -20,7 +20,7 @@ namespace Drivetrain.Robotics.Control
                     SensorPort = $"{(board > 0 ? board + "." : null)}io{port}.in",
                     Signal = PinSignal.Low,
 					Location = endstopLocation,
-					FirstHomingSpeed = 1800
+					FirstHomingSpeed = 500
 				}
 			};
 		}

@@ -10,10 +10,13 @@ namespace Drivetrain.Robotics.Process
 		{
 			_location = location;
 			_well = well;
-			Coordinate = _well.Location;
+
+			var x = location.X - well.Location.X;
+			var y = location.Y - well.Location.Y;
+			Coordinate = new Coordinate(x, y);
 		}
 
-		public override string Description => $"Aligned {_well.Label} with {_location.X}.{_location.Y}";
+		public override string Description => $"Align {_well.Label} with {_location.X},{_location.Y}";
 
 		private readonly Coordinate _location;
 		private readonly Well _well;

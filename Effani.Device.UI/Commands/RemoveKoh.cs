@@ -11,7 +11,7 @@ namespace Drivetrain.Robotics.Process
 			(Device as AbalDeviceControl).RemoveKoh(MicroLiters);
 		}
 
-		public override string Description => $"Remove {MicroLiters}μl of KOH.";
+		public override string Description => $"Remove {MicroLiters}μl of fluid.";
 
 		public int MicroLiters { get; } = microLiters;
 	}

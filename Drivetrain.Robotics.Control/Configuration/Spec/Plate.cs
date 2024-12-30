@@ -7,7 +7,7 @@ namespace Drivetrain.Robotics.Control
 	{
 		public Plate(Coordinate index) : base($"Plate {index.X}.{index.Y}")
 		{
-			Index = index;
+			Location = index;
 			var plateRow = index.Y switch
 			{
 				1 => "A",
@@ -15,10 +15,10 @@ namespace Drivetrain.Robotics.Control
 				_ => index.Y.ToString()
 			};
 
-			Label = $"Plate {plateRow}{index.X + 1}";
+			Label = $"{plateRow}{index.X + 1}";
 		}
 
-		public Coordinate Index { get; } // from left to right and top to bottom, this plate's position
+		public Coordinate Location { get; } // from left to right and bottom to top, this plate's position
 
 		public List<Well> Wells { get; } = new();
 	}

@@ -70,7 +70,11 @@ namespace Effani.Device.UI
 		}
 		private void Wizard_Cancel(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			e.Cancel = (DXMessageBox.Show("Are you sure you want to cancel this test?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No);
+			e.Cancel = (DXMessageBox.Show("Are you sure you want to cancel this assay?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No);
+			if(e.Cancel)
+			{
+				(DataContext as MainViewModel).CancelAssay();
+			}
 		}
 	}
 }

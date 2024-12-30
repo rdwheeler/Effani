@@ -44,15 +44,15 @@ namespace Drivetrain.Robotics.Control
 		#region Public methods
 		public void AccOff(int accDesignation)
 		{
-			Write($"M42 P{accDesignation} S0");
+			WriteWhenReady($"M42 P{accDesignation} S0");
 		}
 		public void AccOn(int accDesignation)
 		{
-			Write($"M42 P{accDesignation} S1");
+			WriteWhenReady($"M42 P{accDesignation} S1");
 		}
 		public void ApplyConfig()
 		{
-			Write($"M98 P\"config.g\"");
+			WriteWhenReady($"M98 P\"config.g\"");
 		}
 		public void Dispose()
 		{
@@ -65,32 +65,32 @@ namespace Drivetrain.Robotics.Control
 		}
 		public void GetBoardDiagnostics(int boardId)
 		{
-			Write($"M122 B{boardId}");
+			WriteWhenReady($"M122 B{boardId}");
 		}
 		public void SendCommand(string command)
 		{
-			Write(command);
+			WriteNow(command);
 		}
 		public void Home(AxisSpec axisSpec)
 		{
-			Write($"G28 {axisSpec.Designation}");
+			WriteWhenReady($"G28 {axisSpec.Designation}");
 		}
 		public void HomeAll()
 		{
-			Write($"G28");
+			WriteWhenReady($"G28");
 		}
 		public void Move(List<MoveSpec> moveSpecs, float speed)
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
-			Write("G90");
-			Write($"G0 {moveCode} F{speed}");
+			WriteWhenReady("G90");
+			WriteWhenReady($"G0 {moveCode} F{speed}");
 		}
 		public void MoveAbsolute(List<MoveSpec> moveSpecs, float speed)
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
-			Write("G90");
+			WriteWhenReady("G90");
 			var formula = $"G0 {moveCode} F{speed}";
-			Write(formula);
+			WriteWhenReady(formula);
 		}
 		public void MoveAbsolute(AxisSpec axisSpec, float location, float? speed = null)
 		{
@@ -99,21 +99,28 @@ namespace Drivetrain.Robotics.Control
 
 			if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
-			Write("G90");
-			Write($"G0 {axisSpec.Designation}{location} F{speed}");
+			WriteWhenReady("G90");
+			WriteWhenReady($"G0 {axisSpec.Designation}{location} F{speed}");
 		}
 		public void MoveToStarting(AxisSpec axisSpec)
 		{
 			var speed = axisSpec.MaxSpeed;
-			Write("G90");
-			Write($"G0 {axisSpec.Designation}{axisSpec.StartingPosition} F{speed}");
+			WriteWhenReady("G90");
+			WriteWhenReady($"G0 {axisSpec.Designation}{axisSpec.StartingPosition} F{speed}");
 		}
-		public void MoveClockwiseArc(List<MoveSpec> moveSpecs, float speed)
+		public void MoveRelativeClockwiseArc(List<MoveSpec> moveSpecs, float speed)
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
-			Write("G91");
+			WriteWhenReady("G91");
 			var formula = $"G2 {moveCode} R4.5 F{speed}";
-			Write(formula);
+			WriteWhenReady(formula);
+		}
+		public void MoveRelativeCounterClockwiseArc(List<MoveSpec> moveSpecs, float speed)
+		{
+			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
+			WriteWhenReady("G91");
+			var formula = $"G3 {moveCode} R4.5 F{speed}";
+			WriteWhenReady(formula);
 		}
 		public void MovePercent(AxisSpec axisSpec, float percent, float? speed = null)
 		{
@@ -125,39 +132,39 @@ namespace Drivetrain.Robotics.Control
 			if (location > axisSpec.Maximum)
 				location = axisSpec.Maximum;
 
-			Write("G90");
-			Write($"G0 {axisSpec.Designation}{location} F{speed}");
+			WriteWhenReady("G90");
+			WriteWhenReady($"G0 {axisSpec.Designation}{location} F{speed}");
 		}
 		public void MoveRelative(AxisSpec axisSpec, float distance, float? speed = null)
 		{
 			if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
 
-			Write("G91");
-			Write($"G0 {axisSpec.Designation}{distance} F{speed}");
+			WriteWhenReady("G91");
+			WriteWhenReady($"G0 {axisSpec.Designation}{distance} F{speed}");
 		}
 		public void Pause(int miliseconds)
 		{
-			Write($"G4 P{miliseconds}");
+			WriteWhenReady($"G4 P{miliseconds}");
 		}
 		public string ReadSensor(int sensorDesignation, int pause)
 		{
 			if(pause > 0)
 				Pause(pause);
-			var response = Write($"M308 S{sensorDesignation}", STR_sensorKey);
+			var response = WriteWhenReady($"M308 S{sensorDesignation}", STR_sensorKey);
 			var first = response.Split("reading ")[1];
 			var last = first.Split(",")[0];
 			return last;
 		}
 		public void SetTrayTemperature(float temperature)
 		{
-			Write($"M140 S{temperature}");
+			WriteWhenReady($"M140 S{temperature}");
 		}
 		public void SetWifi(string ssid, string password)
 		{
-			Write($"M552 S0");
-			Write($"M587 S\"{ssid}\" P\"{password}\"");
-			Write($"M552 S1");
+			WriteWhenReady($"M552 S0");
+			WriteWhenReady($"M587 S\"{ssid}\" P\"{password}\"");
+			WriteWhenReady($"M552 S1");
 		}
 		#endregion
 
@@ -204,46 +211,61 @@ namespace Drivetrain.Robotics.Control
 		}
 		private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
-			string message = _serialPort.ReadExisting();
-			message = message.Trim('\r', '\n');
-			if (!String.IsNullOrEmpty(message))
+			string data = _serialPort.ReadExisting();
+			if(String.IsNullOrEmpty(data))
+				return;
+
+			data = data.Trim('\r', '\n');
+			var messages = data.Split("\n");
+			foreach(var message in messages)
 			{
-				if (_saveResponses)
-					_responses.Enqueue(message);
-				else if (message != "ok")
-					ReadData.Enqueue(message);
+				if(!String.IsNullOrEmpty(message))
+				{
+					if(message == STR_ready)
+						_readyFound = true;
+					else if(_saveResponses && message != "ok")
+						_responses.Enqueue(message);
+					else if(message != "ok")
+						ReadData.Enqueue(message);
+				}
 			}
 		}
-		private void WaitForResponse()
+		private void WaitForReady()
 		{
-			while (!_responses.TryDequeue(out var response))
+			_serialPort.WriteLine($"M400");
+			_readyFound = false;
+			_serialPort.WriteLine($"echo \"{STR_ready}\"");
+			while (!_readyFound)
 			{
-				var a = response;
 				Task.Delay(50).Wait();
 			}
-			_responses.Clear();
 		}
-		private string? Write(string data, string responseKey = null)
+		private void WriteNow(string data, string responseKey = null)
+		{
+			if (!_serialPort.IsOpen)
+				_serialPort.Open();
+
+			_serialPort.WriteLine($"{data}");
+		}
+		private string? WriteWhenReady(string data, string responseKey = null)
 		{
 			try
 			{
 				if (!_serialPort.IsOpen)
 					_serialPort.Open();
 
-				_responses.Clear();
-				_saveResponses = true;
-				_serialPort.WriteLine($"M400");
-				WaitForResponse();
 				if (responseKey == null)
 				{
-					_saveResponses = false;
 					_serialPort.WriteLine($"{data}");
+					WaitForReady();
 					return null;
 				}
 				else
 				{
+					_saveResponses = true;
 					_serialPort.WriteLine($"{data}");
 					var ret = GetResponse(responseKey);
+					WaitForReady();
 					return ret;
 				}
 			}
@@ -270,6 +292,8 @@ namespace Drivetrain.Robotics.Control
 		public bool _saveResponses;
 
 		private const string STR_sensorKey = "Sensor";
+		private const string STR_ready = "ready";
+		private bool _readyFound;
 		#endregion
 	}
 }

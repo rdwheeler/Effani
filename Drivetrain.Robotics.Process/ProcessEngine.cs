@@ -27,6 +27,10 @@ namespace Drivetrain.Robotics.Process
 		{
 			QueueJob(new Job(null, [command]));
 		}
+		public void QueuePriorityCommand(Command command)
+		{
+			QueuePriorityJob(new Job(null, [command]));
+		}
 		public void QueueJob(Job job)
 		{
 			JobQueue.Enqueue(job);
@@ -49,10 +53,13 @@ namespace Drivetrain.Robotics.Process
 
 			foreach (var command in job.Commands)
 			{
-				EnqueueMessage(command.Description);
+				var descriptionPrefix = job.Description is null ? String.Empty : "     ";
+				EnqueueMessage($"{descriptionPrefix}{command.Description}");
+				BeginExecutingCommand?.Invoke(this, new DataArgs<Command>(command));
 				command.Execute();
+				EndExecutingCommand?.Invoke(this, new DataArgs<Command>(command));
 				if (command is ReadSensor)
-					EnqueueMessage($"Result of {command.Description}: {command.Result}");
+					EnqueueMessage($"{descriptionPrefix}Result of {command.Description}: {command.Result}");
 			}
 
 			if (job.Description is not null)
@@ -111,6 +118,8 @@ namespace Drivetrain.Robotics.Process
 		#region Events
 		public event EventHandler<DataArgs<KeyValuePair<string, string>>>? DataReceived;
 		public event EventHandler<DataArgs<string>>? MessageReceived;
+		public event EventHandler<DataArgs<Command>>? BeginExecutingCommand;
+		public event EventHandler<DataArgs<Command>>? EndExecutingCommand;
 		#endregion
 
 		#region Fields
