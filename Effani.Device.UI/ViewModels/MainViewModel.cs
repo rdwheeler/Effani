@@ -44,6 +44,7 @@ namespace Effani.Device.UI
 		#region Public methods
 		public void Dispose()
 		{
+			_device.DataReceived -= Device_DataRecieved;
 			_processEngine.MessageReceived -= ProcessEngine_MessageReceived;
 			_processEngine.BeginExecutingCommand -= ProcessEngine_BeginExecutingCommand;
 			_processEngine.EndExecutingCommand -= ProcessEngine_EndExecutingCommand;
@@ -60,7 +61,7 @@ namespace Effani.Device.UI
 			SamplesInDna.Clear();
 			NumberOfTests = SamplesComplete.Count();
 			UnloadedTestsCount = 0;
-			AddConsoleMessage("Assay complete");
+			AddMessage("Assay canceled", true);
 			AssayComplete = true;
 		}
 		public void PageStartFirstPage()
@@ -107,7 +108,7 @@ namespace Effani.Device.UI
 		}
 		public void PageStartAssayConcluded()
 		{
-			AddConsoleMessage("Assay concluded");
+			AddMessage("Assay concluded", true);
 		}
 		public void PageStartCleanUp()
 		{
@@ -133,15 +134,22 @@ namespace Effani.Device.UI
 		#endregion
 
 		#region Private methods
-		private void AddConsoleMessage(string message)
+		private void AddMessage(string message, bool addToProcessMessages)
 		{
 			Application.Current.Dispatcher
 				.Invoke(
 					() =>
 					{
+						var now = DateTime.Now.ToString("H:mm:ss");
 						while (ConsoleMessages.Count >= 10000)
 							ConsoleMessages.RemoveAt(9999);
-						ConsoleMessages.Insert(0, $"{DateTime.Now.ToString("H:mm:ss")} {message}");
+						ConsoleMessages.Insert(0, $"{now} {message}");
+						if (addToProcessMessages)
+						{
+							while (ProcessMessages.Count >= 10000)
+								ProcessMessages.RemoveAt(9999);
+							ProcessMessages.Insert(0, $"{now} {message}");
+						}
 					});
 		}
 		private void NotifyMoveStartingPositionsComplete()
@@ -188,7 +196,7 @@ namespace Effani.Device.UI
 						}
 						if (SamplesComplete.Count() == NumberOfTests)
 						{
-							AddConsoleMessage("Assay complete");
+							AddMessage("Assay complete", true);
 							AssayComplete = true;
 						}
 					});
@@ -225,7 +233,7 @@ namespace Effani.Device.UI
 		}
 		private void Device_DataRecieved(object sender, DataArgs<string> e)
 		{
-			AddConsoleMessage($"{e.Data}");
+			AddMessage($"{e.Data}", false);
 		}
 		private void PrepareNextSampleForLoading()
 		{
@@ -239,7 +247,7 @@ namespace Effani.Device.UI
 		}
 		private void ProcessEngine_MessageReceived(object sender, DataArgs<string> e)
 		{
-			AddConsoleMessage($"{e.Data}");
+			AddMessage($"{e.Data}", true);
 			Log.Information(e.Data);
 		}
 
@@ -256,7 +264,7 @@ namespace Effani.Device.UI
 		{
 			foreach (var message in e.NewItems.OfType<string>())
 			{
-				AddConsoleMessage(message);
+				AddMessage(message, true);
 			}
 		}
 		private void NotifyPreparedToLoadSample()
@@ -355,6 +363,7 @@ namespace Effani.Device.UI
 		}
 		public ObservableCollection<AxisSpec> Axes { get; set; }
 		public ObservableCollection<string> ConsoleMessages { get; set; } = new();
+		public ObservableCollection<string> ProcessMessages { get; set; } = new();
 		public TestWell CurrentLoadingSample
 		{
 			get
@@ -606,7 +615,7 @@ namespace Effani.Device.UI
         {
             _processEngine.HoldQueueForHighPriorityJob = false;
 
-            AddConsoleMessage($"Skipping sample in {CurrentLoadingSample.Well.Label}");
+            AddMessage($"Skipping sample in {CurrentLoadingSample.Well.Label}", true);
 			CurrentLoadingSample.Canceled = true;
 			SamplesComplete.Add(CurrentLoadingSample);
 			PrepareNextSampleForLoading();
@@ -618,8 +627,8 @@ namespace Effani.Device.UI
 
 			if(CurrentLoadingSample is not null)
 			{
-				AddConsoleMessage(
-					$"Skipping samples after number {CurrentLoadingSample.TestIndex}, {CurrentLoadingSample.SampleId}, {CurrentLoadingSample.Label}");
+				AddMessage(
+					$"Skipping samples after number {CurrentLoadingSample.TestIndex}, {CurrentLoadingSample.SampleId}, {CurrentLoadingSample.Label}", true);
 				var currentIndex = Assay.AllTestWells.IndexOf(CurrentLoadingSample);
 				foreach(var test in Assay.AllTestWells.Skip(currentIndex))
 					test.Canceled = true;
@@ -631,7 +640,7 @@ namespace Effani.Device.UI
 			UnloadedTestsCount = 0;
 			if (SamplesComplete.Count() == NumberOfTests)
 			{
-				AddConsoleMessage("Assay complete");
+				AddMessage("Assay complete", true);
 				AssayComplete = true;
 			}
 			AdvanceWizardPage?.Invoke(this, new EventArgs());

@@ -147,8 +147,8 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
 			//configTextBuilder.AppendLine(@"M950 P4 C""out5"" ; CO2");
 			configTextBuilder.AppendLine("\r\n; Sensors");
-			configTextBuilder.AppendLine(@"M308 S0 P""1.io6.in"" Y""linear-analog"" A""DNAsensor"" F0 B0 C1 ; DNA optical sensor");
-			configTextBuilder.AppendLine(@"M308 S1 P""2.io6.in"" Y""linear-analog"" A""NADHsensor"" F0 B0 C1 ; NADH optical sensor");
+			configTextBuilder.AppendLine(@"M308 S0 P""1.io6.in"" Y""linear-analog"" A""DNAsensor"" F0 B0 C100 ; DNA optical sensor");
+			configTextBuilder.AppendLine(@"M308 S1 P""2.io6.in"" Y""linear-analog"" A""NADHsensor"" F0 B0 C100 ; NADH optical sensor");
 			//configTextBuilder.AppendLine(@"M308 S3 P""2.temp0"" Y""thermistor"" A""Tray Heater"" T10000 B3950 ; configure tray heat sensor");
 			//configTextBuilder.AppendLine("\r\n; Heaters");
 			//configTextBuilder.AppendLine(@"M950 H0 C""1.out0"" T3 ; create tray heater");
@@ -316,7 +316,6 @@ G90 ; absolute positioning
 			DnaVolume = GetConfigValue<int>(nameof(DnaVolume));
 			NadhVolume = GetConfigValue<int>(nameof(NadhVolume));
 			KohVolume = GetConfigValue<int>(nameof(KohVolume));
-			OpticalSensorDwell = GetConfigValue<int>(nameof(OpticalSensorDwell));
 			SensorReadDwell = GetConfigValue<int>(nameof(SensorReadDwell));
 			Co2Dwell = GetConfigValue<int>(nameof(Co2Dwell));
 			TestMediaAspirationVolume = GetConfigValue<int>(nameof(TestMediaAspirationVolume));

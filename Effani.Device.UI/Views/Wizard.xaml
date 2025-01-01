@@ -48,7 +48,7 @@
 										<TextBlock Text="Running Command: " Margin="0,0,0,3"></TextBlock>
 										<TextBlock Text="{Binding ExecutingCommandText}"></TextBlock>
 									</StackPanel>
-									<ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding ConsoleMessages}" Background="Transparent" BorderThickness="1" IsTabStop="False" VerticalAlignment="Stretch">
+									<ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding ProcessMessages}" Background="Transparent" BorderThickness="1" IsTabStop="False" VerticalAlignment="Stretch">
 										<ListBox.ItemTemplate>
 											<DataTemplate>
 												<TextBlock Text="{Binding}" Margin="0,1,0,0"></TextBlock>
