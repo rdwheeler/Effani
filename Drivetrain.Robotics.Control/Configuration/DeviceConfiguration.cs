@@ -23,6 +23,8 @@ namespace Drivetrain.Robotics.Control
 			{
 				var mainFolder = Path.Combine(drive, @"");
 				var sysFolder = Path.Combine(mainFolder, @"sys");
+				if(!Directory.Exists(sysFolder))
+					Directory.CreateDirectory(sysFolder);
 				WriteConfig(sysFolder);
 				WriteHome(sysFolder);
 				var zipFilePath = Path.Combine(mainFolder, "config.zip");
@@ -45,7 +47,7 @@ M83 ; relative extruder moves
 M550 P""ABAL"" ; set hostname
 
 ; Network
-M552 S1 ; configure WiFi adapter
+M552 S2 ; configure WiFi adapter
 M586 P0 S1 ; configure HTTP
 M586 P1 S1 ; configure FTP
 M586 P2 S1 ; configure Telnet

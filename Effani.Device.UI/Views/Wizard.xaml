@@ -126,7 +126,7 @@
 									<TextBlock Margin="0,5,0,0" Text=" to continue."/>
 								</StackPanel>
 								<dxe:TextEdit NullText="Sample identifier" Text="{Binding CurrentLoadingSample.SampleId}" IsEnabled="{DXBinding 'CurrentLoadingSample.Canceled == false'}"/>
-								<StackPanel Margin="0,20,0,0" Visibility="{DXBinding 'CurrentLoadingSample.SampleId != null ? $Visibility.Visible : $Visibility.Collapsed'}">
+								<StackPanel Margin="0,20,0,0">
 									<Grid>
 										<Grid.ColumnDefinitions>
 											<ColumnDefinition Width="7*" />

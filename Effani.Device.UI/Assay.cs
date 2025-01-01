@@ -156,19 +156,19 @@ namespace Effani.Device.UI
 				{
 					Engine.QueueJob(new Job($"Reading 1 µg DNA from {DnaStandardsWells[0].Well.Label}.", [
 						new AlignWellToLocation(Config.DnaLaserLocation, DnaStandardsWells[0].Well, Device),
-						new ReadNadh(Device, (command) => { Microgram1Dna = ParseCommandResult(command); }),
+						new ReadDna(Device, (command) => { Microgram1Dna = ParseCommandResult(command); }),
 					]));
 					Engine.QueueJob(new Job($"Reading 0.25 µg DNA from {DnaStandardsWells[1].Well.Label}.", [
 						new AlignWellToLocation(Config.DnaLaserLocation, DnaStandardsWells[1].Well, Device),
-						new ReadNadh(Device, (command) => { Microgram1Dna = ParseCommandResult(command); }),
+						new ReadDna(Device, (command) => { Microgram1Dna = ParseCommandResult(command); }),
 					]));
 					Engine.QueueJob(new Job($"Reading 0.0625 µg DNA from {DnaStandardsWells[2].Well.Label}.", [
 						new AlignWellToLocation(Config.DnaLaserLocation, DnaStandardsWells[2].Well, Device),
-						new ReadNadh(Device, (command) => { MicrogramDna0625Dna = ParseCommandResult(command); }),
+						new ReadDna(Device, (command) => { MicrogramDna0625Dna = ParseCommandResult(command); }),
 					]));
 					Engine.QueueJob(new Job($"Reading 0 µg DNA from {DnaStandardsWells[3].Well.Label}.", [
 						new AlignWellToLocation(Config.DnaLaserLocation, DnaStandardsWells[3].Well, Device),
-						new ReadNadh(Device, (command) => { Microgram0Dna = ParseCommandResult(command); }),
+						new ReadDna(Device, (command) => { Microgram0Dna = ParseCommandResult(command); }),
 					]));
 				}
 
@@ -317,7 +317,7 @@ namespace Effani.Device.UI
                     Axis dnaAxis = testWell.Well.Plate.Location.X == 0 ? Axis.DnaReagent1 : Axis.DnaReagent2;
                     var job = new Job($"Dispensing DNA reagent to {testWell.Label}");
 					// remove KOH from well
-					job.Commands.AddRange(GetAspirationCommands(FluidType.Koh, testWell, Config.DnaAspirationVolume));
+					job.Commands.AddRange(GetAspirationCommands(FluidType.Koh, testWell, Config.KohAspirationVolume));
 					job.Commands.AddRange(
                     [
                         // add DNA reagent to well
@@ -358,7 +358,7 @@ namespace Effani.Device.UI
 				{
 					Engine.QueueJob(new Job($"Reading DNA from {testWell.Well.Label}.", [
 						new AlignWellToLocation(Config.DnaLaserLocation, testWell.Well, Device),
-						new ReadNadh(Device, (command) => { testWell.DnaValue = ParseCommandResult(command); }),
+						new ReadDna(Device, (command) => { testWell.DnaValue = ParseCommandResult(command); }),
 					]));
                     if (_processTerminating)
                         return;

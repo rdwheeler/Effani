@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using Serilog;
+using System.Collections.Concurrent;
 using System.IO.Ports;
 using System.Linq;
 using System.Management;
@@ -152,6 +153,8 @@ namespace Drivetrain.Robotics.Control
 			if(pause > 0)
 				Pause(pause);
 			var response = WriteWhenReady($"M308 S{sensorDesignation}", STR_sensorKey);
+			if(response.StartsWith("Error"))
+				return response;
 			var first = response.Split("reading ")[1];
 			var last = first.Split(",")[0];
 			return last;
@@ -271,7 +274,8 @@ namespace Drivetrain.Robotics.Control
 			}
 			catch (Exception ex)
 			{
-				return ex.Message;
+				Log.Error(ex, $"Error writing to serial port: {data}");
+				return $"Error: {ex.Message}";
 			}
 		}
 		#endregion
