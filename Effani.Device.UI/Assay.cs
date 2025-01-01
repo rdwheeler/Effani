@@ -280,7 +280,7 @@ namespace Effani.Device.UI
 						Axis kohAxis = testWell.Well.Plate.Location.X == 0 ? Axis.Koh1 : Axis.Koh2;
                         var job = new Job($"Adding KOH to {testWell.Label}.");
 						// remove fluid from well
-						job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.KohAspirationVolume));
+						job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.TestMediaAspirationVolume));
 						job.Commands.AddRange(
                         [
 							// add KOH to well
@@ -380,8 +380,6 @@ namespace Effani.Device.UI
         }
         private List<Command> GetAspirationCommands(FluidType fluidType, TestWell testWell, int volume)
         {
-			fluidType = FluidType.Koh; // TODO: axis limit
-
             var axis = fluidType switch
             {
                 FluidType.General => Axis.AspirateFluid,
@@ -389,8 +387,8 @@ namespace Effani.Device.UI
             };
             Command removeCommand = fluidType switch
             {
-                FluidType.General => new RemoveFluid(Config.CleanUpAspirationVolume, Device),
-                FluidType.Koh => new RemoveKoh(Config.CleanUpAspirationVolume, Device),
+                FluidType.General => new RemoveFluid(volume, Device),
+                FluidType.Koh => new RemoveKoh(volume, Device),
                 _ => null
             };
             Command emptyCommand = fluidType switch

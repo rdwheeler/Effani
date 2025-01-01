@@ -251,8 +251,8 @@ G90 ; absolute positioning
 		private List<AxisSpec> GetAspirateAxes()
 		{
 			var ret = new List<AxisSpec>();
-			//ret.Add(new AspirateAxis(Axis.AspirateFluid, 1, 1, AspirateFluidLocation, AspirateFluidSyringeHomePosition)); // asperate 2
-			//ret.Add(new AspirateZAxis(Axis.AspirateFluidZ, 1, 2));
+			ret.Add(new AspirateAxis(Axis.AspirateFluid, 1, 1, AspirateFluidLocation, AspirateFluidSyringeHomePosition)); // asperate 2
+			ret.Add(new AspirateZAxis(Axis.AspirateFluidZ, 1, 2));
 			ret.Add(new AspirateAxis(Axis.AspirateKoh, 0, 4, AspirateKohLocation, AspirateKohSyringeHomePosition)); // asperate 1
             var aspirate1Z = new AspirateZAxis(Axis.AspirateKohZ, 1, 0);
             aspirate1Z.Driver.Endstop.SensorPort = ($"1.io5.in");
@@ -325,7 +325,6 @@ G90 ; absolute positioning
 			KohTimerPeriod = GetConfigValue<int>(nameof(KohTimerPeriod));
 			DnaTimerPeriod = GetConfigValue<int>(nameof(DnaTimerPeriod));
 			KohAspirationVolume = GetConfigValue<int>(nameof(KohAspirationVolume));
-			DnaAspirationVolume = GetConfigValue<int>(nameof(DnaAspirationVolume));
 			DnaAspirationVolume = GetConfigValue<int>(nameof(DnaAspirationVolume));
 			BypassDeviceCommands = GetConfigValue<int>(nameof(BypassDeviceCommands));
 			AspirateKohSyringeVolumeMl = GetConfigValue<float>(nameof(AspirateKohSyringeVolumeMl));
