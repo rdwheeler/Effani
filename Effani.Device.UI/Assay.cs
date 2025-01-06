@@ -84,11 +84,11 @@ namespace Effani.Device.UI
                     Engine.QueueJob(job);
 
 					Engine.QueueJob(new Job($"Reading Low NADH from {NadhStandardsWells[0].Well.Label}.", [
-						new AlignWellToLocation(Config.NadhLaserLocation, NadhStandardsWells[0].Well, Device),
+						new AlignWellToLocation(Config.NadhSensorLocation, NadhStandardsWells[0].Well, Device),
 						new ReadNadh(Device, (command) => { LowNadh = ParseCommandResult(command); }),
 					]));
 					Engine.QueueJob(new Job($"Reading High NADH from {NadhStandardsWells[1].Well.Label}.", [
-						new AlignWellToLocation(Config.NadhLaserLocation, NadhStandardsWells[1].Well, Device),
+						new AlignWellToLocation(Config.NadhSensorLocation, NadhStandardsWells[1].Well, Device),
 						new ReadNadh(Device, (command) => { HighNadh = ParseCommandResult(command); }),
 					]));
                 }
@@ -155,19 +155,19 @@ namespace Effani.Device.UI
 				if (MainViewModel.DoStandardsSteps)
 				{
 					Engine.QueueJob(new Job($"Reading 1 µg DNA from {DnaStandardsWells[0].Well.Label}.", [
-						new AlignWellToLocation(Config.DnaLaserLocation, DnaStandardsWells[0].Well, Device),
+						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[0].Well, Device),
 						new ReadDna(Device, (command) => { Microgram1Dna = ParseCommandResult(command); }),
 					]));
 					Engine.QueueJob(new Job($"Reading 0.25 µg DNA from {DnaStandardsWells[1].Well.Label}.", [
-						new AlignWellToLocation(Config.DnaLaserLocation, DnaStandardsWells[1].Well, Device),
+						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[1].Well, Device),
 						new ReadDna(Device, (command) => { Microgram1Dna = ParseCommandResult(command); }),
 					]));
 					Engine.QueueJob(new Job($"Reading 0.0625 µg DNA from {DnaStandardsWells[2].Well.Label}.", [
-						new AlignWellToLocation(Config.DnaLaserLocation, DnaStandardsWells[2].Well, Device),
+						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[2].Well, Device),
 						new ReadDna(Device, (command) => { MicrogramDna0625Dna = ParseCommandResult(command); }),
 					]));
 					Engine.QueueJob(new Job($"Reading 0 µg DNA from {DnaStandardsWells[3].Well.Label}.", [
-						new AlignWellToLocation(Config.DnaLaserLocation, DnaStandardsWells[3].Well, Device),
+						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[3].Well, Device),
 						new ReadDna(Device, (command) => { Microgram0Dna = ParseCommandResult(command); }),
 					]));
 				}
@@ -217,7 +217,7 @@ namespace Effani.Device.UI
                     Engine.QueueJob(job);
 
 					Engine.QueueJob(new Job($"Reading NADH {e.Data} from {testWell.Well.Label}.", [
-						new AlignWellToLocation(Config.NadhLaserLocation, testWell.Well, Device),
+						new AlignWellToLocation(Config.NadhSensorLocation, testWell.Well, Device),
 						new ReadNadh(Device, (command) => { testWell.TimeValues.Add(e.Data, ParseCommandResult(command)); }),
 						new StartTimer(testWell.NadhReadings2Timer, $"{testWell.Label} NADH Readings 2", Device)
 					]));
@@ -253,7 +253,7 @@ namespace Effani.Device.UI
 			void TakeReading(DataArgs<int> e, TestWell testWell, System.Timers.Timer nextTimer)
 			{
 				Engine.QueueJob(new Job($"Reading NADH {e.Data} from {testWell.Well.Label}.", [
-					new AlignWellToLocation(Config.NadhLaserLocation, testWell.Well, Device),
+					new AlignWellToLocation(Config.NadhSensorLocation, testWell.Well, Device),
 					new ReadNadh(Device, (command) => { testWell.TimeValues.Add(e.Data, ParseCommandResult(command)); }),
 				]));
 				if (nextTimer != null)
@@ -357,7 +357,7 @@ namespace Effani.Device.UI
                 if (MainViewModel.DoDnaIncubationTimerSteps)
 				{
 					Engine.QueueJob(new Job($"Reading DNA from {testWell.Well.Label}.", [
-						new AlignWellToLocation(Config.DnaLaserLocation, testWell.Well, Device),
+						new AlignWellToLocation(Config.DnaSensorLocation, testWell.Well, Device),
 						new ReadDna(Device, (command) => { testWell.DnaValue = ParseCommandResult(command); }),
 					]));
                     if (_processTerminating)

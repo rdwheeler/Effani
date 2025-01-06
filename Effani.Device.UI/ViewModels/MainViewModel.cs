@@ -37,6 +37,7 @@ namespace Effani.Device.UI
 			_processEngine.BeginExecutingCommand += ProcessEngine_BeginExecutingCommand;
 			_processEngine.EndExecutingCommand += ProcessEngine_EndExecutingCommand;
 			Axes = new ObservableCollection<AxisSpec>(_device.Configuration.DeviceSpecification.Axes);
+			Sensors = new ObservableCollection<SensorSpec>(_device.Configuration.DeviceSpecification.Sensors);
 			Assay = new Assay(_device, _processEngine);
 		}
 		#endregion
@@ -362,6 +363,7 @@ namespace Effani.Device.UI
 			}
 		}
 		public ObservableCollection<AxisSpec> Axes { get; set; }
+		public ObservableCollection<SensorSpec> Sensors { get; set; }
 		public ObservableCollection<string> ConsoleMessages { get; set; } = new();
 		public ObservableCollection<string> ProcessMessages { get; set; } = new();
 		public TestWell CurrentLoadingSample
@@ -675,15 +677,18 @@ namespace Effani.Device.UI
             _processEngine.QueueCommand( new MoveToStartingLocation(axisSpec.Axis, _device));
         }
         [Command]
-		public async Task AlignToFirstWell(AxisSpec axisSpec)
+		public async Task AlignToFirstWell(object parameter)
         {
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
             var well = plate.Wells.First();
             CurrentWell = well;
-            _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
-        }
+			if (parameter is AxisSpec axisSpec)
+				_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
+			else if (parameter is SensorSpec sensorSpec)
+				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
+		}
         [Command]
-        public async Task AlignToNextWell(AxisSpec axisSpec)
+        public async Task AlignToNextWell(object parameter)
         {
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
             if (CurrentWell == null)
@@ -693,17 +698,23 @@ namespace Effani.Device.UI
                 return;
             var well = plate.Wells[nextIndex];
             CurrentWell = well;
-            _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
-        }
+			if (parameter is AxisSpec axisSpec)
+				_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
+			else if (parameter is SensorSpec sensorSpec)
+				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
+		}
 
         [Command]
-        public async Task AlignToLastWell(AxisSpec axisSpec)
-        {
+        public async Task AlignToLastWell(object parameter)
+		{
             var plate = _device.Configuration.DeviceSpecification.Plates.First();
             var well = plate.Wells.Last();
             CurrentWell = well;
-            _processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
-        }
+			if (parameter is AxisSpec axisSpec)
+				_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
+			else if (parameter is SensorSpec sensorSpec)
+				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
+		}
 
         [Command]
         public async Task EmitFluid(AxisSpec axisSpec)
@@ -796,36 +807,20 @@ namespace Effani.Device.UI
 		}
 
 		[Command]
-		public async Task ReadDna()
+		public async Task Read(SensorSpec sensor)
 		{
 			Mouse.OverrideCursor = Cursors.Wait;
-			_processEngine.QueueCommand(new ReadDna(_device, null));
+			switch (sensor)
+			{
+				case DnaSensorSpec:
+					_processEngine.QueueCommand(new ReadDna(_device, null));
+					break;
+				case NadhSensorSpec:
+					_processEngine.QueueCommand(new ReadNadh(_device, null));
+					break;
+			}
 			Mouse.OverrideCursor = Cursors.Arrow;
 		}
-
-		[Command]
-		public async Task ReadNadh()
-		{
-			Mouse.OverrideCursor = Cursors.Wait;
-			_processEngine.QueueCommand(new ReadNadh(_device, null));
-			Mouse.OverrideCursor = Cursors.Arrow;
-        }
-
-        [Command]
-        public async Task AlignToNadhLaser()
-        {
-            var plate = _device.Configuration.DeviceSpecification.Plates.First();
-            var well = plate.Wells.First();
-            _processEngine.QueueCommand(new AlignWellToLocation(_device.Configuration.NadhLaserLocation, well, _device));
-        }
-
-        [Command]
-        public async Task AlignToDnaLaser()
-        {
-            var plate = _device.Configuration.DeviceSpecification.Plates.First();
-            var well = plate.Wells.First();
-            _processEngine.QueueCommand(new AlignWellToLocation(_device.Configuration.DnaLaserLocation, well, _device));
-        }
         [Command]
         public void PrimeFluid()
 		{
@@ -837,24 +832,30 @@ namespace Effani.Device.UI
 			_processEngine.QueueJob(job);
 		}
         [Command]
-		public async Task LaserNadhOn()
+		public async Task LaserOn(SensorSpec sensor)
 		{
-			_device.LaserNadhOn();
+			switch (sensor)
+			{
+				case DnaSensorSpec:
+					_device.LaserDnaOn();
+					break;
+				case NadhSensorSpec:
+					_device.LaserNadhOn();
+					break;
+			}
 		}
 		[Command]
-		public async Task LaserNadhOff()
+		public async Task LaserOff(SensorSpec sensor)
 		{
-			_device.LaserNadhOff();
-		}
-		[Command]
-		public async Task LaserDnaOn()
-		{
-			_device.LaserDnaOn();
-		}
-		[Command]
-		public async Task LaserDnaOff()
-		{
-			_device.LaserDnaOff();
+			switch (sensor)
+			{
+				case DnaSensorSpec:
+					_device.LaserDnaOff();
+					break;
+				case NadhSensorSpec:
+					_device.LaserNadhOff();
+					break;
+			}
 		}
 		[Command]
 		public async Task EnableCommands()

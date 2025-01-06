@@ -1,6 +1,7 @@
 ﻿using DevExpress.Xpf.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -24,6 +25,11 @@ namespace Effani.Device.UI
 		{
 			InitializeComponent();
 			DataContext = new MainViewModel(deviceService);
+		}
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			(DataContext as MainViewModel).Dispose();
+			base.OnClosing(e);
 		}
 	}
 }

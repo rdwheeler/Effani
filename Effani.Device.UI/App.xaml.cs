@@ -46,6 +46,7 @@ namespace Effani.Device.UI
 
 			DevExpress.Xpf.Core.ApplicationThemeHelper.UpdateApplicationThemeName();
 		}
+
 		protected override async void OnExit(ExitEventArgs e)
 		{
 			await AppHost!.StopAsync();

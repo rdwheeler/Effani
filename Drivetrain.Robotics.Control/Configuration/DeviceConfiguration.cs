@@ -128,12 +128,7 @@ M595 P0
 M669 K0 ; configure Cartesian kinematics
 
 ; Endstops
-"
-				);
-			//foreach (var x in DeviceSpecification.Axes)
-			//{
-			//	configTextBuilder.AppendLine($"M574 {x.Designation}{(x.Driver.Endstop.Location == EndstopLocation.LowEnd ? "1" : "2")} P\"{(x.Driver.Endstop.Signal == PinSignal.High ? null : "!")}{(x.DriverPort.StartsWith("0") ? null : (x.DriverPort.First()) + ".")}io{x.DriverPort.Last()}.in\" S1");
-            //}
+");
             foreach (var x in DeviceSpecification.Axes)
             {
                 configTextBuilder.AppendLine($"M574 {x.Designation}{(x.Driver.Endstop.Location == EndstopLocation.LowEnd ? "1" : "2")} P\"{(x.Driver.Endstop.Signal == PinSignal.High ? null : "!")}{x.Driver.Endstop.SensorPort}\" S1");
@@ -147,8 +142,10 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
 			//configTextBuilder.AppendLine(@"M950 P4 C""out5"" ; CO2");
 			configTextBuilder.AppendLine("\r\n; Sensors");
-			configTextBuilder.AppendLine(@"M308 S0 P""1.io6.in"" Y""linear-analog"" A""DNAsensor"" F0 B0 C10000 ; DNA optical sensor");
-			configTextBuilder.AppendLine(@"M308 S1 P""2.io6.in"" Y""linear-analog"" A""NADHsensor"" F0 B0 C10000 ; NADH optical sensor");
+			foreach (var sensor in DeviceSpecification.Sensors)
+			{
+				configTextBuilder.AppendLine($@"M308 S{sensor.SensorNumber} P""{sensor.PortDesignation}"" Y""linear-analog"" A""{sensor.Label}"" F0 B{sensor.ReadLow} C{sensor.ReadHigh}");
+			}
 			//configTextBuilder.AppendLine(@"M308 S3 P""2.temp0"" Y""thermistor"" A""Tray Heater"" T10000 B3950 ; configure tray heat sensor");
 			//configTextBuilder.AppendLine("\r\n; Heaters");
 			//configTextBuilder.AppendLine(@"M950 H0 C""1.out0"" T3 ; create tray heater");
@@ -218,6 +215,9 @@ G90 ; absolute positioning
 			var basal1 = new FluidAxis(Axis.Basal1, 0, 5, Basal1Location, FluidSyringeHomePosition);
             basal1.Driver.Endstop.SensorPort = ($"1.io0.in");
             DeviceSpecification.Axes.Add(basal1);
+
+			DeviceSpecification.Sensors.Add(new DnaSensorSpec("DNA Sensor", DnaSensorNumber, DnaSensorBoardNumber, DnaSensorPortNumber, DnaSensorReadHigh, DnaSensorReadLow, DnaSensorLocation));
+			DeviceSpecification.Sensors.Add(new NadhSensorSpec("NADH Sensor", NadhSensorNumber, NadhSensorBoardNumber, NadhSensorPortNumber, NadhSensorReadHigh, NadhSensorReadLow, NadhSensorLocation));
 
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(0, 0)));
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(0, 1)));
@@ -303,8 +303,18 @@ G90 ; absolute positioning
 			Basal2Location = GetCoordinateConfigValue(nameof(Basal2Location));
 			BiopsyLocation = GetCoordinateConfigValue(nameof(BiopsyLocation));
 			PlateOffset = GetCoordinateConfigValue(nameof(PlateOffset));
-			DnaLaserLocation = GetCoordinateConfigValue(nameof(DnaLaserLocation));
-			NadhLaserLocation = GetCoordinateConfigValue(nameof(NadhLaserLocation));
+			DnaSensorLocation = GetCoordinateConfigValue(nameof(DnaSensorLocation));
+			DnaSensorBoardNumber = GetConfigValue<int>(nameof(DnaSensorBoardNumber));
+			DnaSensorPortNumber = GetConfigValue<int>(nameof(DnaSensorPortNumber));
+			DnaSensorNumber = GetConfigValue<int>(nameof(DnaSensorNumber));
+			DnaSensorReadHigh = GetConfigValue<int>(nameof(DnaSensorReadHigh));
+			DnaSensorReadLow = GetConfigValue<int>(nameof(DnaSensorReadLow));
+			NadhSensorLocation = GetCoordinateConfigValue(nameof(NadhSensorLocation));
+			NadhSensorBoardNumber = GetConfigValue<int>(nameof(NadhSensorBoardNumber));
+			NadhSensorPortNumber = GetConfigValue<int>(nameof(NadhSensorPortNumber));
+			NadhSensorNumber = GetConfigValue<int>(nameof(NadhSensorNumber));
+			NadhSensorReadHigh = GetConfigValue<int>(nameof(NadhSensorReadHigh));
+			NadhSensorReadLow = GetConfigValue<int>(nameof(NadhSensorReadLow));
 			WasteLocation = GetCoordinateConfigValue(nameof(WasteLocation));
 			VerticalWellCount = GetConfigValue<int>(nameof(VerticalWellCount));
 			HorizontalWellCount = GetConfigValue<int>(nameof(HorizontalWellCount));
@@ -370,8 +380,18 @@ G90 ; absolute positioning
 		public Coordinate Basal2Location { get; set; }
 		public Coordinate BiopsyLocation { get; set; }
 		public Coordinate PlateOffset { get; set; } // distance from well 0 of a tray to well 0 of the next tray
-		public Coordinate DnaLaserLocation { get; set; }
-		public Coordinate NadhLaserLocation { get; set; }
+		public Coordinate DnaSensorLocation { get; set; }
+		public int DnaSensorBoardNumber { get; set; }
+		public int DnaSensorPortNumber { get; set; }
+		public int DnaSensorNumber { get; set; }
+		public int DnaSensorReadHigh { get; set; }
+		public int DnaSensorReadLow { get; set; }
+		public Coordinate NadhSensorLocation { get; set; }
+		public int NadhSensorBoardNumber { get; set; }
+		public int NadhSensorPortNumber { get; set; }
+		public int NadhSensorNumber { get; set; }
+		public int NadhSensorReadHigh { get; set; }
+		public int NadhSensorReadLow { get; set; }
 		public Coordinate WasteLocation { get; set; }
 		public int VerticalWellCount { get; set; }
 		public int HorizontalWellCount { get; set; }

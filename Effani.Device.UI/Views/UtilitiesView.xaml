@@ -43,24 +43,24 @@
 					</StackPanel>
 					<StackPanel Orientation="Vertical">
 						<StackPanel Orientation="Horizontal">
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.HomeCommand}" CommandParameter="{Binding}" Content="Home" />
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.MoveToStartCommand}" CommandParameter="{Binding}" Content="Move To Start" />
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.AlignToFirstWellCommand}" CommandParameter="{Binding}" Content="Align First Well" />
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.AlignToNextWellCommand}" CommandParameter="{Binding}" Content="Align Next Well" />
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.AlignToLastWellCommand}" CommandParameter="{Binding}" Content="Align Last Well" />
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.EmitFluidCommand}" CommandParameter="{Binding}"
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.HomeCommand}" CommandParameter="{Binding}" Content="Home" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.MoveToStartCommand}" CommandParameter="{Binding}" Content="Move To Start" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.AlignToFirstWellCommand}" CommandParameter="{Binding}" Content="Align First Well" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.AlignToNextWellCommand}" CommandParameter="{Binding}" Content="Align Next Well" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.AlignToLastWellCommand}" CommandParameter="{Binding}" Content="Align Last Well" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.EmitFluidCommand}" CommandParameter="{Binding}"
 													 Visibility="{DXBinding '@DataContext.GetType() == typeof($control:FluidAxis) ? $Visibility.Visible : $Visibility.Collapsed'}">
 								<dx:SimpleButton.Content>
 									<StackPanel Orientation="Horizontal">
 										<TextBlock Text="Dispense Fluid" />
-										<dxe:SpinEdit Width="80" ShowBorder="False" MaxHeight="50" EditValue="{Binding ElementName=tabControl, Path=DataContext.EmitFluidVolume, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="200"
+										<dxe:SpinEdit Width="80" ShowBorder="False" MaxHeight="50" EditValue="{Binding ElementName=axesList, Path=DataContext.EmitFluidVolume, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="200"
 													EditValueType="{x:Type sys:Int32}" HorizontalAlignment="Left" HorizontalContentAlignment="Right" IsFloatValue="False" Mask="d0" AllowSpinOnMouseWheel="True" />
 									</StackPanel>
 								</dx:SimpleButton.Content>
 							</dx:SimpleButton>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="&lt;&lt;&lt; -100">
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.MoveRapidCommand}" Content="&lt;&lt;&lt; -100">
 								<Button.CommandParameter>
 									<MultiBinding Converter="{StaticResource PassThroughConverter}">
 										<Binding/>
@@ -72,7 +72,7 @@
 									</MultiBinding>
 								</Button.CommandParameter>
 							</dx:SimpleButton>
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="&lt;&lt; -10">
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.MoveRapidCommand}" Content="&lt;&lt; -10">
 								<Button.CommandParameter>
 									<MultiBinding Converter="{StaticResource PassThroughConverter}">
 										<Binding/>
@@ -84,7 +84,7 @@
 									</MultiBinding>
 								</Button.CommandParameter>
 							</dx:SimpleButton>
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="&lt; -1">
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.MoveRapidCommand}" Content="&lt; -1">
 								<Button.CommandParameter>
 									<MultiBinding Converter="{StaticResource PassThroughConverter}">
 										<Binding/>
@@ -96,7 +96,7 @@
 									</MultiBinding>
 								</Button.CommandParameter>
 							</dx:SimpleButton>
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="+1 >">
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.MoveRapidCommand}" Content="+1 >">
 								<Button.CommandParameter>
 									<MultiBinding Converter="{StaticResource PassThroughConverter}">
 										<Binding/>
@@ -108,7 +108,7 @@
 									</MultiBinding>
 								</Button.CommandParameter>
 							</dx:SimpleButton>
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="+10 >>">
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.MoveRapidCommand}" Content="+10 >>">
 								<Button.CommandParameter>
 									<MultiBinding Converter="{StaticResource PassThroughConverter}">
 										<Binding/>
@@ -120,7 +120,7 @@
 									</MultiBinding>
 								</Button.CommandParameter>
 							</dx:SimpleButton>
-							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=tabControl, Path=DataContext.MoveRapidCommand}" Content="+100 >>>">
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.MoveRapidCommand}" Content="+100 >>>">
 								<Button.CommandParameter>
 									<MultiBinding Converter="{StaticResource PassThroughConverter}">
 										<Binding/>
@@ -136,22 +136,43 @@
 					</StackPanel>
 				</StackPanel>
 			</DataTemplate>
+			<DataTemplate x:Key="SensorContentTemplate">
+				<StackPanel Orientation="Horizontal">
+					<StackPanel Orientation="Vertical">
+						<TextBlock Width="150" Text="{Binding Label}" FontSize="18" FontWeight="Bold" Margin="0,1,5,0" />
+						<TextBlock Width="150" x:Name="label" FontSize="12" Margin="0,1,5,0">
+							<TextBlock.Text>
+								<MultiBinding StringFormat="{}S{0}, {1}">
+									<Binding Path="SensorNumber" />
+									<Binding Path="PortDesignation" />
+								</MultiBinding>
+							</TextBlock.Text>
+						</TextBlock>
+						<TextBlock Width="150" FontSize="12" Margin="0,1,5,0">
+							<TextBlock.Text>
+								<MultiBinding StringFormat="{}{0},{1}">
+									<Binding Path="Location.X" />
+									<Binding Path="Location.Y" />
+								</MultiBinding>
+							</TextBlock.Text>
+						</TextBlock>
+					</StackPanel>
+					<StackPanel Orientation="Vertical">
+						<StackPanel Orientation="Horizontal">
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=sensors, Path=DataContext.AlignToFirstWellCommand}" CommandParameter="{Binding}" Content="Align First Well" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=sensors, Path=DataContext.AlignToNextWellCommand}" CommandParameter="{Binding}" Content="Align Next Well" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=sensors, Path=DataContext.AlignToLastWellCommand}" CommandParameter="{Binding}" Content="Align Last Well" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=sensors, Path=DataContext.LaserOnCommand}" CommandParameter="{Binding}" Content="Laser On" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=sensors, Path=DataContext.LaserOffCommand}" CommandParameter="{Binding}" Content="Laser Off" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=sensors, Path=DataContext.ReadCommand}" CommandParameter="{Binding}" Content="Read Sensor" />
+						</StackPanel>
+					</StackPanel>
+				</StackPanel>
+			</DataTemplate>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<DockPanel LastChildFill="true">
 		<dx:DXTabControl DockPanel.Dock="Top">
-			<dx:DXTabItem Header="Sensors">
-                <StackPanel Orientation="Horizontal">
-                    <dx:SimpleButton Width="120" CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AlignToDnaLaserCommand}" Content="Align DNA" />
-					<dx:SimpleButton Width="120" CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding LaserDnaOnCommand}" Content="DNA Laser On" />
-					<dx:SimpleButton Width="120" CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding LaserDnaOffCommand}" Content="DNA Laser Off" />
-                    <dx:SimpleButton Width="120" CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ReadDnaCommand}" Content="Read DNA" />
-                    <dx:SimpleButton Width="120" CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AlignToNadhLaserCommand}" Content="Align NADH" />
-					<dx:SimpleButton Width="120" CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding LaserNadhOnCommand}" Content="NADH Laser On" />
-					<dx:SimpleButton Width="120" CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding LaserNadhOffCommand}" Content="NADH Laser Off" />
-					<dx:SimpleButton Width="120" CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ReadNadhCommand}" Content="Read NADH" />
-				</StackPanel>
-			</dx:DXTabItem>
 			<dx:DXTabItem Header="Sterilization">
 				<StackPanel Orientation="Horizontal">
 					<dx:SimpleButton Width="120" CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding TraySterilizerOnCommand}" Content="Tray Sterilizer On" />
@@ -181,10 +202,18 @@
 			</dx:DXTabItem>
 		</dx:DXTabControl>
 		<DockPanel DockPanel.Dock="Bottom" LastChildFill="true">
-			<ListBox x:Name="tabControl" Margin="0,20,0,0" DockPanel.Dock="Left"
-				ItemsSource="{Binding Axes}"
-				ItemTemplate="{StaticResource TabItemContentTemplate}">
-			</ListBox>
+			<ScrollViewer DockPanel.Dock="Left">			
+				<StackPanel Orientation="Vertical">	
+						<ListBox x:Name="axesList" Margin="0,0,0,0" BorderThickness="0"
+							ItemsSource="{Binding Axes}"
+							ItemTemplate="{StaticResource TabItemContentTemplate}">
+						</ListBox>
+						<ListBox x:Name="sensors" Margin="0,0,0,0" BorderThickness="0"
+							ItemsSource="{Binding Sensors}"
+							ItemTemplate="{StaticResource SensorContentTemplate}">
+						</ListBox>
+				</StackPanel>
+			</ScrollViewer>
 			<DockPanel LastChildFill="true" DockPanel.Dock="Right" Margin="20,20,0,0">
 				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
 					<dxe:TextEdit CornerRadius="3" Padding="5,3,5,3" Width="250" NullText="Command..." EditValue="{Binding SendCommandText}" Margin="0,0,5,0"></dxe:TextEdit>

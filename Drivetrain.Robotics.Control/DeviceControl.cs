@@ -57,12 +57,8 @@ namespace Drivetrain.Robotics.Control
 		}
 		public void Dispose()
 		{
+			_disposing = true;
 			_serialPort.Close();
-			if (_publishThread is not null)
-			{
-				_publishThread.Join();
-				_publishThread = null;
-			}
 		}
 		public void GetBoardDiagnostics(int boardId)
 		{
@@ -203,7 +199,7 @@ namespace Drivetrain.Robotics.Control
 		}
 		private void PublishReadData()
 		{
-			while(true)
+			while(!_disposing)
 			{
 				while(ReadData.TryDequeue(out var message))
 				{
@@ -293,7 +289,8 @@ namespace Drivetrain.Robotics.Control
 		Thread _publishThread;
 		ConcurrentQueue<string> _responses = new();
 		SerialPort _serialPort;
-		public bool _saveResponses;
+		bool _saveResponses;
+		bool _disposing;
 
 		private const string STR_sensorKey = "Sensor";
 		private const string STR_ready = "ready";
