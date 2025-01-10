@@ -10,7 +10,7 @@ namespace Drivetrain.Robotics.Process
 		{
 			var device = (AbalDeviceControl)Device;
 			device.LaserDnaOn();
-			SensorDesignator = 0;
+			SensorDesignator = Device.Configuration.DnaSensorNumber;
 			PauseTime = Device.Configuration.SensorReadDwell;
 			base.Run();
 			device.LaserDnaOff();

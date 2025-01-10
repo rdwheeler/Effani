@@ -105,7 +105,7 @@ namespace Drivetrain.Robotics.Control
 		}
 		public void RemoveFluid(int microLiters)
 		{
-			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel, 10);
+			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel, 100);
 			DoStir(Axes[Axis.AspirateFluidZ]);
 
 			var distance = CalcFluidAspirateTravelMmForMl(microLiters);
@@ -122,7 +122,7 @@ namespace Drivetrain.Robotics.Control
 		}
 		private float CalcFluidAspirateTravelMmForMl(int microLiters)
 		{
-			var microLitersPerMm = Configuration.AspirateSyringeVolumeMl / Configuration.AspirateSyringeTravelMm / 1000;
+			var microLitersPerMm = 0.06f;
 			var ret = (microLitersPerMm * microLiters) * -1;
 			return ret;
 		}
@@ -134,7 +134,7 @@ namespace Drivetrain.Robotics.Control
 		}
 		private void DoStir(AxisSpec axis)
 		{
-			var repetitions = 3;
+			var repetitions = 1;
 			var descentFactor = (Configuration.WellDepth * 0.9f)  / (repetitions * 4);
 			var proximityFactor = (Configuration.WellWidth / 2) * 0.9f;
 			MoveRelative(Axis.TableY, proximityFactor, Configuration.AspirateStirSpeed); // move near well edge

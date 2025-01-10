@@ -740,9 +740,17 @@ namespace Effani.Device.UI
             Mouse.OverrideCursor = Cursors.Wait;
             _processEngine.QueueCommand(new RemoveKoh(EmitFluidVolume, _device));
             Mouse.OverrideCursor = Cursors.Arrow;
-        }
+		}
 
-        [Command]
+		[Command]
+		public async Task AspirateFluid(AxisSpec axisSpec)
+		{
+			Mouse.OverrideCursor = Cursors.Wait;
+			_processEngine.QueueCommand(new RemoveFluid(EmitFluidVolume, _device));
+			Mouse.OverrideCursor = Cursors.Arrow;
+		}
+
+		[Command]
         public async Task HomeAll()
         {
             Mouse.OverrideCursor = Cursors.Wait;

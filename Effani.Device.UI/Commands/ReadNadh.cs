@@ -10,7 +10,7 @@ namespace Drivetrain.Robotics.Process
 		{
 			var device = (AbalDeviceControl)Device;
 			device.LaserNadhOn();
-			SensorDesignator = 1;
+			SensorDesignator = Device.Configuration.NadhSensorNumber;
 			PauseTime = Device.Configuration.SensorReadDwell;
 			base.Run();
 			device.LaserNadhOff();

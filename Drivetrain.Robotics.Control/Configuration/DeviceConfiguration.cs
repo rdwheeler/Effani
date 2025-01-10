@@ -202,7 +202,7 @@ G90 ; absolute positioning
 			DeviceSpecification = new DeviceSpecification();
 			DeviceSpecification.DeviceName = DeviceSpecification.Label;
 			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 535, EndstopLocation.LowEnd, direction: Direction.Forwards));
-			var tabley = new TableAxis(Axis.TableY, 0, 1, 516, EndstopLocation.LowEnd, direction: Direction.Backwards);
+			var tabley = new TableAxis(Axis.TableY, 0, 1, 516, EndstopLocation.HighEnd, direction: Direction.Backwards);
 			DeviceSpecification.Axes.Add(tabley);
 			DeviceSpecification.Axes.AddRange(GetAspirateAxes());
 			//DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent2, 1, 3, Dna2Location, FluidSyringeHomePosition));
