@@ -290,7 +290,8 @@ G90 ; absolute positioning
 			AspirateSyringeVolumeMl = GetConfigValue<float>(nameof(AspirateSyringeVolumeMl));
 			AspirateSyringeTravelMm = GetConfigValue<float>(nameof(AspirateSyringeTravelMm));
 			AspirateSyringeSpeed = GetConfigValue<float>(nameof(AspirateSyringeSpeed));
-			AspirateTopZTravel = GetConfigValue<float>(nameof(AspirateTopZTravel));
+			AspirateKohDistanceToPlate = GetConfigValue<float>(nameof(AspirateKohDistanceToPlate));
+			AspirateFluidDistanceToPlate = GetConfigValue<float>(nameof(AspirateFluidDistanceToPlate));
 			AspirateFluidLocation = GetCoordinateConfigValue(nameof(AspirateFluidLocation));
 			AspirateKohLocation = GetCoordinateConfigValue(nameof(AspirateKohLocation));
 			Dna1Location = GetCoordinateConfigValue(nameof(Dna1Location));
@@ -339,6 +340,7 @@ G90 ; absolute positioning
 			AspirateKohSyringeVolumeMl = GetConfigValue<float>(nameof(AspirateKohSyringeVolumeMl));
 			AspirateKohSyringeTravelMm = GetConfigValue<float>(nameof(AspirateKohSyringeTravelMm));
 			AspirateSyringeSpeed = GetConfigValue<float>(nameof(AspirateSyringeSpeed));
+			AspiratePositioningSpeed = GetConfigValue<float>(nameof(AspiratePositioningSpeed));
 			WellWidth = GetConfigValue<float>(nameof(WellWidth));
 			WellDepth = GetConfigValue<float>(nameof(WellDepth));
 			CleanUpAspirationVolume = GetConfigValue<int>(nameof(CleanUpAspirationVolume));
@@ -366,7 +368,9 @@ G90 ; absolute positioning
 		public float AspirateKohSyringeVolumeMl { get; set; }
 		public float AspirateKohSyringeTravelMm { get; set; } // mm length of a Koh aspirate syringe's contents
 		public float AspirateSyringeSpeed { get; set; } // speed at which an aspirate syringe should withdraw its contents
-		public float AspirateTopZTravel { get; set; } // total mm aspirate axes will descend/ascend to top of well
+		public float AspirateKohDistanceToPlate { get; set; } // total mm aspirate KOH will descend/ascend to top of well
+		public float AspirateFluidDistanceToPlate { get; set; } // total mm aspirate Fluid will descend/ascend to top of well
+		public float AspiratePositioningSpeed { get; set; } // speed at which aspirate syringes will move into position to begin stir
 		public float AspirateStirSpeed { get; set; } // speed at which aspirate will move during stirring
 		public Coordinate AspirateFluidLocation { get; set; }
 		public Coordinate AspirateKohLocation { get; set; }

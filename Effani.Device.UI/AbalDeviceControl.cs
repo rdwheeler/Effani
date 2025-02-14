@@ -95,23 +95,25 @@ namespace Drivetrain.Robotics.Control
 		}
 		public void RemoveKoh(int microLiters)
 		{
-			MoveAbsolute(Axis.AspirateKohZ, Configuration.AspirateTopZTravel, 100);
+			MoveAbsolute(Axis.AspirateKohZ, Configuration.AspirateKohDistanceToPlate, Configuration.AspiratePositioningSpeed);
 			DoStir(Axes[Axis.AspirateKohZ]);
 
 			var distance = CalcKohAspirateTravelMmForMl(microLiters);
 			MoveRelative(Axis.AspirateKoh, distance, Configuration.AspirateSyringeSpeed);
 			Pause(1000);
-			MoveAbsolute(Axis.AspirateKohZ, Configuration.AspirateTopZTravel * -1, 100);
+			MoveRelative(Axis.AspirateKohZ, Configuration.WellDepth * -0.9f, Configuration.AspiratePositioningSpeed);
+			MoveAbsolute(Axis.AspirateKohZ, Configuration.AspirateKohDistanceToPlate * -1, Configuration.AspiratePositioningSpeed);
 		}
 		public void RemoveFluid(int microLiters)
 		{
-			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel, 100);
+			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateFluidDistanceToPlate, Configuration.AspiratePositioningSpeed);
 			DoStir(Axes[Axis.AspirateFluidZ]);
 
 			var distance = CalcFluidAspirateTravelMmForMl(microLiters);
 			MoveRelative(Axis.AspirateFluid, distance, Configuration.AspirateSyringeSpeed);
 			Pause(1000);
-			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateTopZTravel * -1, 100);
+			MoveRelative(Axis.AspirateFluidZ, Configuration.WellDepth * -0.9f, Configuration.AspiratePositioningSpeed);
+			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateFluidDistanceToPlate * -1, Configuration.AspiratePositioningSpeed);
 		}
 
 		private float CalcFluidTravelMmForMl(int microLiters)
