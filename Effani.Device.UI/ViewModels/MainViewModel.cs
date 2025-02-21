@@ -168,7 +168,7 @@ namespace Effani.Device.UI
 				.Invoke(
 					() =>
 					{
-						Assay.FluidPrimingComplete = true;
+						Assay.InitialFluidPrimingComplete = true;
 					});
 		}
 		private void Assay_StandardsComplete(object sender, EventArgs e)
@@ -575,7 +575,7 @@ namespace Effani.Device.UI
                 var job = new Job("Priming fluid pumps.");
                 foreach (var axis in _device.FluidAxes)
                 {
-					job.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.FluidPrimingVolume, _device));
+					job.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.InitialFluidPrimingVolume, _device));
 				}
 				job.Commands.Add(new NotifyComplete((command) => { NotifyFluidPrimingComplete(); }, "Notify fluid priming complete.", _device));
 				_processEngine.QueueJob(job);
@@ -593,7 +593,18 @@ namespace Effani.Device.UI
             _processEngine.HoldQueueForHighPriorityJob = true;
 			PreparingToLoadSample = true;
 
-			if(DoSamplePreparationSteps)
+			if (!Assay.IsPrimedBasal)
+			{
+				var job = new Job("Priming basal media.");
+				job.Commands.Add(new AlignTableForWaste(_device));
+				for (int x = 1; x <= _config.SecondaryFluidPrimingIterations; x++)
+				{
+					job.Commands
+						.Add(new EmitFluid(Axis.Basal1, _config.SecondaryFluidPrimingVolume, _device));
+				}
+				Assay.IsPrimedBasal = true;
+			}
+			if (DoSamplePreparationSteps)
 			{
 				var basalAxis = CurrentLoadingSample.Well.Plate.Location.X == 0 ? Axis.Basal1 : Axis.Basal2;
 				_processEngine.QueuePriorityJob(new Job($"Adding Basal media to {CurrentLoadingSample.Label}.", [
@@ -835,7 +846,7 @@ namespace Effani.Device.UI
 			var job = new Job("Priming fluid pumps.");
 			foreach (var axis in _device.FluidAxes)
 			{
-				job.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.FluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.InitialFluidPrimingVolume, _device));
 			}
 			_processEngine.QueueJob(job);
 		}

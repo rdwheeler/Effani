@@ -52,7 +52,7 @@ namespace Effani.Device.UI
 		{
 			_doingPrepToBaselineTimerStart = true;
 
-			while (!FluidPrimingComplete)
+			while (!InitialFluidPrimingComplete)
 			{
 				if (_processTerminating)
 					return;
@@ -62,9 +62,33 @@ namespace Effani.Device.UI
 			try
 			{
                 if (MainViewModel.DispenseStandardFluids)
-                {
+				{
+					if (!IsPrimedDnaReagent || !IsPrimedNadh)
+					{
+						var primeJob = new Job("Priming DNA reagent and NADH.");
+						primeJob.Commands.Add(new AlignTableForWaste(Device));
+						if(!IsPrimedDnaReagent)
+						{
+							for(int x = 1; x <= Config.SecondaryFluidPrimingIterations; x++)
+							{
+								primeJob.Commands
+									.Add(new EmitFluid(Axis.DnaReagent1, Config.SecondaryFluidPrimingVolume, Device));
+							}
+							IsPrimedDnaReagent = true;
+						}
+						if (!IsPrimedNadh)
+						{
+							for (int x = 1; x <= Config.SecondaryFluidPrimingIterations; x++)
+							{
+								primeJob.Commands
+									.Add(new EmitFluid(Axis.Nadh1, Config.SecondaryFluidPrimingVolume, Device));
+							}
+							IsPrimedNadh = true;
+						}
+						Engine.QueueJob(primeJob);
+					}
                     var job = new Job("Dispensing DNA reagent and NADH for standards establishment.");
-                    foreach (var wellTest in DnaStandardsWells)
+					foreach (var wellTest in DnaStandardsWells)
                     {
                         job.Commands.AddRange(
                         [
@@ -278,7 +302,19 @@ namespace Effani.Device.UI
 						TakeReading(e, testWell, null);
 						Engine.QueuePriorityCommand(new NotifyComplete((command) => { TestInKohPhase?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test in KOH for {testWell.Label}", Device));
 						Axis kohAxis = testWell.Well.Plate.Location.X == 0 ? Axis.Koh1 : Axis.Koh2;
-                        var job = new Job($"Adding KOH to {testWell.Label}.");
+						if (!IsPrimedKoh)
+						{
+							var primeJob = new Job("Priming KOH.");
+							primeJob.Commands.Add(new AlignTableForWaste(Device));
+							for (int x = 1; x <= Config.SecondaryFluidPrimingIterations; x++)
+							{
+								primeJob.Commands
+									.Add(new EmitFluid(kohAxis, Config.SecondaryFluidPrimingVolume, Device));
+							}
+							IsPrimedKoh = true;
+							Engine.QueueJob(primeJob);
+						}
+						var job = new Job($"Adding KOH to {testWell.Label}.");
 						// remove fluid from well
 						job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.TestMediaAspirationVolume));
 						job.Commands.AddRange(
@@ -315,7 +351,7 @@ namespace Effani.Device.UI
                 if (MainViewModel.DoKohTimerSteps)
                 {
                     Axis dnaAxis = testWell.Well.Plate.Location.X == 0 ? Axis.DnaReagent1 : Axis.DnaReagent2;
-                    var job = new Job($"Dispensing DNA reagent to {testWell.Label}");
+					var job = new Job($"Dispensing DNA reagent to {testWell.Label}");
 					// remove KOH from well
 					job.Commands.AddRange(GetAspirationCommands(FluidType.Koh, testWell, Config.KohAspirationVolume));
 					job.Commands.AddRange(
@@ -435,7 +471,11 @@ namespace Effani.Device.UI
 		public AbalDeviceControl Device { get; private set; }
 		public ProcessEngine Engine { get; private set; }
 		public DeviceConfiguration Config => Device.Configuration;
-		public bool FluidPrimingComplete { get; set; }
+		public bool InitialFluidPrimingComplete { get; set; }
+		public bool IsPrimedDnaReagent { get; set; }
+		public bool IsPrimedNadh { get; set; }
+		public bool IsPrimedKoh { get; set; }
+		public bool IsPrimedBasal { get; set; }
 
 		public event EventHandler StandardsComplete;
 		public event EventHandler Terminated;

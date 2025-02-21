@@ -322,7 +322,9 @@ G90 ; absolute positioning
 			TestWellsPerPlate = GetConfigValue<int>(nameof(TestWellsPerPlate));
 			WellOffset = GetCoordinateConfigValue(nameof(WellOffset));
 			TraySterilizationTime = GetConfigValue<float>(nameof(TraySterilizationTime));
-			FluidPrimingVolume = GetConfigValue<int>(nameof(FluidPrimingVolume));
+			InitialFluidPrimingVolume = GetConfigValue<int>(nameof(InitialFluidPrimingVolume));
+			SecondaryFluidPrimingIterations = GetConfigValue<int>(nameof(SecondaryFluidPrimingIterations));
+			SecondaryFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryFluidPrimingVolume));
 			StandardsProcessingDwell = GetConfigValue<int>(nameof(StandardsProcessingDwell));
 			DnaVolume = GetConfigValue<int>(nameof(DnaVolume));
 			NadhVolume = GetConfigValue<int>(nameof(NadhVolume));
@@ -402,7 +404,9 @@ G90 ; absolute positioning
 		public int TestWellsPerPlate { get; set; } // total wells on a given plate to be used for testing
 		public Coordinate WellOffset { get; set; } // distance between cells
 		public float TraySterilizationTime { get; set; } // ammount of seconds tray will be UV sterilized
-		public int FluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
+		public int InitialFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
+		public int SecondaryFluidPrimingVolume { get; set; }
+		public int SecondaryFluidPrimingIterations { get; set; }
 		public int KohVolume { get; set; } // microliters dispensed by KOH pump
 		public int DnaVolume { get; set; } // microliters dispensed by DNA pump
 		public int NadhVolume { get; set; } // microliters dispensed by NADH pump
