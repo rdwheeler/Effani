@@ -1,4 +1,5 @@
 ﻿using Drivetrain.Robotics.Control;
+using System.Threading;
 
 namespace Drivetrain.Robotics.Process
 {
@@ -7,7 +8,7 @@ namespace Drivetrain.Robotics.Process
 		protected override void Run()
 		{
 			var device = (AbalDeviceControl)Device;
-			device.TraySterilizerOff();
+			device.TraySterilizerOff(0);
 		}
 
 		public override string Description => "Turn off tray sterilizer.";

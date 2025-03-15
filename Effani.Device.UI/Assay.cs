@@ -228,15 +228,14 @@ namespace Effani.Device.UI
 				Engine.QueuePriorityCommand(new NotifyComplete((command) => { TestInNadhReadingsPhase?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test in NADH for {testWell.Label}", Device));
                 if (MainViewModel.DoNadhReadingSteps)
                 {
-                    Axis nadhAxis = testWell.Well.Plate.Location.X == 0 ? Axis.Nadh1 : Axis.Nadh2;
                     var job = new Job($"Dispensing {Config.NadhVolume}μl NADH to {testWell.Label} for NADH readings 1.");
 					// remove fluid from well
 					job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.TestMediaAspirationVolume));
 					job.Commands.AddRange(
                     [
                         // add NADH to well
-                        new AlignWellToAxis(nadhAxis, testWell.Well, Device),
-                        new EmitFluid(nadhAxis, Config.NadhVolume, Device),
+                        new AlignWellToAxis(Axis.Nadh1, testWell.Well, Device),
+                        new EmitFluid(Axis.Nadh1, Config.NadhVolume, Device),
                     ]);
                     Engine.QueueJob(job);
 
@@ -301,7 +300,6 @@ namespace Effani.Device.UI
                     case 5:
 						TakeReading(e, testWell, null);
 						Engine.QueuePriorityCommand(new NotifyComplete((command) => { TestInKohPhase?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test in KOH for {testWell.Label}", Device));
-						Axis kohAxis = testWell.Well.Plate.Location.X == 0 ? Axis.Koh1 : Axis.Koh2;
 						if (!IsPrimedKoh)
 						{
 							var primeJob = new Job("Priming KOH.");
@@ -309,7 +307,7 @@ namespace Effani.Device.UI
 							for (int x = 1; x <= Config.SecondaryFluidPrimingIterations; x++)
 							{
 								primeJob.Commands
-									.Add(new EmitFluid(kohAxis, Config.SecondaryFluidPrimingVolume, Device));
+									.Add(new EmitFluid(Axis.Koh1, Config.SecondaryFluidPrimingVolume, Device));
 							}
 							IsPrimedKoh = true;
 							Engine.QueueJob(primeJob);
@@ -320,8 +318,8 @@ namespace Effani.Device.UI
 						job.Commands.AddRange(
                         [
 							// add KOH to well
-							new AlignWellToAxis(kohAxis, testWell.Well, Device),
-                            new EmitFluid(kohAxis, Config.KohVolume, Device),
+							new AlignWellToAxis(Axis.Koh1, testWell.Well, Device),
+                            new EmitFluid(Axis.Koh1, Config.KohVolume, Device),
                         ]);
 						job.Commands.AddRange(
 						[
@@ -350,15 +348,14 @@ namespace Effani.Device.UI
 				Engine.QueuePriorityCommand(new NotifyComplete((command) => { TestInDnaPhase?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test in DNA for {testWell.Label}", Device));
                 if (MainViewModel.DoKohTimerSteps)
                 {
-                    Axis dnaAxis = testWell.Well.Plate.Location.X == 0 ? Axis.DnaReagent1 : Axis.DnaReagent2;
 					var job = new Job($"Dispensing DNA reagent to {testWell.Label}");
 					// remove KOH from well
 					job.Commands.AddRange(GetAspirationCommands(FluidType.Koh, testWell, Config.KohAspirationVolume));
 					job.Commands.AddRange(
                     [
                         // add DNA reagent to well
-                        new AlignWellToAxis(dnaAxis, testWell.Well, Device),
-                        new EmitFluid(dnaAxis, Config.DnaVolume, Device),
+                        new AlignWellToAxis(Axis.DnaReagent1, testWell.Well, Device),
+                        new EmitFluid(Axis.DnaReagent1, Config.DnaVolume, Device),
                         new StartTimer(testWell.DnaIncubationTimer, $"{testWell.Label} DNA", Device)
 					]);
                     Engine.QueueJob(job);
@@ -418,8 +415,8 @@ namespace Effani.Device.UI
         {
             var axis = fluidType switch
             {
-                FluidType.General => Axis.AspirateFluid,
-                FluidType.Koh => Axis.AspirateKoh
+                FluidType.General => Axis.AspirateFluidZ,
+                FluidType.Koh => Axis.AspirateKohZ
             };
             Command removeCommand = fluidType switch
             {
@@ -427,17 +424,9 @@ namespace Effani.Device.UI
                 FluidType.Koh => new RemoveKoh(volume, Device),
                 _ => null
             };
-            Command emptyCommand = fluidType switch
-            {
-                FluidType.General => new EmptyAspirateFluid(Device),
-                FluidType.Koh => new EmptyAspirateKoh(Device),
-                _ => null
-            };
             var ret = new List<Command>();
             ret.Add(new AlignWellToAxis(axis, testWell.Well, Device));
             ret.Add(removeCommand);
-            ret.Add(new AlignTableForWaste(Device));
-            ret.Add(emptyCommand);
 
             return ret;
         }

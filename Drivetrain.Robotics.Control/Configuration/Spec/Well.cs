@@ -14,22 +14,20 @@ namespace Drivetrain.Robotics.Control
 			Location = location;
 			var row = y switch
 			{
-				7 => "A",
-				6 => "B",
-				5 => "C",
-				4 => "D",
-				3 => "E",
-				2 => "F",
-				1 => "G",
-				0 => "H",
+				0 => "A",
+				1 => "B",
+				2 => "C",
+				3 => "D",
+				4 => "E",
+				5 => "F",
+				6 => "G",
+				7 => "H",
 				_ => y.ToString()
 			};
 			var plateRow = plate.Location.Y switch
 			{
-				3 => "A",
-				2 => "B",
-				1 => "C",
-				0 => "D",
+				0 => "A",
+				1 => "B",
 				_ => plate.Location.Y.ToString()
 			};
 

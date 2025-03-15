@@ -7,7 +7,7 @@ namespace Drivetrain.Robotics.Process
 		protected override void Run()
 		{
 			var device = (AbalDeviceControl)Device;
-			device.TraySterilizerOn();
+			device.TraySterilizerOn(0);
 		}
 
 		public override string Description => "Turn on tray sterilizer.";

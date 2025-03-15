@@ -10,12 +10,6 @@ namespace Drivetrain.Robotics.Control
 		TableX,
 		[Display(ShortName = "Y")]
 		TableY,
-		//[Display(ShortName = "Z")]
-		//Biopsy,
-		//[Display(ShortName = "U")]
-		//BiopsyEject,
-		[Display(ShortName = "Z")]
-		AspirateKoh,
 		[Display(ShortName = "U")]
 		AspirateKohZ,
 		[Display(ShortName = "V")]
@@ -26,17 +20,7 @@ namespace Drivetrain.Robotics.Control
 		Nadh1,
 		[Display(ShortName = "B")]
 		Basal1,
-        [Display(ShortName = "C")]
-        AspirateFluid,
         [Display(ShortName = "D")]
         AspirateFluidZ,
-		[Display(ShortName = "X")]
-		DnaReagent2,
-		[Display(ShortName = "Y")]
-		Koh2,
-		[Display(ShortName = "Z")]
-		Nadh2,
-		[Display(ShortName = "U")]
-		Basal2,
 	}
 }

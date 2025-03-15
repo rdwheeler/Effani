@@ -10,8 +10,8 @@ namespace Drivetrain.Robotics.Control
 			Location = index;
 			var plateRow = index.Y switch
 			{
-				1 => "A",
-				0 => "B",
+				0 => "A",
+				1 => "B",
 				_ => index.Y.ToString()
 			};
 

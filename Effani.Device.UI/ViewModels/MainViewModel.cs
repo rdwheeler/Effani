@@ -606,10 +606,9 @@ namespace Effani.Device.UI
 			}
 			if (DoSamplePreparationSteps)
 			{
-				var basalAxis = CurrentLoadingSample.Well.Plate.Location.X == 0 ? Axis.Basal1 : Axis.Basal2;
 				_processEngine.QueuePriorityJob(new Job($"Adding Basal media to {CurrentLoadingSample.Label}.", [
-					new AlignWellToAxis(basalAxis, CurrentLoadingSample.Well, _device),
-					new EmitFluid(basalAxis, _device.Configuration.BasalVolume, _device)
+					new AlignWellToAxis(Axis.Basal1, CurrentLoadingSample.Well, _device),
+					new EmitFluid(Axis.Basal1, _device.Configuration.BasalVolume, _device)
 				]));
 				_processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
 					new AlignWellToLocation(_device.Configuration.BiopsyLocation, CurrentLoadingSample.Well, _device),
@@ -661,6 +660,9 @@ namespace Effani.Device.UI
 		[Command]
 		public void TraysLoaded()
 		{
+			_processEngine.QueuePriorityJob(new Job($"Sterilizing sample trays.", [
+				new RunSterilizationCycle(_device, _config.TraySterilizationTime)]));
+
 			new System.Threading.Thread(() => Assay.EstablishStandards()).Start();
 			AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
@@ -738,14 +740,6 @@ namespace Effani.Device.UI
         }
 
         [Command]
-        public async Task EmptyKoh(AxisSpec axisSpec)
-        {
-            Mouse.OverrideCursor = Cursors.Wait;
-            _processEngine.QueueCommand(new EmptyAspirateKoh(_device));
-            Mouse.OverrideCursor = Cursors.Arrow;
-        }
-
-        [Command]
         public async Task AspirateKoh(AxisSpec axisSpec)
         {
             Mouse.OverrideCursor = Cursors.Wait;
@@ -790,10 +784,9 @@ namespace Effani.Device.UI
         {
             Mouse.OverrideCursor = Cursors.Wait;
 			var well = CurrentWell;
-			var basalAxis = CurrentLoadingSample.Well.Plate.Location.X == 0 ? Axis.Basal1 : Axis.Basal2;
 			_processEngine.QueuePriorityJob(new Job($"Adding Basal media to {CurrentLoadingSample.Label}.", [
-				new AlignWellToAxis(basalAxis, CurrentLoadingSample.Well, _device),
-				new EmitFluid(basalAxis, _device.Configuration.BasalVolume, _device)
+				new AlignWellToAxis(Axis.Basal1, CurrentLoadingSample.Well, _device),
+				new EmitFluid(Axis.Basal1, _device.Configuration.BasalVolume, _device)
 			]));
 			_processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
 				new AlignWellToLocation(_device.Configuration.BiopsyLocation, CurrentLoadingSample.Well, _device)
@@ -822,7 +815,7 @@ namespace Effani.Device.UI
 		[Command]
 		public async Task TraySterilizerOff()
 		{
-			_processEngine.QueueCommand(new TraySterilizerOn(_device));
+			_processEngine.QueueCommand(new TraySterilizerOff(_device));
 		}
 
 		[Command]
