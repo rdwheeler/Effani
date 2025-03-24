@@ -13,7 +13,7 @@ namespace Drivetrain.Robotics.Control
 			MaxSpeed = maxSpeed;
 			Driver = new DriverSpec(Label)
 			{
-				Current = 1700,
+				Current = 2000,
 				Direction = direction,
 				Endstop = new EndstopSpec($"{Label} Endstop")
                 {
