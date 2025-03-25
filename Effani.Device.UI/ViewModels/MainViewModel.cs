@@ -82,7 +82,14 @@ namespace Effani.Device.UI
             {
                 //_processEngine.QueueCommand(new SetTableTemp(_config.TrayTemperature, _device));
 				_processEngine.QueueJob(new Job("Moving all controls to loading positions.", [
-					new HomeAll(_device),
+					new HomeAxis(Axis.TableX, _device),
+					new HomeAxis(Axis.TableY, _device),
+					new HomeAxis(Axis.Koh1, _device),
+					new HomeAxis(Axis.Basal1, _device),
+					new HomeAxis(Axis.DnaReagent1, _device),
+					new HomeAxis(Axis.Nadh1, _device),
+					new HomeAxis(Axis.AspirateKohZ, _device),
+					new HomeAxis(Axis.AspirateFluidZ, _device),
 					new MoveToStartingLocations(_device),
                     new TableToTrayLoadingLocation(_device),
 					new NotifyComplete((command) => { NotifyMoveStartingPositionsComplete(); }, "Notify move to starting positions complete.", _device)
