@@ -59,15 +59,6 @@ namespace Drivetrain.Robotics.Control
 		{
 			return ReadSensor(1, Configuration.SensorReadDwell);
 		}
-
-		public void TraySterilizerOn(int lightNumber)
-		{
-			AccOn(lightNumber);
-		}
-		public void TraySterilizerOff(int lightNumber)
-		{
-			AccOff(lightNumber);
-		}
 		public void LaserDnaOn()
 		{
 			AccOn(3);

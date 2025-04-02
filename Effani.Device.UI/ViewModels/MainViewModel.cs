@@ -551,7 +551,7 @@ namespace Effani.Device.UI
 		public static bool DoHome = true;
 		public static bool DoPrime = true;
 		public static bool DoStandardsSteps = true;
-        public static bool DispenseStandardFluids = true;
+        public static bool SterilizeAndDispenseStandardFluids = true;
 		public static bool DoSamplePreparationSteps = true;
         public static bool DoNadhReadingSteps = true;
         public static bool DoKohTimerSteps = true;
@@ -667,9 +667,6 @@ namespace Effani.Device.UI
 		[Command]
 		public void TraysLoaded()
 		{
-			_processEngine.QueuePriorityJob(new Job($"Sterilizing sample trays.", [
-				new RunSterilizationCycle(_device, _config.TraySterilizationTime)]));
-
 			new System.Threading.Thread(() => Assay.EstablishStandards()).Start();
 			AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
@@ -784,9 +781,26 @@ namespace Effani.Device.UI
             Mouse.OverrideCursor = Cursors.Wait;
             _processEngine.QueueCommand(new AlignTableForWaste(_device));
             Mouse.OverrideCursor = Cursors.Arrow;
-        }
+		}
 
-        [Command]
+		[Command]
+		public async Task AlignForTrayLoading()
+		{
+			Mouse.OverrideCursor = Cursors.Wait;
+			_processEngine.QueueCommand(new TableToTrayLoadingLocation(_device));
+			Mouse.OverrideCursor = Cursors.Arrow;
+		}
+
+
+
+		[Command]
+		public async Task AlignForSterilization()
+		{
+			Mouse.OverrideCursor = Cursors.Wait;
+			_processEngine.QueueCommand(new TableToTraySterilizationLocation(_device));
+			Mouse.OverrideCursor = Cursors.Arrow;
+		}
+		[Command]
         public async Task InjectSampleTest()
         {
             Mouse.OverrideCursor = Cursors.Wait;
@@ -814,15 +828,27 @@ namespace Effani.Device.UI
 		}
 
 		[Command]
-		public async Task TraySterilizerOn()
+		public async Task ChamberUvOn()
 		{
-			_processEngine.QueueCommand(new TraySterilizerOn(_device));
+			_processEngine.QueueCommand(new ChamberUvOn(_device));
 		}
 
 		[Command]
-		public async Task TraySterilizerOff()
+		public async Task ChamberUvOff()
 		{
-			_processEngine.QueueCommand(new TraySterilizerOff(_device));
+			_processEngine.QueueCommand(new ChamberUvOff(_device));
+		}
+
+		[Command]
+		public async Task TrayUvOn()
+		{
+			_processEngine.QueueCommand(new TrayUvOn(_device));
+		}
+
+		[Command]
+		public async Task TrayUvOff()
+		{
+			_processEngine.QueueCommand(new TrayUvOff(_device));
 		}
 
 		[Command]

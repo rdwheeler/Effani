@@ -61,8 +61,14 @@ namespace Effani.Device.UI
 
 			try
 			{
-                if (MainViewModel.DispenseStandardFluids)
+
+				if (MainViewModel.SterilizeAndDispenseStandardFluids)
 				{
+					Engine.QueuePriorityJob(new Job($"Sterilizing sample trays.", [
+						new TableToTraySterilizationLocation(Device),
+						new RunSterilizationCycle(Device, Config.TraySterilizationTime)
+					]));
+
 					if (!IsPrimedDnaReagent || !IsPrimedNadh)
 					{
 						var primeJob = new Job("Priming DNA reagent and NADH.");

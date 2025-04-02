@@ -3,14 +3,14 @@ using System.Threading;
 
 namespace Drivetrain.Robotics.Process
 {
-	public class TraySterilizerOff(AbalDeviceControl device) : Command(device)
+	public class ChamberUvOff(AbalDeviceControl device) : Command(device)
 	{
 		protected override void Run()
 		{
 			var device = (AbalDeviceControl)Device;
-			device.TraySterilizerOff(0);
+			device.AccOff(1);
 		}
 
-		public override string Description => "Turn off tray sterilizer.";
+		public override string Description => "Turn off chamber sterilizer.";
 	}
 }

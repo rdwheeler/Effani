@@ -135,12 +135,10 @@ M669 K0 ; configure Cartesian kinematics
             }
             var t = configTextBuilder.ToString();
             configTextBuilder.AppendLine("\r\n; Actuators");
-			configTextBuilder.AppendLine(@"M950 P0 C""1.out5"" ; plate UV");
-			configTextBuilder.AppendLine(@"M950 P1 C""1.out6"" ; needle UV");
-			//configTextBuilder.AppendLine(@"M42 P1 S1 ; needle UV"); // needle UV uses voltage to signal off state because its a dimmer
+			configTextBuilder.AppendLine(@"M950 P0 C""2.out5"" ; tray UV");
+			configTextBuilder.AppendLine(@"M950 P1 C""1.out6"" ; chamber UV");
 			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
 			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
-			//configTextBuilder.AppendLine(@"M950 P4 C""out5"" ; CO2");
 			configTextBuilder.AppendLine("\r\n; Sensors");
 			foreach (var sensor in DeviceSpecification.Sensors)
 			{
@@ -201,7 +199,7 @@ G90 ; absolute positioning
 		{
 			DeviceSpecification = new DeviceSpecification();
 			DeviceSpecification.DeviceName = DeviceSpecification.Label;
-			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 500, EndstopLocation.LowEnd, Direction.Forwards, TableAxisSpeed));
+			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 500, EndstopLocation.LowEnd, Direction.Backwards, TableAxisSpeed));
 			DeviceSpecification.Axes.Add((AxisSpec)new TableAxis(Axis.TableY, 0, 1, 500, EndstopLocation.LowEnd, Direction.Backwards, TableAxisSpeed));
 			DeviceSpecification.Axes.AddRange(GetAspirateAxes());
 			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent1, 1, 4, DnaLocation, FluidSyringeLoadingPosition));
@@ -311,7 +309,6 @@ G90 ; absolute positioning
 			NadhVolume = GetConfigValue<int>(nameof(NadhVolume));
 			KohVolume = GetConfigValue<int>(nameof(KohVolume));
 			SensorReadDwell = GetConfigValue<int>(nameof(SensorReadDwell));
-			Co2Dwell = GetConfigValue<int>(nameof(Co2Dwell));
 			TestMediaAspirationVolume = GetConfigValue<int>(nameof(TestMediaAspirationVolume));
 			StirringDistance = GetConfigValue<float>(nameof(StirringDistance));
 			NadhReadingsTimerPeriod = GetConfigValue<int>(nameof(NadhReadingsTimerPeriod));
@@ -329,9 +326,11 @@ G90 ; absolute positioning
 			StandardsWellCount = GetConfigValue<int>(nameof(StandardsWellCount));
 			TimerDescriptionUpdateInterval = GetConfigValue<int>(nameof(TimerDescriptionUpdateInterval));
 			TrayLoadingLocation = GetCoordinateConfigValue(nameof(TrayLoadingLocation));
-            FirstWellLocation = GetCoordinateConfigValue(nameof(FirstWellLocation));
+			TraySterilizationLocation = GetCoordinateConfigValue(nameof(TraySterilizationLocation));
+			FirstWellLocation = GetCoordinateConfigValue(nameof(FirstWellLocation));
 			AspirateTravelPerMicroLiter = GetConfigValue<float>(nameof(AspirateTravelPerMicroLiter));
 			FluidTravelPerMicroLiter = GetConfigValue<float>(nameof(FluidTravelPerMicroLiter));
+			AspirateStirSpeed = GetConfigValue<float>(nameof(AspirateStirSpeed));
 			TableAxisSpeed = GetConfigValue<int>(nameof(TableAxisSpeed));
 		}
 
@@ -381,15 +380,14 @@ G90 ; absolute positioning
         public int BasalVolume { get; set; } // microliters dispensed by Basal pump
         public int OpticalSensorDwell { get; set; } // total milliseconds to activate laser and read sensor
 		public int SensorReadDwell { get; set; } // total milliseconds to wait for a sensor reading to be reported
-		public int Co2Dwell { get; set; } // total milliseconds to activate CO2
 		public int TestMediaAspirationVolume { get; set; } // microliters withdraw from baseline
 		public float StirringDistance { get; set; } // total mm to move needle when stirring
 		public int BasalIncubationTimerPeriod { get; set; } // miliseconds of the basal media incubation
 		public int NadhReadingsTimerPeriod { get; set; } // miliseconds between NADH readings
 		public int KohTimerPeriod { get; set; } // milliseconds the KOH timer will wait - 4hs
 		public int DnaTimerPeriod { get; set; } // miliseconds the DNA timer will wait
-		public int KohAspirationVolume { get; set; } // microliters withdraw for before KOH injection
-		public int DnaAspirationVolume { get; set; } // microliters withdraw for before DNA reagent injection
+		public int KohAspirationVolume { get; set; } // microliters to withdraw for before KOH injection
+		public int DnaAspirationVolume { get; set; } // microliters to withdraw for before DNA reagent injection
 		public int CleanUpAspirationVolume { get; set; } // microliters withdrawn for clean up
 		public int StandardsProcessingDwell { get; set; } // milliseconds standards processing will wait
 		public int TimerDescriptionUpdateInterval { get; set; } // milliseconds between updateing the UI with time-remaining descriptons
@@ -397,6 +395,7 @@ G90 ; absolute positioning
 		public int StandardsWellCount { get; set; }
 		public Coordinate FirstWellLocation { get; set; }
         public Coordinate TrayLoadingLocation { get; set; }
+		public Coordinate TraySterilizationLocation { get; set; }
 		public float AspirateTravelPerMicroLiter { get; set; }
 		public float FluidTravelPerMicroLiter { get; set; }
 		public int TableAxisSpeed { get; set; }
