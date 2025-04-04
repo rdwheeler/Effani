@@ -608,7 +608,7 @@ namespace Effani.Device.UI
 				job.Commands.Add(new AlignTableForWaste(_device));
 				job.Commands.Add(new EmitFluid(Axis.Basal1, _config.SecondaryFluidPrimingVolume, _device));
 				Assay.IsPrimedBasal = true;
-				_processEngine.QueueJob(job);
+				_processEngine.QueuePriorityJob(job);
 			}
 			if (DoSamplePreparationSteps)
 			{
