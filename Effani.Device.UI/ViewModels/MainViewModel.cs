@@ -101,8 +101,7 @@ namespace Effani.Device.UI
 			}
 		}
 		public void PageStartLoadSampleTrays()
-		{
-			Thread.Sleep(1000);        
+		{    
 		}
         public void PageStartLoadingSamples()
 		{

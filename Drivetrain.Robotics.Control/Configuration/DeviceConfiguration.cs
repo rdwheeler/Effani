@@ -302,7 +302,6 @@ G90 ; absolute positioning
 			WellOffset = GetCoordinateConfigValue(nameof(WellOffset));
 			TraySterilizationTime = GetConfigValue<int>(nameof(TraySterilizationTime));
 			InitialFluidPrimingVolume = GetConfigValue<int>(nameof(InitialFluidPrimingVolume));
-			SecondaryFluidPrimingIterations = GetConfigValue<int>(nameof(SecondaryFluidPrimingIterations));
 			SecondaryFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryFluidPrimingVolume));
 			StandardsProcessingDwell = GetConfigValue<int>(nameof(StandardsProcessingDwell));
 			DnaVolume = GetConfigValue<int>(nameof(DnaVolume));
