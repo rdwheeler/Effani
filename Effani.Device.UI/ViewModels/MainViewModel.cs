@@ -579,6 +579,7 @@ namespace Effani.Device.UI
 		[Command]
 		public void FluidLoaded()
         {
+			Thread.Sleep(1000);
             if (DoPrime)
             {
                 var job = new Job("Priming fluid pumps.");
