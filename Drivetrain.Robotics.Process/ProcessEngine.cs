@@ -9,7 +9,7 @@ namespace Drivetrain.Robotics.Process
 		#region Constructors
 		public ProcessEngine()
 		{
-			_processThread = new Thread(ProcessCommands);
+			_processThread = new Thread(ProcessJobs);
 			_processThread.Start();
 			_publishThread = new Thread(PublishMessages);
 			_publishThread.Start();
@@ -69,7 +69,7 @@ namespace Drivetrain.Robotics.Process
 		{
 			Messages.Enqueue(message);
 		}
-		private void ProcessCommands()
+		private void ProcessJobs()
 		{
 			try
 			{

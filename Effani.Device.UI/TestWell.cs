@@ -24,7 +24,7 @@ namespace Effani.Device.UI
 			TestIndex = testIndex;
 			Well = well;
 
-			BasalIncubationCount = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			BasalIncubationCount = deviceConfiguration.BasalIncubationTimerPeriod / _timerDescriptionUpdateInterval;
 			NadhReadings2Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
 			NadhReadings3Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
 			NadhReadings4Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
