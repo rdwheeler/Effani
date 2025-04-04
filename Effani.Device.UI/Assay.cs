@@ -392,7 +392,6 @@ namespace Effani.Device.UI
             try
             {
                 var testWell = sender as TestWell;
-				Engine.QueuePriorityCommand(new NotifyComplete((command) => { TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test complete for {testWell.Label}", Device));
                 if (MainViewModel.DoDnaIncubationTimerSteps)
 				{
 					Engine.QueueJob(new Job($"Reading DNA from {testWell.Well.Label}.", [
@@ -404,7 +403,12 @@ namespace Effani.Device.UI
                     var job = new Job($"Test completed for {testWell.Label}. Removing remaining fluid.");
 					// remove KOH from well
 					job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.CleanUpAspirationVolume));
+					job.Commands.Add(new NotifyComplete((command) => { TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test complete for {testWell.Label}", Device));
                     Engine.QueueJob(job);
+				}
+				else
+				{
+					Engine.QueueCommand(new NotifyComplete((command) => { TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test complete for {testWell.Label}", Device));
 				}
 
 			}
