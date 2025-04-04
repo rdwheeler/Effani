@@ -332,7 +332,8 @@ G90 ; absolute positioning
 			AspirateStirSpeed = GetConfigValue<float>(nameof(AspirateStirSpeed));
 			TableAxisSpeed = GetConfigValue<int>(nameof(TableAxisSpeed));
 			PauseCommandsForPrompt = GetConfigValue<bool>(nameof(PauseCommandsForPrompt));
-		}
+            AspirationDwell = GetConfigValue<int>(nameof(AspirationDwell));
+        }
 
 		public int BypassDeviceCommands { get; set; }
 		public bool PauseCommandsForPrompt { get; set; }
@@ -393,7 +394,8 @@ G90 ; absolute positioning
 		public int TimerDescriptionUpdateInterval { get; set; } // milliseconds between updateing the UI with time-remaining descriptons
 		public int ComPortNumber { get; set; }
 		public int StandardsWellCount { get; set; }
-		public Coordinate FirstWellLocation { get; set; }
+        public int AspirationDwell { get; set; }
+        public Coordinate FirstWellLocation { get; set; }
         public Coordinate TrayLoadingLocation { get; set; }
 		public Coordinate TraySterilizationLocation { get; set; }
 		public float AspirateTravelPerMicroLiter { get; set; }
