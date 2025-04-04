@@ -604,12 +604,9 @@ namespace Effani.Device.UI
 			{
 				var job = new Job("Priming basal media.");
 				job.Commands.Add(new AlignTableForWaste(_device));
-				for (int x = 1; x <= _config.SecondaryFluidPrimingIterations; x++)
-				{
-					job.Commands
-						.Add(new EmitFluid(Axis.Basal1, _config.SecondaryFluidPrimingVolume, _device));
-				}
+				job.Commands.Add(new EmitFluid(Axis.Basal1, _config.SecondaryFluidPrimingVolume, _device));
 				Assay.IsPrimedBasal = true;
+				_processEngine.QueueJob(job);
 			}
 			if (DoSamplePreparationSteps)
 			{
@@ -736,59 +733,45 @@ namespace Effani.Device.UI
         [Command]
         public async Task EmitFluid(AxisSpec axisSpec)
         {
-            Mouse.OverrideCursor = Cursors.Wait;
             var plate = _device.Configuration.DeviceSpecification.Plates
                 .FirstOrDefault(p => p.Location.X == 0 && p.Location.Y == 0);
             _processEngine.QueueCommand(new EmitFluid(axisSpec.Axis, EmitFluidVolume, _device));
-            Mouse.OverrideCursor = Cursors.Arrow;
         }
 
         [Command]
         public async Task AspirateKoh(AxisSpec axisSpec)
-        {
-            Mouse.OverrideCursor = Cursors.Wait;
-            _processEngine.QueueCommand(new RemoveKoh(EmitFluidVolume, _device));
-            Mouse.OverrideCursor = Cursors.Arrow;
+		{
+			_processEngine.QueueCommand(new RemoveKoh(_config.KohAspirationVolume, _device));
 		}
 
 		[Command]
 		public async Task AspirateFluid(AxisSpec axisSpec)
 		{
-			Mouse.OverrideCursor = Cursors.Wait;
-			_processEngine.QueueCommand(new RemoveFluid(EmitFluidVolume, _device));
-			Mouse.OverrideCursor = Cursors.Arrow;
+			_processEngine.QueueCommand(new RemoveFluid(_config.TestMediaAspirationVolume, _device));
 		}
 
 		[Command]
         public async Task HomeAll()
         {
-            Mouse.OverrideCursor = Cursors.Wait;
             _processEngine.QueueCommand(new HomeAll(_device));
-            Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
 		[Command]
 		public async Task MoveToStartingLocations()
 		{
-			Mouse.OverrideCursor = Cursors.Wait;
 			_processEngine.QueueCommand(new MoveToStartingLocations(_device));
-			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
 		[Command]
         public async Task AlignForWaste()
         {
-            Mouse.OverrideCursor = Cursors.Wait;
             _processEngine.QueueCommand(new AlignTableForWaste(_device));
-            Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
 		[Command]
 		public async Task AlignForTrayLoading()
 		{
-			Mouse.OverrideCursor = Cursors.Wait;
 			_processEngine.QueueCommand(new TableToTrayLoadingLocation(_device));
-			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
 
@@ -796,14 +779,11 @@ namespace Effani.Device.UI
 		[Command]
 		public async Task AlignForSterilization()
 		{
-			Mouse.OverrideCursor = Cursors.Wait;
 			_processEngine.QueueCommand(new TableToTraySterilizationLocation(_device));
-			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 		[Command]
         public async Task InjectSampleTest()
         {
-            Mouse.OverrideCursor = Cursors.Wait;
 			var well = CurrentWell;
 			_processEngine.QueuePriorityJob(new Job($"Adding Basal media to {CurrentLoadingSample.Label}.", [
 				new AlignWellToAxis(Axis.Basal1, CurrentLoadingSample.Well, _device),
@@ -812,7 +792,6 @@ namespace Effani.Device.UI
 			_processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
 				new AlignWellToLocation(_device.Configuration.BiopsyLocation, CurrentLoadingSample.Well, _device)
 			]));
-			Mouse.OverrideCursor = Cursors.Arrow;
         }
 
         [Command]

@@ -107,7 +107,7 @@ namespace Drivetrain.Robotics.Control
 		}
 		private float CalcAspirateTravelMmForMl(int microLiters)
 		{
-			var ret = (Configuration.AspirateTravelPerMicroLiter * microLiters) * -1;
+			var ret = (Configuration.AspirateTravelPerMicroLiter * microLiters);
 			return ret;
 		}
 		private void DoStir(AxisSpec axis, float distance)

@@ -310,7 +310,6 @@ G90 ; absolute positioning
 			KohVolume = GetConfigValue<int>(nameof(KohVolume));
 			SensorReadDwell = GetConfigValue<int>(nameof(SensorReadDwell));
 			TestMediaAspirationVolume = GetConfigValue<int>(nameof(TestMediaAspirationVolume));
-			StirringDistance = GetConfigValue<float>(nameof(StirringDistance));
 			NadhReadingsTimerPeriod = GetConfigValue<int>(nameof(NadhReadingsTimerPeriod));
 			KohTimerPeriod = GetConfigValue<int>(nameof(KohTimerPeriod));
 			DnaTimerPeriod = GetConfigValue<int>(nameof(DnaTimerPeriod));
@@ -373,7 +372,6 @@ G90 ; absolute positioning
 		public int TraySterilizationTime { get; set; } // ammount of seconds tray will be UV sterilized
 		public int InitialFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
 		public int SecondaryFluidPrimingVolume { get; set; }
-		public int SecondaryFluidPrimingIterations { get; set; }
 		public int KohVolume { get; set; } // microliters dispensed by KOH pump
 		public int DnaVolume { get; set; } // microliters dispensed by DNA pump
 		public int NadhVolume { get; set; } // microliters dispensed by NADH pump
