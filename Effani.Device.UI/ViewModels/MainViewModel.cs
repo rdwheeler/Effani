@@ -265,6 +265,9 @@ namespace Effani.Device.UI
 
 		private void ProcessEngine_BeginExecutingCommand(object sender, DataArgs<Command> e)
 		{
+			if (_config.PauseCommandsForPrompt)
+				MessageBox.Show(e.Data.Description, "Preparing to excute command");
+
 			ExecutingCommandText = e.Data.Description;
 		}
 		private void StatusMessages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -564,7 +567,7 @@ namespace Effani.Device.UI
 		public void AcceptSample()
 		{
 			var job = new Job($"{CurrentLoadingSample.Well.Label} sample loaded.");
-			job.Commands.Add(new StartTimer(CurrentLoadingSample.BasalIncubationTimer, $"{CurrentLoadingSample.Well.Label} basal incubation.", _device));
+			job.Commands.Add(new StartTimer(CurrentLoadingSample.BasalIncubationTimer, $"{CurrentLoadingSample.Well.Label} basal incubation", _device));
 			_processEngine.QueuePriorityJob(job);
 
 			_processEngine.HoldQueueForHighPriorityJob = false;
@@ -576,6 +579,7 @@ namespace Effani.Device.UI
 		[Command]
 		public void FluidLoaded()
         {
+			Thread.Sleep(1000);
             if (DoPrime)
             {
                 var job = new Job("Priming fluid pumps.");
@@ -605,7 +609,7 @@ namespace Effani.Device.UI
 				job.Commands.Add(new AlignTableForWaste(_device));
 				job.Commands.Add(new EmitFluid(Axis.Basal1, _config.SecondaryFluidPrimingVolume, _device));
 				Assay.IsPrimedBasal = true;
-				_processEngine.QueueJob(job);
+				_processEngine.QueuePriorityJob(job);
 			}
 			if (DoSamplePreparationSteps)
 			{

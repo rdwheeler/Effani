@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ABAL Device Control"
-#define MyAppVersion "2.6.3"
+#define MyAppVersion "2.6.4"
 #define MyAppPublisher "Effani"
 #define MyAppExeName "Effani.Device.UI.exe"
 

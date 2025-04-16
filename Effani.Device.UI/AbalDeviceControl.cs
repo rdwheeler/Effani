@@ -112,7 +112,8 @@ namespace Drivetrain.Robotics.Control
 		}
 		private void DoStir(AxisSpec axis, float distance)
 		{
-			MoveRelative(axis, distance);
+			MoveRelative(axis, distance, Configuration.AspirateStirSpeed);
+			Pause(Configuration.AspirationDwell);
 			//var repetitions = 1;
 			//var descentFactor = distance / (repetitions * 4);
 			//var proximityFactor = (Configuration.WellWidth / 2) * 0.9f;

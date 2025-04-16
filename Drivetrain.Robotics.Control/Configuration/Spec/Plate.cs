@@ -5,17 +5,17 @@ namespace Drivetrain.Robotics.Control
 {
 	public class Plate : Spec
 	{
-		public Plate(Coordinate index) : base($"Plate {index.X}.{index.Y}")
+		public Plate(Coordinate index) : base(null)
 		{
 			Location = index;
-			var plateRow = index.Y switch
+			var plateRow = index.X switch
 			{
 				0 => "A",
 				1 => "B",
 				_ => index.Y.ToString()
 			};
 
-			Label = $"{plateRow}{index.X + 1}";
+			Label = $"{plateRow}{index.Y + 1}";
 		}
 
 		public Coordinate Location { get; } // from left to right and bottom to top, this plate's position

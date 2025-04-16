@@ -312,6 +312,8 @@ G90 ; absolute positioning
 			NadhReadingsTimerPeriod = GetConfigValue<int>(nameof(NadhReadingsTimerPeriod));
 			KohTimerPeriod = GetConfigValue<int>(nameof(KohTimerPeriod));
 			DnaTimerPeriod = GetConfigValue<int>(nameof(DnaTimerPeriod));
+			BasalIncubationTimerPeriod = GetConfigValue<int>(nameof(BasalIncubationTimerPeriod));
+			TimerDescriptionUpdateInterval = GetConfigValue<int>(nameof(TimerDescriptionUpdateInterval));
 			KohAspirationVolume = GetConfigValue<int>(nameof(KohAspirationVolume));
 			DnaAspirationVolume = GetConfigValue<int>(nameof(DnaAspirationVolume));
 			BypassDeviceCommands = GetConfigValue<int>(nameof(BypassDeviceCommands));
@@ -322,7 +324,6 @@ G90 ; absolute positioning
             ComPortNumber = GetConfigValue<int>(nameof(ComPortNumber));
             BasalVolume = GetConfigValue<int>(nameof(BasalVolume));
 			StandardsWellCount = GetConfigValue<int>(nameof(StandardsWellCount));
-			TimerDescriptionUpdateInterval = GetConfigValue<int>(nameof(TimerDescriptionUpdateInterval));
 			TrayLoadingLocation = GetCoordinateConfigValue(nameof(TrayLoadingLocation));
 			TraySterilizationLocation = GetCoordinateConfigValue(nameof(TraySterilizationLocation));
 			FirstWellLocation = GetCoordinateConfigValue(nameof(FirstWellLocation));
@@ -330,11 +331,14 @@ G90 ; absolute positioning
 			FluidTravelPerMicroLiter = GetConfigValue<float>(nameof(FluidTravelPerMicroLiter));
 			AspirateStirSpeed = GetConfigValue<float>(nameof(AspirateStirSpeed));
 			TableAxisSpeed = GetConfigValue<int>(nameof(TableAxisSpeed));
+			PauseCommandsForPrompt = GetConfigValue<bool>(nameof(PauseCommandsForPrompt));
+            AspirationDwell = GetConfigValue<int>(nameof(AspirationDwell));
 			AspirationEmissionTogglePortNumber = GetConfigValue<int>(nameof(AspirationEmissionTogglePortNumber));
 			AspirationEmissionToggleBoardNumber = GetConfigValue<int>(nameof(AspirationEmissionToggleBoardNumber));
 		}
 
-		public int BypassDeviceCommands { get; set; } // zero for no, one for yes, more than one for a n millisecond pause when bypassing
+		public int BypassDeviceCommands { get; set; }
+		public bool PauseCommandsForPrompt { get; set; }
 		public float FluidSyringeLoadingPosition { get; set; }
 		public float AspirateFluidActuatorStartPosition { get; set; }
 		public float AspirateKohActuatorStartPosition { get; set; }
@@ -394,7 +398,8 @@ G90 ; absolute positioning
 		public int TimerDescriptionUpdateInterval { get; set; } // milliseconds between updateing the UI with time-remaining descriptons
 		public int ComPortNumber { get; set; }
 		public int StandardsWellCount { get; set; }
-		public Coordinate FirstWellLocation { get; set; }
+        public int AspirationDwell { get; set; }
+        public Coordinate FirstWellLocation { get; set; }
         public Coordinate TrayLoadingLocation { get; set; }
 		public Coordinate TraySterilizationLocation { get; set; }
 		public float AspirateTravelPerMicroLiter { get; set; }
