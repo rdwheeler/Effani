@@ -330,6 +330,8 @@ G90 ; absolute positioning
 			FluidTravelPerMicroLiter = GetConfigValue<float>(nameof(FluidTravelPerMicroLiter));
 			AspirateStirSpeed = GetConfigValue<float>(nameof(AspirateStirSpeed));
 			TableAxisSpeed = GetConfigValue<int>(nameof(TableAxisSpeed));
+			AspirationEmissionTogglePortNumber = GetConfigValue<int>(nameof(AspirationEmissionTogglePortNumber));
+			AspirationEmissionToggleBoardNumber = GetConfigValue<int>(nameof(AspirationEmissionToggleBoardNumber));
 		}
 
 		public int BypassDeviceCommands { get; set; } // zero for no, one for yes, more than one for a n millisecond pause when bypassing
@@ -364,6 +366,8 @@ G90 ; absolute positioning
 		public int NadhSensorNumber { get; set; }
 		public int NadhSensorReadHigh { get; set; }
 		public int NadhSensorReadLow { get; set; }
+		public int AspirationEmissionToggleBoardNumber { get; set; }
+		public int AspirationEmissionTogglePortNumber { get; set; }
 		public Coordinate WasteLocation { get; set; }
 		public int VerticalWellCount { get; set; }
 		public int HorizontalWellCount { get; set; }

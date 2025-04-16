@@ -84,14 +84,14 @@ namespace Drivetrain.Robotics.Control
 			MoveRelative(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
 			Pause(pauseDwell);
 		}
-		public void RemoveKoh(int microLiters)
+		public void AspirateKoh(int microLiters)
 		{
 			MoveAbsolute(Axis.AspirateKohZ, (Configuration.AspirateKohActuatorStartPosition + Configuration.AspirateKohDistanceToPlate), Configuration.AspiratePositioningSpeed);
 			var distance = CalcAspirateTravelMmForMl(microLiters);
 			DoStir(Axes[Axis.AspirateKohZ], distance);
 			MoveAbsolute(Axis.AspirateKohZ, Configuration.AspirateKohActuatorStartPosition);
 		}
-		public void RemoveFluid(int microLiters)
+		public void AspirateFluid(int microLiters)
 		{
 			MoveAbsolute(Axis.AspirateFluidZ, (Configuration.AspirateFluidActuatorStartPosition + Configuration.AspirateFluidDistanceToPlate), Configuration.AspiratePositioningSpeed);
 			var distance = CalcAspirateTravelMmForMl(microLiters);

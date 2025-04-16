@@ -740,13 +740,13 @@ namespace Effani.Device.UI
         [Command]
         public async Task AspirateKoh(AxisSpec axisSpec)
 		{
-			_processEngine.QueueCommand(new RemoveKoh(_config.KohAspirationVolume, _device));
+			_processEngine.QueueCommand(new AspirateKoh(_config.KohAspirationVolume, _device));
 		}
 
 		[Command]
 		public async Task AspirateFluid(AxisSpec axisSpec)
 		{
-			_processEngine.QueueCommand(new RemoveFluid(_config.TestMediaAspirationVolume, _device));
+			_processEngine.QueueCommand(new AspirateFluid(_config.TestMediaAspirationVolume, _device));
 		}
 
 		[Command]

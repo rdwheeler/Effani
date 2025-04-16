@@ -423,8 +423,8 @@ namespace Effani.Device.UI
             };
             Command removeCommand = fluidType switch
             {
-                FluidType.General => new RemoveFluid(volume, Device),
-                FluidType.Koh => new RemoveKoh(volume, Device),
+                FluidType.General => new AspirateFluid(volume, Device),
+                FluidType.Koh => new AspirateKoh(volume, Device),
                 _ => null
             };
             var ret = new List<Command>();
