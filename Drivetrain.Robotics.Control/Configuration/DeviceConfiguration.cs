@@ -139,6 +139,8 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine(@"M950 P1 C""1.out6"" ; chamber UV");
 			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
 			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
+			var aspirationEmissionToggleBoardNumber = AspirationEmissionToggleBoardNumber == 0 ? null : $"{AspirationEmissionToggleBoardNumber}.";
+			configTextBuilder.AppendLine(@$"M950 P4 C""{aspirationEmissionToggleBoardNumber}.out{AspirationEmissionTogglePortNumber}"" ; aspiration emission switch");
 			configTextBuilder.AppendLine("\r\n; Sensors");
 			foreach (var sensor in DeviceSpecification.Sensors)
 			{
@@ -335,6 +337,8 @@ G90 ; absolute positioning
             AspirationDwell = GetConfigValue<int>(nameof(AspirationDwell));
 			AspirationEmissionTogglePortNumber = GetConfigValue<int>(nameof(AspirationEmissionTogglePortNumber));
 			AspirationEmissionToggleBoardNumber = GetConfigValue<int>(nameof(AspirationEmissionToggleBoardNumber));
+			AspirationEmissionAscension = GetConfigValue<float>(nameof(AspirationEmissionAscension));
+			AspirationEmissionDwell = GetConfigValue<int>(nameof(AspirationEmissionDwell));
 		}
 
 		public int BypassDeviceCommands { get; set; }
@@ -405,6 +409,8 @@ G90 ; absolute positioning
 		public float AspirateTravelPerMicroLiter { get; set; }
 		public float FluidTravelPerMicroLiter { get; set; }
 		public int TableAxisSpeed { get; set; }
+		public int AspirationEmissionDwell { get; set; }
+		public float AspirationEmissionAscension { get; set; }
 
 
 		public DeviceSpecification? DeviceSpecification { get; private set; }

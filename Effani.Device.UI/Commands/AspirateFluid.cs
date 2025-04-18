@@ -15,15 +15,4 @@ namespace Drivetrain.Robotics.Process
 
 		public int MicroLiters { get; } = microLiters;
 	}
-	public class ClearFluidAspiration(int microLiters, AbalDeviceControl device) : Command(device)
-	{
-		protected override void Run()
-		{
-			(Device as AbalDeviceControl).AspirateKoh(MicroLiters);
-		}
-
-		public override string Description => $"Remove {MicroLiters}μl of fluid.";
-
-		public int MicroLiters { get; } = microLiters;
-	}
 }

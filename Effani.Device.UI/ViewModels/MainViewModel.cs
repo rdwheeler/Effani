@@ -547,7 +547,6 @@ namespace Effani.Device.UI
 		int _emitFluidVolume;
 		string _sendCommandText;
 		bool _moveStartingPositionsComplete;
-		bool _fluidPrimingComplete;
 		string _executingCommandText = "None";
 
 		public static bool DoHome = true;
