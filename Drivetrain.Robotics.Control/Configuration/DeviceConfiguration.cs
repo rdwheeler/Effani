@@ -140,7 +140,7 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
 			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
 			var aspirationEmissionToggleBoardNumber = AspirationEmissionToggleBoardNumber == 0 ? null : $"{AspirationEmissionToggleBoardNumber}.";
-			configTextBuilder.AppendLine(@$"M950 P4 C""{aspirationEmissionToggleBoardNumber}.out{AspirationEmissionTogglePortNumber}"" ; aspiration emission switch");
+			configTextBuilder.AppendLine(@$"M950 P4 C""{aspirationEmissionToggleBoardNumber}out{AspirationEmissionTogglePortNumber}"" ; aspiration emission switch");
 			configTextBuilder.AppendLine("\r\n; Sensors");
 			foreach (var sensor in DeviceSpecification.Sensors)
 			{
