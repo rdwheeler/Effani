@@ -75,39 +75,60 @@ namespace Drivetrain.Robotics.Control
 		{
 			AccOff(2);
 		}
-		public void EmitFluid(AxisSpec axisSpec, int microLiters, int pauseDwell)
+		public void EmitFluid(AxisSpec axisSpec, int microLiters)
 		{
 			if(!(axisSpec is FluidAxis))
 				return;
 
 			var distance = CalcFluidTravelMmForMl(microLiters);
 			MoveRelative(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
-			Pause(pauseDwell);
+			Pause(Configuration.FluidEmissionDwell);
 		}
 		public void AspirateKoh(int microLiters)
 		{
 			MoveAbsolute(Axis.AspirateKohZ, (Configuration.AspirateKohActuatorStartPosition + Configuration.AspirateKohDistanceToPlate), Configuration.AspiratePositioningSpeed);
 			var distance = CalcAspirateTravelMmForMl(microLiters);
-			DoStir(Axes[Axis.AspirateKohZ], distance);
+			DoStirringDescent(Axes[Axis.AspirateKohZ], distance);
 			MoveAbsolute(Axis.AspirateKohZ, Configuration.AspirateKohActuatorStartPosition);
 		}
-		public void AspirationEmissionOn()
+		public void AspirationPressureOn()
 		{
 			AccOn(4);
 		}
-		public void AspirationEmissionOff()
+		public void AspirationPressureOff()
 		{
 			AccOff(4);
 		}
+		public void AspirationSuctionOn()
+		{
+			AccOn(5);
+		}
+		public void AspirationSuctionOff()
+		{
+			AccOff(5);
+		}
 		public void AspirateFluid(int microLiters)
 		{
+			// turn suction on
+			AspirationSuctionOn();
+			// lower fluid aspirator needle to top of the plate
 			MoveAbsolute(Axis.AspirateFluidZ, (Configuration.AspirateFluidActuatorStartPosition + Configuration.AspirateFluidDistanceToPlate), Configuration.AspiratePositioningSpeed);
+			// lower aspirator needle calculated distance per ml to extract
 			var distance = CalcAspirateTravelMmForMl(microLiters);
-			DoStir(Axes[Axis.AspirateFluidZ], distance);
-			MoveRelative(Axis.AspirateFluidZ, Configuration.AspirationEmissionAscension * -1);
-			AspirationEmissionOn();
+			MoveRelative(Axis.AspirateFluidZ, distance, Configuration.AspirateStirSpeed);
+			// wait for extraction to complete
 			Pause(Configuration.AspirationDwell);
-			AspirationEmissionOff();
+			// turn suction off
+			AspirationSuctionOff();
+			// raise aspiration needle to sample ejection position
+			MoveRelative(Axis.AspirateFluidZ, Configuration.AspirationPressureAscension * -1);
+			// turn pressure on
+			AspirationPressureOn();
+			// wait for sample to be ejected
+			Pause(Configuration.AspirationPressureDwell);
+			// turn pressure off
+			AspirationPressureOff();
+			// raise aspiration needle to its starting location
 			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateFluidActuatorStartPosition);
 		}
 
@@ -122,7 +143,7 @@ namespace Drivetrain.Robotics.Control
 			var ret = (Configuration.AspirateTravelPerMicroLiter * microLiters);
 			return ret;
 		}
-		private void DoStir(AxisSpec axis, float distance)
+		private void DoStirringDescent(AxisSpec axis, float distance)
 		{
 			MoveRelative(axis, distance, Configuration.AspirateStirSpeed);
 			Pause(Configuration.AspirationDwell);

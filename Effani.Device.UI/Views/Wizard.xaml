@@ -78,27 +78,12 @@
 					</Grid>
 				</dxco:WelcomeWizardPage>
 				<dxco:WizardPage ShowFinish="False" ShowBack="False" ShowNext="False" ShowCancel="False" x:Name="LoadFluidSystemPage">
-					<StackPanel MaxWidth="800" HorizontalAlignment="Center" VerticalAlignment="Center">
-						<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
-						<TextBlock Text="Waiting for all controls to move into their starting positions..." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Collapsed : $Visibility.Visible'}"></TextBlock>
-						<TextBlock TextWrapping="WrapWithOverflow" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Visible : $Visibility.Collapsed'}"/>
-						<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Left" Command="{Binding FluidLoadedCommand}" IsEnabled="{Binding MoveStartingPositionsComplete}">
-							<dx:SimpleButton.Content>
-								<StackPanel>
-									<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Fluid Loaded</TextBlock>
-									<TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Press here when all syringes are loaded."/>
-								</StackPanel>
-							</dx:SimpleButton.Content>
-						</dx:SimpleButton>
-					</StackPanel>
-				</dxco:WizardPage>
-				<dxco:WizardPage ShowFinish="False" ShowBack="False" ShowNext="False" ShowCancel="False" x:Name="LoadSampleTraysPage">
-					<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-						<StackPanel MaxWidth="800">
-							<TextBlock Foreground="Gray" TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
-							<TextBlock Foreground="Gray" Text="Waiting for all controls to move into their starting positions..." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Collapsed : $Visibility.Visible'}"></TextBlock>
-							<TextBlock Foreground="Gray" TextWrapping="WrapWithOverflow" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Visible : $Visibility.Collapsed'}"/>
-							<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Left" IsEnabled="False">
+					<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+						<StackPanel MaxWidth="800" HorizontalAlignment="Center" VerticalAlignment="Center">
+							<TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
+							<TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" Text="Waiting for all controls to move into their starting positions..." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Collapsed : $Visibility.Visible'}"></TextBlock>
+							<TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Visible : $Visibility.Collapsed'}"/>
+							<dx:SimpleButton Padding="40" Margin="0,40,200,0" HorizontalAlignment="Left" Command="{Binding FluidLoadedCommand}" IsEnabled="{Binding MoveStartingPositionsComplete}">
 								<dx:SimpleButton.Content>
 									<StackPanel>
 										<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Fluid Loaded</TextBlock>
@@ -107,18 +92,47 @@
 								</dx:SimpleButton.Content>
 							</dx:SimpleButton>
 						</StackPanel>
-					<StackPanel Margin="0,40,0,0">
-						<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Load Sample Trays"/>
-						<TextBlock TextWrapping="WrapWithOverflow" Text="Open the door on the deck and load sample trays into the sample tray carriage."/>
-						<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Left" Command="{Binding TraysLoadedCommand}">
-							<dx:SimpleButton.Content>
-								<StackPanel>
-									<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Trays Loaded</TextBlock>
-									<TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Press here when all trays are loaded."/>
-								</StackPanel>
-							</dx:SimpleButton.Content>
-						</dx:SimpleButton>
+						<StackPanel>
+							<TextBlock Foreground="Gray" TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" FontSize="40" FontWeight="Black" Text="Load Sample Trays"/>
+							<TextBlock Foreground="Gray" TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" Text="Open the door on the deck and load sample trays into the sample tray carriage."/>
+							<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Left" IsEnabled="False">
+								<dx:SimpleButton.Content>
+									<StackPanel>
+										<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Trays Loaded</TextBlock>
+										<TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Press here when all trays are loaded."/>
+									</StackPanel>
+								</dx:SimpleButton.Content>
+							</dx:SimpleButton>
+						</StackPanel>
 					</StackPanel>
+				</dxco:WizardPage>
+				<dxco:WizardPage ShowFinish="False" ShowBack="False" ShowNext="False" ShowCancel="False" x:Name="LoadSampleTraysPage">
+					<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+						<StackPanel MaxWidth="800">
+							<TextBlock Foreground="Gray" TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
+							<TextBlock Foreground="Gray" TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" Text="Waiting for all controls to move into their starting positions..." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Collapsed : $Visibility.Visible'}"></TextBlock>
+							<TextBlock Foreground="Gray" MaxWidth="500" HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label."/>
+							<dx:SimpleButton Padding="40" Margin="0,40,200,0" HorizontalAlignment="Left" IsEnabled="False">
+								<dx:SimpleButton.Content>
+									<StackPanel>
+										<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Fluid Loaded</TextBlock>
+										<TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Press here when all syringes are loaded."/>
+									</StackPanel>
+								</dx:SimpleButton.Content>
+							</dx:SimpleButton>
+						</StackPanel>
+						<StackPanel>
+							<TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" FontSize="40" FontWeight="Black" Text="Load Sample Trays"/>
+							<TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" Text="Open the door on the deck and load sample trays into the sample tray carriage."/>
+							<dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Left" Command="{Binding TraysLoadedCommand}">
+								<dx:SimpleButton.Content>
+									<StackPanel>
+										<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Trays Loaded</TextBlock>
+										<TextBlock TextAlignment="Center" MaxWidth="500" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Press here when all trays are loaded."/>
+									</StackPanel>
+								</dx:SimpleButton.Content>
+							</dx:SimpleButton>
+						</StackPanel>
 					</StackPanel>
 				</dxco:WizardPage>
 				<dxco:WizardPage SideContentTemplate="{StaticResource sideContentTemplate}" ShowFinish="False" ShowNext="False" ShowBack="False" ShowCancel="False" x:Name="LoadingSamplesPage" AllowNext="{DXBinding 'CurrentLoadingSample == null'}" ShowSideContent="True">

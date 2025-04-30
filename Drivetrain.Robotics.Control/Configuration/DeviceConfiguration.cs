@@ -139,8 +139,10 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine(@"M950 P1 C""1.out6"" ; chamber UV");
 			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
 			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
-			var aspirationEmissionToggleBoardNumber = AspirationEmissionToggleBoardNumber == 0 ? null : $"{AspirationEmissionToggleBoardNumber}.";
-			configTextBuilder.AppendLine(@$"M950 P4 C""{aspirationEmissionToggleBoardNumber}out{AspirationEmissionTogglePortNumber}"" ; aspiration emission switch");
+			var aspirationPressureToggleBoardNumber = AspirationPressureToggleBoardNumber == 0 ? null : $"{AspirationPressureToggleBoardNumber}.";
+			configTextBuilder.AppendLine(@$"M950 P4 C""{aspirationPressureToggleBoardNumber}out{AspirationPressureTogglePortNumber}"" ; aspiration emission switch");
+			var aspirationSuctionToggleBoardNumber = AspirationSuctionToggleBoardNumber == 0 ? null : $"{AspirationSuctionToggleBoardNumber}.";
+			configTextBuilder.AppendLine(@$"M950 P5 C""{aspirationSuctionToggleBoardNumber}out{AspirationSuctionTogglePortNumber}"" ; aspiration emission switch");
 			configTextBuilder.AppendLine("\r\n; Sensors");
 			foreach (var sensor in DeviceSpecification.Sensors)
 			{
@@ -322,7 +324,7 @@ G90 ; absolute positioning
 			AspiratePositioningSpeed = GetConfigValue<float>(nameof(AspiratePositioningSpeed));
 			WellWidth = GetConfigValue<float>(nameof(WellWidth));
 			WellDepth = GetConfigValue<float>(nameof(WellDepth));
-			CleanUpAspirationVolume = GetConfigValue<int>(nameof(CleanUpAspirationVolume));
+			NadhIncubationDwell = GetConfigValue<int>(nameof(NadhIncubationDwell));
             ComPortNumber = GetConfigValue<int>(nameof(ComPortNumber));
             BasalVolume = GetConfigValue<int>(nameof(BasalVolume));
 			StandardsWellCount = GetConfigValue<int>(nameof(StandardsWellCount));
@@ -335,10 +337,13 @@ G90 ; absolute positioning
 			TableAxisSpeed = GetConfigValue<int>(nameof(TableAxisSpeed));
 			PauseCommandsForPrompt = GetConfigValue<bool>(nameof(PauseCommandsForPrompt));
             AspirationDwell = GetConfigValue<int>(nameof(AspirationDwell));
-			AspirationEmissionTogglePortNumber = GetConfigValue<int>(nameof(AspirationEmissionTogglePortNumber));
-			AspirationEmissionToggleBoardNumber = GetConfigValue<int>(nameof(AspirationEmissionToggleBoardNumber));
-			AspirationEmissionAscension = GetConfigValue<float>(nameof(AspirationEmissionAscension));
-			AspirationEmissionDwell = GetConfigValue<int>(nameof(AspirationEmissionDwell));
+			AspirationSuctionTogglePortNumber = GetConfigValue<int>(nameof(AspirationSuctionTogglePortNumber));
+			AspirationSuctionToggleBoardNumber = GetConfigValue<int>(nameof(AspirationSuctionToggleBoardNumber));
+			AspirationPressureTogglePortNumber = GetConfigValue<int>(nameof(AspirationPressureTogglePortNumber));
+			AspirationPressureToggleBoardNumber = GetConfigValue<int>(nameof(AspirationPressureToggleBoardNumber));
+			AspirationPressureAscension = GetConfigValue<float>(nameof(AspirationPressureAscension));
+			AspirationPressureDwell = GetConfigValue<int>(nameof(AspirationPressureDwell));
+			FluidEmissionDwell = GetConfigValue<int>(nameof(AspirationPressureDwell));
 		}
 
 		public int BypassDeviceCommands { get; set; }
@@ -374,8 +379,10 @@ G90 ; absolute positioning
 		public int NadhSensorNumber { get; set; }
 		public int NadhSensorReadHigh { get; set; }
 		public int NadhSensorReadLow { get; set; }
-		public int AspirationEmissionToggleBoardNumber { get; set; }
-		public int AspirationEmissionTogglePortNumber { get; set; }
+		public int AspirationPressureToggleBoardNumber { get; set; }
+		public int AspirationPressureTogglePortNumber { get; set; }
+		public int AspirationSuctionToggleBoardNumber { get; set; }
+		public int AspirationSuctionTogglePortNumber { get; set; }
 		public Coordinate WasteLocation { get; set; }
 		public int VerticalWellCount { get; set; }
 		public int HorizontalWellCount { get; set; }
@@ -409,8 +416,10 @@ G90 ; absolute positioning
 		public float AspirateTravelPerMicroLiter { get; set; }
 		public float FluidTravelPerMicroLiter { get; set; }
 		public int TableAxisSpeed { get; set; }
-		public int AspirationEmissionDwell { get; set; }
-		public float AspirationEmissionAscension { get; set; }
+		public int AspirationPressureDwell { get; set; }
+		public float AspirationPressureAscension { get; set; }
+		public int NadhIncubationDwell { get; set; }
+		public int FluidEmissionDwell { get; set; }
 
 
 		public DeviceSpecification? DeviceSpecification { get; private set; }

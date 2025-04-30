@@ -100,6 +100,7 @@ namespace Effani.Device.UI
 
 					Engine.QueueJob(new Job($"Reading Low NADH from {NadhStandardsWells[0].Well.Label}.", [
 						new AlignWellToLocation(Config.NadhSensorLocation, NadhStandardsWells[0].Well, Device),
+						new Pause(Config.NadhIncubationDwell, Device),
 						new ReadNadh(Device, (command) => { LowNadh = ParseCommandResult(command); }),
 					]));
 					Engine.QueueJob(new Job($"Reading High NADH from {NadhStandardsWells[1].Well.Label}.", [
@@ -175,7 +176,7 @@ namespace Effani.Device.UI
 					]));
 					Engine.QueueJob(new Job($"Reading 0.25 µg DNA from {DnaStandardsWells[1].Well.Label}.", [
 						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[1].Well, Device),
-						new ReadDna(Device, (command) => { Microgram1Dna = ParseCommandResult(command); }),
+						new ReadDna(Device, (command) => { MicrogramDna25Dna = ParseCommandResult(command); }),
 					]));
 					Engine.QueueJob(new Job($"Reading 0.0625 µg DNA from {DnaStandardsWells[2].Well.Label}.", [
 						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[2].Well, Device),
@@ -400,9 +401,8 @@ namespace Effani.Device.UI
 					]));
                     if (_processTerminating)
                         return;
-                    var job = new Job($"Test completed for {testWell.Label}. Removing remaining fluid.");
+                    var job = new Job($"Test completed for {testWell.Label}.");
 					// remove KOH from well
-					job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.CleanUpAspirationVolume));
 					job.Commands.Add(new NotifyComplete((command) => { TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test complete for {testWell.Label}", Device));
                     Engine.QueueJob(job);
 				}

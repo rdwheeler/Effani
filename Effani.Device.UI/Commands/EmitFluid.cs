@@ -12,7 +12,7 @@ namespace Drivetrain.Robotics.Process
 			if (axisSpec is null)
 				throw new ApplicationException($"Unknown axis {axis} in {nameof(EmitFluid)}");
 
-			device.EmitFluid(axisSpec, MicroLiters, 3000);
+			device.EmitFluid(axisSpec, MicroLiters);
 		}
 
 		public override string Description => $"Emit {microLiters}μl from {axisSpec.Label}.";
