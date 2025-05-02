@@ -80,7 +80,7 @@ namespace Drivetrain.Robotics.Control
 			if(!(axisSpec is FluidAxis))
 				return;
 
-			var distance = CalcFluidTravelMmForMl(microLiters);
+			var distance = CalcFluidTravelMmForMl(microLiters, axisSpec);
 			MoveRelative(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
 			Pause(Configuration.FluidEmissionDwell);
 		}
@@ -132,9 +132,16 @@ namespace Drivetrain.Robotics.Control
 			MoveAbsolute(Axis.AspirateFluidZ, Configuration.AspirateFluidActuatorStartPosition);
 		}
 
-		private float CalcFluidTravelMmForMl(int microLiters)
+		private float CalcFluidTravelMmForMl(int microLiters, AxisSpec axisSpec)
 		{
-			var microLitersPerMm = Configuration.FluidTravelPerMicroLiter;
+			var microLitersPerMm = axisSpec.Axis switch
+			{
+				Axis.Basal1 => Configuration.BasalTravelPerMicroLiter,
+				Axis.Nadh1 => Configuration.NadhTravelPerMicroLiter,
+				Axis.Koh1 => Configuration.KohTravelPerMicroLiter,
+				Axis.DnaReagent1 => Configuration.DnaTravelPerMicroLiter,
+				_ => throw new ApplicationException($"Unknown axis {axisSpec.Axis} in {nameof(CalcFluidTravelMmForMl)}")
+			};
 			var ret = microLitersPerMm * microLiters;
 			return ret;
 		}

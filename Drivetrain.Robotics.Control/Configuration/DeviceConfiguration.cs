@@ -332,7 +332,10 @@ G90 ; absolute positioning
 			TraySterilizationLocation = GetCoordinateConfigValue(nameof(TraySterilizationLocation));
 			FirstWellLocation = GetCoordinateConfigValue(nameof(FirstWellLocation));
 			AspirateTravelPerMicroLiter = GetConfigValue<float>(nameof(AspirateTravelPerMicroLiter));
-			FluidTravelPerMicroLiter = GetConfigValue<float>(nameof(FluidTravelPerMicroLiter));
+			NadhTravelPerMicroLiter = GetConfigValue<float>(nameof(NadhTravelPerMicroLiter));
+			DnaTravelPerMicroLiter = GetConfigValue<float>(nameof(DnaTravelPerMicroLiter));
+			KohTravelPerMicroLiter = GetConfigValue<float>(nameof(KohTravelPerMicroLiter));
+			BasalTravelPerMicroLiter = GetConfigValue<float>(nameof(BasalTravelPerMicroLiter));
 			AspirateStirSpeed = GetConfigValue<float>(nameof(AspirateStirSpeed));
 			TableAxisSpeed = GetConfigValue<int>(nameof(TableAxisSpeed));
 			PauseCommandsForPrompt = GetConfigValue<bool>(nameof(PauseCommandsForPrompt));
@@ -346,6 +349,10 @@ G90 ; absolute positioning
 			FluidEmissionDwell = GetConfigValue<int>(nameof(AspirationPressureDwell));
 		}
 
+		public float NadhTravelPerMicroLiter { get; set; }
+		public float DnaTravelPerMicroLiter { get; set; }
+		public float KohTravelPerMicroLiter { get; set; }
+		public float BasalTravelPerMicroLiter { get; set; }
 		public int BypassDeviceCommands { get; set; }
 		public bool PauseCommandsForPrompt { get; set; }
 		public float FluidSyringeLoadingPosition { get; set; }
@@ -414,7 +421,6 @@ G90 ; absolute positioning
         public Coordinate TrayLoadingLocation { get; set; }
 		public Coordinate TraySterilizationLocation { get; set; }
 		public float AspirateTravelPerMicroLiter { get; set; }
-		public float FluidTravelPerMicroLiter { get; set; }
 		public int TableAxisSpeed { get; set; }
 		public int AspirationPressureDwell { get; set; }
 		public float AspirationPressureAscension { get; set; }
