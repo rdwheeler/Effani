@@ -45,6 +45,16 @@ namespace Effani.Device.UI
 		#region Public methods
 		public void Dispose()
 		{
+			if(Assay != null)
+			{
+				Assay.StatusMessages.CollectionChanged -= StatusMessages_CollectionChanged;
+				Assay.StandardsComplete -= Assay_StandardsComplete;
+				Assay.TestInNadhReadingsPhase -= Assay_TestInNadhPhase;
+				Assay.TestInDnaPhase -= Assay_TestInDnaPhase;
+				Assay.TestInKohPhase -= Assay_TestInKohPhase;
+				Assay.TestComplete -= Assay_TestComplete;
+				Assay.Terminated -= Assay_Terminated;
+			}
 			_device.DataReceived -= Device_DataRecieved;
 			_processEngine.MessageReceived -= ProcessEngine_MessageReceived;
 			_processEngine.BeginExecutingCommand -= ProcessEngine_BeginExecutingCommand;
@@ -135,6 +145,13 @@ namespace Effani.Device.UI
 					$"{well.SampleId},{well.Label},DNA:{well.DnaValue},{String.Join(',', well.TimeValues.Select(t => $"T{t.Key}:{t.Value}"))}");
 			File.WriteAllText(ResultsFilePath, results.ToString());
 
+			Assay.StatusMessages.CollectionChanged -= StatusMessages_CollectionChanged;
+			Assay.StandardsComplete -= Assay_StandardsComplete;
+			Assay.TestInNadhReadingsPhase -= Assay_TestInNadhPhase;
+			Assay.TestInDnaPhase -= Assay_TestInDnaPhase;
+			Assay.TestInKohPhase -= Assay_TestInKohPhase;
+			Assay.TestComplete -= Assay_TestComplete;
+			Assay.Terminated -= Assay_Terminated;
 			Assay.Dispose();
 			Assay = null;
 		}
@@ -582,10 +599,10 @@ namespace Effani.Device.UI
             if (DoPrime)
             {
                 var job = new Job("Priming fluid pumps.");
-                foreach (var axis in _device.FluidAxes)
-                {
-					job.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.InitialFluidPrimingVolume, _device));
-				}
+				job.Commands.Add(new EmitFluid(Axis.DnaReagent1, _device.Configuration.InitialDnaFluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(Axis.Koh1, _device.Configuration.InitialKohFluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(Axis.Nadh1, _device.Configuration.InitialNadhFluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(Axis.Basal1, _device.Configuration.InitialBasalFluidPrimingVolume, _device));
 				job.Commands.Add(new NotifyComplete((command) => { NotifyFluidPrimingComplete(); }, "Notify fluid priming complete.", _device));
 				_processEngine.QueueJob(job);
             }
@@ -606,7 +623,7 @@ namespace Effani.Device.UI
 			{
 				var job = new Job("Priming basal media.");
 				job.Commands.Add(new AlignTableForWaste(_device));
-				job.Commands.Add(new EmitFluid(Axis.Basal1, _config.SecondaryFluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(Axis.Basal1, _config.SecondaryBasalFluidPrimingVolume, _device));
 				Assay.IsPrimedBasal = true;
 				_processEngine.QueuePriorityJob(job);
 			}
@@ -851,10 +868,10 @@ namespace Effani.Device.UI
         public void PrimeFluid()
 		{
 			var job = new Job("Priming fluid pumps.");
-			foreach (var axis in _device.FluidAxes)
-			{
-				job.Commands.Add(new EmitFluid(axis.Axis, _device.Configuration.InitialFluidPrimingVolume, _device));
-			}
+			job.Commands.Add(new EmitFluid(Axis.DnaReagent1, _device.Configuration.InitialDnaFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.Koh1, _device.Configuration.InitialKohFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.Nadh1, _device.Configuration.InitialNadhFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.Basal1, _device.Configuration.InitialBasalFluidPrimingVolume, _device));
 			_processEngine.QueueJob(job);
 		}
         [Command]

@@ -25,6 +25,7 @@ namespace Effani.Device.UI
 			Well = well;
 
 			BasalIncubationCount = deviceConfiguration.BasalIncubationTimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings1Count = deviceConfiguration.NadhReading1TimerPeriod / _timerDescriptionUpdateInterval;
 			NadhReadings2Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
 			NadhReadings3Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
 			NadhReadings4Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
@@ -39,6 +40,8 @@ namespace Effani.Device.UI
 		{
 			if (BasalIncubationTimer is not null)
 				BasalIncubationTimer.Elapsed -= BasalIncubationTimer_Elapsed;
+			if (NadhReadings1Timer is not null)
+				NadhReadings1Timer.Elapsed -= NadhReadings1Timer_Elapsed;
 			if (NadhReadings2Timer is not null)
 				NadhReadings2Timer.Elapsed -= NadhReadings2Timer_Elapsed;
 			if (NadhReadings3Timer is not null)
@@ -53,6 +56,7 @@ namespace Effani.Device.UI
 				DnaIncubationTimer.Elapsed -= DnaIncubationTimer_Elapsed;
 
 			BasalIncubationTimer = DisposeTimer(BasalIncubationTimer);
+			NadhReadings1Timer = DisposeTimer(NadhReadings1Timer);
 			NadhReadings2Timer = DisposeTimer(NadhReadings2Timer);
 			NadhReadings3Timer = DisposeTimer(NadhReadings3Timer);
 			NadhReadings4Timer = DisposeTimer(NadhReadings4Timer);
@@ -64,6 +68,7 @@ namespace Effani.Device.UI
 		public void InitializeTimers()
 		{
 			BasalIncubationTimer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
+			NadhReadings1Timer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
 			NadhReadings2Timer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
 			NadhReadings3Timer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
 			NadhReadings4Timer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
@@ -74,6 +79,7 @@ namespace Effani.Device.UI
 			SetCurrentTimerDescription(BasalIncubationCount);
 
 			BasalIncubationTimer.Elapsed += BasalIncubationTimer_Elapsed;
+			NadhReadings1Timer.Elapsed += NadhReadings1Timer_Elapsed;
 			NadhReadings2Timer.Elapsed += NadhReadings2Timer_Elapsed;
 			NadhReadings3Timer.Elapsed += NadhReadings3Timer_Elapsed;
 			NadhReadings4Timer.Elapsed += NadhReadings4Timer_Elapsed;
@@ -114,12 +120,32 @@ namespace Effani.Device.UI
 				SetCurrentTimerDescription(0, "1@waiting");
 				BasalIncubationTimer.Elapsed -= BasalIncubationTimer_Elapsed;
 				BasalIncubationTimer = DisposeTimer(BasalIncubationTimer);
-				Task.Run(() => _basalIncubationTimerCallback.Invoke(this, new DataArgs<int>(1)));
+				Task.Run(() => _basalIncubationTimerCallback.Invoke(this, new DataArgs<int>(0)));
 			}
 			else
 			{
 				SetCurrentTimerDescription(BasalIncubationCount);
 				BasalIncubationTimer.Start();
+			}
+		}
+
+		private void NadhReadings1Timer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			if (NadhReadings1Timer is null)
+				return;
+
+			NadhReadings1Count--;
+			if (NadhReadings1Count <= 0)
+			{
+				SetCurrentTimerDescription(0, "2@waiting");
+				NadhReadings1Timer.Elapsed -= NadhReadings1Timer_Elapsed;
+				NadhReadings1Timer = DisposeTimer(NadhReadings1Timer);
+				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(1)));
+			}
+			else
+			{
+				SetCurrentTimerDescription(NadhReadings1Count);
+				NadhReadings1Timer.Start();
 			}
 		}
 		private void NadhReadings2Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -293,6 +319,7 @@ namespace Effani.Device.UI
 		public float DnaValue { get; set; }
 		public string Label => Well.Label;
 		public Timer BasalIncubationTimer { get; set; }
+		public Timer NadhReadings1Timer { get; set; }
 		public Timer NadhReadings2Timer { get; set; }
 		public Timer NadhReadings3Timer { get; set; }
 		public Timer NadhReadings4Timer { get; set; }
@@ -306,7 +333,7 @@ namespace Effani.Device.UI
 
 		#region Fields
         readonly EventHandler<DataArgs<int>> _basalIncubationTimerCallback;
-        readonly EventHandler<DataArgs<int>> _dnaIncubationTimerCallback;
+		readonly EventHandler<DataArgs<int>> _dnaIncubationTimerCallback;
 		readonly EventHandler<DataArgs<int>> _kohDwellDnaTimerCallback;
 		readonly EventHandler<DataArgs<int>> _nadhReadingsTimerCallback;
 		private int BasalIncubationCount;

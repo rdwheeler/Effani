@@ -74,8 +74,8 @@ namespace Effani.Device.UI
 						IsPrimedStandards = true;
 						var primeJob = new Job("Priming DNA reagent and NADH.");
 						primeJob.Commands.Add(new AlignTableForWaste(Device));
-						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent1, Config.SecondaryFluidPrimingVolume, Device));
-						primeJob.Commands.Add(new EmitFluid(Axis.Nadh1, Config.SecondaryFluidPrimingVolume, Device));
+						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent1, Config.SecondaryDnaFluidPrimingVolume, Device));
+						primeJob.Commands.Add(new EmitFluid(Axis.Nadh1, Config.SecondaryNadhFluidPrimingVolume, Device));
 						Engine.QueueJob(primeJob);
 					}
                     var job = new Job("Dispensing DNA reagent and NADH for standards establishment.");
@@ -220,7 +220,7 @@ namespace Effani.Device.UI
 				{
 					var job = new Job("Re-priming NADH.");
 					job.Commands.Add(new AlignTableForWaste(Device));
-					job.Commands.Add(new EmitFluid(Axis.Nadh1, Config.SecondaryFluidPrimingVolume, Device));
+					job.Commands.Add(new EmitFluid(Axis.Nadh1, Config.SecondaryNadhFluidPrimingVolume, Device));
 					IsPrimedNadh = true;
 					Engine.QueueJob(job);
 				}
@@ -229,21 +229,14 @@ namespace Effani.Device.UI
                 if (MainViewModel.DoNadhReadingSteps)
                 {
                     var job = new Job($"Dispensing {Config.NadhVolume}μl NADH to {testWell.Label} for NADH readings 1.");
-					// remove fluid from well
-					job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.TestMediaAspirationVolume));
 					job.Commands.AddRange(
                     [
                         // add NADH to well
                         new AlignWellToAxis(Axis.Nadh1, testWell.Well, Device),
                         new EmitFluid(Axis.Nadh1, Config.NadhVolume, Device),
+						new StartTimer(testWell.NadhReadings1Timer, $"{testWell.Label} NADH Readings 1 ({GetTimeString(Config.NadhReadingsTimerPeriod)})", Device)
                     ]);
                     Engine.QueueJob(job);
-
-					Engine.QueueJob(new Job($"Reading NADH {e.Data} from {testWell.Well.Label}.", [
-						new AlignWellToLocation(Config.NadhSensorLocation, testWell.Well, Device),
-						new ReadNadh(Device, (command) => { testWell.TimeValues.Add(e.Data, ParseCommandResult(command)); }),
-						new StartTimer(testWell.NadhReadings2Timer, $"{testWell.Label} NADH Readings 2 ({GetTimeString(Config.NadhReadingsTimerPeriod)})", Device)
-					]));
 				}
 				else
 				{
@@ -262,8 +255,8 @@ namespace Effani.Device.UI
             {
                 _nadhLock.Release();
             }
-        }
-        private void NadhReadingsTimer_Elapsed(object sender, DataArgs<int> e)
+		}
+		private void NadhReadingsTimer_Elapsed(object sender, DataArgs<int> e)
 		{
 			if (_processTerminating)
 				return;
@@ -288,6 +281,9 @@ namespace Effani.Device.UI
                 var testWell = sender as TestWell;
 				switch (e.Data)
 				{
+					case 1:
+						TakeReading(e, testWell, testWell.NadhReadings2Timer);
+						break;
 					case 2:
 						TakeReading(e, testWell, testWell.NadhReadings3Timer);
 						break;
@@ -304,7 +300,7 @@ namespace Effani.Device.UI
 						{
 							var primeJob = new Job("Priming KOH.");
 							primeJob.Commands.Add(new AlignTableForWaste(Device));
-							primeJob.Commands.Add(new EmitFluid(Axis.Koh1, Config.SecondaryFluidPrimingVolume, Device));
+							primeJob.Commands.Add(new EmitFluid(Axis.Koh1, Config.SecondaryKohFluidPrimingVolume, Device));
 							IsPrimedKoh = true;
 							Engine.QueueJob(primeJob);
 						}
@@ -351,7 +347,7 @@ namespace Effani.Device.UI
 					{
 						var primeJob = new Job("Re-priming DNA reagent.");
 						primeJob.Commands.Add(new AlignTableForWaste(Device));
-						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent1, Config.SecondaryFluidPrimingVolume, Device));
+						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent1, Config.SecondaryDnaFluidPrimingVolume, Device));
 						IsPrimedDnaReagent = true;
 						Engine.QueueJob(primeJob);
 					}

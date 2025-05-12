@@ -123,9 +123,10 @@ namespace Drivetrain.Robotics.Control
 			Pause(Configuration.AspirationDwell);
 			// in case the sample got in the way of removing as much liquid as planned, raise with suction off and lower with suction on again
 			AspirationSuctionOff();
-			MoveRelative(Axis.AspirateFluidZ, -3, Configuration.AspirateStirSpeed);
+			MoveRelative(Axis.AspirateFluidZ, Configuration.AspirationPressureAscension * -1, Configuration.AspirateStirSpeed);
 			AspirationSuctionOn();
-			MoveRelative(Axis.AspirateFluidZ, 3, Configuration.AspirateStirSpeed);
+			MoveRelative(Axis.AspirateFluidZ, Configuration.AspirationPressureAscension, Configuration.AspirateStirSpeed);
+			Pause(Configuration.AspirationDwell);
 			// turn suction off
 			AspirationSuctionOff();
 			// raise aspiration needle to sample ejection position

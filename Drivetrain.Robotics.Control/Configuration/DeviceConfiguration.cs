@@ -206,10 +206,10 @@ G90 ; absolute positioning
 			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 500, EndstopLocation.LowEnd, Direction.Backwards, TableAxisSpeed));
 			DeviceSpecification.Axes.Add((AxisSpec)new TableAxis(Axis.TableY, 0, 1, 500, EndstopLocation.LowEnd, Direction.Backwards, TableAxisSpeed));
 			DeviceSpecification.Axes.AddRange(GetAspirateAxes());
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent1, 1, 4, DnaLocation, FluidSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh1, 2, 1, KohLocation, FluidSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh1, 2, 3, NadhLocation, FluidSyringeLoadingPosition));
-			var basal1 = new FluidAxis(Axis.Basal1, 0, 5, BasalLocation, FluidSyringeLoadingPosition);
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent1, 1, 4, DnaLocation, DnaSyringeLoadingPosition));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh1, 2, 1, KohLocation, KohSyringeLoadingPosition));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh1, 2, 3, NadhLocation, NadhSyringeLoadingPosition));
+			var basal1 = new FluidAxis(Axis.Basal1, 0, 5, BasalLocation, BasalSyringeLoadingPosition);
             basal1.Driver.Endstop.SensorPort = ($"1.io0.in");
             DeviceSpecification.Axes.Add(basal1);
 
@@ -273,7 +273,6 @@ G90 ; absolute positioning
 		}
 		private void SetConfigValues()
 		{
-			FluidSyringeLoadingPosition = GetConfigValue<float>(nameof(FluidSyringeLoadingPosition));
 			AspirateFluidActuatorStartPosition = GetConfigValue<float>(nameof(AspirateFluidActuatorStartPosition));
 			AspirateKohActuatorStartPosition = GetConfigValue<float>(nameof(AspirateKohActuatorStartPosition));
 			TrayTemperature = GetConfigValue<float>(nameof(TrayTemperature));
@@ -305,8 +304,14 @@ G90 ; absolute positioning
 			HorizontalWellCount = GetConfigValue<int>(nameof(HorizontalWellCount));
 			WellOffset = GetCoordinateConfigValue(nameof(WellOffset));
 			TraySterilizationTime = GetConfigValue<int>(nameof(TraySterilizationTime));
-			InitialFluidPrimingVolume = GetConfigValue<int>(nameof(InitialFluidPrimingVolume));
-			SecondaryFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryFluidPrimingVolume));
+			InitialDnaFluidPrimingVolume = GetConfigValue<int>(nameof(InitialDnaFluidPrimingVolume));
+			InitialNadhFluidPrimingVolume = GetConfigValue<int>(nameof(InitialDnaFluidPrimingVolume));
+			InitialKohFluidPrimingVolume = GetConfigValue<int>(nameof(InitialDnaFluidPrimingVolume));
+			InitialBasalFluidPrimingVolume = GetConfigValue<int>(nameof(InitialDnaFluidPrimingVolume));
+			SecondaryDnaFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryDnaFluidPrimingVolume));
+			SecondaryNadhFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryNadhFluidPrimingVolume));
+			SecondaryKohFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryKohFluidPrimingVolume));
+			SecondaryBasalFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryBasalFluidPrimingVolume));
 			StandardsProcessingDwell = GetConfigValue<int>(nameof(StandardsProcessingDwell));
 			DnaVolume = GetConfigValue<int>(nameof(DnaVolume));
 			NadhVolume = GetConfigValue<int>(nameof(NadhVolume));
@@ -317,6 +322,7 @@ G90 ; absolute positioning
 			KohTimerPeriod = GetConfigValue<int>(nameof(KohTimerPeriod));
 			DnaTimerPeriod = GetConfigValue<int>(nameof(DnaTimerPeriod));
 			BasalIncubationTimerPeriod = GetConfigValue<int>(nameof(BasalIncubationTimerPeriod));
+			NadhReading1TimerPeriod = GetConfigValue<int>(nameof(NadhReading1TimerPeriod));
 			TimerDescriptionUpdateInterval = GetConfigValue<int>(nameof(TimerDescriptionUpdateInterval));
 			KohAspirationVolume = GetConfigValue<int>(nameof(KohAspirationVolume));
 			DnaAspirationVolume = GetConfigValue<int>(nameof(DnaAspirationVolume));
@@ -347,6 +353,10 @@ G90 ; absolute positioning
 			AspirationPressureAscension = GetConfigValue<float>(nameof(AspirationPressureAscension));
 			AspirationPressureDwell = GetConfigValue<int>(nameof(AspirationPressureDwell));
 			FluidEmissionDwell = GetConfigValue<int>(nameof(AspirationPressureDwell));
+			DnaSyringeLoadingPosition = GetConfigValue<float>(nameof(DnaSyringeLoadingPosition));
+			NadhSyringeLoadingPosition = GetConfigValue<float>(nameof(NadhSyringeLoadingPosition));
+			KohSyringeLoadingPosition = GetConfigValue<float>(nameof(KohSyringeLoadingPosition));
+			BasalSyringeLoadingPosition = GetConfigValue<float>(nameof(BasalSyringeLoadingPosition));
 		}
 
 		public float NadhTravelPerMicroLiter { get; set; }
@@ -355,7 +365,10 @@ G90 ; absolute positioning
 		public float BasalTravelPerMicroLiter { get; set; }
 		public int BypassDeviceCommands { get; set; }
 		public bool PauseCommandsForPrompt { get; set; }
-		public float FluidSyringeLoadingPosition { get; set; }
+		public float DnaSyringeLoadingPosition { get; set; }
+		public float NadhSyringeLoadingPosition { get; set; }
+		public float KohSyringeLoadingPosition { get; set; }
+		public float BasalSyringeLoadingPosition { get; set; }
 		public float AspirateFluidActuatorStartPosition { get; set; }
 		public float AspirateKohActuatorStartPosition { get; set; }
 		public float WellWidth { get; set; } // mm of width of sample well
@@ -395,8 +408,14 @@ G90 ; absolute positioning
 		public int HorizontalWellCount { get; set; }
 		public Coordinate WellOffset { get; set; } // distance between cells
 		public int TraySterilizationTime { get; set; } // ammount of seconds tray will be UV sterilized
-		public int InitialFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
-		public int SecondaryFluidPrimingVolume { get; set; }
+		public int InitialDnaFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
+		public int InitialNadhFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
+		public int InitialKohFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
+		public int InitialBasalFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
+		public int SecondaryDnaFluidPrimingVolume { get; set; }
+		public int SecondaryNadhFluidPrimingVolume { get; set; }
+		public int SecondaryKohFluidPrimingVolume { get; set; }
+		public int SecondaryBasalFluidPrimingVolume { get; set; }
 		public int KohVolume { get; set; } // microliters dispensed by KOH pump
 		public int DnaVolume { get; set; } // microliters dispensed by DNA pump
 		public int NadhVolume { get; set; } // microliters dispensed by NADH pump
@@ -405,10 +424,11 @@ G90 ; absolute positioning
 		public int SensorReadDwell { get; set; } // total milliseconds to wait for a sensor reading to be reported
 		public int TestMediaAspirationVolume { get; set; } // microliters withdraw from baseline
 		public float StirringDistance { get; set; } // total mm to move needle when stirring
-		public int BasalIncubationTimerPeriod { get; set; } // miliseconds of the basal media incubation
-		public int NadhReadingsTimerPeriod { get; set; } // miliseconds between NADH readings
+		public int BasalIncubationTimerPeriod { get; set; } // milliseconds of the basal media incubation
+		public int NadhReading1TimerPeriod { get; set; } // milliseconds to wait for nadh to mix with basal
+		public int NadhReadingsTimerPeriod { get; set; } // milliseconds between NADH readings
 		public int KohTimerPeriod { get; set; } // milliseconds the KOH timer will wait - 4hs
-		public int DnaTimerPeriod { get; set; } // miliseconds the DNA timer will wait
+		public int DnaTimerPeriod { get; set; } // milliseconds the DNA timer will wait
 		public int KohAspirationVolume { get; set; } // microliters to withdraw for before KOH injection
 		public int DnaAspirationVolume { get; set; } // microliters to withdraw for before DNA reagent injection
 		public int CleanUpAspirationVolume { get; set; } // microliters withdrawn for clean up
