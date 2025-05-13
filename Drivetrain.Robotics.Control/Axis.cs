@@ -6,21 +6,21 @@ namespace Drivetrain.Robotics.Control
 {
 	public enum Axis
 	{
-		[Display(ShortName = "X")]
+		[Display(ShortName = "X", Name = "Table X")]
 		TableX,
-		[Display(ShortName = "Y")]
+		[Display(ShortName = "Y", Name = "Table Y")]
 		TableY,
-		[Display(ShortName = "U")]
-		AspirateKohZ,
-		[Display(ShortName = "V")]
-		DnaReagent1,
-		[Display(ShortName = "W")]
-		Koh1,
-		[Display(ShortName = "A")]
-		Nadh1,
-		[Display(ShortName = "B")]
-		Basal1,
-        [Display(ShortName = "D")]
-        AspirateFluidZ,
+		[Display(ShortName = "U", Name = "Aspirate KOH")]
+		AspirateKoh,
+		[Display(ShortName = "V", Name = "DNA Reagent")]
+		DnaReagent,
+		[Display(ShortName = "W", Name = "KOH")]
+		Koh,
+		[Display(ShortName = "A", Name = "NADH")]
+		Nadh,
+		[Display(ShortName = "B", Name = "Basal")]
+		Basal,
+        [Display(ShortName = "D", Name = "Aspirate Fluid")]
+        AspirateFluid,
 	}
 }

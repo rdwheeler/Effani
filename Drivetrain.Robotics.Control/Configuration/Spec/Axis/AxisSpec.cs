@@ -7,7 +7,7 @@ namespace Drivetrain.Robotics.Control
 	public class AxisSpec : Spec
 	{
 		public AxisSpec(Axis axis, int board, int port, float? startingPosition = null)
-			: base(axis.ToString())
+			: base(axis.GetAttribute<DisplayAttribute>().Name)
 		{
 			Axis = axis;
 			DriverPort = $"{board}.{port}";

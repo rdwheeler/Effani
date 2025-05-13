@@ -94,12 +94,12 @@ namespace Effani.Device.UI
 				_processEngine.QueueJob(new Job("Moving all controls to loading positions.", [
 					new HomeAxis(Axis.TableX, _device),
 					new HomeAxis(Axis.TableY, _device),
-					new HomeAxis(Axis.Koh1, _device),
-					new HomeAxis(Axis.Basal1, _device),
-					new HomeAxis(Axis.DnaReagent1, _device),
-					new HomeAxis(Axis.Nadh1, _device),
-					new HomeAxis(Axis.AspirateKohZ, _device),
-					new HomeAxis(Axis.AspirateFluidZ, _device),
+					new HomeAxis(Axis.Koh, _device),
+					new HomeAxis(Axis.Basal, _device),
+					new HomeAxis(Axis.DnaReagent, _device),
+					new HomeAxis(Axis.Nadh, _device),
+					new HomeAxis(Axis.AspirateKoh, _device),
+					new HomeAxis(Axis.AspirateFluid, _device),
 					new MoveToStartingLocations(_device),
                     new TableToTrayLoadingLocation(_device),
 					new NotifyComplete((command) => { NotifyMoveStartingPositionsComplete(); }, "Notify move to starting positions complete.", _device)
@@ -599,10 +599,10 @@ namespace Effani.Device.UI
             if (DoPrime)
             {
                 var job = new Job("Priming fluid pumps.");
-				job.Commands.Add(new EmitFluid(Axis.DnaReagent1, _device.Configuration.InitialDnaFluidPrimingVolume, _device));
-				job.Commands.Add(new EmitFluid(Axis.Koh1, _device.Configuration.InitialKohFluidPrimingVolume, _device));
-				job.Commands.Add(new EmitFluid(Axis.Nadh1, _device.Configuration.InitialNadhFluidPrimingVolume, _device));
-				job.Commands.Add(new EmitFluid(Axis.Basal1, _device.Configuration.InitialBasalFluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(Axis.DnaReagent, _device.Configuration.InitialDnaFluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(Axis.Koh, _device.Configuration.InitialKohFluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(Axis.Nadh, _device.Configuration.InitialNadhFluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(Axis.Basal, _device.Configuration.InitialBasalFluidPrimingVolume, _device));
 				job.Commands.Add(new NotifyComplete((command) => { NotifyFluidPrimingComplete(); }, "Notify fluid priming complete.", _device));
 				_processEngine.QueueJob(job);
             }
@@ -623,15 +623,15 @@ namespace Effani.Device.UI
 			{
 				var job = new Job("Priming basal media.");
 				job.Commands.Add(new AlignTableForWaste(_device));
-				job.Commands.Add(new EmitFluid(Axis.Basal1, _config.SecondaryBasalFluidPrimingVolume, _device));
+				job.Commands.Add(new EmitFluid(Axis.Basal, _config.SecondaryBasalFluidPrimingVolume, _device));
 				Assay.IsPrimedBasal = true;
 				_processEngine.QueuePriorityJob(job);
 			}
 			if (DoSamplePreparationSteps)
 			{
-				_processEngine.QueuePriorityJob(new Job($"Adding Basal media to {CurrentLoadingSample.Label}.", [
-					new AlignWellToAxis(Axis.Basal1, CurrentLoadingSample.Well, _device),
-					new EmitFluid(Axis.Basal1, _device.Configuration.BasalVolume, _device)
+				_processEngine.QueuePriorityJob(new Job($"Dispensing {_device.Configuration.BasalVolume}µg basal media to {CurrentLoadingSample.Label}.", [
+					new AlignWellToAxis(Axis.Basal, CurrentLoadingSample.Well, _device),
+					new EmitFluid(Axis.Basal, _device.Configuration.BasalVolume, _device)
 				]));
 				_processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
 					new AlignWellToLocation(_device.Configuration.BiopsyLocation, CurrentLoadingSample.Well, _device),
@@ -805,8 +805,8 @@ namespace Effani.Device.UI
         {
 			var well = CurrentWell;
 			_processEngine.QueuePriorityJob(new Job($"Adding Basal media to {CurrentLoadingSample.Label}.", [
-				new AlignWellToAxis(Axis.Basal1, CurrentLoadingSample.Well, _device),
-				new EmitFluid(Axis.Basal1, _device.Configuration.BasalVolume, _device)
+				new AlignWellToAxis(Axis.Basal, CurrentLoadingSample.Well, _device),
+				new EmitFluid(Axis.Basal, _device.Configuration.BasalVolume, _device)
 			]));
 			_processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
 				new AlignWellToLocation(_device.Configuration.BiopsyLocation, CurrentLoadingSample.Well, _device)
@@ -868,10 +868,10 @@ namespace Effani.Device.UI
         public void PrimeFluid()
 		{
 			var job = new Job("Priming fluid pumps.");
-			job.Commands.Add(new EmitFluid(Axis.DnaReagent1, _device.Configuration.InitialDnaFluidPrimingVolume, _device));
-			job.Commands.Add(new EmitFluid(Axis.Koh1, _device.Configuration.InitialKohFluidPrimingVolume, _device));
-			job.Commands.Add(new EmitFluid(Axis.Nadh1, _device.Configuration.InitialNadhFluidPrimingVolume, _device));
-			job.Commands.Add(new EmitFluid(Axis.Basal1, _device.Configuration.InitialBasalFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.DnaReagent, _device.Configuration.InitialDnaFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.Koh, _device.Configuration.InitialKohFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.Nadh, _device.Configuration.InitialNadhFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.Basal, _device.Configuration.InitialBasalFluidPrimingVolume, _device));
 			_processEngine.QueueJob(job);
 		}
         [Command]

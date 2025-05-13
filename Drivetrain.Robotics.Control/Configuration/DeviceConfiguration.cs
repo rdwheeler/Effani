@@ -206,10 +206,10 @@ G90 ; absolute positioning
 			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 500, EndstopLocation.LowEnd, Direction.Backwards, TableAxisSpeed));
 			DeviceSpecification.Axes.Add((AxisSpec)new TableAxis(Axis.TableY, 0, 1, 500, EndstopLocation.LowEnd, Direction.Backwards, TableAxisSpeed));
 			DeviceSpecification.Axes.AddRange(GetAspirateAxes());
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent1, 1, 4, DnaLocation, DnaSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh1, 2, 1, KohLocation, KohSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh1, 2, 3, NadhLocation, NadhSyringeLoadingPosition));
-			var basal1 = new FluidAxis(Axis.Basal1, 0, 5, BasalLocation, BasalSyringeLoadingPosition);
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent, 1, 4, DnaLocation, DnaSyringeLoadingPosition));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh, 2, 1, KohLocation, KohSyringeLoadingPosition));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh, 2, 3, NadhLocation, NadhSyringeLoadingPosition));
+			var basal1 = new FluidAxis(Axis.Basal, 0, 5, BasalLocation, BasalSyringeLoadingPosition);
             basal1.Driver.Endstop.SensorPort = ($"1.io0.in");
             DeviceSpecification.Axes.Add(basal1);
 
@@ -247,8 +247,8 @@ G90 ; absolute positioning
 		private List<AxisSpec> GetAspirateAxes()
 		{
 			var ret = new List<AxisSpec>();
-			ret.Add(new AspirateZAxis(Axis.AspirateFluidZ, 0, 4, AspirateFluidLocation, AspirateFluidActuatorStartPosition));
-            var aspirate1Z = new AspirateZAxis(Axis.AspirateKohZ, 1, 1, AspirateKohLocation, AspirateKohActuatorStartPosition);
+			ret.Add(new AspirateZAxis(Axis.AspirateFluid, 0, 4, AspirateFluidLocation, AspirateFluidActuatorStartPosition));
+            var aspirate1Z = new AspirateZAxis(Axis.AspirateKoh, 1, 1, AspirateKohLocation, AspirateKohActuatorStartPosition);
             aspirate1Z.Driver.Endstop.SensorPort = ($"1.io1.in");
             ret.Add(aspirate1Z);
 
@@ -305,9 +305,9 @@ G90 ; absolute positioning
 			WellOffset = GetCoordinateConfigValue(nameof(WellOffset));
 			TraySterilizationTime = GetConfigValue<int>(nameof(TraySterilizationTime));
 			InitialDnaFluidPrimingVolume = GetConfigValue<int>(nameof(InitialDnaFluidPrimingVolume));
-			InitialNadhFluidPrimingVolume = GetConfigValue<int>(nameof(InitialDnaFluidPrimingVolume));
-			InitialKohFluidPrimingVolume = GetConfigValue<int>(nameof(InitialDnaFluidPrimingVolume));
-			InitialBasalFluidPrimingVolume = GetConfigValue<int>(nameof(InitialDnaFluidPrimingVolume));
+			InitialNadhFluidPrimingVolume = GetConfigValue<int>(nameof(InitialNadhFluidPrimingVolume));
+			InitialKohFluidPrimingVolume = GetConfigValue<int>(nameof(InitialKohFluidPrimingVolume));
+			InitialBasalFluidPrimingVolume = GetConfigValue<int>(nameof(InitialBasalFluidPrimingVolume));
 			SecondaryDnaFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryDnaFluidPrimingVolume));
 			SecondaryNadhFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryNadhFluidPrimingVolume));
 			SecondaryKohFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryKohFluidPrimingVolume));

@@ -72,28 +72,30 @@ namespace Effani.Device.UI
 					if (!IsPrimedStandards)
 					{
 						IsPrimedStandards = true;
-						var primeJob = new Job("Priming DNA reagent and NADH.");
+						var primeJob = new Job($"Priming DNA reagent ({Config.SecondaryDnaFluidPrimingVolume}µg) and NADH ({Config.SecondaryNadhFluidPrimingVolume}µg).");
 						primeJob.Commands.Add(new AlignTableForWaste(Device));
-						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent1, Config.SecondaryDnaFluidPrimingVolume, Device));
-						primeJob.Commands.Add(new EmitFluid(Axis.Nadh1, Config.SecondaryNadhFluidPrimingVolume, Device));
+						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent, Config.SecondaryDnaFluidPrimingVolume, Device));
+						primeJob.Commands.Add(new EmitFluid(Axis.Nadh, Config.SecondaryNadhFluidPrimingVolume, Device));
 						Engine.QueueJob(primeJob);
 					}
-                    var job = new Job("Dispensing DNA reagent and NADH for standards establishment.");
+                    var job = new Job($"Dispensing DNA reagent ({Config.DnaVolume}µg) and NADH/Basal ({Config.NadhVolume}µg/{Config.BasalVolume}µg) for standards establishment.");
 					foreach (var wellTest in DnaStandardsWells)
                     {
                         job.Commands.AddRange(
                         [
-                            new AlignWellToAxis(Axis.DnaReagent1, wellTest.Well, Device),
-                            new EmitFluid(Axis.DnaReagent1, Config.DnaVolume, Device)
+                            new AlignWellToAxis(Axis.DnaReagent, wellTest.Well, Device),
+                            new EmitFluid(Axis.DnaReagent, Config.DnaVolume, Device)
                         ]);
                     }
                     foreach (var wellTest in NadhStandardsWells)
                     {
                         job.Commands.AddRange(
                         [
-                            new AlignWellToAxis(Axis.Nadh1, wellTest.Well, Device),
-                            new EmitFluid(Axis.Nadh1, Config.NadhVolume, Device)
-                        ]);
+                            new AlignWellToAxis(Axis.Nadh, wellTest.Well, Device),
+                            new EmitFluid(Axis.Nadh, Config.NadhVolume, Device),
+							new AlignWellToAxis(Axis.Basal, wellTest.Well, Device),
+							new EmitFluid(Axis.Basal, Config.BasalVolume, Device)
+						]);
                     }
                     job.Commands.Add(new StartTimer(StandardsTimer, $"Standards ({GetTimeString(Config.StandardsProcessingDwell)})", Device));
                     Engine.QueueJob(job);
@@ -218,9 +220,9 @@ namespace Effani.Device.UI
 			{
 				if (!IsPrimedNadh)
 				{
-					var job = new Job("Re-priming NADH.");
+					var job = new Job($"Re-priming NADH ({Config.SecondaryNadhFluidPrimingVolume}µg).");
 					job.Commands.Add(new AlignTableForWaste(Device));
-					job.Commands.Add(new EmitFluid(Axis.Nadh1, Config.SecondaryNadhFluidPrimingVolume, Device));
+					job.Commands.Add(new EmitFluid(Axis.Nadh, Config.SecondaryNadhFluidPrimingVolume, Device));
 					IsPrimedNadh = true;
 					Engine.QueueJob(job);
 				}
@@ -232,8 +234,8 @@ namespace Effani.Device.UI
 					job.Commands.AddRange(
                     [
                         // add NADH to well
-                        new AlignWellToAxis(Axis.Nadh1, testWell.Well, Device),
-                        new EmitFluid(Axis.Nadh1, Config.NadhVolume, Device),
+                        new AlignWellToAxis(Axis.Nadh, testWell.Well, Device),
+                        new EmitFluid(Axis.Nadh, Config.NadhVolume, Device),
 						new StartTimer(testWell.NadhReadings1Timer, $"{testWell.Label} NADH Readings 1 ({GetTimeString(Config.NadhReadingsTimerPeriod)})", Device)
                     ]);
                     Engine.QueueJob(job);
@@ -298,20 +300,20 @@ namespace Effani.Device.UI
 						Engine.QueuePriorityCommand(new NotifyComplete((command) => { TestInKohPhase?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test in KOH for {testWell.Label}", Device));
 						if (!IsPrimedKoh)
 						{
-							var primeJob = new Job("Priming KOH.");
+							var primeJob = new Job($"Priming KOH ({Config.KohVolume}µg).");
 							primeJob.Commands.Add(new AlignTableForWaste(Device));
-							primeJob.Commands.Add(new EmitFluid(Axis.Koh1, Config.SecondaryKohFluidPrimingVolume, Device));
+							primeJob.Commands.Add(new EmitFluid(Axis.Koh, Config.SecondaryKohFluidPrimingVolume, Device));
 							IsPrimedKoh = true;
 							Engine.QueueJob(primeJob);
 						}
-						var job = new Job($"Adding KOH to {testWell.Label}.");
+						var job = new Job($"Dispensing {Config.KohVolume}µg KOH to {testWell.Label}.");
 						// remove fluid from well
 						job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.TestMediaAspirationVolume));
 						job.Commands.AddRange(
                         [
 							// add KOH to well
-							new AlignWellToAxis(Axis.Koh1, testWell.Well, Device),
-                            new EmitFluid(Axis.Koh1, Config.KohVolume, Device),
+							new AlignWellToAxis(Axis.Koh, testWell.Well, Device),
+                            new EmitFluid(Axis.Koh, Config.KohVolume, Device),
                         ]);
 						job.Commands.AddRange(
 						[
@@ -345,20 +347,20 @@ namespace Effani.Device.UI
 				{
 					if (!IsPrimedDnaReagent)
 					{
-						var primeJob = new Job("Re-priming DNA reagent.");
+						var primeJob = new Job($"Re-priming DNA reagent ({Config.SecondaryDnaFluidPrimingVolume}µg).");
 						primeJob.Commands.Add(new AlignTableForWaste(Device));
-						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent1, Config.SecondaryDnaFluidPrimingVolume, Device));
+						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent, Config.SecondaryDnaFluidPrimingVolume, Device));
 						IsPrimedDnaReagent = true;
 						Engine.QueueJob(primeJob);
 					}
-					var job = new Job($"Dispensing DNA reagent to {testWell.Label}");
+					var job = new Job($"Dispensing {Config.DnaVolume}µg DNA reagent to {testWell.Label}");
 					// remove KOH from well
 					job.Commands.AddRange(GetAspirationCommands(FluidType.Koh, testWell, Config.KohAspirationVolume));
 					job.Commands.AddRange(
                     [
                         // add DNA reagent to well
-                        new AlignWellToAxis(Axis.DnaReagent1, testWell.Well, Device),
-                        new EmitFluid(Axis.DnaReagent1, Config.DnaVolume, Device),
+                        new AlignWellToAxis(Axis.DnaReagent, testWell.Well, Device),
+                        new EmitFluid(Axis.DnaReagent, Config.DnaVolume, Device),
                         new StartTimer(testWell.DnaIncubationTimer, $"{testWell.Label} DNA ({GetTimeString(Config.DnaTimerPeriod)})", Device)
 					]);
                     Engine.QueueJob(job);
@@ -421,8 +423,8 @@ namespace Effani.Device.UI
         {
             var axis = fluidType switch
             {
-                FluidType.General => Axis.AspirateFluidZ,
-                FluidType.Koh => Axis.AspirateKohZ
+                FluidType.General => Axis.AspirateFluid,
+                FluidType.Koh => Axis.AspirateKoh
             };
             Command removeCommand = fluidType switch
             {
