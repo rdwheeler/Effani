@@ -109,23 +109,20 @@ namespace Drivetrain.Robotics.Control
 		}
 		public void AspirateFluid(int microLiters)
 		{
-			// turn suction on
-			AspirationSuctionOn();
 			// lower fluid aspirator needle to top of the plate
-			MoveAbsolute(
-				Axis.AspirateFluid,
-				(Configuration.AspirateFluidActuatorStartPosition + Configuration.AspirateFluidDistanceToPlate),
-				Configuration.AspiratePositioningSpeed);
+			MoveAbsolute(Axis.AspirateFluid, (Configuration.AspirateFluidActuatorStartPosition + Configuration.AspirateFluidDistanceToPlate), Configuration.AspiratePositioningSpeed);
 			// lower aspirator needle calculated distance per ml to extract
 			var distance = CalcAspirateTravelMmForMl(microLiters);
 			MoveRelative(Axis.AspirateFluid, distance, Configuration.AspirateStirSpeed);
+			// turn suction on
+			AspirationSuctionOn();
 			// wait for extraction to complete
 			Pause(Configuration.AspirationDwell);
 			// in case the sample got in the way of removing as much liquid as planned, raise with suction off and lower with suction on again
 			AspirationSuctionOff();
 			MoveRelative(Axis.AspirateFluid, Configuration.AspirationPressureAscension * -1, Configuration.AspirateStirSpeed);
-			AspirationSuctionOn();
 			MoveRelative(Axis.AspirateFluid, Configuration.AspirationPressureAscension, Configuration.AspirateStirSpeed);
+			AspirationSuctionOn();
 			Pause(Configuration.AspirationDwell);
 			// turn suction off
 			AspirationSuctionOff();
