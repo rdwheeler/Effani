@@ -1,4 +1,4 @@
-﻿<UserControl 
+﻿<dx:ThemedWindow 
     x:Class="Effani.Device.UI.UtilitiesView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,9 +9,12 @@
 	xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:control="clr-namespace:Drivetrain.Robotics.Control;assembly=Drivetrain.Robotics.Control"
     xmlns:local="clr-namespace:Effani.Device.UI"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib" d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+	Title="Settings" WindowStyle="ToolWindow" 
+	WindowState="Maximized"
+	WindowStartupLocation="CenterScreen" 
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="1000">
-	<UserControl.Resources>
+	<dx:ThemedWindow.Resources>
 		<ResourceDictionary>
 			<local:PassThroughConverter x:Key="PassThroughConverter"/>
 			<Style x:Key="TabItemStyle" TargetType="dx:DXTabItem" >
@@ -170,7 +173,7 @@
 				</StackPanel>
 			</DataTemplate>
 		</ResourceDictionary>
-	</UserControl.Resources>
+	</dx:ThemedWindow.Resources>
 	<DockPanel LastChildFill="true">
 		<dx:DXTabControl DockPanel.Dock="Top">
 			<dx:DXTabItem Header="Sterilization">
@@ -233,4 +236,4 @@
 			</DockPanel>
 		</DockPanel>
 	</DockPanel>
-</UserControl>
+</dx:ThemedWindow>

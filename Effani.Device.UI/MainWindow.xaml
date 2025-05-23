@@ -2,16 +2,32 @@
     x:Class="Effani.Device.UI.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+	xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+	xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxco="http://schemas.devexpress.com/winfx/2008/xaml/controls"
     xmlns:local="clr-namespace:Effani.Device.UI"
-    Title="ABAL" WindowStyle="ToolWindow" WindowKind="Tabbed" 
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    Title="Effani" WindowStyle="ToolWindow" 
 	WindowStartupLocation="CenterScreen" 
 	WindowState="Maximized"
 	Height="800" Width="1000">
-	<Window.Resources>
-	</Window.Resources>
-    <Grid>
-        <local:MainView/>
+	<dx:ThemedWindow.Resources>
+		<Style TargetType="{x:Type Border}">
+			<Setter Property="Background" Value="GhostWhite" />
+			<Setter Property="CornerRadius" Value="10" />
+			<Setter Property="BorderThickness" Value="3" />
+			<Setter Property="BorderBrush" Value="CornflowerBlue" />
+			<Setter Property="Padding" Value="20" />
+		</Style>
+	</dx:ThemedWindow.Resources>
+	<dx:ThemedWindow.HeaderItems>
+		<dx:SimpleButton Command="{Binding ShowSettingsCommand}" BorderThickness="0" Margin="0,5,0,5">
+			<dx:SimpleButton.Content>
+				<Image Source="{dx:DXImage 'SvgImages/Icon Builder/Actions_Settings.svg'}" />
+			</dx:SimpleButton.Content>
+		</dx:SimpleButton>
+	</dx:ThemedWindow.HeaderItems>
+	<Grid>
+		<local:Wizard></local:Wizard>
     </Grid>
 </dx:ThemedWindow>

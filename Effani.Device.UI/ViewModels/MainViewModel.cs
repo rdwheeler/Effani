@@ -74,10 +74,8 @@ namespace Effani.Device.UI
 			UnloadedTestsCount = 0;
 			AddMessage("Assay canceled", true);
 			AssayComplete = true;
+			AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
-		public void PageStartFirstPage()
-		{
-        }
 		public void PageStartLoadFluidSystem()
 		{
 			Assay.Initialize(NumberOfTests);
@@ -110,18 +108,11 @@ namespace Effani.Device.UI
 				_processEngine.QueueCommand(new NotifyComplete((command) => { NotifyMoveStartingPositionsComplete(); }, "Notify move to starting positions complete.", _device));
 			}
 		}
-		public void PageStartLoadSampleTrays()
-		{    
-		}
         public void PageStartLoadingSamples()
 		{
             SampleLoadingCollection.AddRange(Assay.TestWells1);
 			SampleLoadingCollection.AddRange(Assay.TestWells2);
 			CurrentLoadingSample = SampleLoadingCollection.First();
-		}
-		public void PageStartAssay()
-		{
-
 		}
 		public void PageStartAssayConcluded()
 		{
@@ -222,6 +213,7 @@ namespace Effani.Device.UI
 						{
 							AddMessage("Assay complete", true);
 							AssayComplete = true;
+							AdvanceWizardPage?.Invoke(this, new EventArgs());
 						}
 					});
 		}
@@ -478,6 +470,20 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(MoveStartingPositionsComplete));
 			}
 		}
+		public bool FluidLoadingComplete
+		{
+			get
+			{
+				return _fluidLoadingComplete;
+			}
+			set
+			{
+				if (_fluidLoadingComplete == value)
+					return;
+				_fluidLoadingComplete = value;
+				RaisePropertyChanged(nameof(FluidLoadingComplete));
+			}
+		}
 		public string ResultsFilePath { get; set; }
 		public string LogFilePath { get; set; }
 		public List<TestWell> SampleLoadingCollection { get; set; } = new();
@@ -564,6 +570,7 @@ namespace Effani.Device.UI
 		int _emitFluidVolume;
 		string _sendCommandText;
 		bool _moveStartingPositionsComplete;
+		bool _fluidLoadingComplete;
 		string _executingCommandText = "None";
 
 		public static bool DoHome = true;
@@ -579,6 +586,13 @@ namespace Effani.Device.UI
 		#endregion
 
 		#region Commands
+
+		[Command]
+		public void ShowSettings()
+		{
+			var settingsWindow = new UtilitiesView() { Title = "Settings" };
+			settingsWindow.ShowDialog();
+		}
 		[Command]
 		public void AcceptSample()
 		{
@@ -595,7 +609,7 @@ namespace Effani.Device.UI
 		[Command]
 		public void FluidLoaded()
         {
-			Thread.Sleep(1000);
+			FluidLoadingComplete = true;
             if (DoPrime)
             {
                 var job = new Job("Priming fluid pumps.");
@@ -610,8 +624,6 @@ namespace Effani.Device.UI
 			{
 				_processEngine.QueueCommand(new NotifyComplete((command) => { NotifyFluidPrimingComplete(); }, "Notify fluid priming complete.", _device));
 			}
-
-            AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
 		[Command]
 		public void InjectSample()
@@ -678,6 +690,11 @@ namespace Effani.Device.UI
 				AddMessage("Assay complete", true);
 				AssayComplete = true;
 			}
+			AdvanceWizardPage?.Invoke(this, new EventArgs());
+		}
+		[Command]
+		public void AssayParametersCollected()
+		{
 			AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
 		[Command]

@@ -34,7 +34,6 @@ namespace Effani.Device.UI
 		{
 			var viewModel = DataContext as MainViewModel;
 			viewModel.AdvanceWizardPage += ViewModel_AdvanceWizardPage;
-			viewModel.PageStartFirstPage();
 		}
 		private void ViewModel_AdvanceWizardPage(object sender, EventArgs e)
 		{
@@ -52,13 +51,7 @@ namespace Effani.Device.UI
 					viewModel.PageStartLoadFluidSystem();
 					break;
 				case "LoadFluidSystemPage":
-					viewModel.PageStartLoadSampleTrays();
-					break;
-				case "LoadSampleTraysPage":
 					viewModel.PageStartLoadingSamples();
-					break;
-				case "LoadingSamplesPage":
-					viewModel.PageStartAssay();
 					break;
 				case "AssayPage":
 					viewModel.PageStartCleanUp();

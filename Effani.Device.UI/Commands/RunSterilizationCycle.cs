@@ -16,7 +16,7 @@ namespace Drivetrain.Robotics.Process
 			Thread.Sleep(dwell);
 			device.AccOff(1);
 		}
-		public override string Description => $"Sterilizing for {dwell/1000} seconds.";
+		public override string Description => $"Sterilizing for {dwell/1000 * 2} seconds.";
 
 		private readonly int dwell = dwell;
 	}

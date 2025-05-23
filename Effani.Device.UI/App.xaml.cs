@@ -31,8 +31,6 @@ namespace Effani.Device.UI
 					services.AddSingleton<UtilitiesView>();
 				})
 				.Build();
-
-			ApplicationThemeHelper.ApplicationThemeName = Theme.Win11Dark.Name;
 		}
 
 		protected override async void OnStartup(StartupEventArgs e)

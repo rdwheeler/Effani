@@ -10,13 +10,6 @@
     xmlns:local="clr-namespace:Effani.Device.UI"
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 	<Grid>
-		<dx:DXTabControl VerticalAlignment="Stretch" Margin="10">
-			<dx:DXTabItem Header="Analyze">
-				<local:Wizard></local:Wizard>
-			</dx:DXTabItem>
-			<dx:DXTabItem Header="Utilities">
-				<local:UtilitiesView></local:UtilitiesView>
-			</dx:DXTabItem>
-		</dx:DXTabControl>
+		<local:Wizard></local:Wizard>
 	</Grid>
 </UserControl>

@@ -10,7 +10,17 @@
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>False</UseWindowsForms>
+		<ApplicationIcon>Resources\effanicow.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\effanicow.webp" />
+	  <None Remove="Resources\effani_background.jpg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\effanicow.ico" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="DevExpress.Images" Version="24.1.7" />
@@ -36,6 +46,13 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Drivetrain.Robotics.Control\Drivetrain.Robotics.Control.csproj" />
 	  <ProjectReference Include="..\Drivetrain.Robotics.Process\Drivetrain.Robotics.Process.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\effanicow.webp" />
+	  <Resource Include="Resources\effani_background.jpg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
 	</ItemGroup>
 
 	<ItemGroup>
