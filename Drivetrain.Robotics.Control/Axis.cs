@@ -20,7 +20,7 @@ namespace Drivetrain.Robotics.Control
 		Nadh,
 		[Display(ShortName = "B", Name = "Basal")]
 		Basal,
-        [Display(ShortName = "D", Name = "Aspirate Fluid")]
-        AspirateFluid,
+        //[Display(ShortName = "D", Name = "Aspirate Fluid")]
+        //AspirateFluid,
 	}
 }

@@ -193,7 +193,6 @@
 					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding InjectSampleTestCommand}" Content="Inject Sample" />
                     <dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding PrimeFluidCommand}" Content="Prime Fluid" />
 					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AspirateKohCommand}" Content="Aspirate KOH" />
-					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AspirateFluidCommand}" Content="Aspirate Fluid" />
                 </StackPanel>
             </dx:DXTabItem>
             <dx:DXTabItem Header="Control Board">

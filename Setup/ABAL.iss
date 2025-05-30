@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Effani"
-#define MyAppVersion "2.14.0"
+#define MyAppVersion "2.15.0"
 #define MyAppPublisher "Effani"
 #define MyAppExeName "Effani.Device.UI.exe"
 

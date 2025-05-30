@@ -97,7 +97,7 @@ namespace Effani.Device.UI
 					new HomeAxis(Axis.DnaReagent, _device),
 					new HomeAxis(Axis.Nadh, _device),
 					new HomeAxis(Axis.AspirateKoh, _device),
-					new HomeAxis(Axis.AspirateFluid, _device),
+					//new HomeAxis(Axis.AspirateFluid, _device),
 					new MoveToStartingLocations(_device),
                     new TableToTrayLoadingLocation(_device),
 					new NotifyComplete((command) => { NotifyMoveStartingPositionsComplete(); }, "Notify move to starting positions complete.", _device)
@@ -591,6 +591,7 @@ namespace Effani.Device.UI
 		public void ShowSettings()
 		{
 			var settingsWindow = new UtilitiesView() { Title = "Settings" };
+			settingsWindow.DataContext = this;
 			settingsWindow.ShowDialog();
 		}
 		[Command]
@@ -780,11 +781,11 @@ namespace Effani.Device.UI
 			_processEngine.QueueCommand(new AspirateKoh(_config.KohAspirationVolume, _device));
 		}
 
-		[Command]
-		public async Task AspirateFluid(AxisSpec axisSpec)
-		{
-			_processEngine.QueueCommand(new AspirateFluid(_config.TestMediaAspirationVolume, _device));
-		}
+		//[Command]
+		//public async Task AspirateFluid(AxisSpec axisSpec)
+		//{
+		//	_processEngine.QueueCommand(new AspirateFluid(_config.TestMediaAspirationVolume, _device));
+		//}
 
 		[Command]
         public async Task HomeAll()

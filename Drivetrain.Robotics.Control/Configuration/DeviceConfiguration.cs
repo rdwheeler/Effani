@@ -139,8 +139,8 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine(@"M950 P1 C""1.out6"" ; chamber UV");
 			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
 			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
-			var aspirationPressureToggleBoardNumber = AspirationPressureToggleBoardNumber == 0 ? null : $"{AspirationPressureToggleBoardNumber}.";
-			configTextBuilder.AppendLine(@$"M950 P4 C""{aspirationPressureToggleBoardNumber}out{AspirationPressureTogglePortNumber}"" ; aspiration emission switch");
+			//var aspirationPressureToggleBoardNumber = AspirationPressureToggleBoardNumber == 0 ? null : $"{AspirationPressureToggleBoardNumber}.";
+			//configTextBuilder.AppendLine(@$"M950 P4 C""{aspirationPressureToggleBoardNumber}out{AspirationPressureTogglePortNumber}"" ; aspiration emission switch");
 			var aspirationSuctionToggleBoardNumber = AspirationSuctionToggleBoardNumber == 0 ? null : $"{AspirationSuctionToggleBoardNumber}.";
 			configTextBuilder.AppendLine(@$"M950 P5 C""{aspirationSuctionToggleBoardNumber}out{AspirationSuctionTogglePortNumber}"" ; aspiration emission switch");
 			configTextBuilder.AppendLine("\r\n; Sensors");
@@ -247,7 +247,7 @@ G90 ; absolute positioning
 		private List<AxisSpec> GetAspirateAxes()
 		{
 			var ret = new List<AxisSpec>();
-			ret.Add(new AspirateZAxis(Axis.AspirateFluid, 0, 4, AspirateFluidLocation, AspirateFluidActuatorStartPosition));
+			//ret.Add(new AspirateZAxis(Axis.AspirateFluid, 0, 4, AspirateFluidLocation, AspirateFluidActuatorStartPosition));
             var aspirate1Z = new AspirateZAxis(Axis.AspirateKoh, 1, 1, AspirateKohLocation, AspirateKohActuatorStartPosition);
             aspirate1Z.Driver.Endstop.SensorPort = ($"1.io1.in");
             ret.Add(aspirate1Z);
@@ -273,13 +273,10 @@ G90 ; absolute positioning
 		}
 		private void SetConfigValues()
 		{
-			AspirateFluidActuatorStartPosition = GetConfigValue<float>(nameof(AspirateFluidActuatorStartPosition));
 			AspirateKohActuatorStartPosition = GetConfigValue<float>(nameof(AspirateKohActuatorStartPosition));
 			TrayTemperature = GetConfigValue<float>(nameof(TrayTemperature));
 			FluidSyringeSpeed = GetConfigValue<float>(nameof(FluidSyringeSpeed));
 			AspirateKohDistanceToPlate = GetConfigValue<float>(nameof(AspirateKohDistanceToPlate));
-			AspirateFluidDistanceToPlate = GetConfigValue<float>(nameof(AspirateFluidDistanceToPlate));
-			AspirateFluidLocation = GetCoordinateConfigValue(nameof(AspirateFluidLocation));
 			AspirateKohLocation = GetCoordinateConfigValue(nameof(AspirateKohLocation));
 			DnaLocation = GetCoordinateConfigValue(nameof(DnaLocation));
 			KohLocation = GetCoordinateConfigValue(nameof(KohLocation));
@@ -348,11 +345,7 @@ G90 ; absolute positioning
             AspirationDwell = GetConfigValue<int>(nameof(AspirationDwell));
 			AspirationSuctionTogglePortNumber = GetConfigValue<int>(nameof(AspirationSuctionTogglePortNumber));
 			AspirationSuctionToggleBoardNumber = GetConfigValue<int>(nameof(AspirationSuctionToggleBoardNumber));
-			AspirationPressureTogglePortNumber = GetConfigValue<int>(nameof(AspirationPressureTogglePortNumber));
-			AspirationPressureToggleBoardNumber = GetConfigValue<int>(nameof(AspirationPressureToggleBoardNumber));
-			AspirationPressureAscension = GetConfigValue<float>(nameof(AspirationPressureAscension));
-			AspirationPressureDwell = GetConfigValue<int>(nameof(AspirationPressureDwell));
-			FluidEmissionDwell = GetConfigValue<int>(nameof(AspirationPressureDwell));
+			FluidEmissionDwell = GetConfigValue<int>(nameof(FluidEmissionDwell));
 			DnaSyringeLoadingPosition = GetConfigValue<float>(nameof(DnaSyringeLoadingPosition));
 			NadhSyringeLoadingPosition = GetConfigValue<float>(nameof(NadhSyringeLoadingPosition));
 			KohSyringeLoadingPosition = GetConfigValue<float>(nameof(KohSyringeLoadingPosition));
@@ -369,17 +362,14 @@ G90 ; absolute positioning
 		public float NadhSyringeLoadingPosition { get; set; }
 		public float KohSyringeLoadingPosition { get; set; }
 		public float BasalSyringeLoadingPosition { get; set; }
-		public float AspirateFluidActuatorStartPosition { get; set; }
 		public float AspirateKohActuatorStartPosition { get; set; }
 		public float WellWidth { get; set; } // mm of width of sample well
 		public float WellDepth { get; set; } // mm of width of sample well
 		public float TrayTemperature { get; set; } // in Celcius, target temperature to heat the tray to
 		public float FluidSyringeSpeed { get; set; } // speed at which a fluid syringe should emitt its contents
 		public float AspirateKohDistanceToPlate { get; set; } // total mm aspirate KOH will descend/ascend to top of well
-		public float AspirateFluidDistanceToPlate { get; set; } // total mm aspirate Fluid will descend/ascend to top of well
 		public float AspiratePositioningSpeed { get; set; } // speed at which aspirate needles will move into position to begin stir
 		public float AspirateStirSpeed { get; set; } // speed at which aspirate will move during stirring
-		public Coordinate AspirateFluidLocation { get; set; }
 		public Coordinate AspirateKohLocation { get; set; }
 		public Coordinate DnaLocation { get; set; }
 		public Coordinate KohLocation { get; set; }
@@ -399,8 +389,6 @@ G90 ; absolute positioning
 		public int NadhSensorNumber { get; set; }
 		public int NadhSensorReadHigh { get; set; }
 		public int NadhSensorReadLow { get; set; }
-		public int AspirationPressureToggleBoardNumber { get; set; }
-		public int AspirationPressureTogglePortNumber { get; set; }
 		public int AspirationSuctionToggleBoardNumber { get; set; }
 		public int AspirationSuctionTogglePortNumber { get; set; }
 		public Coordinate WasteLocation { get; set; }
@@ -442,8 +430,6 @@ G90 ; absolute positioning
 		public Coordinate TraySterilizationLocation { get; set; }
 		public float AspirateTravelPerMicroLiter { get; set; }
 		public int TableAxisSpeed { get; set; }
-		public int AspirationPressureDwell { get; set; }
-		public float AspirationPressureAscension { get; set; }
 		public int NadhIncubationDwell { get; set; }
 		public int FluidEmissionDwell { get; set; }
 

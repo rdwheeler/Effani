@@ -203,7 +203,7 @@ namespace Effani.Device.UI
 		}
         public enum FluidType
         {
-            General = 0,
+            //General = 0,
             Koh = 1
         }
         private void BasalIncubationTimer_Elapsed(object sender, DataArgs<int> e)
@@ -308,7 +308,7 @@ namespace Effani.Device.UI
 						}
 						var job = new Job($"Dispensing {Config.KohVolume}µg KOH to {testWell.Label}.");
 						// remove fluid from well
-						job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.TestMediaAspirationVolume));
+						//job.Commands.AddRange(GetAspirationCommands(FluidType.General, testWell, Config.TestMediaAspirationVolume));
 						job.Commands.AddRange(
                         [
 							// add KOH to well
@@ -423,12 +423,12 @@ namespace Effani.Device.UI
         {
             var axis = fluidType switch
             {
-                FluidType.General => Axis.AspirateFluid,
+                //FluidType.General => Axis.AspirateFluid,
                 FluidType.Koh => Axis.AspirateKoh
             };
             Command removeCommand = fluidType switch
             {
-                FluidType.General => new AspirateFluid(volume, Device),
+                //FluidType.General => new AspirateFluid(volume, Device),
                 FluidType.Koh => new AspirateKoh(volume, Device),
                 _ => null
             };
