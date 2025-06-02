@@ -1,18 +1,18 @@
-﻿using DevExpress.Mvvm;
-using Drivetrain.Robotics.Control;
+﻿using Drivetrain.Robotics.Control;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Timers;
-using System.Windows;
-using static Drivetrain.Robotics.Control.AbalDeviceControl;
+using Timer = System.Timers.Timer;
 
-namespace Effani.Device.UI
+namespace Effani.Device.Assay
 {
-	public class TestWell : ViewModelBase, IDisposable
+	public class TestWell : IDisposable, INotifyPropertyChanged
 	{
+		#region Constructors
+		public TestWell() { }
+		#endregion
+
 		#region Constructors
 		public TestWell(DeviceConfiguration deviceConfiguration, Well well, int testIndex, EventHandler<DataArgs<int>> basalIncubationTimerCallback, EventHandler<DataArgs<int>> nadhReadingsTimerCallback, EventHandler<DataArgs<int>> kohDwellTimerCallback, EventHandler<DataArgs<int>> dnaIncubationTimerCallback)
 		{
@@ -92,11 +92,12 @@ namespace Effani.Device.UI
 		#region Private methods
 		private void SetCurrentTimerDescription(int count, string prefix = null)
 		{
-			Application.Current.Dispatcher.Invoke(() =>
-			{
-				var timeString = count == 0 ? null : TimeSpan.FromMilliseconds(count * _timerDescriptionUpdateInterval).ToString("c");
-				CurrentTimerDescription = $"{prefix}{timeString}";
-			});
+			var timeString = count == 0 ? null : TimeSpan.FromMilliseconds(count * _timerDescriptionUpdateInterval).ToString("c");
+			CurrentTimerDescription = $"{prefix}{timeString}";
+		}
+		protected void RaisePropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 		private Timer DisposeTimer(Timer timer)
 		{
@@ -331,8 +332,10 @@ namespace Effani.Device.UI
 		public Dictionary<int, float> TimeValues = new();
 		#endregion
 
+		public event PropertyChangedEventHandler PropertyChanged;
+
 		#region Fields
-        readonly EventHandler<DataArgs<int>> _basalIncubationTimerCallback;
+		readonly EventHandler<DataArgs<int>> _basalIncubationTimerCallback;
 		readonly EventHandler<DataArgs<int>> _dnaIncubationTimerCallback;
 		readonly EventHandler<DataArgs<int>> _kohDwellDnaTimerCallback;
 		readonly EventHandler<DataArgs<int>> _nadhReadingsTimerCallback;

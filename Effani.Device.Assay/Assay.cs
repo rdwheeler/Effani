@@ -1,21 +1,13 @@
-﻿using DevExpress.Utils.Extensions;
-using DevExpress.Xpf.CodeView;
-using Drivetrain.Robotics.Control;
+﻿using Drivetrain.Robotics.Control;
 using Drivetrain.Robotics.Process;
+using Effani.Device.Control;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
-using static Drivetrain.Robotics.Control.AbalDeviceControl;
 
-namespace Effani.Device.UI
+namespace Effani.Device.Assay
 {
 	public class Assay : IDisposable
     {
@@ -24,6 +16,7 @@ namespace Effani.Device.UI
 			Device = device;
 			Engine = engine;
 			CreatedOn = DateTime.Now;
+			StandardsWellCount = Device.Configuration.StandardsWellCount;
 			StandardsTimer = new System.Timers.Timer(Config.StandardsProcessingDwell) { AutoReset = false };
 			StandardsTimer.Elapsed += StandardsTimer_Elapsed;
 		}
@@ -61,59 +54,51 @@ namespace Effani.Device.UI
 
 			try
 			{
+				Engine.QueuePriorityJob(new Job($"Sterilizing sample trays.", [
+					new TableToTraySterilizationLocation(Device),
+					new RunSterilizationCycle(Device, Config.TraySterilizationTime)
+				]));
 
-				if (MainViewModel.SterilizeAndDispenseStandardFluids)
+				if (!IsPrimedStandards)
 				{
-					Engine.QueuePriorityJob(new Job($"Sterilizing sample trays.", [
-						new TableToTraySterilizationLocation(Device),
-						new RunSterilizationCycle(Device, Config.TraySterilizationTime)
-					]));
-
-					if (!IsPrimedStandards)
-					{
-						IsPrimedStandards = true;
-						var primeJob = new Job($"Priming DNA reagent ({Config.SecondaryDnaFluidPrimingVolume}µg) and NADH ({Config.SecondaryNadhFluidPrimingVolume}µg).");
-						primeJob.Commands.Add(new AlignTableForWaste(Device));
-						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent, Config.SecondaryDnaFluidPrimingVolume, Device));
-						primeJob.Commands.Add(new EmitFluid(Axis.Nadh, Config.SecondaryNadhFluidPrimingVolume, Device));
-						Engine.QueueJob(primeJob);
-					}
-                    var job = new Job($"Dispensing DNA reagent ({Config.DnaVolume}µg) and NADH/Basal ({Config.NadhVolume}µg/{Config.BasalVolume}µg) for standards establishment.");
-					foreach (var wellTest in DnaStandardsWells)
-                    {
-                        job.Commands.AddRange(
-                        [
-                            new AlignWellToAxis(Axis.DnaReagent, wellTest.Well, Device),
-                            new EmitFluid(Axis.DnaReagent, Config.DnaVolume, Device)
-                        ]);
-                    }
-                    foreach (var wellTest in NadhStandardsWells)
-                    {
-                        job.Commands.AddRange(
-                        [
-                            new AlignWellToAxis(Axis.Nadh, wellTest.Well, Device),
-                            new EmitFluid(Axis.Nadh, Config.NadhVolume, Device),
-							new AlignWellToAxis(Axis.Basal, wellTest.Well, Device),
-							new EmitFluid(Axis.Basal, Config.BasalVolume, Device)
-						]);
-                    }
-                    job.Commands.Add(new StartTimer(StandardsTimer, $"Standards ({GetTimeString(Config.StandardsProcessingDwell)})", Device));
-                    Engine.QueueJob(job);
-
-					Engine.QueueJob(new Job($"Reading Low NADH from {NadhStandardsWells[0].Well.Label}.", [
-						new AlignWellToLocation(Config.NadhSensorLocation, NadhStandardsWells[0].Well, Device),
-						new Pause(Config.NadhIncubationDwell, Device),
-						new ReadNadh(Device, (command) => { LowNadh = ParseCommandResult(command); }),
-					]));
-					Engine.QueueJob(new Job($"Reading High NADH from {NadhStandardsWells[1].Well.Label}.", [
-						new AlignWellToLocation(Config.NadhSensorLocation, NadhStandardsWells[1].Well, Device),
-						new ReadNadh(Device, (command) => { HighNadh = ParseCommandResult(command); }),
-					]));
-                }
-				else
-				{
-					Engine.QueueCommand(new StartTimer(StandardsTimer, $"Standards ({GetTimeString(Config.StandardsProcessingDwell)})", Device));
+					IsPrimedStandards = true;
+					var primeJob = new Job($"Priming DNA reagent ({Config.SecondaryDnaFluidPrimingVolume}µg) and NADH ({Config.SecondaryNadhFluidPrimingVolume}µg).");
+					primeJob.Commands.Add(new AlignTableForWaste(Device));
+					primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent, Config.SecondaryDnaFluidPrimingVolume, Device));
+					primeJob.Commands.Add(new EmitFluid(Axis.Nadh, Config.SecondaryNadhFluidPrimingVolume, Device));
+					Engine.QueueJob(primeJob);
 				}
+                var job = new Job($"Dispensing DNA reagent ({Config.DnaVolume}µg) and NADH/Basal ({Config.NadhVolume}µg/{Config.BasalVolume}µg) for standards establishment.");
+				foreach (var wellTest in DnaStandardsWells)
+                {
+                    job.Commands.AddRange(
+                    [
+                        new AlignWellToAxis(Axis.DnaReagent, wellTest.Well, Device),
+                        new EmitFluid(Axis.DnaReagent, Config.DnaVolume, Device)
+                    ]);
+                }
+                foreach (var wellTest in NadhStandardsWells)
+                {
+                    job.Commands.AddRange(
+                    [
+                        new AlignWellToAxis(Axis.Nadh, wellTest.Well, Device),
+                        new EmitFluid(Axis.Nadh, Config.NadhVolume, Device),
+						new AlignWellToAxis(Axis.Basal, wellTest.Well, Device),
+						new EmitFluid(Axis.Basal, Config.BasalVolume, Device)
+					]);
+                }
+                job.Commands.Add(new StartTimer(StandardsTimer, $"Standards ({GetTimeString(Config.StandardsProcessingDwell)})", Device));
+                Engine.QueueJob(job);
+
+				Engine.QueueJob(new Job($"Reading Low NADH from {NadhStandardsWells[0].Well.Label}.", [
+					new AlignWellToLocation(Config.NadhSensorLocation, NadhStandardsWells[0].Well, Device),
+					new Pause(Config.NadhIncubationDwell, Device),
+					new ReadNadh(Device, (command) => { LowNadh = ParseCommandResult(command); }),
+				]));
+				Engine.QueueJob(new Job($"Reading High NADH from {NadhStandardsWells[1].Well.Label}.", [
+					new AlignWellToLocation(Config.NadhSensorLocation, NadhStandardsWells[1].Well, Device),
+					new ReadNadh(Device, (command) => { HighNadh = ParseCommandResult(command); }),
+				]));
             }
             catch (IOException ex)
             {
@@ -169,26 +154,22 @@ namespace Effani.Device.UI
 						return;
 					Task.Delay(1000).Wait();
 				}
-
-				if (MainViewModel.DoStandardsSteps)
-				{
-					Engine.QueueJob(new Job($"Reading 1 µg DNA from {DnaStandardsWells[0].Well.Label}.", [
-						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[0].Well, Device),
-						new ReadDna(Device, (command) => { Microgram1Dna = ParseCommandResult(command); }),
-					]));
-					Engine.QueueJob(new Job($"Reading 0.25 µg DNA from {DnaStandardsWells[1].Well.Label}.", [
-						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[1].Well, Device),
-						new ReadDna(Device, (command) => { MicrogramDna25Dna = ParseCommandResult(command); }),
-					]));
-					Engine.QueueJob(new Job($"Reading 0.0625 µg DNA from {DnaStandardsWells[2].Well.Label}.", [
-						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[2].Well, Device),
-						new ReadDna(Device, (command) => { MicrogramDna0625Dna = ParseCommandResult(command); }),
-					]));
-					Engine.QueueJob(new Job($"Reading 0 µg DNA from {DnaStandardsWells[3].Well.Label}.", [
-						new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[3].Well, Device),
-						new ReadDna(Device, (command) => { Microgram0Dna = ParseCommandResult(command); }),
-					]));
-				}
+				Engine.QueueJob(new Job($"Reading 1 µg DNA from {DnaStandardsWells[0].Well.Label}.", [
+					new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[0].Well, Device),
+					new ReadDna(Device, (command) => { Microgram1Dna = ParseCommandResult(command); }),
+				]));
+				Engine.QueueJob(new Job($"Reading 0.25 µg DNA from {DnaStandardsWells[1].Well.Label}.", [
+					new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[1].Well, Device),
+					new ReadDna(Device, (command) => { MicrogramDna25Dna = ParseCommandResult(command); }),
+				]));
+				Engine.QueueJob(new Job($"Reading 0.0625 µg DNA from {DnaStandardsWells[2].Well.Label}.", [
+					new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[2].Well, Device),
+					new ReadDna(Device, (command) => { MicrogramDna0625Dna = ParseCommandResult(command); }),
+				]));
+				Engine.QueueJob(new Job($"Reading 0 µg DNA from {DnaStandardsWells[3].Well.Label}.", [
+					new AlignWellToLocation(Config.DnaSensorLocation, DnaStandardsWells[3].Well, Device),
+					new ReadDna(Device, (command) => { Microgram0Dna = ParseCommandResult(command); }),
+				]));
 
 				Engine.QueueCommand(new NotifyComplete((command) => { StandardsComplete?.Invoke(this, EventArgs.Empty); }, "Notify standards establishment complete.", Device));
 			}
@@ -220,34 +201,23 @@ namespace Effani.Device.UI
 			{
 				if (!IsPrimedNadh)
 				{
-					var job = new Job($"Re-priming NADH ({Config.SecondaryNadhFluidPrimingVolume}µg).");
-					job.Commands.Add(new AlignTableForWaste(Device));
-					job.Commands.Add(new EmitFluid(Axis.Nadh, Config.SecondaryNadhFluidPrimingVolume, Device));
+					var primingJob = new Job($"Re-priming NADH ({Config.SecondaryNadhFluidPrimingVolume}µg).");
+					primingJob.Commands.Add(new AlignTableForWaste(Device));
+					primingJob.Commands.Add(new EmitFluid(Axis.Nadh, Config.SecondaryNadhFluidPrimingVolume, Device));
 					IsPrimedNadh = true;
-					Engine.QueueJob(job);
+					Engine.QueueJob(primingJob);
 				}
 				var testWell = sender as TestWell;
 				Engine.QueuePriorityCommand(new NotifyComplete((command) => { TestInNadhReadingsPhase?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test in NADH for {testWell.Label}", Device));
-                if (MainViewModel.DoNadhReadingSteps)
-                {
-                    var job = new Job($"Dispensing {Config.NadhVolume}μl NADH to {testWell.Label} for NADH readings 1.");
-					job.Commands.AddRange(
-                    [
-                        // add NADH to well
-                        new AlignWellToAxis(Axis.Nadh, testWell.Well, Device),
-                        new EmitFluid(Axis.Nadh, Config.NadhVolume, Device),
-						new StartTimer(testWell.NadhReadings1Timer, $"{testWell.Label} NADH Readings 1 ({GetTimeString(Config.NadhReadingsTimerPeriod)})", Device)
-                    ]);
-                    Engine.QueueJob(job);
-				}
-				else
-				{
-					Engine.QueuePriorityJob(new Job($"Skipping NADH fluid readings.",
-					[
-						new StartTimer(testWell.KohDwellTimer, $"{testWell.Label} KOH dwell ({GetTimeString(Config.StandardsProcessingDwell)})", Device),
-						new NotifyComplete((command) => { TestInKohPhase?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test in KOH for {testWell.Label}", Device)
-					]));
-				}
+                var job = new Job($"Dispensing {Config.NadhVolume}μl NADH to {testWell.Label} for NADH readings 1.");
+				job.Commands.AddRange(
+                [
+                    // add NADH to well
+                    new AlignWellToAxis(Axis.Nadh, testWell.Well, Device),
+                    new EmitFluid(Axis.Nadh, Config.NadhVolume, Device),
+					new StartTimer(testWell.NadhReadings1Timer, $"{testWell.Label} NADH Readings 1 ({GetTimeString(Config.NadhReadingsTimerPeriod)})", Device)
+                ]);
+                Engine.QueueJob(job);
             }
             catch (Exception ex)
             {
@@ -343,38 +313,25 @@ namespace Effani.Device.UI
             {
                 var testWell = sender as TestWell;
 				Engine.QueuePriorityCommand(new NotifyComplete((command) => { TestInDnaPhase?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test in DNA for {testWell.Label}", Device));
-                if (MainViewModel.DoKohTimerSteps)
+				if (!IsPrimedDnaReagent)
 				{
-					if (!IsPrimedDnaReagent)
-					{
-						var primeJob = new Job($"Re-priming DNA reagent ({Config.SecondaryDnaFluidPrimingVolume}µg).");
-						primeJob.Commands.Add(new AlignTableForWaste(Device));
-						primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent, Config.SecondaryDnaFluidPrimingVolume, Device));
-						IsPrimedDnaReagent = true;
-						Engine.QueueJob(primeJob);
-					}
-					var job = new Job($"Dispensing {Config.DnaVolume}µg DNA reagent to {testWell.Label}");
-					// remove KOH from well
-					job.Commands.AddRange(GetAspirationCommands(FluidType.Koh, testWell, Config.KohAspirationVolume));
-					job.Commands.AddRange(
-                    [
-                        // add DNA reagent to well
-                        new AlignWellToAxis(Axis.DnaReagent, testWell.Well, Device),
-                        new EmitFluid(Axis.DnaReagent, Config.DnaVolume, Device),
-                        new StartTimer(testWell.DnaIncubationTimer, $"{testWell.Label} DNA ({GetTimeString(Config.DnaTimerPeriod)})", Device)
-					]);
-                    Engine.QueueJob(job);
-                }
-                else
-				{
-					var job = new Job($"Skipping dispensing DNA reagent for {testWell.Label}");
-					job.Commands.AddRange(
-					[
-						new StartTimer(testWell.DnaIncubationTimer, $"{testWell.Label} DNA ({GetTimeString(Config.DnaTimerPeriod)})", Device)
-					]);
-					Engine.QueueJob(job);
+					var primeJob = new Job($"Re-priming DNA reagent ({Config.SecondaryDnaFluidPrimingVolume}µg).");
+					primeJob.Commands.Add(new AlignTableForWaste(Device));
+					primeJob.Commands.Add(new EmitFluid(Axis.DnaReagent, Config.SecondaryDnaFluidPrimingVolume, Device));
+					IsPrimedDnaReagent = true;
+					Engine.QueueJob(primeJob);
 				}
-
+				var job = new Job($"Dispensing {Config.DnaVolume}µg DNA reagent to {testWell.Label}");
+				// remove KOH from well
+				job.Commands.AddRange(GetAspirationCommands(FluidType.Koh, testWell, Config.KohAspirationVolume));
+				job.Commands.AddRange(
+                [
+                    // add DNA reagent to well
+                    new AlignWellToAxis(Axis.DnaReagent, testWell.Well, Device),
+                    new EmitFluid(Axis.DnaReagent, Config.DnaVolume, Device),
+                    new StartTimer(testWell.DnaIncubationTimer, $"{testWell.Label} DNA ({GetTimeString(Config.DnaTimerPeriod)})", Device)
+				]);
+                Engine.QueueJob(job);
 			}
 			catch(Exception ex)
 			{
@@ -391,24 +348,16 @@ namespace Effani.Device.UI
             try
             {
                 var testWell = sender as TestWell;
-                if (MainViewModel.DoDnaIncubationTimerSteps)
-				{
-					Engine.QueueJob(new Job($"Reading DNA from {testWell.Well.Label}.", [
-						new AlignWellToLocation(Config.DnaSensorLocation, testWell.Well, Device),
-						new ReadDna(Device, (command) => { testWell.DnaValue = ParseCommandResult(command); }),
-					]));
-                    if (_processTerminating)
-                        return;
-                    var job = new Job($"Test completed for {testWell.Label}.");
-					// remove KOH from well
-					job.Commands.Add(new NotifyComplete((command) => { TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test complete for {testWell.Label}", Device));
-                    Engine.QueueJob(job);
-				}
-				else
-				{
-					Engine.QueueCommand(new NotifyComplete((command) => { TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test complete for {testWell.Label}", Device));
-				}
-
+				Engine.QueueJob(new Job($"Reading DNA from {testWell.Well.Label}.", [
+					new AlignWellToLocation(Config.DnaSensorLocation, testWell.Well, Device),
+					new ReadDna(Device, (command) => { testWell.DnaValue = ParseCommandResult(command); }),
+				]));
+                if (_processTerminating)
+                    return;
+                var job = new Job($"Test completed for {testWell.Label}.");
+				// remove KOH from well
+				job.Commands.Add(new NotifyComplete((command) => { TestComplete?.Invoke(this, new DataArgs<TestWell>(testWell)); }, $"Notify test complete for {testWell.Label}", Device));
+                Engine.QueueJob(job);
 			}
 			catch (Exception ex)
 			{
@@ -439,7 +388,7 @@ namespace Effani.Device.UI
             return ret;
         }
 
-        public string AccountName { get; set; }
+        public string AssayDescription { get; set; }
 		public DateTime CreatedOn { get; set; }
         public int NumberOfSamples { get; set; }
 		[DisplayName("Low NADH")]
@@ -474,6 +423,7 @@ namespace Effani.Device.UI
 		public bool IsPrimedKoh { get; set; }
 		public bool IsPrimedBasal { get; set; }
 		public bool IsPrimedStandards { get; set; }
+		public int StandardsWellCount { get; set; }
 
 		public event EventHandler StandardsComplete;
 		public event EventHandler Terminated;

@@ -1,8 +1,9 @@
 ﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Linq;
+using Drivetrain.Robotics.Process;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class HomeAxis : Home
 	{

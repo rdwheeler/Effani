@@ -26,6 +26,11 @@
 				<Image Source="{dx:DXImage 'SvgImages/Icon Builder/Actions_Settings.svg'}" />
 			</dx:SimpleButton.Content>
 		</dx:SimpleButton>
+		<dx:SimpleButton Command="{Binding ShowUploadCommand}" BorderThickness="0" Margin="0,5,0,5">
+			<dx:SimpleButton.Content>
+				<Image Source="{dx:DXImage 'Images/Actions/Upload_32x32.png'}" />
+			</dx:SimpleButton.Content>
+		</dx:SimpleButton>
 	</dx:ThemedWindow.HeaderItems>
 	<Grid>
 		<local:Wizard></local:Wizard>

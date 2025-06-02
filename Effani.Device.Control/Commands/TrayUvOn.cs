@@ -1,6 +1,7 @@
 ﻿using Drivetrain.Robotics.Control;
+using Drivetrain.Robotics.Process;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class TrayUvOn(AbalDeviceControl device) : Command(device)
 	{

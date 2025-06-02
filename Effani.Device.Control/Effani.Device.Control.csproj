@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Drivetrain.Robotics.Control\Drivetrain.Robotics.Control.csproj" />
+    <ProjectReference Include="..\Drivetrain.Robotics.Process\Drivetrain.Robotics.Process.csproj" />
+  </ItemGroup>
+
+</Project>

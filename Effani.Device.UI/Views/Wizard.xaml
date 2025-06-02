@@ -90,8 +90,8 @@
 						<Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<StackPanel>
 								<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Effani Assay"/>
-								<TextBlock TextWrapping="WrapWithOverflow" Text="Effani Account Name" Margin="0,15,0,0"/>
-								<dxe:TextEdit NullText="Enter your Effani account name" Text="{Binding AccountName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+								<TextBlock TextWrapping="WrapWithOverflow" Text="Assay Description" Margin="0,15,0,0"/>
+								<dxe:TextEdit NullText="Enter a description for this assay, such as it's time and place." Text="{Binding AssayDescription, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
 								<TextBlock TextWrapping="WrapWithOverflow" Text="Number of animals to be tested" Margin="0,15,0,0"/>
 								<dxe:SpinEdit Width="80" EditValue="{Binding NumberOfTests, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="0"
 								EditValueType="{x:Type sys:Int32}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" IsFloatValue="False" Mask="d0" MinValue="1" MaxValue="360" AllowSpinOnMouseWheel="True" />

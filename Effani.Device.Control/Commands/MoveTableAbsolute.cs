@@ -2,8 +2,9 @@
 using System;
 using System.Linq;
 using System.Reflection.Metadata;
+using Drivetrain.Robotics.Process;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class MoveTableAbsolute(AbalDeviceControl device, Coordinate coordinate = null) : Command(device)
 	{

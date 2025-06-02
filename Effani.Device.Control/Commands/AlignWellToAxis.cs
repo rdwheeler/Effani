@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class AlignWellToAxis : MoveTableAbsolute
 	{

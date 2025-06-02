@@ -1,7 +1,9 @@
 ﻿using Drivetrain.Robotics.Control;
+using Drivetrain.Robotics.Process;
 using System.Linq;
+using Drivetrain.Robotics.Process;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class MoveToStartingLocations(AbalDeviceControl device) : Command(device)
 	{

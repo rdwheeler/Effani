@@ -1,6 +1,7 @@
 ﻿using Drivetrain.Robotics.Control;
+using Drivetrain.Robotics.Process;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class ChamberUvOn(AbalDeviceControl device) : Command(device)
 	{

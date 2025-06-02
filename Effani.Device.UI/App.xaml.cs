@@ -1,5 +1,6 @@
 ﻿using DevExpress.Mvvm.POCO;
 using DevExpress.Xpf.Core;
+using Effani.Device.Assay;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -26,8 +27,8 @@ namespace Effani.Device.UI
 				.ConfigureServices((hostContext, services) =>
 				{
 					services.AddSingleton<IDeviceService, DeviceService>();
+					services.AddSingleton<IAssayManagerService, AssayManagerService>();
 					services.AddSingleton<MainWindow>();
-					services.AddSingleton<MainView>();
 					services.AddSingleton<UtilitiesView>();
 				})
 				.Build();

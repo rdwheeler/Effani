@@ -1,13 +1,15 @@
 ﻿using Drivetrain.Robotics.Control;
+using System.Threading;
+using Drivetrain.Robotics.Process;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
-	public class TrayUvOff(AbalDeviceControl device) : Command(device)
+	public class ChamberUvOff(AbalDeviceControl device) : Command(device)
 	{
 		protected override void Run()
 		{
 			var device = (AbalDeviceControl)Device;
-			device.AccOff(0);
+			device.AccOff(1);
 		}
 
 		public override string Description => "Turn off chamber sterilizer.";

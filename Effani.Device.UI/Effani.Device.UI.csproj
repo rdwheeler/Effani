@@ -7,7 +7,7 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>net9.0-windows7.0</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>False</UseWindowsForms>
 		<ApplicationIcon>Resources\effanicow.ico</ApplicationIcon>
@@ -33,19 +33,22 @@
 		<PackageReference Include="DevExpress.Wpf.Themes.Office2016White" Version="24.1.7" />
 		<PackageReference Include="DevExpress.Wpf.Themes.All" Version="24.1.7" />
 		<PackageReference Include="DevExpress.Win.BonusSkins" Version="24.1.7" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+		<PackageReference Include="DriveTrain.Toolbox" Version="1.0.3" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
 		<PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="4.0.50">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-		<PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Drivetrain.Robotics.Control\Drivetrain.Robotics.Control.csproj" />
 	  <ProjectReference Include="..\Drivetrain.Robotics.Process\Drivetrain.Robotics.Process.csproj" />
+	  <ProjectReference Include="..\Effani.Device.Assay\Effani.Device.Assay.csproj" />
+	  <ProjectReference Include="..\Effani.Device.Control\Effani.Device.Control.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Drivetrain.Robotics.Control
+namespace Effani.Device.Control
 {
 	public class AbalDeviceControl : DeviceControl
 	{

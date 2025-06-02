@@ -1,8 +1,10 @@
 ﻿using Drivetrain.Robotics.Control;
+using Drivetrain.Robotics.Process;
 using System;
 using System.Linq;
+using Drivetrain.Robotics.Process;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class TableToTrayLoadingLocation(AbalDeviceControl device) : Command(device)
 	{

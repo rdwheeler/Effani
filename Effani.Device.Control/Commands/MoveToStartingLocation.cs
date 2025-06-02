@@ -1,7 +1,8 @@
 ﻿using Drivetrain.Robotics.Control;
 using System;
+using Drivetrain.Robotics.Process;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class MoveToStartingLocation(Axis axisSpec, AbalDeviceControl device) : Command(device)
 	{

@@ -1,8 +1,9 @@
 ﻿using Drivetrain.Robotics.Control;
+using Drivetrain.Robotics.Process;
 using System;
 using System.Linq;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class TableToTraySterilizationLocation(AbalDeviceControl device) : Command(device)
 	{

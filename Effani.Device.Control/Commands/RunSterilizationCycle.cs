@@ -1,7 +1,8 @@
 ﻿using Drivetrain.Robotics.Control;
 using System.Threading;
+using Drivetrain.Robotics.Process;
 
-namespace Drivetrain.Robotics.Process
+namespace Effani.Device.Control
 {
 	public class RunSterilizationCycle(AbalDeviceControl device, int dwell) : Command(device)
 	{
