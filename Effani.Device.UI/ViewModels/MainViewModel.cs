@@ -2,7 +2,7 @@
 using DevExpress.Xpf.CodeView;
 using Drivetrain.Robotics.Control;
 using Drivetrain.Robotics.Process;
-using Effani.Device.Assay;
+using Effani.Device.DataCollection;
 using Effani.Device.Control;
 using Serilog;
 using System;
@@ -14,14 +14,16 @@ using System.Linq;
 using System.Windows;
 using Drivetrain;
 using DevExpress.Utils.Extensions;
+using Effani.Device.Services;
 
 namespace Effani.Device.UI
 {
 	public partial class MainViewModel : ViewModelBase, IDisposable
 	{
 		#region Constructors
-		public MainViewModel(IDeviceService deviceService, IAssayManagerService assayManagerService)
+		public MainViewModel(IDeviceService deviceService, IAssayManagerService assayManagerService, ISettingsService settingsService)
 		{
+			_settingsService = settingsService;
 			_assayManagerService = assayManagerService;
 			_device = deviceService.GetDevice();
 			_device.DataReceived += Device_DataRecieved;
@@ -31,7 +33,7 @@ namespace Effani.Device.UI
 			_processEngine.EndExecutingCommand += ProcessEngine_EndExecutingCommand;
 			Axes = new ObservableCollection<AxisSpec>(_device.Configuration.DeviceSpecification.Axes);
 			Sensors = new ObservableCollection<SensorSpec>(_device.Configuration.DeviceSpecification.Sensors);
-			Assay = new Assay.Assay(_device, _processEngine);
+			Assay = new DataCollection.Assay(_device, _processEngine);
 		}
 		#endregion
 
@@ -115,13 +117,7 @@ namespace Effani.Device.UI
 		public void PageStartAssayConcluded()
 		{
 			AddMessage("Assay concluded", true);
-		}
-		public void PageStartCleanUp()
-		{
-			//_processEngine.QueueCommand(new SetTableTemp(0, _device));
-			_processEngine.QueueCommand(new MoveToStartingLocations(_device));
-			_processEngine.QueueCommand(new TableToTrayLoadingLocation(_device));
-			_assayManagerService.SaveAssay(Assay);
+			AssayFullName = _assayManagerService.SaveAssay(Assay).Result;
 
 			Assay.StatusMessages.CollectionChanged -= StatusMessages_CollectionChanged;
 			Assay.StandardsComplete -= Assay_StandardsComplete;
@@ -132,6 +128,12 @@ namespace Effani.Device.UI
 			Assay.Terminated -= Assay_Terminated;
 			Assay.Dispose();
 			Assay = null;
+		}
+		public void PageStartCleanUp()
+		{
+			//_processEngine.QueueCommand(new SetTableTemp(0, _device));
+			_processEngine.QueueCommand(new MoveToStartingLocations(_device));
+			_processEngine.QueueCommand(new TableToTrayLoadingLocation(_device));
 		}
 		#endregion
 
@@ -287,10 +289,24 @@ namespace Effani.Device.UI
 						PreparedToLoadSample = true;
 					});
 		}
+		string _assayFullName;
 		#endregion
 
 		#region Properties
-
+		public string AssayFullName
+		{
+			get
+			{
+				return _assayFullName;
+			}
+			set
+			{
+				if (_assayFullName == value)
+					return;
+				_assayFullName = value;
+				RaisePropertyChanged(nameof(AssayFullName));
+			}
+		}
 		public int EmitFluidVolume
 		{
 			get => _emitFluidVolume;
@@ -320,6 +336,7 @@ namespace Effani.Device.UI
 			}
 		}
 		public bool DescriptionAndNumberOfTestsComplete => !String.IsNullOrEmpty(AssayDescription) && NumberOfTests != 0;
+		public bool UsernameAndPasswordComplete => !String.IsNullOrEmpty(Username) && !String.IsNullOrEmpty(Password);
 		public string AssayDescription
 		{
 			get
@@ -337,7 +354,7 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(DescriptionAndNumberOfTestsComplete));
 			}
 		}
-		public Assay.Assay Assay { get; private set; }
+		public DataCollection.Assay Assay { get; private set; }
 		public bool AssayComplete
 		{
 			get
@@ -504,6 +521,37 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(UnloadedTestsCount));
 			}
 		}
+		public string Uploading { get; }
+		public string Username
+		{
+			get
+			{
+				return _settingsService.EffaniUsername;
+			}
+			set
+			{
+				if (_settingsService.EffaniUsername == value)
+					return;
+				_settingsService.EffaniUsername = value;
+				RaisePropertyChanged(nameof(Username));
+				RaisePropertyChanged(nameof(UsernameAndPasswordComplete));
+			}
+		}
+		public string Password
+		{
+			get
+			{
+				return _settingsService.EffaniPassword;
+			}
+			set
+			{
+				if (_settingsService.EffaniPassword == value)
+					return;
+				_settingsService.EffaniPassword = value;
+				RaisePropertyChanged(nameof(Password));
+				RaisePropertyChanged(nameof(UsernameAndPasswordComplete));
+			}
+		}
 		public bool PreparingToLoadSample
 		{
 			get
@@ -518,6 +566,7 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(PreparingToLoadSample));
 			}
 		}
+		public BindingList<string> AssayManagerActivity => _assayManagerService.Activity;
 		#region PreparedToLoadSample
 		public bool PreparedToLoadSample
 		{
@@ -535,9 +584,9 @@ namespace Effani.Device.UI
 		}
 		bool _preparedToLoadSample;
 		#endregion
+		#endregion
 
 		public EventHandler AdvanceWizardPage;
-		#endregion
 
 		#region Fields
 		bool _assayComplete;
@@ -555,10 +604,10 @@ namespace Effani.Device.UI
 		bool _moveStartingPositionsComplete;
 		bool _fluidLoadingComplete;
 		string _executingCommandText = "None";
-
-        private Well _currentWell;
-		private bool _preparingToLoadSample;
+        Well _currentWell;
+		bool _preparingToLoadSample;
 		readonly IAssayManagerService _assayManagerService;
+		readonly ISettingsService _settingsService;
 		#endregion
 	}
 }

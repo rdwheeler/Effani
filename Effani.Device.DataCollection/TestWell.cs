@@ -2,10 +2,11 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace Effani.Device.Assay
+namespace Effani.Device.DataCollection
 {
 	public class TestWell : IDisposable, INotifyPropertyChanged
 	{
@@ -266,6 +267,7 @@ namespace Effani.Device.Assay
 		#endregion
 
 		#region Properties
+		[JsonIgnore]
 		#region CurrentTimerDescription
 		public string CurrentTimerDescription
 		{
@@ -283,6 +285,7 @@ namespace Effani.Device.Assay
 		}
 		string _currentTimerDescription;
 		#endregion
+		[JsonIgnore]
 		#region Canceled
 		public bool Canceled
 		{
@@ -319,15 +322,25 @@ namespace Effani.Device.Assay
 		#endregion
 		public float DnaValue { get; set; }
 		public string Label => Well.Label;
+		[JsonIgnore]
 		public Timer BasalIncubationTimer { get; set; }
+		[JsonIgnore]
 		public Timer NadhReadings1Timer { get; set; }
+		[JsonIgnore]
 		public Timer NadhReadings2Timer { get; set; }
+		[JsonIgnore]
 		public Timer NadhReadings3Timer { get; set; }
+		[JsonIgnore]
 		public Timer NadhReadings4Timer { get; set; }
+		[JsonIgnore]
 		public Timer NadhReadings5Timer { get; set; }
+		[JsonIgnore]
 		public Timer KohDwellTimer { get; set; }
+		[JsonIgnore]
 		public Timer DnaIncubationTimer { get; set; }
+		[JsonIgnore]
 		public Well Well { get; private set; }
+		[JsonIgnore]
 		public int TestIndex { get; }
 		public Dictionary<int, float> TimeValues = new();
 		#endregion

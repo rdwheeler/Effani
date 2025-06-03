@@ -7,7 +7,7 @@ using DevExpress.Xpf.Core;
 using DevExpress.XtraScheduler.Commands;
 using Drivetrain.Robotics.Control;
 using Drivetrain.Robotics.Process;
-using Effani.Device.Assay;
+using Effani.Device.DataCollection;
 using Effani.Device.Control;
 using Serilog;
 using System;
@@ -30,22 +30,7 @@ namespace Effani.Device.UI
 {
 	public partial class MainViewModel : ViewModelBase, IDisposable
 	{
-		#region Commands
-
-		[Command]
-		public void ShowSettings()
-		{
-			var settingsWindow = new UtilitiesView() { Title = "Settings" };
-			settingsWindow.DataContext = this;
-			settingsWindow.ShowDialog();
-		}
-		[Command]
-		public void ShowUpload()
-		{
-			var window = new UploadView(_assayManagerService) { Title = "Settings" };
-			window.DataContext = this;
-			window.ShowDialog();
-		}
+		#region Public methods
 		[Command]
 		public void AcceptSample()
 		{
@@ -60,10 +45,115 @@ namespace Effani.Device.UI
 			PrepareNextSampleForLoading();
 		}
 		[Command]
+		public async Task AlignForSterilization()
+		{
+			_processEngine.QueueCommand(new TableToTraySterilizationLocation(_device));
+		}
+		[Command]
+		public async Task AlignForTrayLoading()
+		{
+			_processEngine.QueueCommand(new TableToTrayLoadingLocation(_device));
+		}
+		[Command]
+		public async Task AlignForWaste()
+		{
+			_processEngine.QueueCommand(new AlignTableForWaste(_device));
+		}
+		[Command]
+		public async Task AlignToFirstWell(object parameter)
+		{
+			var plate = _device.Configuration.DeviceSpecification.Plates.First();
+			var well = plate.Wells.First();
+			CurrentWell = well;
+			if (parameter is AxisSpec axisSpec)
+				_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
+			else if (parameter is SensorSpec sensorSpec)
+				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
+		}
+		[Command]
+		public async Task AlignToLastWell(object parameter)
+		{
+			var plate = _device.Configuration.DeviceSpecification.Plates.First();
+			var well = plate.Wells.Last();
+			CurrentWell = well;
+			if (parameter is AxisSpec axisSpec)
+				_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
+			else if (parameter is SensorSpec sensorSpec)
+				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
+		}
+		[Command]
+		public async Task AlignToNextWell(object parameter)
+		{
+			var plate = _device.Configuration.DeviceSpecification.Plates.First();
+			if (CurrentWell == null)
+				CurrentWell = plate.Wells.First();
+			var nextIndex = plate.Wells.IndexOf(CurrentWell) + 1;
+			if (plate.Wells.Count - 1 < nextIndex)
+				return;
+			var well = plate.Wells[nextIndex];
+			CurrentWell = well;
+			if (parameter is AxisSpec axisSpec)
+				_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
+			else if (parameter is SensorSpec sensorSpec)
+				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
+		}
+		[Command]
+		public async Task ApplyConfig()
+		{
+			_device.ApplyConfig();
+		}
+		[Command]
+		public async Task AspirateKoh(AxisSpec axisSpec)
+		{
+			_processEngine.QueueCommand(new AspirateKoh(_config.KohAspirationVolume, _device));
+		}
+		[Command]
+		public void NextPage()
+		{
+			AdvanceWizardPage?.Invoke(this, new EventArgs());
+		}
+		[Command]
+		public async Task UploadAssays()
+		{
+			await _assayManagerService.UploadAssays();
+		}
+		[Command]
+		public async Task ChamberUvOff()
+		{
+			_processEngine.QueueCommand(new ChamberUvOff(_device));
+		}
+		[Command]
+		public async Task ChamberUvOn()
+		{
+			_processEngine.QueueCommand(new ChamberUvOn(_device));
+		}
+		[Command]
+		public async Task ClearMessages()
+		{
+			ConsoleMessages.Clear();
+		}
+		[Command]
+		public async Task DisableCommands()
+		{
+			_device.Configuration.BypassDeviceCommands = 0;
+		}
+		[Command]
+		public async Task EmitFluid(AxisSpec axisSpec)
+		{
+			var plate = _device.Configuration.DeviceSpecification.Plates
+				.FirstOrDefault(p => p.Location.X == 0 && p.Location.Y == 0);
+			_processEngine.QueueCommand(new EmitFluid(axisSpec.Axis, EmitFluidVolume, _device));
+		}
+		[Command]
+		public async Task EnableCommands()
+		{
+			_device.Configuration.BypassDeviceCommands = 2000;
+		}
+		[Command]
 		public void FluidLoaded()
-        {
+		{
 			FluidLoadingComplete = true;
-            var job = new Job("Priming fluid pumps.");
+			var job = new Job("Priming fluid pumps.");
 			job.Commands.Add(new EmitFluid(Axis.DnaReagent, _device.Configuration.InitialDnaFluidPrimingVolume, _device));
 			job.Commands.Add(new EmitFluid(Axis.Koh, _device.Configuration.InitialKohFluidPrimingVolume, _device));
 			job.Commands.Add(new EmitFluid(Axis.Nadh, _device.Configuration.InitialNadhFluidPrimingVolume, _device));
@@ -72,9 +162,46 @@ namespace Effani.Device.UI
 			_processEngine.QueueJob(job);
 		}
 		[Command]
+		public async Task GenerateConfigFiles()
+		{
+			try
+			{
+				var fileLocation = _device.Configuration
+					.GenerateConfigFiles(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+				string messageBoxText = $"Config generated at {fileLocation}";
+				string caption = "Generate Config";
+
+				DXMessageBox.Show(messageBoxText, caption);
+			}
+			catch (Exception ex)
+			{
+				var a = ex;
+			}
+		}
+		[Command]
+		public async Task GetBoardDiagnostics(int boardNumber)
+		{
+			_processEngine.QueueCommand(new GetBoardDiagnostics(boardNumber, _device));
+		}
+		[Command]
+		public async Task Home(AxisSpec axisSpec)
+		{
+			_processEngine.QueueCommand(new Home(_device, axisSpec));
+		}
+		//[Command]
+		//public async Task AspirateFluid(AxisSpec axisSpec)
+		//{
+		//	_processEngine.QueueCommand(new AspirateFluid(_config.TestMediaAspirationVolume, _device));
+		//}
+		[Command]
+		public async Task HomeAll()
+		{
+			_processEngine.QueueCommand(new HomeAll(_device));
+		}
+		[Command]
 		public void InjectSample()
 		{
-            _processEngine.HoldQueueForHighPriorityJob = true;
+			_processEngine.HoldQueueForHighPriorityJob = true;
 			PreparingToLoadSample = true;
 
 			if (!Assay.IsPrimedBasal)
@@ -95,168 +222,8 @@ namespace Effani.Device.UI
 			]));
 		}
 		[Command]
-		public void SkipSample()
-        {
-            _processEngine.HoldQueueForHighPriorityJob = false;
-
-            AddMessage($"Skipping sample in {CurrentLoadingSample.Well.Label}", true);
-			CurrentLoadingSample.Canceled = true;
-			SamplesComplete.Add(new TestWellViewModel(CurrentLoadingSample));
-			PrepareNextSampleForLoading();
-		}
-		[Command]
-		public void SkipRemaining()
-        {
-            _processEngine.HoldQueueForHighPriorityJob = false;
-
-			if(CurrentLoadingSample is not null)
-			{
-				AddMessage(
-					$"Skipping samples after number {CurrentLoadingSample.TestIndex}, {CurrentLoadingSample.SampleId}, {CurrentLoadingSample.Label}", true);
-				var currentIndex = Assay.AllTestWells.IndexOf(CurrentLoadingSample);
-				foreach(var test in Assay.AllTestWells.Skip(currentIndex))
-					test.Canceled = true;
-				UnloadedTestsCount = 0;
-				NumberOfTests = currentIndex - 1;
-			}
-			CurrentLoadingSample = null; // triggers the loading process is complete
-			PreparedToLoadSample = false;
-			UnloadedTestsCount = 0;
-			if (SamplesComplete.Count() == NumberOfTests)
-			{
-				AddMessage("Assay complete", true);
-				AssayComplete = true;
-			}
-			AdvanceWizardPage?.Invoke(this, new EventArgs());
-		}
-		[Command]
-		public void AssayParametersCollected()
+		public async Task InjectSampleTest()
 		{
-			AdvanceWizardPage?.Invoke(this, new EventArgs());
-		}
-		[Command]
-		public void TraysLoaded()
-		{
-			new System.Threading.Thread(() => Assay.EstablishStandards()).Start();
-			AdvanceWizardPage?.Invoke(this, new EventArgs());
-		}
-		[Command]
-		public async Task GenerateConfigFiles()
-		{
-			try
-			{
-				var fileLocation = _device.Configuration
-					.GenerateConfigFiles(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-				string messageBoxText = $"Config generated at {fileLocation}";
-				string caption = "Generate Config";
-
-				DXMessageBox.Show(messageBoxText, caption);
-			}
-			catch (Exception ex)
-			{
-				var a = ex;
-			}
-		}
-
-        [Command]
-        public async Task MoveToStart(AxisSpec axisSpec)
-        {
-            _processEngine.QueueCommand( new MoveToStartingLocation(axisSpec.Axis, _device));
-        }
-        [Command]
-		public async Task AlignToFirstWell(object parameter)
-        {
-            var plate = _device.Configuration.DeviceSpecification.Plates.First();
-            var well = plate.Wells.First();
-            CurrentWell = well;
-			if (parameter is AxisSpec axisSpec)
-				_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
-			else if (parameter is SensorSpec sensorSpec)
-				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
-		}
-        [Command]
-        public async Task AlignToNextWell(object parameter)
-        {
-            var plate = _device.Configuration.DeviceSpecification.Plates.First();
-            if (CurrentWell == null)
-                CurrentWell = plate.Wells.First();
-            var nextIndex = plate.Wells.IndexOf(CurrentWell) + 1;
-            if (plate.Wells.Count - 1 < nextIndex)
-                return;
-            var well = plate.Wells[nextIndex];
-            CurrentWell = well;
-			if (parameter is AxisSpec axisSpec)
-				_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
-			else if (parameter is SensorSpec sensorSpec)
-				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
-		}
-
-        [Command]
-        public async Task AlignToLastWell(object parameter)
-		{
-            var plate = _device.Configuration.DeviceSpecification.Plates.First();
-            var well = plate.Wells.Last();
-            CurrentWell = well;
-			if (parameter is AxisSpec axisSpec)
-				_processEngine.QueueCommand(new AlignWellToAxis(axisSpec.Axis, well, _device));
-			else if (parameter is SensorSpec sensorSpec)
-				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
-		}
-
-        [Command]
-        public async Task EmitFluid(AxisSpec axisSpec)
-        {
-            var plate = _device.Configuration.DeviceSpecification.Plates
-                .FirstOrDefault(p => p.Location.X == 0 && p.Location.Y == 0);
-            _processEngine.QueueCommand(new EmitFluid(axisSpec.Axis, EmitFluidVolume, _device));
-        }
-
-        [Command]
-        public async Task AspirateKoh(AxisSpec axisSpec)
-		{
-			_processEngine.QueueCommand(new AspirateKoh(_config.KohAspirationVolume, _device));
-		}
-
-		//[Command]
-		//public async Task AspirateFluid(AxisSpec axisSpec)
-		//{
-		//	_processEngine.QueueCommand(new AspirateFluid(_config.TestMediaAspirationVolume, _device));
-		//}
-
-		[Command]
-        public async Task HomeAll()
-        {
-            _processEngine.QueueCommand(new HomeAll(_device));
-		}
-
-		[Command]
-		public async Task MoveToStartingLocations()
-		{
-			_processEngine.QueueCommand(new MoveToStartingLocations(_device));
-		}
-
-		[Command]
-        public async Task AlignForWaste()
-        {
-            _processEngine.QueueCommand(new AlignTableForWaste(_device));
-		}
-
-		[Command]
-		public async Task AlignForTrayLoading()
-		{
-			_processEngine.QueueCommand(new TableToTrayLoadingLocation(_device));
-		}
-
-
-
-		[Command]
-		public async Task AlignForSterilization()
-		{
-			_processEngine.QueueCommand(new TableToTraySterilizationLocation(_device));
-		}
-		[Command]
-        public async Task InjectSampleTest()
-        {
 			var well = CurrentWell;
 			_processEngine.QueuePriorityJob(new Job($"Adding Basal media to {CurrentLoadingSample.Label}.", [
 				new AlignWellToAxis(Axis.Basal, CurrentLoadingSample.Well, _device),
@@ -265,81 +232,6 @@ namespace Effani.Device.UI
 			_processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
 				new AlignWellToLocation(_device.Configuration.BiopsyLocation, CurrentLoadingSample.Well, _device)
 			]));
-        }
-
-        [Command]
-		public async Task ApplyConfig()
-		{
-			_device.ApplyConfig();
-		}
-
-		[Command]
-		public async Task Home(AxisSpec axisSpec)
-		{
-			_processEngine.QueueCommand(new Home(_device, axisSpec));
-		}
-
-		[Command]
-		public async Task ChamberUvOn()
-		{
-			_processEngine.QueueCommand(new ChamberUvOn(_device));
-		}
-
-		[Command]
-		public async Task ChamberUvOff()
-		{
-			_processEngine.QueueCommand(new ChamberUvOff(_device));
-		}
-
-		[Command]
-		public async Task TrayUvOn()
-		{
-			_processEngine.QueueCommand(new TrayUvOn(_device));
-		}
-
-		[Command]
-		public async Task TrayUvOff()
-		{
-			_processEngine.QueueCommand(new TrayUvOff(_device));
-		}
-
-		[Command]
-		public async Task Read(SensorSpec sensor)
-		{
-			Mouse.OverrideCursor = Cursors.Wait;
-			switch (sensor)
-			{
-				case DnaSensorSpec:
-					_processEngine.QueueCommand(new ReadDna(_device, null));
-					break;
-				case NadhSensorSpec:
-					_processEngine.QueueCommand(new ReadNadh(_device, null));
-					break;
-			}
-			Mouse.OverrideCursor = Cursors.Arrow;
-		}
-        [Command]
-        public void PrimeFluid()
-		{
-			var job = new Job("Priming fluid pumps.");
-			job.Commands.Add(new EmitFluid(Axis.DnaReagent, _device.Configuration.InitialDnaFluidPrimingVolume, _device));
-			job.Commands.Add(new EmitFluid(Axis.Koh, _device.Configuration.InitialKohFluidPrimingVolume, _device));
-			job.Commands.Add(new EmitFluid(Axis.Nadh, _device.Configuration.InitialNadhFluidPrimingVolume, _device));
-			job.Commands.Add(new EmitFluid(Axis.Basal, _device.Configuration.InitialBasalFluidPrimingVolume, _device));
-			_processEngine.QueueJob(job);
-		}
-        [Command]
-		public async Task LaserOn(SensorSpec sensor)
-		{
-			switch (sensor)
-			{
-				case DnaSensorSpec:
-					_device.LaserDnaOn();
-					break;
-				case NadhSensorSpec:
-					_device.LaserNadhOn();
-					break;
-			}
 		}
 		[Command]
 		public async Task LaserOff(SensorSpec sensor)
@@ -355,14 +247,64 @@ namespace Effani.Device.UI
 			}
 		}
 		[Command]
-		public async Task EnableCommands()
+		public async Task LaserOn(SensorSpec sensor)
 		{
-			_device.Configuration.BypassDeviceCommands = 2000;
+			switch (sensor)
+			{
+				case DnaSensorSpec:
+					_device.LaserDnaOn();
+					break;
+				case NadhSensorSpec:
+					_device.LaserNadhOn();
+					break;
+			}
 		}
 		[Command]
-		public async Task DisableCommands()
+		public async Task MoveRapid(List<object> parameters)
 		{
-			_device.Configuration.BypassDeviceCommands = 0;
+			var axisSpec = (AxisSpec)parameters[0];
+			var distance = (float)parameters[1];
+			_processEngine.QueueCommand(new MoveRelative(distance, _device, axisSpec));
+		}
+		[Command]
+		public async Task MoveToStart(AxisSpec axisSpec)
+		{
+			_processEngine.QueueCommand(new MoveToStartingLocation(axisSpec.Axis, _device));
+		}
+		[Command]
+		public async Task MoveToStartingLocations()
+		{
+			_processEngine.QueueCommand(new MoveToStartingLocations(_device));
+		}
+		[Command]
+		public void PrimeFluid()
+		{
+			var job = new Job("Priming fluid pumps.");
+			job.Commands.Add(new EmitFluid(Axis.DnaReagent, _device.Configuration.InitialDnaFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.Koh, _device.Configuration.InitialKohFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.Nadh, _device.Configuration.InitialNadhFluidPrimingVolume, _device));
+			job.Commands.Add(new EmitFluid(Axis.Basal, _device.Configuration.InitialBasalFluidPrimingVolume, _device));
+			_processEngine.QueueJob(job);
+		}
+		[Command]
+		public async Task Read(SensorSpec sensor)
+		{
+			Mouse.OverrideCursor = Cursors.Wait;
+			switch (sensor)
+			{
+				case DnaSensorSpec:
+					_processEngine.QueueCommand(new ReadDna(_device, null));
+					break;
+				case NadhSensorSpec:
+					_processEngine.QueueCommand(new ReadNadh(_device, null));
+					break;
+			}
+			Mouse.OverrideCursor = Cursors.Arrow;
+		}
+		[Command]
+		public async Task Send()
+		{
+			_processEngine.QueueCommand(new SendCommand(_sendCommandText, _device));
 		}
 		[Command]
 		public async Task SetWifi()
@@ -371,32 +313,70 @@ namespace Effani.Device.UI
 			var pass = ConfigurationManager.AppSettings["wifi-password"];
 			_device.SetWifi(ssid, pass);
 		}
-
 		[Command]
-		public async Task GetBoardDiagnostics(int boardNumber)
+		public void ShowSettings()
 		{
-			_processEngine.QueueCommand(new GetBoardDiagnostics(boardNumber, _device));
+			var settingsWindow = new UtilitiesView() { Title = "Settings" };
+			settingsWindow.DataContext = this;
+			settingsWindow.ShowDialog();
 		}
-
 		[Command]
-		public async Task Send()
+		public void ShowUpload()
 		{
-			_processEngine.QueueCommand(new SendCommand(_sendCommandText, _device));
+			var window = new UploadView(_assayManagerService, _settingsService) { Title = "Effani Online" };
+			window.ShowDialog();
 		}
-
 		[Command]
-		public async Task ClearMessages()
+		public void SkipRemaining()
 		{
-			ConsoleMessages.Clear();
+			_processEngine.HoldQueueForHighPriorityJob = false;
+
+			if (CurrentLoadingSample is not null)
+			{
+				AddMessage(
+					$"Skipping samples after number {CurrentLoadingSample.TestIndex}, {CurrentLoadingSample.SampleId}, {CurrentLoadingSample.Label}", true);
+				var currentIndex = Assay.AllTestWells.IndexOf(CurrentLoadingSample);
+				foreach (var test in Assay.AllTestWells.Skip(currentIndex))
+					test.Canceled = true;
+				UnloadedTestsCount = 0;
+				NumberOfTests = currentIndex - 1;
+			}
+			CurrentLoadingSample = null; // triggers the loading process is complete
+			PreparedToLoadSample = false;
+			UnloadedTestsCount = 0;
+			if (SamplesComplete.Count() == NumberOfTests)
+			{
+				AddMessage("Assay complete", true);
+				AssayComplete = true;
+			}
+			AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
-
 		[Command]
-		public async Task MoveRapid(List<object> parameters)
+		public void SkipSample()
 		{
-			var axisSpec = (AxisSpec)parameters[0];
-			var distance = (float)parameters[1];
-			_processEngine.QueueCommand(new MoveRelative(distance, _device, axisSpec));
+			_processEngine.HoldQueueForHighPriorityJob = false;
+
+			AddMessage($"Skipping sample in {CurrentLoadingSample.Well.Label}", true);
+			CurrentLoadingSample.Canceled = true;
+			SamplesComplete.Add(new TestWellViewModel(CurrentLoadingSample));
+			PrepareNextSampleForLoading();
+		}
+		[Command]
+		public void TraysLoaded()
+		{
+			new System.Threading.Thread(() => Assay.EstablishStandards()).Start();
+			AdvanceWizardPage?.Invoke(this, new EventArgs());
+		}
+		[Command]
+		public async Task TrayUvOff()
+		{
+			_processEngine.QueueCommand(new TrayUvOff(_device));
+		}
+		[Command]
+		public async Task TrayUvOn()
+		{
+			_processEngine.QueueCommand(new TrayUvOn(_device));
 		}
 		#endregion
-    }
+	}
 }

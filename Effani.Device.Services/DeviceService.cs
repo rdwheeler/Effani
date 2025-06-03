@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Effani.Device.UI
+namespace Effani.Device.Services
 {
 	public class DeviceService : IDeviceService
 	{

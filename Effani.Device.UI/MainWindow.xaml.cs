@@ -1,5 +1,6 @@
 ﻿using DevExpress.Xpf.Core;
-using Effani.Device.Assay;
+using Effani.Device.DataCollection;
+using Effani.Device.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,10 +23,10 @@ namespace Effani.Device.UI
 	/// </summary>
 	public partial class MainWindow : ThemedWindow
 	{
-		public MainWindow(IDeviceService deviceService, IAssayManagerService assayManagerService)
+		public MainWindow(IDeviceService deviceService, IAssayManagerService assayManagerService, ISettingsService settingsService)
 		{
 			InitializeComponent();
-			DataContext = new MainViewModel(deviceService, assayManagerService);
+			DataContext = new MainViewModel(deviceService, assayManagerService, settingsService);
 		}
 		protected override void OnClosing(CancelEventArgs e)
 		{

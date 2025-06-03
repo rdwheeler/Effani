@@ -3,7 +3,7 @@ using DevExpress.Mvvm;
 using System;
 using System.Windows;
 
-namespace Effani.Device.Assay
+namespace Effani.Device.DataCollection
 {
 	public class TestWellViewModel : ViewModelBase, IDisposable
 	{

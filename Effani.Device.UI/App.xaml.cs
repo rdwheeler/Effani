@@ -1,10 +1,13 @@
 ﻿using DevExpress.Mvvm.POCO;
 using DevExpress.Xpf.Core;
-using Effani.Device.Assay;
+using Effani.Device.DataCollection;
+using Effani.Device.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Windows;
 
@@ -26,14 +29,23 @@ namespace Effani.Device.UI
             AppHost = Host.CreateDefaultBuilder()
 				.ConfigureServices((hostContext, services) =>
 				{
+					services.AddSingleton<ISettingsService, SettingsService>();
 					services.AddSingleton<IDeviceService, DeviceService>();
 					services.AddSingleton<IAssayManagerService, AssayManagerService>();
+					var connectionString = $"data source={Path.Combine(SettingsService.DataFolder, "AssayData.effani")}";
+					services.AddDbContext<EfContext>(options =>
+						options.UseSqlite("connectionString"));
 					services.AddSingleton<MainWindow>();
 					services.AddSingleton<UtilitiesView>();
 				})
 				.Build();
-		}
 
+			using (var scope = AppHost.Services.CreateScope())
+			{
+				var db = scope.ServiceProvider.GetRequiredService<EfContext>();
+				db.Database.Migrate();
+			}
+		}
 		protected override async void OnStartup(StartupEventArgs e)
 		{
 			await AppHost!.StopAsync();

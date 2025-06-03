@@ -34,6 +34,9 @@
 		<PackageReference Include="DevExpress.Wpf.Themes.All" Version="24.1.7" />
 		<PackageReference Include="DevExpress.Win.BonusSkins" Version="24.1.7" />
 		<PackageReference Include="DriveTrain.Toolbox" Version="1.0.3" />
+		<PackageReference Include="Flurl.Http" Version="4.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.5" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
 		<PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="4.0.50">
@@ -49,6 +52,7 @@
 	  <ProjectReference Include="..\Drivetrain.Robotics.Process\Drivetrain.Robotics.Process.csproj" />
 	  <ProjectReference Include="..\Effani.Device.Assay\Effani.Device.Assay.csproj" />
 	  <ProjectReference Include="..\Effani.Device.Control\Effani.Device.Control.csproj" />
+	  <ProjectReference Include="..\Effani.Device.Services\Effani.Device.Services.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

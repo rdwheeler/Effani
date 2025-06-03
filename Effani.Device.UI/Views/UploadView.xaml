@@ -7,33 +7,95 @@
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
 	xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
     xmlns:control="clr-namespace:Drivetrain.Robotics.Control;assembly=Drivetrain.Robotics.Control"
     xmlns:local="clr-namespace:Effani.Device.UI"
     xmlns:sys="clr-namespace:System;assembly=mscorlib" d:DataContext="{d:DesignInstance Type=local:UploadViewModel}"
-	Title="Settings" WindowStyle="ToolWindow" 
-	WindowState="Maximized"
+	Title="Effani Online" WindowStyle="ToolWindow" 
 	WindowStartupLocation="CenterScreen" 
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="1000">
 	<dx:ThemedWindow.Resources>
-		<ResourceDictionary>
-		</ResourceDictionary>
+		<Style TargetType="{x:Type dxe:TextEdit}">
+			<Setter Property="Margin" Value="0,10,0,0" />
+		</Style>
+		<Style TargetType="{x:Type dxe:SpinEdit}">
+			<Setter Property="Margin" Value="0,10,0,0" />
+		</Style>
+		<Style x:Key="WizardButton" TargetType="{x:Type dx:SimpleButton}">
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Background" Value="LightSkyBlue" />
+				</Trigger>
+			</Style.Triggers>
+			<Setter Property="Padding" Value="40" />
+			<Setter Property="CornerRadius" Value="7" />
+			<Setter Property="BorderThickness" Value="2" />
+			<Setter Property="BorderBrush" Value="#aed0f5" />
+			<Setter Property="Background" Value="#aed0f5" />
+		</Style>
 	</dx:ThemedWindow.Resources>
-	<DockPanel LastChildFill="true">
-		<ScrollViewer DockPanel.Dock="Left">
-			<ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding Assays}" Background="Transparent" BorderThickness="1" IsTabStop="False">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding}" Margin="0,1,0,0"></TextBlock>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
-		</ScrollViewer>
-		<DockPanel LastChildFill="true" DockPanel.Dock="Right" Margin="20,20,0,0">
-			<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
-				<dxe:TextEdit CornerRadius="3" Padding="5,3,5,3" Width="250" NullText="Command..." EditValue="{Binding SendCommandText}" Margin="0,0,5,0"></dxe:TextEdit>
-				<dx:SimpleButton HorizontalAlignment="Left" CornerRadius="3" Padding="5,3,5,3" Margin="0,0,20,0" Command="{Binding SendCommand}" Content="Send" />
-				<dx:SimpleButton HorizontalAlignment="Left" CornerRadius="3" Padding="5,3,5,3" Command="{Binding ClearMessagesCommand}" Content="Clear Messages" />
-			</StackPanel>
+	<Grid>
+		<DockPanel Margin="20,20,20,20" LastChildFill="True">
+			<dxg:GridControl x:Name="grid" DockPanel.Dock="Top"
+							 ItemsSource="{Binding AssayData}">
+				<dxg:GridControl.InputBindings>
+					<KeyBinding Command="{Binding View.Commands.DeleteSelectedRows, ElementName=grid}" Key="Delete" />
+				</dxg:GridControl.InputBindings>
+				<dxg:GridControl.View>
+					<dxg:TableView AutoWidth="True" 
+								   ShowGroupPanel="False"
+								   ValidateRowDeletionCommand="{Binding ValidateRowDeletionCommand}" 
+								   NewItemRowPosition="None"
+								   NavigationStyle="Row"/>
+				</dxg:GridControl.View>
+				<dxg:GridColumn FieldName="Delete" Width="18">
+					<dxg:GridColumn.CellTemplate>
+						<DataTemplate>
+							<dx:SimpleButton BorderThickness="0" Width="50" Background="Transparent">
+								<dx:SimpleButton.Content>
+									<Image Source="{dx:DXImage 'SvgImages/Dashboards/Delete.svg'}" />
+								</dx:SimpleButton.Content>
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:ConfirmationBehavior EnableConfirmationMessage="True"  
+											 Command="{Binding Path=View.Commands.DeleteSelectedRows, ElementName=grid}"  
+											 MessageText="Are you sure to delete the current assay record?"  
+											 MessageIcon="Question" MessageTitle="Delete Assay Record"/>
+								</dxmvvm:Interaction.Behaviors>
+							</dx:SimpleButton>
+						</DataTemplate>
+					</dxg:GridColumn.CellTemplate>
+				</dxg:GridColumn>
+				<dxg:GridColumn FieldName="AssayId" IsSmart="True" AllowEditing="False"/>
+				<dxg:GridColumn FieldName="AssayName" IsSmart="True" SortIndex="1" SortOrder="Ascending" AllowEditing="False"/>
+				<dxg:GridColumn FieldName="CreatedOn" IsSmart="True" SortIndex="0" SortOrder="Descending" AllowEditing="False"/>
+				<dxg:GridColumn FieldName="UploadedOn" IsSmart="True"/>
+			</dxg:GridControl>
+			<DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
+				<StackPanel DockPanel.Dock="Left">
+					<TextBlock TextWrapping="WrapWithOverflow" Text="Provide your Effani account credentials to upload results." Margin="0,20,0,0"/>
+					<dxe:TextEdit Margin="0,3,0,0" NullText="Effani User Name" Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+					<dxe:TextEdit Margin="0,3,0,0" NullText="Effani Password" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+					<dx:SimpleButton Style="{StaticResource WizardButton}" Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding UploadAssaysCommand}" IsEnabled="{DXBinding 'UsernameAndPasswordComplete'}">
+						<dx:SimpleButton.Content>
+							<StackPanel>
+								<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Upload</TextBlock>
+								<TextBlock TextAlignment="Center" MaxWidth="500" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Press here after typing your username and password."/>
+							</StackPanel>
+						</dx:SimpleButton.Content>
+					</dx:SimpleButton>
+				</StackPanel>
+				<Border BorderThickness="2" BorderBrush="#aed0f5" Margin="20,20,0,0" CornerRadius="5">
+					<ScrollViewer DockPanel.Dock="Right" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+						<ItemsControl ItemsSource="{Binding AssayManagerActivity}" BorderThickness="3" IsTabStop="False">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Padding="0" Margin="0" Text="{Binding}" ToolTip="{Binding}" FontSize="15" TextWrapping="NoWrap" MaxHeight="20" MaxWidth="1000"></TextBlock>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
+				</Border>
+			</DockPanel>
 		</DockPanel>
-	</DockPanel>
+	</Grid>
 </dx:ThemedWindow>
