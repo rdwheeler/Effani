@@ -13,14 +13,17 @@ namespace Effani.Device.Services
 		{
 			AssayUploadUrl = ConfigurationManager.AppSettings["EffaniApiUrl"];
 		}
-		public static string DataFolder => Path.Combine(Environment.SpecialFolder.LocalApplicationData.ToString(), "Effani");
+		public static string DataFolder => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Effani");
 
 		public string AssayUploadUrl { get; set; } = "https://www.effani.com";
 		public string EffaniUsername { get; set; }
 		public string EffaniPassword { get; set; }
+
+		public bool SaveAssayFiles { get; set; } = true;
 	}
 	public interface ISettingsService
 	{
+		bool SaveAssayFiles { get; set; }
 		string EffaniPassword { get; set; }
 		string EffaniUsername { get; set; }
 		string AssayUploadUrl { get; }

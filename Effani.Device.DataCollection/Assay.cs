@@ -445,7 +445,7 @@ namespace Effani.Device.DataCollection
 
 		public string Username { get; set; }
 
-		public string Id = Guid.NewGuid().ToString();
+		public Guid Id { get; set; } = Guid.NewGuid();
 		#endregion
 
 		#region Events

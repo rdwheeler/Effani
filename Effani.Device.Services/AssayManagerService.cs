@@ -5,6 +5,7 @@ using System.Text.Json;
 using Flurl.Http;
 using Flurl;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Effani.Device.Services
 {
@@ -21,7 +22,7 @@ namespace Effani.Device.Services
 		#endregion
 
 		#region Public methods
-		public void DeleteAssay(string id)
+		public void DeleteAssay(Guid id)
 		{
 			var item = _efContext.AssayData.Find(id);
 			_efContext.AssayData.Remove(item);
@@ -39,7 +40,10 @@ namespace Effani.Device.Services
 			AssayData.Add(assayData);
 			_efContext.AssayData.Add(assayData);
 			await _efContext.SaveChangesAsync();
-			return WriteAssayFile(assay);
+			if (_settingsService.SaveAssayFiles)
+				WriteAssayFile(assay);
+
+			return assayData.AssayName;
 		}
 		public async Task UploadAssays()
 		{
@@ -67,7 +71,14 @@ namespace Effani.Device.Services
 				return;
 			}
 
-			foreach (var a in _efContext.AssayData.Where(i => i.UploadedOn == null))
+			var toUpload = _efContext.AssayData.Where(i => i.UploadedOn == null).ToList();
+			if (!toUpload.Any())
+			{
+				Activity.Add($"All assay records have been previously uploaded.");
+				return;
+			}
+
+			foreach (var a in toUpload)
 			{
 				Activity.Add($"Upoading {a.AssayName} ({a.AssayId})");
 				try
@@ -76,15 +87,18 @@ namespace Effani.Device.Services
 						.AppendPathSegment("EffaniAssay")
 						.AppendPathSegment("Upload")
 						.WithBasicAuth(_settingsService.EffaniUsername, _settingsService.EffaniPassword)
-						.PostJsonAsync(JsonSerializer.Serialize(a), cancellationToken: CancellationToken.None);
+						.PostJsonAsync(a.AssayJson, cancellationToken: CancellationToken.None);
+					if(result.StatusCode == 200)
+					{
+						a.UploadedOn = DateTime.Now;
+						await _efContext.SaveChangesAsync();
+					}
 				}
 				catch (FlurlHttpException ex)
 				{
 					Activity.Add($"* Failed: {ex.Call.Exception}");
 					continue;
 				}
-				a.UploadedOn = DateTime.Now;
-				await _efContext.SaveChangesAsync();
 			}
 		}
 		private string WriteAssayFile(Assay assay)
@@ -100,12 +114,12 @@ namespace Effani.Device.Services
 			foreach (var well in assay.TestWells.Skip(assay.StandardsWellCount).Where(w => !w.Canceled))
 				results.AppendLine(
 					$"{well.SampleId},{well.Label},DNA:{well.DnaValue},{String.Join(',', well.TimeValues.Select(t => $"T{t.Key}:{t.Value}"))}");
-			var dataFolder = SettingsService.DataFolder;
-			if (!Directory.Exists(dataFolder))
-				Directory.CreateDirectory(dataFolder);
+			var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Effani");
+			if (!Directory.Exists(folder))
+				Directory.CreateDirectory(folder);
 			var fullname = GetAssayName(assay);
 			var filePath = Path.Combine(
-				dataFolder,
+				folder,
 				$"{fullname}.{assayFileExtension}");
 			File.WriteAllText(filePath, results.ToString());
 			return fullname;
@@ -133,7 +147,7 @@ namespace Effani.Device.Services
 	public interface IAssayManagerService : INotifyPropertyChanged
 	{
 		#region Public methods
-		void DeleteAssay(string id);
+		void DeleteAssay(Guid id);
 		Task<string> SaveAssay(Assay assay);
 		Task UploadAssays();
 		#endregion

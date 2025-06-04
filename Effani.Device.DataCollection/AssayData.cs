@@ -11,7 +11,7 @@ namespace Effani.Device.DataCollection
 	{
 		#region Properties
 		[Key]
-		public string AssayId { get; set; }
+		public Guid AssayId { get; set; }
 		public string AssayJson { get; set; }
 		public string AssayName { get; set; }
 		public DateTime? UploadedOn { get; set; }

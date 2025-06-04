@@ -89,7 +89,7 @@
 						<ItemsControl ItemsSource="{Binding AssayManagerActivity}" BorderThickness="3" IsTabStop="False">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
-									<TextBlock Padding="0" Margin="0" Text="{Binding}" ToolTip="{Binding}" FontSize="15" TextWrapping="NoWrap" MaxHeight="20" MaxWidth="1000"></TextBlock>
+									<TextBlock HorizontalAlignment="Left" Padding="0" Margin="0" Text="{Binding}" ToolTip="{Binding}" FontSize="15" TextWrapping="NoWrap" MaxHeight="20" MaxWidth="1000"></TextBlock>
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</ItemsControl>

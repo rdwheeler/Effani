@@ -38,7 +38,7 @@ namespace Effani.Device.Services.Migrations
 
                     b.HasKey("AssayId");
 
-                    b.ToTable("AssayData");
+                    b.ToTable("AssayData", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -69,16 +69,5 @@ namespace Effani.Device.Services
 		#region properties
 		public DbSet<AssayData> AssayData { get; set; }
 		#endregion
-
-		public class AppDbContextFactory : IDesignTimeDbContextFactory<EfContext>
-		{
-			public EfContext CreateDbContext(string[] args)
-			{
-				var optionsBuilder = new DbContextOptionsBuilder<EfContext>();
-				//optionsBuilder.UseSqlite(new SqliteConnectionStringBuilder() { DataSource = @"C:\Users\rdwhe\OneDrive\Desktop\test.productionline" }.ToString());
-
-				return new EfContext(optionsBuilder.Options);
-			}
-		}
 	}
 }

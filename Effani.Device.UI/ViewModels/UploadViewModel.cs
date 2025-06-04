@@ -29,9 +29,14 @@ namespace Effani.Device.UI
 		{
 			_assayManagerService.DeleteAssay(((AssayData)args.Items.First()).AssayId);
 		}
+		[Command]
+		public async Task UploadAssays()
+		{
+			await _assayManagerService.UploadAssays();
+		}
 
 		public BindingList<AssayData> AssayData => _assayManagerService.AssayData;
-		public BindingList<string> Activity => _assayManagerService.Activity;
+		public BindingList<string> AssayManagerActivity => _assayManagerService.Activity;
 		public string Username
 		{
 			get
