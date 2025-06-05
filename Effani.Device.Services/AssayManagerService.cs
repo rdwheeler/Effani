@@ -71,12 +71,7 @@ namespace Effani.Device.Services
 				return;
 			}
 
-			var toUpload = _efContext.AssayData.Where(i => i.UploadedOn == null).ToList();
-			if (!toUpload.Any())
-			{
-				Activity.Add($"All assay records have been previously uploaded.");
-				return;
-			}
+			var toUpload = _efContext.AssayData;
 
 			foreach (var a in toUpload)
 			{
