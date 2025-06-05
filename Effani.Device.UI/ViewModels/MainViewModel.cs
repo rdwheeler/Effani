@@ -76,7 +76,7 @@ namespace Effani.Device.UI
 			SamplesInNadh.Clear();
 			SamplesInKoh.Clear();
 			SamplesInDna.Clear();
-			NumberOfTests = SamplesComplete.Count();
+			NumberOfSamples = SamplesComplete.Count();
 			UnloadedTestsCount = 0;
 			AddMessage("Assay canceled", true);
 			AssayComplete = true;
@@ -84,7 +84,7 @@ namespace Effani.Device.UI
 		}
 		public void PageStartLoadFluidSystem()
 		{
-			Assay.Initialize(NumberOfTests);
+			Assay.Initialize(NumberOfSamples);
 			Assay.StatusMessages.CollectionChanged += StatusMessages_CollectionChanged;
 			Assay.StandardsComplete += Assay_StandardsComplete;
 			Assay.TestInNadhReadingsPhase += Assay_TestInNadhPhase;
@@ -199,7 +199,7 @@ namespace Effani.Device.UI
 							SamplesInDna.Remove(vm);
 							SamplesComplete.Add(vm);
 						}
-						if (SamplesComplete.Count() == NumberOfTests)
+						if (SamplesComplete.Count() == NumberOfSamples)
 						{
 							AddMessage("Assay complete", true);
 							AssayComplete = true;
@@ -335,7 +335,7 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(SendCommandText));
 			}
 		}
-		public bool DescriptionAndNumberOfTestsComplete => !String.IsNullOrEmpty(AssayDescription) && NumberOfTests != 0;
+		public bool DescriptionAndNumberOfTestsComplete => !String.IsNullOrEmpty(AssayDescription) && NumberOfSamples != 0;
 		public bool UsernameAndPasswordComplete => !String.IsNullOrEmpty(Username) && !String.IsNullOrEmpty(Password);
 		public string AssayDescription
 		{
@@ -415,18 +415,18 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(ExecutingCommandText));
 			}
 		}
-		public int NumberOfTests
+		public int NumberOfSamples
 		{
 			get
 			{
-				return _numberOfTests;
+				return Assay.NumberOfSamples;
 			}
 			set
 			{
-				if (_numberOfTests == value)
+				if (Assay.NumberOfSamples == value)
 					return;
-				_numberOfTests = value;
-				RaisePropertyChanged(nameof(NumberOfTests));
+				Assay.NumberOfSamples = value;
+				RaisePropertyChanged(nameof(NumberOfSamples));
 				RaisePropertyChanged(nameof(DescriptionAndNumberOfTestsComplete));
 				UnloadedTestsCount = value;
 			}
@@ -595,7 +595,6 @@ namespace Effani.Device.UI
 		AbalDeviceControl _device;
 		DeviceConfiguration _config => _device.Configuration;
 
-		int _numberOfTests;
 		bool _preparationComplete;
 		int _unloadedTestsCount;
 		ProcessEngine _processEngine;
