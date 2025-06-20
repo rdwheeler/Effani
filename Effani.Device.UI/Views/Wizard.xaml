@@ -93,7 +93,7 @@
 								<TextBlock TextWrapping="WrapWithOverflow" Text="Assay Description" Margin="0,15,0,0"/>
 								<dxe:TextEdit NullText="Enter a description for this assay, such as it's animal group and location." Text="{Binding AssayDescription, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
 								<TextBlock TextWrapping="WrapWithOverflow" Text="Number of animals to be tested" Margin="0,15,0,0"/>
-								<dxe:SpinEdit Width="80" EditValue="{Binding NumberOfTests, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="0"
+								<dxe:SpinEdit Width="80" EditValue="{Binding NumberOfSamples, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="0"
 								EditValueType="{x:Type sys:Int32}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" IsFloatValue="False" Mask="d0" MinValue="1" MaxValue="360" AllowSpinOnMouseWheel="True" />
 								<dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding NextPageCommand}" IsEnabled="{DXBinding 'DescriptionAndNumberOfTestsComplete'}">
 									<dx:SimpleButton.Content>
@@ -216,9 +216,10 @@
 						<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 							<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Concluded"/>
 							<TextBlock TextWrapping="WrapWithOverflow" Text="{DXBinding '`Assay results recorded as: ` + AssayFullName'}" Visibility="{DXBinding 'AssayFullName == null ? Visibility.Collapsed : Visibility.Visible'}"/>
-							<TextBlock TextWrapping="WrapWithOverflow" Text="Provide your Effani account credentials to upload results." Margin="0,20,0,0"/>
+							<TextBlock TextWrapping="WrapWithOverflow" Text="Provide your Effani account credentials if you would like to upload results." Margin="0,20,0,0"/>
+							<TextBlock TextWrapping="WrapWithOverflow" Text="You may upload results later using the Upload (cloud-shaped) button in the upper right." />
 							<dxe:TextEdit NullText="Effani User Name" Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-							<dxe:TextEdit NullText="Effani Password" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+							<dxe:PasswordBoxEdit Margin="0,10,0,0" NullText="Effani Password" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ShowCapsLockWarningToolTip="True" ShowPasswordButtonVisibility="Auto" />
 							<dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding UploadAssaysCommand}" IsEnabled="{DXBinding 'UsernameAndPasswordComplete'}">
 								<dx:SimpleButton.Content>
 									<StackPanel>

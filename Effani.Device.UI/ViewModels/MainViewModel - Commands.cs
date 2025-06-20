@@ -339,7 +339,7 @@ namespace Effani.Device.UI
 				foreach (var test in Assay.AllTestWells.Skip(currentIndex))
 					test.Canceled = true;
 				UnloadedTestsCount = 0;
-				NumberOfSamples = currentIndex - 1;
+				NumberOfSamples = currentIndex;
 			}
 			CurrentLoadingSample = null; // triggers the loading process is complete
 			PreparedToLoadSample = false;
