@@ -15,24 +15,24 @@ namespace Effani.Device.DataCollection
 		#endregion
 
 		#region Constructors
-		public TestWell(DeviceConfiguration deviceConfiguration, Well well, int testIndex, EventHandler<DataArgs<int>> basalIncubationTimerCallback, EventHandler<DataArgs<int>> nadhReadingsTimerCallback, EventHandler<DataArgs<int>> kohDwellTimerCallback, EventHandler<DataArgs<int>> dnaIncubationTimerCallback)
+		public TestWell(Settings settings, Well well, int testIndex, EventHandler<DataArgs<int>> basalIncubationTimerCallback, EventHandler<DataArgs<int>> nadhReadingsTimerCallback, EventHandler<DataArgs<int>> kohDwellTimerCallback, EventHandler<DataArgs<int>> dnaIncubationTimerCallback)
 		{
 			_basalIncubationTimerCallback = basalIncubationTimerCallback;
 			_dnaIncubationTimerCallback = dnaIncubationTimerCallback;
 			_kohDwellDnaTimerCallback = kohDwellTimerCallback;
 			_nadhReadingsTimerCallback = nadhReadingsTimerCallback;
-			_timerDescriptionUpdateInterval = deviceConfiguration.TimerDescriptionUpdateInterval;
+			_timerDescriptionUpdateInterval = settings.TimerDescriptionUpdateInterval;
 			TestIndex = testIndex;
 			Well = well;
 
-			BasalIncubationCount = deviceConfiguration.BasalIncubationTimerPeriod / _timerDescriptionUpdateInterval;
-			NadhReadings1Count = deviceConfiguration.NadhReading1TimerPeriod / _timerDescriptionUpdateInterval;
-			NadhReadings2Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
-			NadhReadings3Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
-			NadhReadings4Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
-			NadhReadings5Count = deviceConfiguration.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
-			KohDwellCount = deviceConfiguration.KohTimerPeriod / _timerDescriptionUpdateInterval;
-			DnaIncubationCount = deviceConfiguration.DnaTimerPeriod / _timerDescriptionUpdateInterval;
+			BasalIncubationCount = settings.BasalIncubationTimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings1Count = settings.NadhReading1TimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings2Count = settings.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings3Count = settings.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings4Count = settings.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			NadhReadings5Count = settings.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
+			KohDwellCount = settings.KohTimerPeriod / _timerDescriptionUpdateInterval;
+			DnaIncubationCount = settings.DnaTimerPeriod / _timerDescriptionUpdateInterval;
 		}
 		#endregion
 

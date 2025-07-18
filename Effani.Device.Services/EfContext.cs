@@ -1,11 +1,16 @@
-﻿using Effani.Device.DataCollection;
+﻿using Drivetrain.Robotics.Control;
+using Effani.Device.DataCollection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Effani.Device.Services
@@ -13,12 +18,19 @@ namespace Effani.Device.Services
 	public class EfContext : DbContext
 	{
 		#region constructors
+		public EfContext() : base() { }
 		public EfContext(DbContextOptions options) : base(options)
 		{
 		}
 		#endregion
 
 		#region protected methods
+		protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+		{
+			configurationBuilder
+				.Properties<Coordinate>()
+				.HaveConversion<CoordinateConverter>();
+		}
 		#region OnConfiguring
 		/// <summary>
 		/// <para> /// Override this method to configure the database (and other options) to be used for this context.
@@ -62,12 +74,35 @@ namespace Effani.Device.Services
 
 			// The best way to debug migration creations is by enabling the Debugger.Launch() below
 			//Debugger.Launch();
+
+			modelBuilder.Entity<SettingsVersion>().Property(e => e.DeviceSettings).HasConversion(
+				v => JsonSerializer.Serialize(v, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull }),
+				v => JsonSerializer.Deserialize<Settings>(v, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull }));
 		}
 		#endregion
 		#endregion
 
 		#region properties
 		public DbSet<AssayData> AssayData { get; set; }
+		public DbSet<SettingsVersion> SettingsVersions { get; set; }
 		#endregion
+	}
+	public class CoordinateConverter : ValueConverter<Coordinate, string>
+	{
+		public CoordinateConverter() : base(convertToProviderExpression, convertFromProviderExpression, null)
+		{ }
+
+		public static string ToString(Coordinate obj)
+		{
+			return JsonSerializer.Serialize(obj);
+		}
+
+		public static Coordinate ToObject(string objString)
+		{
+			return JsonSerializer.Deserialize<Coordinate>(objString);
+		}
+
+		private static Expression<Func<Coordinate, string>> convertToProviderExpression = x => ToString(x);
+		private static Expression<Func<string, Coordinate>> convertFromProviderExpression = x => ToObject(x);
 	}
 }

@@ -9,7 +9,7 @@ namespace Effani.Device.Control
 	{
 		protected override void Run()
 		{
-			(Device as AbalDeviceControl).TableGoTo(Device.Configuration.TraySterilizationLocation);
+			(Device as AbalDeviceControl).TableGoTo(Device.Configuration.Settings.TraySterilizationLocation);
 		}
 
 		public override string Description => $"Move table to tray sterilization location.";

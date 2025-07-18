@@ -5,7 +5,7 @@ namespace Drivetrain.Robotics.Control
 {
 	public class TableAxis : AxisSpec
 	{
-		public TableAxis(Axis axis, int board, int port, int maximumMovement, EndstopLocation endstopLocation, Direction direction, int maxSpeed, float? startingPosition = null)
+		public TableAxis(Axis axis, int board, int port, int maximumMovement, EndstopLocation endstopLocation, Direction direction, int maxSpeed, decimal? startingPosition = null)
 			: base(axis, board, port, startingPosition)
 		{
 			Maximum = maximumMovement;

@@ -31,8 +31,6 @@ namespace Effani.Device.UI
 			_processEngine.MessageReceived += ProcessEngine_MessageReceived;
 			_processEngine.BeginExecutingCommand += ProcessEngine_BeginExecutingCommand;
 			_processEngine.EndExecutingCommand += ProcessEngine_EndExecutingCommand;
-			Axes = new ObservableCollection<AxisSpec>(_device.Configuration.DeviceSpecification.Axes);
-			Sensors = new ObservableCollection<SensorSpec>(_device.Configuration.DeviceSpecification.Sensors);
 			Assay = new DataCollection.Assay(_device, _processEngine);
 		}
 		#endregion
@@ -267,7 +265,7 @@ namespace Effani.Device.UI
 
 		private void ProcessEngine_BeginExecutingCommand(object sender, DataArgs<Command> e)
 		{
-			if (_config.PauseCommandsForPrompt)
+			if (_config.Settings.PauseCommandsForPrompt)
 				MessageBox.Show(e.Data.Description, "Preparing to excute command");
 
 			ExecutingCommandText = e.Data.Description;
@@ -305,34 +303,6 @@ namespace Effani.Device.UI
 					return;
 				_assayFullName = value;
 				RaisePropertyChanged(nameof(AssayFullName));
-			}
-		}
-		public int EmitFluidVolume
-		{
-			get => _emitFluidVolume;
-			set
-			{
-				if(_emitFluidVolume == value)
-				{
-					return;
-				}
-
-				_emitFluidVolume = value;
-				RaisePropertyChanged(nameof(EmitFluidVolume));
-			}
-		}
-		public string SendCommandText
-		{
-			get => _sendCommandText;
-			set
-			{
-				if (_sendCommandText == value)
-				{
-					return;
-				}
-
-				_sendCommandText = value;
-				RaisePropertyChanged(nameof(SendCommandText));
 			}
 		}
 		public bool DescriptionAndNumberOfTestsComplete => !String.IsNullOrEmpty(AssayDescription) && NumberOfSamples != 0;
@@ -383,8 +353,6 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(AssayTerminated));
 			}
 		}
-		public ObservableCollection<AxisSpec> Axes { get; set; }
-		public ObservableCollection<SensorSpec> Sensors { get; set; }
 		public ObservableCollection<string> ConsoleMessages { get; set; } = new();
 		public ObservableCollection<string> ProcessMessages { get; set; } = new();
 		public TestWell CurrentLoadingSample
@@ -493,20 +461,6 @@ namespace Effani.Device.UI
 		public ExplicitBindingList<TestWellViewModel> SamplesInKoh { get; set; } = new();
 		public ExplicitBindingList<TestWellViewModel> SamplesInNadh { get; set; } = new();
 		public ExplicitBindingList<TestWellViewModel> SamplesInBasal { get; set; } = new();
-		public Well CurrentWell
-		{
-			get
-			{
-				if (_currentWell == null && _device is not null)
-					_currentWell = _device.Configuration.DeviceSpecification.Plates.FirstOrDefault()?.Wells.FirstOrDefault();
-				return _currentWell;
-			}
-			set
-			{
-				_currentWell = value;
-				RaisePropertyChanged(nameof(CurrentWell));
-			}
-		}
 		public int UnloadedTestsCount
 		{
 			get
@@ -526,13 +480,13 @@ namespace Effani.Device.UI
 		{
 			get
 			{
-				return _settingsService.EffaniUsername;
+				return _settingsService.Settings.EffaniUsername;
 			}
 			set
 			{
-				if (_settingsService.EffaniUsername == value)
+				if (_settingsService.Settings.EffaniUsername == value)
 					return;
-				_settingsService.EffaniUsername = value;
+				_settingsService.Settings.EffaniUsername = value;
 				RaisePropertyChanged(nameof(Username));
 				RaisePropertyChanged(nameof(UsernameAndPasswordComplete));
 			}
@@ -541,13 +495,13 @@ namespace Effani.Device.UI
 		{
 			get
 			{
-				return _settingsService.EffaniPassword;
+				return _settingsService.Settings.EffaniPassword;
 			}
 			set
 			{
-				if (_settingsService.EffaniPassword == value)
+				if (_settingsService.Settings.EffaniPassword == value)
 					return;
-				_settingsService.EffaniPassword = value;
+				_settingsService.Settings.EffaniPassword = value;
 				RaisePropertyChanged(nameof(Password));
 				RaisePropertyChanged(nameof(UsernameAndPasswordComplete));
 			}
@@ -598,12 +552,9 @@ namespace Effani.Device.UI
 		bool _preparationComplete;
 		int _unloadedTestsCount;
 		ProcessEngine _processEngine;
-		int _emitFluidVolume;
-		string _sendCommandText;
 		bool _moveStartingPositionsComplete;
 		bool _fluidLoadingComplete;
 		string _executingCommandText = "None";
-        Well _currentWell;
 		bool _preparingToLoadSample;
 		readonly IAssayManagerService _assayManagerService;
 		readonly ISettingsService _settingsService;

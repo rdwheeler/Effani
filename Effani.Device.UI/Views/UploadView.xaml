@@ -74,7 +74,7 @@
 				<StackPanel DockPanel.Dock="Left">
 					<TextBlock TextWrapping="WrapWithOverflow" Text="Provide your Effani account credentials to upload results." Margin="0,20,0,0"/>
 					<dxe:TextEdit Margin="0,3,0,0" NullText="Effani User Name" Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-					<dxe:TextEdit Margin="0,3,0,0" NullText="Effani Password" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+					<dxe:PasswordBoxEdit Margin="0,3,0,0" NullText="Effani Password" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ShowCapsLockWarningToolTip="True" ShowPasswordButtonVisibility="Auto"/>
 					<dx:SimpleButton Style="{StaticResource WizardButton}" Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding UploadAssaysCommand}" IsEnabled="{DXBinding 'UsernameAndPasswordComplete'}">
 						<dx:SimpleButton.Content>
 							<StackPanel>

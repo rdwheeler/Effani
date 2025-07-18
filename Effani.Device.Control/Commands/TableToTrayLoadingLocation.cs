@@ -10,7 +10,7 @@ namespace Effani.Device.Control
 	{
 		protected override void Run()
 		{
-			(Device as AbalDeviceControl).TableGoTo(Device.Configuration.TrayLoadingLocation);
+			(Device as AbalDeviceControl).TableGoTo(Device.Configuration.Settings.TrayLoadingLocation);
 		}
 
 		public override string Description => $"Move table to tray loading location.";

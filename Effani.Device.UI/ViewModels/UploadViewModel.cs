@@ -41,13 +41,13 @@ namespace Effani.Device.UI
 		{
 			get
 			{
-				return _settingsService.EffaniUsername;
+				return _settingsService.Settings.EffaniUsername;
 			}
 			set
 			{
-				if (_settingsService.EffaniUsername == value)
+				if (_settingsService.Settings.EffaniUsername == value)
 					return;
-				_settingsService.EffaniUsername = value;
+				_settingsService.Settings.EffaniUsername = value;
 				RaisePropertyChanged(nameof(Username));
 				RaisePropertyChanged(nameof(UsernameAndPasswordComplete));
 			}
@@ -56,13 +56,13 @@ namespace Effani.Device.UI
 		{
 			get
 			{
-				return _settingsService.EffaniPassword;
+				return _settingsService.Settings.EffaniPassword;
 			}
 			set
 			{
-				if (_settingsService.EffaniPassword == value)
+				if (_settingsService.Settings.EffaniPassword == value)
 					return;
-				_settingsService.EffaniPassword = value;
+				_settingsService.Settings.EffaniPassword = value;
 				RaisePropertyChanged(nameof(Password));
 				RaisePropertyChanged(nameof(UsernameAndPasswordComplete));
 			}

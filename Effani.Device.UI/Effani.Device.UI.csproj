@@ -23,19 +23,23 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DevExpress.Images" Version="24.1.7" />
-		<PackageReference Include="DevExpress.Win.Design" Version="24.1.7" />
-		<PackageReference Include="DevExpress.Wpf.Core" Version="24.1.7" />
-		<PackageReference Include="DevExpress.Wpf.ThemesLW" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Images" Version="25.1.3" />
+		<PackageReference Include="DevExpress.Win.Design" Version="25.1.3" />
+		<PackageReference Include="DevExpress.Wpf.Core" Version="25.1.3" />
+		<PackageReference Include="DevExpress.Wpf.ThemesLW" Version="25.1.3" />
 		<PackageReference Include="DevExpress.Mvvm.CodeGenerators" Version="22.1.*-*" />
-		<PackageReference Include="DevExpress.Wpf.Controls" Version="24.1.7" />
-		<PackageReference Include="DevExpress.Wpf.Reporting" Version="24.1.7" />
-		<PackageReference Include="DevExpress.Wpf.Themes.Office2016White" Version="24.1.7" />
-		<PackageReference Include="DevExpress.Wpf.Themes.All" Version="24.1.7" />
-		<PackageReference Include="DevExpress.Win.BonusSkins" Version="24.1.7" />
+		<PackageReference Include="DevExpress.Wpf.Controls" Version="25.1.3" />
+		<PackageReference Include="DevExpress.Wpf.Reporting" Version="25.1.3" />
+		<PackageReference Include="DevExpress.Wpf.Themes.Office2016White" Version="25.1.3" />
+		<PackageReference Include="DevExpress.Wpf.Themes.All" Version="25.1.3" />
+		<PackageReference Include="DevExpress.Win.BonusSkins" Version="25.1.3" />
 		<PackageReference Include="DriveTrain.Toolbox" Version="1.0.3" />
 		<PackageReference Include="Flurl.Http" Version="4.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.5" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
@@ -50,7 +54,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Drivetrain.Robotics.Control\Drivetrain.Robotics.Control.csproj" />
 	  <ProjectReference Include="..\Drivetrain.Robotics.Process\Drivetrain.Robotics.Process.csproj" />
-	  <ProjectReference Include="..\Effani.Device.Assay\Effani.Device.Assay.csproj" />
 	  <ProjectReference Include="..\Effani.Device.Control\Effani.Device.Control.csproj" />
 	  <ProjectReference Include="..\Effani.Device.Services\Effani.Device.Services.csproj" />
 	</ItemGroup>

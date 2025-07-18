@@ -219,7 +219,7 @@
 							<TextBlock TextWrapping="WrapWithOverflow" Text="Provide your Effani account credentials if you would like to upload results." Margin="0,20,0,0"/>
 							<TextBlock TextWrapping="WrapWithOverflow" Text="You may upload results later using the Upload (cloud-shaped) button in the upper right." />
 							<dxe:TextEdit NullText="Effani User Name" Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-							<dxe:PasswordBoxEdit Margin="0,10,0,0" NullText="Effani Password" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ShowCapsLockWarningToolTip="True" ShowPasswordButtonVisibility="Auto" />
+							<dxe:PasswordBoxEdit Margin="0,5,0,0" NullText="Effani Password" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ShowCapsLockWarningToolTip="True" ShowPasswordButtonVisibility="Auto" />
 							<dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding UploadAssaysCommand}" IsEnabled="{DXBinding 'UsernameAndPasswordComplete'}">
 								<dx:SimpleButton.Content>
 									<StackPanel>

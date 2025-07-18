@@ -11,8 +11,8 @@ namespace Effani.Device.Control
 		{
 			var device = (AbalDeviceControl)Device;
 			device.LaserDnaOn();
-			SensorDesignator = Device.Configuration.DnaSensorNumber;
-			PauseTime = Device.Configuration.SensorReadDwell;
+			SensorDesignator = Device.Configuration.Settings.DnaSensorNumber;
+			PauseTime = Device.Configuration.Settings.SensorReadDwell;
 			base.Run();
 			device.LaserDnaOff();
 		}

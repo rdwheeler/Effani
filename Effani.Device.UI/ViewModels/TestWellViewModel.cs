@@ -37,7 +37,7 @@ namespace Effani.Device.DataCollection
 
 		#region Properties
 		public string CurrentTimerDescription => TestWell.CurrentTimerDescription;
-		public float DnaValue { get; set; }
+		public decimal DnaValue { get; set; }
 		public string Label => TestWell.Label;
 		public string SampleId => TestWell.SampleId;
 		public TestWell TestWell { get; set; }

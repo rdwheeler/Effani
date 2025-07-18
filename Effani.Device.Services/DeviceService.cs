@@ -11,9 +11,9 @@ namespace Effani.Device.Services
 {
 	public class DeviceService : IDeviceService
 	{
-		public DeviceService()
+		public DeviceService(ISettingsService settingsService)
 		{
-			_device = new AbalDeviceControl();
+			_device = new AbalDeviceControl(settingsService.Settings);
 			_processEngine = new ProcessEngine();
 		}
 

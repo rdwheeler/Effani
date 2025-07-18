@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Drivetrain.Robotics.Process
 {
-	public class SetTableTemp(float temperature, DeviceControl device) : Command(device)
+	public class SetTableTemp(decimal temperature, DeviceControl device) : Command(device)
 	{
 		protected override void Run()
 		{
@@ -13,6 +13,6 @@ namespace Drivetrain.Robotics.Process
 
 		public override string Description => $"Set table temperature to {_temperature}.";
 
-		private readonly float _temperature = temperature;
+		private readonly decimal _temperature = temperature;
 	}
 }

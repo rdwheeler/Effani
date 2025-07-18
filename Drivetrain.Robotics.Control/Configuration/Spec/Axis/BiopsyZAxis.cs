@@ -5,11 +5,11 @@ namespace Drivetrain.Robotics.Control
 {
 	public class BiopsyZAxis : AxisSpec
 	{
-		public BiopsyZAxis(Axis axis, int board, int port, float? startingPosition = null)
+		public BiopsyZAxis(Axis axis, int board, int port, decimal? startingPosition = null)
 			: base(axis, board, port, startingPosition)
 		{
 			Maximum = 100;
-			StepsPerMillimeter = 3200f;
+			StepsPerMillimeter = 3200m;
 			MaxSpeed = 400;
 			Driver = new DriverSpec(Label)
 			{

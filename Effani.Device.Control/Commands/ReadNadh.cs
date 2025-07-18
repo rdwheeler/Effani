@@ -11,8 +11,8 @@ namespace Effani.Device.Control
 		{
 			var device = (AbalDeviceControl)Device;
 			device.LaserNadhOn();
-			SensorDesignator = Device.Configuration.NadhSensorNumber;
-			PauseTime = Device.Configuration.SensorReadDwell;
+			SensorDesignator = Device.Configuration.Settings.NadhSensorNumber;
+			PauseTime = Device.Configuration.Settings.SensorReadDwell;
 			base.Run();
 			device.LaserNadhOff();
 		}

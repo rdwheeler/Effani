@@ -22,4 +22,10 @@
     <ProjectReference Include="..\Effani.Device.DataCollection\Effani.Device.DataCollection.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="DevExpress.Mvvm.v25.1">
+      
+    </Reference>
+  </ItemGroup>
+
 </Project>

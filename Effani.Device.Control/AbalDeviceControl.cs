@@ -7,12 +7,13 @@ namespace Effani.Device.Control
 {
 	public class AbalDeviceControl : DeviceControl
 	{
-		public AbalDeviceControl()
+		public AbalDeviceControl(Settings settings)
+			: base (settings)
 		{
 			Axes = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => v);
 		}
 
-		public void MoveAbsolute(Axis axis, float location, float? speed = null)
+		public void MoveAbsolute(Axis axis, decimal location, decimal? speed = null)
 		{
 			if(!Axes.TryGetValue(axis, out var axisSpec))
 				throw new ApplicationException($"Unknown axis {axis} in {nameof(MoveAbsolute)}");
@@ -20,18 +21,18 @@ namespace Effani.Device.Control
 			MoveAbsolute(axisSpec, location, speed);
 		}
 
-		public void MoveRelative(Axis axis, float distance, float? speed = null)
+		public void MoveRelative(Axis axis, decimal distance, decimal? speed = null)
 		{
 			if (!Axes.TryGetValue(axis, out var axisSpec))
 				throw new ApplicationException($"Unknown axis {axis} in {nameof(MoveRelative)}");
 
 			MoveRelative(axisSpec, distance, speed);
 		}
-		public void TableGoTo(Coordinate location, float? speed = null)
+		public void TableGoTo(Coordinate location, decimal? speed = null)
 		{
 			TableGoTo(location.X, location.Y, speed);
 		}
-		public void TableGoTo(float x, float y, float? speed = null)
+		public void TableGoTo(decimal x, decimal y, decimal? speed = null)
 		{
 			var xaxis = Axes[Axis.TableX];
 			var yaxis = Axes[Axis.TableY];
@@ -53,11 +54,11 @@ namespace Effani.Device.Control
 		}
 		public string ReadDna()
 		{
-			return ReadSensor(0, Configuration.SensorReadDwell);
+			return ReadSensor(0, Settings.SensorReadDwell);
 		}
 		public string ReadNadh()
 		{
-			return ReadSensor(1, Configuration.SensorReadDwell);
+			return ReadSensor(1, Settings.SensorReadDwell);
 		}
 		public void LaserDnaOn()
 		{
@@ -81,15 +82,15 @@ namespace Effani.Device.Control
 				return;
 
 			var distance = CalcFluidTravelMmForMl(microLiters, axisSpec);
-			MoveRelative(axisSpec.Axis, distance, Configuration.FluidSyringeSpeed);
-			Pause(Configuration.FluidEmissionDwell);
+			MoveRelative(axisSpec.Axis, distance, Settings.FluidSyringeSpeed);
+			Pause(Settings.FluidEmissionDwell);
 		}
 		public void AspirateKoh(int microLiters)
 		{
-			MoveAbsolute(Axis.AspirateKoh, (Configuration.AspirateKohActuatorStartPosition + Configuration.AspirateKohDistanceToPlate), Configuration.AspiratePositioningSpeed);
+			MoveAbsolute(Axis.AspirateKoh, (Settings.AspirateKohActuatorStartPosition + Settings.AspirateKohDistanceToPlate), Settings.AspiratePositioningSpeed);
 			var distance = CalcAspirateTravelMmForMl(microLiters);
 			DoStirringDescent(Axes[Axis.AspirateKoh], distance);
-			MoveAbsolute(Axis.AspirateKoh, Configuration.AspirateKohActuatorStartPosition);
+			MoveAbsolute(Axis.AspirateKoh, Settings.AspirateKohActuatorStartPosition);
 		}
 		//public void AspirationPressureOn()
 		//{
@@ -138,28 +139,28 @@ namespace Effani.Device.Control
 		//	MoveAbsolute(Axis.AspirateFluid, Configuration.AspirateFluidActuatorStartPosition);
 		//}
 
-		private float CalcFluidTravelMmForMl(int microLiters, AxisSpec axisSpec)
+		private decimal CalcFluidTravelMmForMl(int microLiters, AxisSpec axisSpec)
 		{
 			var microLitersPerMm = axisSpec.Axis switch
 			{
-				Axis.Basal => Configuration.BasalTravelPerMicroLiter,
-				Axis.Nadh => Configuration.NadhTravelPerMicroLiter,
-				Axis.Koh => Configuration.KohTravelPerMicroLiter,
-				Axis.DnaReagent => Configuration.DnaTravelPerMicroLiter,
+				Axis.Basal => Configuration.Settings.BasalTravelPerMicroLiter,
+				Axis.Nadh => Configuration.Settings.NadhTravelPerMicroLiter,
+				Axis.Koh => Configuration.Settings.KohTravelPerMicroLiter,
+				Axis.DnaReagent => Configuration.Settings.DnaTravelPerMicroLiter,
 				_ => throw new ApplicationException($"Unknown axis {axisSpec.Axis} in {nameof(CalcFluidTravelMmForMl)}")
 			};
 			var ret = microLitersPerMm * microLiters;
 			return ret;
 		}
-		private float CalcAspirateTravelMmForMl(int microLiters)
+		private decimal CalcAspirateTravelMmForMl(int microLiters)
 		{
-			var ret = (Configuration.AspirateTravelPerMicroLiter * microLiters);
+			var ret = (Configuration.Settings.AspirateTravelPerMicroLiter * microLiters);
 			return ret;
 		}
-		private void DoStirringDescent(AxisSpec axis, float distance)
+		private void DoStirringDescent(AxisSpec axis, decimal distance)
 		{
-			MoveRelative(axis, distance, Configuration.AspirateStirSpeed);
-			Pause(Configuration.AspirationDwell);
+			MoveRelative(axis, distance, Configuration.Settings.AspirateStirSpeed);
+			Pause(Configuration.Settings.AspirationDwell);
 			//var repetitions = 1;
 			//var descentFactor = distance / (repetitions * 4);
 			//var proximityFactor = (Configuration.WellWidth / 2) * 0.9f;

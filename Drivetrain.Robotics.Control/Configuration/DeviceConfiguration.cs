@@ -6,15 +6,16 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Drivetrain.Robotics.Control
 {
 	public class DeviceConfiguration : ConfigurationSection
 	{
-		public DeviceConfiguration() 
+		public DeviceConfiguration(Settings settings)
 		{
-			SetConfigValues();
+			Settings = settings;
 			BuildDeviceSpec();
 		}
 		public string GenerateConfigFiles(string drive)
@@ -141,8 +142,8 @@ M669 K0 ; configure Cartesian kinematics
 			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
 			//var aspirationPressureToggleBoardNumber = AspirationPressureToggleBoardNumber == 0 ? null : $"{AspirationPressureToggleBoardNumber}.";
 			//configTextBuilder.AppendLine(@$"M950 P4 C""{aspirationPressureToggleBoardNumber}out{AspirationPressureTogglePortNumber}"" ; aspiration emission switch");
-			var aspirationSuctionToggleBoardNumber = AspirationSuctionToggleBoardNumber == 0 ? null : $"{AspirationSuctionToggleBoardNumber}.";
-			configTextBuilder.AppendLine(@$"M950 P5 C""{aspirationSuctionToggleBoardNumber}out{AspirationSuctionTogglePortNumber}"" ; aspiration emission switch");
+			var aspirationSuctionToggleBoardNumber = Settings.AspirationSuctionToggleBoardNumber == 0 ? null : $"{Settings.AspirationSuctionToggleBoardNumber}.";
+			configTextBuilder.AppendLine(@$"M950 P5 C""{aspirationSuctionToggleBoardNumber}out{Settings.AspirationSuctionTogglePortNumber}"" ; aspiration emission switch");
 			configTextBuilder.AppendLine("\r\n; Sensors");
 			foreach (var sensor in DeviceSpecification.Sensors)
 			{
@@ -203,34 +204,34 @@ G90 ; absolute positioning
 		{
 			DeviceSpecification = new DeviceSpecification();
 			DeviceSpecification.DeviceName = DeviceSpecification.Label;
-			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 500, EndstopLocation.LowEnd, Direction.Backwards, TableAxisSpeed));
-			DeviceSpecification.Axes.Add((AxisSpec)new TableAxis(Axis.TableY, 0, 1, 500, EndstopLocation.LowEnd, Direction.Backwards, TableAxisSpeed));
+			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
+			DeviceSpecification.Axes.Add((AxisSpec)new TableAxis(Axis.TableY, 0, 1, 500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
 			DeviceSpecification.Axes.AddRange(GetAspirateAxes());
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent, 1, 4, DnaLocation, DnaSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh, 2, 1, KohLocation, KohSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh, 2, 3, NadhLocation, NadhSyringeLoadingPosition));
-			var basal1 = new FluidAxis(Axis.Basal, 0, 5, BasalLocation, BasalSyringeLoadingPosition);
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent, 1, 4, Settings.DnaLocation, Settings.DnaSyringeLoadingPosition));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh, 2, 1, Settings.KohLocation, Settings.KohSyringeLoadingPosition));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh, 2, 3, Settings.NadhLocation, Settings.NadhSyringeLoadingPosition));
+			var basal1 = new FluidAxis(Axis.Basal, 0, 5, Settings.BasalLocation, Settings.BasalSyringeLoadingPosition);
             basal1.Driver.Endstop.SensorPort = ($"1.io0.in");
             DeviceSpecification.Axes.Add(basal1);
 
-			DeviceSpecification.Sensors.Add(new DnaSensorSpec("DNA Sensor", DnaSensorNumber, DnaSensorBoardNumber, DnaSensorPortNumber, DnaSensorReadHigh, DnaSensorReadLow, DnaSensorLocation));
-			DeviceSpecification.Sensors.Add(new NadhSensorSpec("NADH Sensor", NadhSensorNumber, NadhSensorBoardNumber, NadhSensorPortNumber, NadhSensorReadHigh, NadhSensorReadLow, NadhSensorLocation));
+			DeviceSpecification.Sensors.Add(new DnaSensorSpec("DNA Sensor", Settings.DnaSensorNumber, Settings.DnaSensorBoardNumber, Settings.DnaSensorPortNumber, Settings.DnaSensorReadHigh, Settings.DnaSensorReadLow, Settings.DnaSensorLocation));
+			DeviceSpecification.Sensors.Add(new NadhSensorSpec("NADH Sensor", Settings.NadhSensorNumber, Settings.NadhSensorBoardNumber, Settings.NadhSensorPortNumber, Settings.NadhSensorReadHigh, Settings.NadhSensorReadLow, Settings.NadhSensorLocation));
 
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(0, 0)));
 			DeviceSpecification.Plates.Add(new Plate(new Coordinate(1, 0)));
 			Plate currentPlate = DeviceSpecification.Plates[0];
-			var wellsPerPlate = (HorizontalWellCount * VerticalWellCount);
+			var wellsPerPlate = (Settings.HorizontalWellCount * Settings.VerticalWellCount);
 			for (int index = 0; index < 2 * wellsPerPlate; index++)
 			{
-				for (int x = 0; x < HorizontalWellCount; x++)
+				for (int x = 0; x < Settings.HorizontalWellCount; x++)
 				{
-					for (int y = 0; y < VerticalWellCount; y++)
+					for (int y = 0; y < Settings.VerticalWellCount; y++)
 					{
-                        var baseX = FirstWellLocation.X + (PlateOffset.X * currentPlate.Location.X);
-                        var baseY = FirstWellLocation.Y + (PlateOffset.Y * currentPlate.Location.Y);
+                        var baseX = Settings.FirstWellLocation.X + (Settings.PlateOffset.X * currentPlate.Location.X);
+                        var baseY = Settings.FirstWellLocation.Y + (Settings.PlateOffset.Y * currentPlate.Location.Y);
 						var location = new Coordinate(
-							((x * WellOffset.X) + baseX), 
-							((y * WellOffset.Y) + baseY));
+							((x * Settings.WellOffset.X) + baseX), 
+							((y * Settings.WellOffset.Y) + baseY));
 						new Well(currentPlate, x, y, location);
 					}
 				}
@@ -247,193 +248,24 @@ G90 ; absolute positioning
 		private List<AxisSpec> GetAspirateAxes()
 		{
 			var ret = new List<AxisSpec>();
-			//ret.Add(new AspirateZAxis(Axis.AspirateFluid, 0, 4, AspirateFluidLocation, AspirateFluidActuatorStartPosition));
-            var aspirate1Z = new AspirateZAxis(Axis.AspirateKoh, 1, 1, AspirateKohLocation, AspirateKohActuatorStartPosition);
+			//ret.Add(new AspirateZAxis(Axis.AspirateFluid, 0, 4, Settings.AspirateFluidLocation, Settings.AspirateFluidActuatorStartPosition));
+			var aspirate1Z = new AspirateZAxis(Axis.AspirateKoh, 1, 1, Settings.AspirateKohLocation, Settings.AspirateKohActuatorStartPosition);
             aspirate1Z.Driver.Endstop.SensorPort = ($"1.io1.in");
             ret.Add(aspirate1Z);
 
             return ret;
-		}
-		private T GetConfigValue<T>(string key)
-		{
-			var value = ConfigurationManager.AppSettings[key];
-			if (value is null)
-				throw new ValidationException($"Configuration key {key} not found");
-
-			return (T)Convert.ChangeType(value, typeof(T));
 		}
 		private Coordinate GetCoordinateConfigValue(string key)
 		{
 			var value = ConfigurationManager.AppSettings[key];
 			if (value is null)
 				throw new ValidationException($"Configuration key {key} not found");
-			var x = float.Parse(value.Split(',')[0]);
-			var y = float.Parse(value.Split(',')[1]);
+			var x = decimal.Parse(value.Split(',')[0]);
+			var y = decimal.Parse(value.Split(',')[1]);
 			return new Coordinate(x, y);
 		}
-		private void SetConfigValues()
-		{
-			AspirateKohActuatorStartPosition = GetConfigValue<float>(nameof(AspirateKohActuatorStartPosition));
-			TrayTemperature = GetConfigValue<float>(nameof(TrayTemperature));
-			FluidSyringeSpeed = GetConfigValue<float>(nameof(FluidSyringeSpeed));
-			AspirateKohDistanceToPlate = GetConfigValue<float>(nameof(AspirateKohDistanceToPlate));
-			AspirateKohLocation = GetCoordinateConfigValue(nameof(AspirateKohLocation));
-			DnaLocation = GetCoordinateConfigValue(nameof(DnaLocation));
-			KohLocation = GetCoordinateConfigValue(nameof(KohLocation));
-			NadhLocation = GetCoordinateConfigValue(nameof(NadhLocation));
-			BasalLocation = GetCoordinateConfigValue(nameof(BasalLocation));
-			BiopsyLocation = GetCoordinateConfigValue(nameof(BiopsyLocation));
-			PlateOffset = GetCoordinateConfigValue(nameof(PlateOffset));
-			DnaSensorLocation = GetCoordinateConfigValue(nameof(DnaSensorLocation));
-			DnaSensorBoardNumber = GetConfigValue<int>(nameof(DnaSensorBoardNumber));
-			DnaSensorPortNumber = GetConfigValue<int>(nameof(DnaSensorPortNumber));
-			DnaSensorNumber = GetConfigValue<int>(nameof(DnaSensorNumber));
-			DnaSensorReadHigh = GetConfigValue<int>(nameof(DnaSensorReadHigh));
-			DnaSensorReadLow = GetConfigValue<int>(nameof(DnaSensorReadLow));
-			NadhSensorLocation = GetCoordinateConfigValue(nameof(NadhSensorLocation));
-			NadhSensorBoardNumber = GetConfigValue<int>(nameof(NadhSensorBoardNumber));
-			NadhSensorPortNumber = GetConfigValue<int>(nameof(NadhSensorPortNumber));
-			NadhSensorNumber = GetConfigValue<int>(nameof(NadhSensorNumber));
-			NadhSensorReadHigh = GetConfigValue<int>(nameof(NadhSensorReadHigh));
-			NadhSensorReadLow = GetConfigValue<int>(nameof(NadhSensorReadLow));
-			WasteLocation = GetCoordinateConfigValue(nameof(WasteLocation));
-			VerticalWellCount = GetConfigValue<int>(nameof(VerticalWellCount));
-			HorizontalWellCount = GetConfigValue<int>(nameof(HorizontalWellCount));
-			WellOffset = GetCoordinateConfigValue(nameof(WellOffset));
-			TraySterilizationTime = GetConfigValue<int>(nameof(TraySterilizationTime));
-			InitialDnaFluidPrimingVolume = GetConfigValue<int>(nameof(InitialDnaFluidPrimingVolume));
-			InitialNadhFluidPrimingVolume = GetConfigValue<int>(nameof(InitialNadhFluidPrimingVolume));
-			InitialKohFluidPrimingVolume = GetConfigValue<int>(nameof(InitialKohFluidPrimingVolume));
-			InitialBasalFluidPrimingVolume = GetConfigValue<int>(nameof(InitialBasalFluidPrimingVolume));
-			SecondaryDnaFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryDnaFluidPrimingVolume));
-			SecondaryNadhFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryNadhFluidPrimingVolume));
-			SecondaryKohFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryKohFluidPrimingVolume));
-			SecondaryBasalFluidPrimingVolume = GetConfigValue<int>(nameof(SecondaryBasalFluidPrimingVolume));
-			StandardsProcessingDwell = GetConfigValue<int>(nameof(StandardsProcessingDwell));
-			DnaVolume = GetConfigValue<int>(nameof(DnaVolume));
-			NadhVolume = GetConfigValue<int>(nameof(NadhVolume));
-			KohVolume = GetConfigValue<int>(nameof(KohVolume));
-			SensorReadDwell = GetConfigValue<int>(nameof(SensorReadDwell));
-			TestMediaAspirationVolume = GetConfigValue<int>(nameof(TestMediaAspirationVolume));
-			NadhReadingsTimerPeriod = GetConfigValue<int>(nameof(NadhReadingsTimerPeriod));
-			KohTimerPeriod = GetConfigValue<int>(nameof(KohTimerPeriod));
-			DnaTimerPeriod = GetConfigValue<int>(nameof(DnaTimerPeriod));
-			BasalIncubationTimerPeriod = GetConfigValue<int>(nameof(BasalIncubationTimerPeriod));
-			NadhReading1TimerPeriod = GetConfigValue<int>(nameof(NadhReading1TimerPeriod));
-			TimerDescriptionUpdateInterval = GetConfigValue<int>(nameof(TimerDescriptionUpdateInterval));
-			KohAspirationVolume = GetConfigValue<int>(nameof(KohAspirationVolume));
-			DnaAspirationVolume = GetConfigValue<int>(nameof(DnaAspirationVolume));
-			BypassDeviceCommands = GetConfigValue<int>(nameof(BypassDeviceCommands));
-			AspiratePositioningSpeed = GetConfigValue<float>(nameof(AspiratePositioningSpeed));
-			WellWidth = GetConfigValue<float>(nameof(WellWidth));
-			WellDepth = GetConfigValue<float>(nameof(WellDepth));
-			NadhIncubationDwell = GetConfigValue<int>(nameof(NadhIncubationDwell));
-            ComPortNumber = GetConfigValue<int>(nameof(ComPortNumber));
-            BasalVolume = GetConfigValue<int>(nameof(BasalVolume));
-			StandardsWellCount = GetConfigValue<int>(nameof(StandardsWellCount));
-			TrayLoadingLocation = GetCoordinateConfigValue(nameof(TrayLoadingLocation));
-			TraySterilizationLocation = GetCoordinateConfigValue(nameof(TraySterilizationLocation));
-			FirstWellLocation = GetCoordinateConfigValue(nameof(FirstWellLocation));
-			AspirateTravelPerMicroLiter = GetConfigValue<float>(nameof(AspirateTravelPerMicroLiter));
-			NadhTravelPerMicroLiter = GetConfigValue<float>(nameof(NadhTravelPerMicroLiter));
-			DnaTravelPerMicroLiter = GetConfigValue<float>(nameof(DnaTravelPerMicroLiter));
-			KohTravelPerMicroLiter = GetConfigValue<float>(nameof(KohTravelPerMicroLiter));
-			BasalTravelPerMicroLiter = GetConfigValue<float>(nameof(BasalTravelPerMicroLiter));
-			AspirateStirSpeed = GetConfigValue<float>(nameof(AspirateStirSpeed));
-			TableAxisSpeed = GetConfigValue<int>(nameof(TableAxisSpeed));
-			PauseCommandsForPrompt = GetConfigValue<bool>(nameof(PauseCommandsForPrompt));
-            AspirationDwell = GetConfigValue<int>(nameof(AspirationDwell));
-			AspirationSuctionTogglePortNumber = GetConfigValue<int>(nameof(AspirationSuctionTogglePortNumber));
-			AspirationSuctionToggleBoardNumber = GetConfigValue<int>(nameof(AspirationSuctionToggleBoardNumber));
-			FluidEmissionDwell = GetConfigValue<int>(nameof(FluidEmissionDwell));
-			DnaSyringeLoadingPosition = GetConfigValue<float>(nameof(DnaSyringeLoadingPosition));
-			NadhSyringeLoadingPosition = GetConfigValue<float>(nameof(NadhSyringeLoadingPosition));
-			KohSyringeLoadingPosition = GetConfigValue<float>(nameof(KohSyringeLoadingPosition));
-			BasalSyringeLoadingPosition = GetConfigValue<float>(nameof(BasalSyringeLoadingPosition));
-		}
 
-		public float NadhTravelPerMicroLiter { get; set; }
-		public float DnaTravelPerMicroLiter { get; set; }
-		public float KohTravelPerMicroLiter { get; set; }
-		public float BasalTravelPerMicroLiter { get; set; }
-		public int BypassDeviceCommands { get; set; }
-		public bool PauseCommandsForPrompt { get; set; }
-		public float DnaSyringeLoadingPosition { get; set; }
-		public float NadhSyringeLoadingPosition { get; set; }
-		public float KohSyringeLoadingPosition { get; set; }
-		public float BasalSyringeLoadingPosition { get; set; }
-		public float AspirateKohActuatorStartPosition { get; set; }
-		public float WellWidth { get; set; } // mm of width of sample well
-		public float WellDepth { get; set; } // mm of width of sample well
-		public float TrayTemperature { get; set; } // in Celcius, target temperature to heat the tray to
-		public float FluidSyringeSpeed { get; set; } // speed at which a fluid syringe should emitt its contents
-		public float AspirateKohDistanceToPlate { get; set; } // total mm aspirate KOH will descend/ascend to top of well
-		public float AspiratePositioningSpeed { get; set; } // speed at which aspirate needles will move into position to begin stir
-		public float AspirateStirSpeed { get; set; } // speed at which aspirate will move during stirring
-		public Coordinate AspirateKohLocation { get; set; }
-		public Coordinate DnaLocation { get; set; }
-		public Coordinate KohLocation { get; set; }
-		public Coordinate NadhLocation { get; set; }
-		public Coordinate BasalLocation { get; set; }
-		public Coordinate BiopsyLocation { get; set; }
-		public Coordinate PlateOffset { get; set; } // distance from well 0 of a tray to well 0 of the next tray
-		public Coordinate DnaSensorLocation { get; set; }
-		public int DnaSensorBoardNumber { get; set; }
-		public int DnaSensorPortNumber { get; set; }
-		public int DnaSensorNumber { get; set; }
-		public int DnaSensorReadHigh { get; set; }
-		public int DnaSensorReadLow { get; set; }
-		public Coordinate NadhSensorLocation { get; set; }
-		public int NadhSensorBoardNumber { get; set; }
-		public int NadhSensorPortNumber { get; set; }
-		public int NadhSensorNumber { get; set; }
-		public int NadhSensorReadHigh { get; set; }
-		public int NadhSensorReadLow { get; set; }
-		public int AspirationSuctionToggleBoardNumber { get; set; }
-		public int AspirationSuctionTogglePortNumber { get; set; }
-		public Coordinate WasteLocation { get; set; }
-		public int VerticalWellCount { get; set; }
-		public int HorizontalWellCount { get; set; }
-		public Coordinate WellOffset { get; set; } // distance between cells
-		public int TraySterilizationTime { get; set; } // ammount of seconds tray will be UV sterilized
-		public int InitialDnaFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
-		public int InitialNadhFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
-		public int InitialKohFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
-		public int InitialBasalFluidPrimingVolume { get; set; } // microliters dispensed during fluid pump priming
-		public int SecondaryDnaFluidPrimingVolume { get; set; }
-		public int SecondaryNadhFluidPrimingVolume { get; set; }
-		public int SecondaryKohFluidPrimingVolume { get; set; }
-		public int SecondaryBasalFluidPrimingVolume { get; set; }
-		public int KohVolume { get; set; } // microliters dispensed by KOH pump
-		public int DnaVolume { get; set; } // microliters dispensed by DNA pump
-		public int NadhVolume { get; set; } // microliters dispensed by NADH pump
-        public int BasalVolume { get; set; } // microliters dispensed by Basal pump
-        public int OpticalSensorDwell { get; set; } // total milliseconds to activate laser and read sensor
-		public int SensorReadDwell { get; set; } // total milliseconds to wait for a sensor reading to be reported
-		public int TestMediaAspirationVolume { get; set; } // microliters withdraw from baseline
-		public float StirringDistance { get; set; } // total mm to move needle when stirring
-		public int BasalIncubationTimerPeriod { get; set; } // milliseconds of the basal media incubation
-		public int NadhReading1TimerPeriod { get; set; } // milliseconds to wait for nadh to mix with basal
-		public int NadhReadingsTimerPeriod { get; set; } // milliseconds between NADH readings
-		public int KohTimerPeriod { get; set; } // milliseconds the KOH timer will wait - 4hs
-		public int DnaTimerPeriod { get; set; } // milliseconds the DNA timer will wait
-		public int KohAspirationVolume { get; set; } // microliters to withdraw for before KOH injection
-		public int DnaAspirationVolume { get; set; } // microliters to withdraw for before DNA reagent injection
-		public int CleanUpAspirationVolume { get; set; } // microliters withdrawn for clean up
-		public int StandardsProcessingDwell { get; set; } // milliseconds standards processing will wait
-		public int TimerDescriptionUpdateInterval { get; set; } // milliseconds between updateing the UI with time-remaining descriptons
-		public int ComPortNumber { get; set; }
-		public int StandardsWellCount { get; set; }
-        public int AspirationDwell { get; set; }
-        public Coordinate FirstWellLocation { get; set; }
-        public Coordinate TrayLoadingLocation { get; set; }
-		public Coordinate TraySterilizationLocation { get; set; }
-		public float AspirateTravelPerMicroLiter { get; set; }
-		public int TableAxisSpeed { get; set; }
-		public int NadhIncubationDwell { get; set; }
-		public int FluidEmissionDwell { get; set; }
-
-
+		public Settings Settings { get; set; }
 		public DeviceSpecification? DeviceSpecification { get; private set; }
 	}
 }

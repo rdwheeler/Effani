@@ -34,7 +34,8 @@ namespace Effani.Device.UI
 					services.AddSingleton<IAssayManagerService, AssayManagerService>();
 					var connectionString = $"data source={Path.Combine(SettingsService.DataFolder, "AssayData.effani")}";
 					services.AddDbContext<EfContext>(options =>
-						options.UseSqlite("connectionString"));
+						options.UseSqlite("connectionString",
+						x => x.MigrationsAssembly("Effani.Device.Services")));
 					services.AddSingleton<MainWindow>();
 					services.AddSingleton<UtilitiesView>();
 				})

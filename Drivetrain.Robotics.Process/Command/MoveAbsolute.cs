@@ -2,7 +2,7 @@
 
 namespace Drivetrain.Robotics.Process
 {
-	public class MoveAbsolute(float position, DeviceControl device, AxisSpec axisSpec = null) : Command(device)
+	public class MoveAbsolute(decimal position, DeviceControl device, AxisSpec axisSpec = null) : Command(device)
 	{
 		protected override void Run()
 		{
@@ -15,6 +15,6 @@ namespace Drivetrain.Robotics.Process
 		public override string Description => $"Move {AxisSpec.Label} to {Position}";
 
 		public AxisSpec AxisSpec { get; protected set; } = axisSpec;
-		public float Position { get; } = position;
+		public decimal Position { get; } = position;
 	}
 }

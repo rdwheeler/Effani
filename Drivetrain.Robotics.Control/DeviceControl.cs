@@ -10,9 +10,9 @@ namespace Drivetrain.Robotics.Control
 	public class DeviceControl : IDisposable
 	{
 		#region Constructors
-		public DeviceControl()
+		public DeviceControl(Settings settings)
 		{
-			Configuration = new DeviceConfiguration();
+			Configuration = new DeviceConfiguration(settings);
 			_serialPort = new SerialPort();
 			_serialPort.BaudRate = 9600; // SetPortBaudRate(_serialPort.BaudRate);
 			_serialPort.Parity = Parity.None; // SetPortParity(_serialPort.Parity);
@@ -34,7 +34,7 @@ namespace Drivetrain.Robotics.Control
 					}
 				}
 				if (String.IsNullOrEmpty(_serialPort.PortName))
-					_serialPort.PortName = $"COM{Configuration.ComPortNumber}";
+					_serialPort.PortName = $"COM{settings.ComPortNumber}";
 			}
 
 			_publishThread = new Thread(InitializeReadData);
@@ -76,20 +76,20 @@ namespace Drivetrain.Robotics.Control
 		{
 			WriteWhenReady($"G28");
 		}
-		public void Move(List<MoveSpec> moveSpecs, float speed)
+		public void Move(List<MoveSpec> moveSpecs, decimal speed)
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
 			WriteWhenReady("G90");
 			WriteWhenReady($"G0 {moveCode} F{speed}");
 		}
-		public void MoveAbsolute(List<MoveSpec> moveSpecs, float speed)
+		public void MoveAbsolute(List<MoveSpec> moveSpecs, decimal speed)
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
 			WriteWhenReady("G90");
 			var formula = $"G0 {moveCode} F{speed}";
 			WriteWhenReady(formula);
 		}
-		public void MoveAbsolute(AxisSpec axisSpec, float location, float? speed = null)
+		public void MoveAbsolute(AxisSpec axisSpec, decimal location, decimal? speed = null)
 		{
 			if (location < axisSpec.Minimum || location > axisSpec.Maximum)
 				return;
@@ -105,21 +105,21 @@ namespace Drivetrain.Robotics.Control
 			WriteWhenReady("G90");
 			WriteWhenReady($"G0 {axisSpec.Designation}{axisSpec.StartingPosition} F{speed}");
 		}
-		public void MoveRelativeClockwiseArc(List<MoveSpec> moveSpecs, float speed)
+		public void MoveRelativeClockwiseArc(List<MoveSpec> moveSpecs, decimal speed)
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
 			WriteWhenReady("G91");
 			var formula = $"G2 {moveCode} R4.5 F{speed}";
 			WriteWhenReady(formula);
 		}
-		public void MoveRelativeCounterClockwiseArc(List<MoveSpec> moveSpecs, float speed)
+		public void MoveRelativeCounterClockwiseArc(List<MoveSpec> moveSpecs, decimal speed)
 		{
 			var moveCode = String.Join(' ', moveSpecs.Select(s => s.ToGode()));
 			WriteWhenReady("G91");
 			var formula = $"G3 {moveCode} R4.5 F{speed}";
 			WriteWhenReady(formula);
 		}
-		public void MovePercent(AxisSpec axisSpec, float percent, float? speed = null)
+		public void MovePercent(AxisSpec axisSpec, decimal percent, decimal? speed = null)
 		{
 			if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
@@ -132,7 +132,7 @@ namespace Drivetrain.Robotics.Control
 			WriteWhenReady("G90");
 			WriteWhenReady($"G0 {axisSpec.Designation}{location} F{speed}");
 		}
-		public void MoveRelative(AxisSpec axisSpec, float distance, float? speed = null)
+		public void MoveRelative(AxisSpec axisSpec, decimal distance, decimal? speed = null)
 		{
 			if (!speed.HasValue)
 				speed = axisSpec.MaxSpeed;
@@ -155,7 +155,7 @@ namespace Drivetrain.Robotics.Control
 			var last = first.Split(",")[0];
 			return last;
 		}
-		public void SetTrayTemperature(float temperature)
+		public void SetTrayTemperature(decimal temperature)
 		{
 			WriteWhenReady($"M140 S{temperature}");
 		}
@@ -278,6 +278,8 @@ namespace Drivetrain.Robotics.Control
 
 		#region Properties
 		public DeviceConfiguration? Configuration { get; private set; }
+
+		public Settings? Settings => Configuration.Settings;
 		public ConcurrentQueue<string> ReadData { get; set; } = new();
 		#endregion
 

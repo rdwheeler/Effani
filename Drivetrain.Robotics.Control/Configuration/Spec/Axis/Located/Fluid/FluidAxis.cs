@@ -5,12 +5,12 @@ namespace Drivetrain.Robotics.Control
 {
 	public class FluidAxis : LocatedAxis
 	{
-		public FluidAxis(Axis axis, int board, int port, Coordinate location, float? startingPosition = null)
+		public FluidAxis(Axis axis, int board, int port, Coordinate location, decimal? startingPosition = null)
 			: base(axis, board, port, location, startingPosition)
         {
             Maximum = 117;
             MaxSpeed = 4000;
-            StepsPerMillimeter = 1260f;
+            StepsPerMillimeter = 1260m;
 			Driver = new DriverSpec(Label)
 			{
 				Current = 1500,

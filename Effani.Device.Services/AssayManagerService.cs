@@ -40,32 +40,17 @@ namespace Effani.Device.Services
 			AssayData.Add(assayData);
 			_efContext.AssayData.Add(assayData);
 			await _efContext.SaveChangesAsync();
-			if (_settingsService.SaveAssayFiles)
+			if (_settingsService.Settings.SaveAssayFiles)
 				WriteAssayFile(assay);
 
 			return assayData.AssayName;
 		}
 		public async Task UploadAssays()
 		{
-			await SyncAll();
-		}
-		#endregion
-
-		#region Private methods
-		private string GetAssayName(Assay assay)
-		{
-			return $"Assay Results {assay.AssayDescription} {GetShortNow(assay.CreatedOn)}";
-		}
-		private string GetShortNow(DateTime time)
-		{
-			return $"{time.ToString("yyyy-dd-M--HH-mm-ss")}";
-		}
-		private async Task SyncAll()
-		{
 			Activity.Clear();
 
-			if (String.IsNullOrWhiteSpace(_settingsService.EffaniUsername) ||
-				String.IsNullOrWhiteSpace(_settingsService.EffaniPassword))
+			if (String.IsNullOrWhiteSpace(_settingsService.Settings.EffaniUsername) ||
+				String.IsNullOrWhiteSpace(_settingsService.Settings.EffaniPassword))
 			{
 				Activity.Add($"Missing Effani username or password.");
 				return;
@@ -78,13 +63,13 @@ namespace Effani.Device.Services
 				Activity.Add($"Upoading {a.AssayName} ({a.AssayId})");
 				try
 				{
-					var result = await _settingsService.AssayUploadUrl
+					var result = await _settingsService.Settings.EffaniApiUrl
 						.AppendPathSegment("Document")
 						.AppendPathSegment("Upload")
-						.AppendQueryParam("documentTypeName", "EffaniAssayEditModel")
-						.WithBasicAuth(_settingsService.EffaniUsername, _settingsService.EffaniPassword)
+						.AppendQueryParam("documentTypeName", "EffaniAssayModel")
+						.WithBasicAuth(_settingsService.Settings.EffaniUsername, _settingsService.Settings.EffaniPassword)
 						.PostJsonAsync(a.AssayJson, cancellationToken: CancellationToken.None);
-					if(result.StatusCode == 200)
+					if (result.StatusCode == 200)
 					{
 						a.UploadedOn = DateTime.Now;
 						await _efContext.SaveChangesAsync();
@@ -96,6 +81,17 @@ namespace Effani.Device.Services
 					continue;
 				}
 			}
+		}
+		#endregion
+
+		#region Private methods
+		private string GetAssayName(Assay assay)
+		{
+			return $"Assay Results {assay.AssayDescription} {GetShortNow(assay.CreatedOn)}";
+		}
+		private string GetShortNow(DateTime time)
+		{
+			return $"{time.ToString("yyyy-dd-M--HH-mm-ss")}";
 		}
 		private string WriteAssayFile(Assay assay)
 		{

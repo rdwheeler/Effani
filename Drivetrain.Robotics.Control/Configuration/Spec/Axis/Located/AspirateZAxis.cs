@@ -5,12 +5,12 @@ namespace Drivetrain.Robotics.Control
 {
     public class AspirateZAxis : LocatedAxis
     {
-        public AspirateZAxis(Axis axis, int board, int port, Coordinate location, float? startingPosition = null)
+        public AspirateZAxis(Axis axis, int board, int port, Coordinate location, decimal? startingPosition = null)
             : base(axis, board, port, location, startingPosition)
         {
             Maximum = 500;
             MaxSpeed = 4000;
-            StepsPerMillimeter = 1259.84f;
+            StepsPerMillimeter = 1259.84m;
             Driver = new DriverSpec(Label)
             {
                 Current = 500,

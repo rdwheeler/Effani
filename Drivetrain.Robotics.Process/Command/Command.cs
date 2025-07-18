@@ -11,14 +11,7 @@ namespace Drivetrain.Robotics.Process
 	{
 		public void Execute()
 		{
-			if(Device.Configuration.BypassDeviceCommands > 0)
-			{
-				Task.Delay(Device.Configuration.BypassDeviceCommands).Wait();
-			}
-			else
-			{
-				Run();
-			}
+			Run();
 		}
 
 		protected abstract void Run();

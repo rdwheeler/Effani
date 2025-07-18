@@ -6,7 +6,7 @@ namespace Drivetrain.Robotics.Control
 {
 	public class AxisSpec : Spec
 	{
-		public AxisSpec(Axis axis, int board, int port, float? startingPosition = null)
+		public AxisSpec(Axis axis, int board, int port, decimal? startingPosition = null)
 			: base(axis.GetAttribute<DisplayAttribute>().Name)
 		{
 			Axis = axis;
@@ -18,8 +18,8 @@ namespace Drivetrain.Robotics.Control
 		public string? DriverPort { get; set; }
 		public int Minimum { get; set; }
 		public int Maximum { get; set; }
-		public float StartingPosition { get; set; }
-		public float StepsPerMillimeter { get; set; }
+		public decimal StartingPosition { get; set; }
+		public decimal StepsPerMillimeter { get; set; }
 
 		public int MaxSpeed { get; set; } = 500;
 
