@@ -110,6 +110,8 @@
 					<Image Source="{dx:DXImage 'SvgImages/Save/SaveDialog.svg'}" />
 				</dx:SimpleButton.Content>
 			</dx:SimpleButton>
+				<dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Upload.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Upload these settings to the cloud" Command="{Binding UploadSettingsCommand}"/>
+				<dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Download.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Download these settings from the cloud" Command="{Binding DownloadSettingsCommand}"/>
 			</StackPanel>
 		</StackPanel>
 		<dxlc:LayoutControl Orientation="Vertical">
@@ -378,10 +380,10 @@
 						<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0.01" MaxValue="100" EditValue="{Binding WellDepth}" />
 					</dxlc:LayoutItem>
 					<dxlc:LayoutItem Label="Vertical Well Count" ToolTip="Count of sample wells in a tray in the vertical direction">
-						<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="1" MaxValue="100" EditValue="{Binding VerticalWellCount}" />
+						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="1" MaxValue="100" EditValue="{Binding VerticalWellCount}" />
 					</dxlc:LayoutItem>
 					<dxlc:LayoutItem Label="Horizontal Well Count" ToolTip="Count of sample wells in a tray in the horizontal direction">
-						<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="1" MaxValue="100" EditValue="{Binding HorizontalWellCount}" />
+						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="1" MaxValue="100" EditValue="{Binding HorizontalWellCount}" />
 					</dxlc:LayoutItem>
 					<dxlc:LayoutItem LabelPosition="Top" Label="Tray Offset (mm)" ToolTip="Distance from well 0 of a tray to well 0 of the next tray">
 						<dxlc:LayoutGroup Orientation="Horizontal">

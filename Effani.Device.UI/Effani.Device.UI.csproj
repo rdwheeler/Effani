@@ -14,8 +14,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Download.svg" />
 	  <None Remove="Resources\effanicow.webp" />
 	  <None Remove="Resources\effani_background.jpg" />
+	  <None Remove="Resources\Upload.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -59,10 +61,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Resources\Download.svg" />
 	  <Resource Include="Resources\effanicow.webp" />
 	  <Resource Include="Resources\effani_background.jpg">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
+	  <Resource Include="Resources\Upload.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
