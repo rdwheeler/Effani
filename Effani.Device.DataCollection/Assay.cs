@@ -17,7 +17,7 @@ namespace Effani.Device.DataCollection
 		{
 			Device = device;
 			Engine = engine;
-			CreatedOn = DateTime.Now;
+			CollectedOn = DateTime.Now;
 			StandardsWellCount = Settings.StandardsWellCount;
 			StandardsTimer = new System.Timers.Timer(Settings.StandardsProcessingDwell) { AutoReset = false };
 			StandardsTimer.Elapsed += StandardsTimer_Elapsed;
@@ -268,7 +268,7 @@ namespace Effani.Device.DataCollection
 			{
 				Engine.QueueJob(new Job($"Reading NADH {e.Data} from {testWell.Well.Label}.", [
 					new AlignWellToLocation(Settings.NadhSensorLocation, testWell.Well, Device),
-					new ReadNadh(Device, (command) => { testWell.TimeValues.Add(e.Data, ParseCommandResult(command)); }),
+					new ReadNadh(Device, (command) => { testWell.TimeValues.Add($"Interval {e.Data}", ParseCommandResult(command)); }),
 				]));
 				if (nextTimer != null)
 					Engine.QueueCommand(new StartTimer(nextTimer, $"{testWell.Label} NADH Readings {e.Data + 1} ({GetTimeString(Settings.NadhReadingsTimerPeriod)})", Device));
@@ -398,7 +398,7 @@ namespace Effani.Device.DataCollection
 		public string AssayDescription { get; set; }
 		[JsonIgnore]
 		public Settings Settings => Device.Configuration.Settings;
-		public DateTime CreatedOn { get; set; }
+		public DateTime CollectedOn { get; set; }
 		[JsonIgnore]
 		public AbalDeviceControl Device { get; private set; }
 		[JsonIgnore]

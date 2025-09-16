@@ -35,7 +35,7 @@ namespace Effani.Device.Services
 				AssayJson = JsonSerializer.Serialize(assay),
 				AssayName = GetAssayName(assay),
 				AssayId = assay.Id,
-				CreatedOn = assay.CreatedOn
+				CreatedOn = assay.CollectedOn
 			};
 			AssayData.Add(assayData);
 			_efContext.AssayData.Add(assayData);
@@ -60,13 +60,14 @@ namespace Effani.Device.Services
 
 			foreach (var a in toUpload)
 			{
-				Activity.Add($"Upoading {a.AssayName} ({a.AssayId})");
+				Activity.Add($"Uploading {a.AssayName} ({a.AssayId})");
 				try
 				{
 					var result = await _settingsService.Settings.EffaniApiUrl
 						.AppendPathSegment("Document")
 						.AppendPathSegment("Upload")
 						.AppendQueryParam("documentTypeName", "EffaniAssayModel")
+						.AppendQueryParam("ownerId", _settingsService.Settings.EffaniUsername)
 						.WithBasicAuth(_settingsService.Settings.EffaniUsername, _settingsService.Settings.EffaniPassword)
 						.PostJsonAsync(a.AssayJson, cancellationToken: CancellationToken.None);
 					if (result.StatusCode == 200)
@@ -87,7 +88,7 @@ namespace Effani.Device.Services
 		#region Private methods
 		private string GetAssayName(Assay assay)
 		{
-			return $"Assay Results {assay.AssayDescription} {GetShortNow(assay.CreatedOn)}";
+			return $"Assay Results {assay.AssayDescription} {GetShortNow(assay.CollectedOn)}";
 		}
 		private string GetShortNow(DateTime time)
 		{
@@ -105,7 +106,7 @@ namespace Effani.Device.Services
 			results.AppendLine($"0 µg DNA:{assay.DNA_0mcg}");
 			foreach (var well in assay.TestWells.Skip(assay.StandardsWellCount).Where(w => !w.Canceled))
 				results.AppendLine(
-					$"{well.SampleId},{well.Label},DNA:{well.DnaValue},{String.Join(',', well.TimeValues.Select(t => $"T{t.Key}:{t.Value}"))}");
+					$"{well.AnimalId},{well.Label},DNA:{well.DnaValue},{String.Join(',', well.TimeValues.Select(t => $"{t.Key}:{t.Value}"))}");
 			var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Effani");
 			if (!Directory.Exists(folder))
 				Directory.CreateDirectory(folder);

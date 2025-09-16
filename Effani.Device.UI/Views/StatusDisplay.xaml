@@ -27,7 +27,7 @@
 					<ItemsControl ItemsSource="{Binding DataContext.SamplesInBasal, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
+								<TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
@@ -37,7 +37,7 @@
 					<ItemsControl ItemsSource="{Binding DataContext.SamplesInNadh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
+								<TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
@@ -47,7 +47,7 @@
 					<ItemsControl ItemsSource="{Binding DataContext.SamplesInKoh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
+								<TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
@@ -57,7 +57,7 @@
 					<ItemsControl ItemsSource="{Binding DataContext.SamplesInDna, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock FontSize="15" Text="{DXBinding 'SampleId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
+								<TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
@@ -67,7 +67,7 @@
 					<ItemsControl ItemsSource="{Binding DataContext.SamplesComplete, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock Padding="0" Margin="0" FontSize="15" Text="{DXBinding 'SampleId + ` ` + Label'}" TextWrapping="Wrap"></TextBlock>
+								<TextBlock Padding="0" Margin="0" FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label'}" TextWrapping="Wrap"></TextBlock>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>

@@ -526,10 +526,31 @@ namespace Drivetrain.Robotics.Control
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaVolume)));
 			}
 		}
+		bool _debug;
+		public bool Debug
+		{
+			get
+			{
+#if DEBUG
+				return true;
+#endif
+				return _debug;
+			}
+			set
+			{
+				if (_debug == value)
+					return;
+				_debug = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Debug)));
+			}
+		}
 		public string EffaniApiUrl
 		{
 			get
 			{
+				if (Debug)
+					return "https://localhost:44384/umbraco/api";
+
 				return _effaniApiUrl;
 			}
 			set
@@ -1454,7 +1475,7 @@ namespace Drivetrain.Robotics.Control
 		int _dnaTimerPeriod = 180000;
 		decimal _dnaTravelPerMicroLiter = 0.00153m;
 		int _dnaVolume = 200;
-		string _effaniApiUrl = "https://www.effani.com";
+		string _effaniApiUrl = "https://www.effani.com/umbraco/api";
 		string _effaniPassword;
 		string _effaniUsername;
 		Coordinate _firstWellLocation = new(0, 0);

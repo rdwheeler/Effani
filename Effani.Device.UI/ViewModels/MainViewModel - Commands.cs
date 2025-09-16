@@ -104,7 +104,7 @@ namespace Effani.Device.UI
 			if (CurrentLoadingSample is not null)
 			{
 				AddMessage(
-					$"Skipping samples after number {CurrentLoadingSample.TestIndex}, {CurrentLoadingSample.SampleId}, {CurrentLoadingSample.Label}", true);
+					$"Skipping samples after number {CurrentLoadingSample.TestIndex}, {CurrentLoadingSample.AnimalId}, {CurrentLoadingSample.Label}", true);
 				var currentIndex = Assay.AllTestWells.IndexOf(CurrentLoadingSample);
 				foreach (var test in Assay.AllTestWells.Skip(currentIndex))
 					test.Canceled = true;

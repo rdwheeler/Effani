@@ -39,7 +39,7 @@ namespace Effani.Device.DataCollection
 		public string CurrentTimerDescription => TestWell.CurrentTimerDescription;
 		public decimal DnaValue { get; set; }
 		public string Label => TestWell.Label;
-		public string SampleId => TestWell.SampleId;
+		public string AnimalId => TestWell.AnimalId;
 		public TestWell TestWell { get; set; }
 		#endregion
 	}

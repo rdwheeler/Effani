@@ -149,7 +149,16 @@ namespace Drivetrain.Robotics.Control
 			if(pause > 0)
 				Pause(pause);
 			var response = WriteWhenReady($"M308 S{sensorDesignation}", STR_sensorKey);
-			if(response.StartsWith("Error"))
+
+			if(Settings.Debug)
+			{
+				if (sensorDesignation == Settings.DnaSensorNumber)
+					return new Random().Next(Settings.DnaSensorReadLow, Settings.DnaSensorReadHigh).ToString();
+				if (sensorDesignation == Settings.NadhSensorNumber)
+					return new Random().Next(Settings.NadhSensorNumber, Settings.NadhSensorNumber).ToString();
+			}
+
+			if (response.StartsWith("Error"))
 				return response;
 			var first = response.Split("reading ")[1];
 			var last = first.Split(",")[0];

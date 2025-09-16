@@ -303,22 +303,22 @@ namespace Effani.Device.DataCollection
 		}
 		bool _canceled = false;
 		#endregion
-		#region SampleId
-		public string SampleId
+		#region AnimalId
+		public string AnimalId
 		{
 			get
 			{
-				return _sampleId;
+				return _animalId;
 			}
 			set
 			{
-				if (_sampleId == value)
+				if (_animalId == value)
 					return;
-				_sampleId = value;
-				RaisePropertyChanged(nameof(SampleId));
+				_animalId = value;
+				RaisePropertyChanged(nameof(AnimalId));
 			}
         }
-		string _sampleId;
+		string _animalId;
 		#endregion
 		public float DnaValue { get; set; }
 		public string Label => Well.Label;
@@ -342,7 +342,8 @@ namespace Effani.Device.DataCollection
 		public Well Well { get; private set; }
 		[JsonIgnore]
 		public int TestIndex { get; }
-		public Dictionary<int, float> TimeValues = new();
+		[JsonInclude]
+		public Dictionary<string, float> TimeValues = new();
 		#endregion
 
 		public event PropertyChangedEventHandler PropertyChanged;

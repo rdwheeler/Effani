@@ -68,13 +68,14 @@ namespace Effani.Device.Services
 
 			foreach (var a in toUpload)
 			{
-				Activity.Add($"Upoading settings from {a.CreatedOn}.");
+				Activity.Add($"Uploading settings from {a.CreatedOn}.");
 				try
 				{
 					var result = await Settings.EffaniApiUrl
 						.AppendPathSegment("Document")
 						.AppendPathSegment("Upload")
-						.AppendQueryParam("documentTypeName", "EffaniSettings")
+						.AppendQueryParam("documentTypeName", "EffaniSettingsVersion")
+						.AppendQueryParam("ownerId", Settings.EffaniUsername)
 						.WithBasicAuth(Settings.EffaniUsername, Settings.EffaniPassword)
 						.PostJsonAsync(JsonSerializer.Serialize(ActiveSettingsVersion), cancellationToken: CancellationToken.None);
 				}
@@ -102,6 +103,7 @@ namespace Effani.Device.Services
 		}
 		private void DeviceSettings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
+			_efContext.Entry(ActiveSettingsVersion).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 			_efContext.SaveChanges();
 		}
 		#endregion

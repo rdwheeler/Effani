@@ -158,7 +158,7 @@
 									<TextBlock Margin="0,5,0,0" Text="{Binding CurrentLoadingSample.Label}"/>
 									<TextBlock Margin="0,5,0,0" Text=" to continue."/>
 								</StackPanel>
-								<dxe:TextEdit NullText="Sample identifier" Text="{Binding CurrentLoadingSample.SampleId}" IsEnabled="{DXBinding 'CurrentLoadingSample.Canceled == false'}"/>
+									<dxe:TextEdit NullText="Sample identifier" Text="{Binding CurrentLoadingSample.AnimalId}" IsEnabled="{DXBinding 'CurrentLoadingSample.Canceled == false'}"/>
 								<StackPanel Margin="0,20,0,0">
 									<Grid>
 										<Grid.ColumnDefinitions>
@@ -216,27 +216,14 @@
 						<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 							<TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Concluded"/>
 							<TextBlock TextWrapping="WrapWithOverflow" Text="{DXBinding '`Assay results recorded as: ` + AssayFullName'}" Visibility="{DXBinding 'AssayFullName == null ? Visibility.Collapsed : Visibility.Visible'}"/>
-							<TextBlock TextWrapping="WrapWithOverflow" Text="Provide your Effani account credentials if you would like to upload results." Margin="0,20,0,0"/>
-							<TextBlock TextWrapping="WrapWithOverflow" Text="You may upload results later using the Upload (cloud-shaped) button in the upper right." />
-							<dxe:TextEdit NullText="Effani User Name" Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-							<dxe:PasswordBoxEdit Margin="0,5,0,0" NullText="Effani Password" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ShowCapsLockWarningToolTip="True" ShowPasswordButtonVisibility="Auto" />
-							<dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding UploadAssaysCommand}" IsEnabled="{DXBinding 'UsernameAndPasswordComplete'}">
+							<dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding ShowUploadCommand}">
 								<dx:SimpleButton.Content>
 									<StackPanel>
-										<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Upload</TextBlock>
-										<TextBlock TextAlignment="Center" MaxWidth="500" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Press here after typing your username and password."/>
+										<TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Open Upload Screen</TextBlock>
+										<TextBlock TextAlignment="Center" MaxWidth="500" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Text="If you would like to upload these assay results to Effani now, press here to open the Assay Upload screen."/>
 									</StackPanel>
 								</dx:SimpleButton.Content>
 							</dx:SimpleButton>
-							<ScrollViewer Margin="0,10,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-								<ItemsControl ItemsSource="{Binding AssayManagerActivity}" BorderThickness="3" IsTabStop="False">
-									<ItemsControl.ItemTemplate>
-										<DataTemplate>
-											<TextBlock Padding="0" Margin="0" Text="{Binding}" ToolTip="{Binding}" FontSize="15" TextWrapping="NoWrap" MaxHeight="20" MaxWidth="1000"></TextBlock>
-										</DataTemplate>
-									</ItemsControl.ItemTemplate>
-								</ItemsControl>
-							</ScrollViewer>
 						</StackPanel>
 					</Border>
 				</dxco:WizardPage>
