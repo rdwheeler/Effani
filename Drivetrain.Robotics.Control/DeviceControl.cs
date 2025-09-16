@@ -155,7 +155,7 @@ namespace Drivetrain.Robotics.Control
 				if (sensorDesignation == Settings.DnaSensorNumber)
 					return new Random().Next(Settings.DnaSensorReadLow, Settings.DnaSensorReadHigh).ToString();
 				if (sensorDesignation == Settings.NadhSensorNumber)
-					return new Random().Next(Settings.NadhSensorNumber, Settings.NadhSensorNumber).ToString();
+					return new Random().Next(Settings.NadhSensorReadLow, Settings.NadhSensorReadHigh).ToString();
 			}
 
 			if (response.StartsWith("Error"))
