@@ -64,10 +64,8 @@ namespace Effani.Device.Services
 				try
 				{
 					var result = await _settingsService.Settings.EffaniApiUrl
-						.AppendPathSegment("Document")
-						.AppendPathSegment("Upload")
-						.AppendQueryParam("documentTypeName", "EffaniAssayModel")
-						.AppendQueryParam("ownerId", _settingsService.Settings.EffaniUsername)
+						.AppendPathSegment("EffaniDocument")
+						.AppendPathSegment("UploadAssay")
 						.WithBasicAuth(_settingsService.Settings.EffaniUsername, _settingsService.Settings.EffaniPassword)
 						.PostJsonAsync(a.AssayJson, cancellationToken: CancellationToken.None);
 					if (result.StatusCode == 200)
