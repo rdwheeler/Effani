@@ -86,7 +86,7 @@ namespace Effani.Device.Services
 		#region Private methods
 		private string GetAssayName(Assay assay)
 		{
-			return $"Assay Results {assay.AssayDescription} {GetShortNow(assay.CollectedOn)}";
+			return $"Assay Results {assay.HerdId} {GetShortNow(assay.CollectedOn)}";
 		}
 		private string GetShortNow(DateTime time)
 		{
@@ -95,7 +95,7 @@ namespace Effani.Device.Services
 		private string WriteAssayFile(Assay assay)
 		{
 			var results = new StringBuilder();
-			results.AppendLine(assay.AssayDescription);
+			results.AppendLine(assay.HerdId);
 			results.AppendLine($"Low NADH:{assay.Low_NADH}");
 			results.AppendLine($"High NADH:{assay.High_NADH}");
 			results.AppendLine($"1 µg DNA:{assay.DNA_1mcg}");

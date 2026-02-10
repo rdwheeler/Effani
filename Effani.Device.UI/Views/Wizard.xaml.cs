@@ -69,5 +69,12 @@ namespace Effani.Device.UI
 				(DataContext as MainViewModel).CancelAssay();
 			}
 		}
-	}
+
+        private void AnimalIdTextEdit_Validate(object sender, ValidationEventArgs e)
+        {
+            var viewModel = DataContext as MainViewModel;
+			if (viewModel != null && !String.IsNullOrWhiteSpace((string)e.Value))
+				viewModel.InjectSample();
+        }
+    }
 }

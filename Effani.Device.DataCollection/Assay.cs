@@ -390,12 +390,12 @@ namespace Effani.Device.DataCollection
 			StatusMessages.Add(message);
 			StatusMessages.Add($"Process terminating");
 		}
-		#endregion
+        #endregion
 
-		#region Properties
-		[JsonIgnore]
+        #region Properties
+        [JsonIgnore]
 		public List<TestWell> AllTestWells { get; private set; } = new();
-		public string AssayDescription { get; set; }
+		public string HerdId { get; set; }
 		[JsonIgnore]
 		public Settings Settings => Device.Configuration.Settings;
 		public DateTime CollectedOn { get; set; }

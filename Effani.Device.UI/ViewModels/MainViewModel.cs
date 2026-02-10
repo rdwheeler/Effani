@@ -130,9 +130,31 @@ namespace Effani.Device.UI
 		public void PageStartCleanUp()
 		{
 			//_processEngine.QueueCommand(new SetTableTemp(0, _device));
-			_processEngine.QueueCommand(new MoveToStartingLocations(_device));
+			//_processEngine.QueueCommand(new MoveToStartingLocations(_device));
 			_processEngine.QueueCommand(new TableToTrayLoadingLocation(_device));
 		}
+        public void InjectSample()
+        {
+            _processEngine.HoldQueueForHighPriorityJob = true;
+            PreparingToLoadSample = true;
+
+            if (!Assay.IsPrimedBasal)
+            {
+                var job = new Job("Priming basal media.");
+                job.Commands.Add(new AlignTableForWaste(_device));
+                job.Commands.Add(new EmitFluid(Axis.Basal, _config.Settings.SecondaryBasalFluidPrimingVolume, _device));
+                Assay.IsPrimedBasal = true;
+                _processEngine.QueuePriorityJob(job);
+            }
+            _processEngine.QueuePriorityJob(new Job($"Dispensing {_config.Settings.BasalVolume}µg basal media to {CurrentLoadingSample.Label}.", [
+                new AlignWellToAxis(Axis.Basal, CurrentLoadingSample.Well, _device),
+                new EmitFluid(Axis.Basal, _config.Settings.BasalVolume, _device)
+            ]));
+            _processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
+                new AlignWellToLocation(_config.Settings.BiopsyLocation, CurrentLoadingSample.Well, _device),
+                new NotifyComplete((command) => { NotifyPreparedToLoadSample(); }, "Notify ready to load sample.", _device)
+            ]));
+        }
 		#endregion
 
 		#region Private methods
@@ -153,8 +175,8 @@ namespace Effani.Device.UI
 							ProcessMessages.Insert(0, $"{now} {message}");
 						}
 					});
-		}
-		private void NotifyMoveStartingPositionsComplete()
+        }
+        private void NotifyMoveStartingPositionsComplete()
 		{
 			Application.Current.Dispatcher
 				.Invoke(
@@ -305,23 +327,23 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(AssayFullName));
 			}
 		}
-		public bool DescriptionAndNumberOfTestsComplete => !String.IsNullOrEmpty(AssayDescription) && NumberOfSamples != 0;
+		public bool HerdIdAndNumberOfTestsComplete => !String.IsNullOrEmpty(HerdId) && NumberOfSamples != 0;
 		public bool UsernameAndPasswordComplete => !String.IsNullOrEmpty(Username) && !String.IsNullOrEmpty(Password);
-		public string AssayDescription
+		public string HerdId
 		{
 			get
 			{
-				return Assay?.AssayDescription;
+				return Assay?.HerdId;
 			}
 			set
 			{
 				if(Assay == null)
 					return;
-				if (Assay.AssayDescription == value)
+				if (Assay.HerdId == value)
 					return;
-				Assay.AssayDescription = value;
-				RaisePropertyChanged(nameof(AssayDescription));
-				RaisePropertyChanged(nameof(DescriptionAndNumberOfTestsComplete));
+				Assay.HerdId = value;
+				RaisePropertyChanged(nameof(HerdId));
+				RaisePropertyChanged(nameof(HerdIdAndNumberOfTestsComplete));
 			}
 		}
 		public DataCollection.Assay Assay { get; private set; }
@@ -395,7 +417,7 @@ namespace Effani.Device.UI
 					return;
 				Assay.NumberOfSamples = value;
 				RaisePropertyChanged(nameof(NumberOfSamples));
-				RaisePropertyChanged(nameof(DescriptionAndNumberOfTestsComplete));
+				RaisePropertyChanged(nameof(HerdIdAndNumberOfTestsComplete));
 				UnloadedTestsCount = value;
 			}
 		}
@@ -411,20 +433,6 @@ namespace Effani.Device.UI
 					return;
 				_preparationComplete = value;
 				RaisePropertyChanged(nameof(StandardsComplete));
-			}
-		}
-		public bool SampleLoadingInProcess
-		{
-			get
-			{
-				return PreparingToLoadSample;
-			}
-			set
-			{
-				if (PreparingToLoadSample == value)
-					return;
-				PreparingToLoadSample = value;
-				RaisePropertyChanged(nameof(SampleLoadingInProcess));
 			}
 		}
 		public bool MoveStartingPositionsComplete
@@ -510,7 +518,7 @@ namespace Effani.Device.UI
 		{
 			get
 			{
-				return _preparingToLoadSample;
+				return _preparingToLoadSample && !String.IsNullOrEmpty(HerdId);
 			}
 			set
 			{

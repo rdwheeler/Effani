@@ -62,29 +62,6 @@ namespace Effani.Device.UI
 			_processEngine.QueueJob(job);
 		}
 		[Command]
-		public void InjectSample()
-		{
-			_processEngine.HoldQueueForHighPriorityJob = true;
-			PreparingToLoadSample = true;
-
-			if (!Assay.IsPrimedBasal)
-			{
-				var job = new Job("Priming basal media.");
-				job.Commands.Add(new AlignTableForWaste(_device));
-				job.Commands.Add(new EmitFluid(Axis.Basal, _config.Settings.SecondaryBasalFluidPrimingVolume, _device));
-				Assay.IsPrimedBasal = true;
-				_processEngine.QueuePriorityJob(job);
-			}
-			_processEngine.QueuePriorityJob(new Job($"Dispensing {_config.Settings.BasalVolume}µg basal media to {CurrentLoadingSample.Label}.", [
-				new AlignWellToAxis(Axis.Basal, CurrentLoadingSample.Well, _device),
-				new EmitFluid(Axis.Basal, _config.Settings.BasalVolume, _device)
-			]));
-			_processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
-				new AlignWellToLocation(_config.Settings.BiopsyLocation, CurrentLoadingSample.Well, _device),
-				new NotifyComplete((command) => { NotifyPreparedToLoadSample(); }, "Notify ready to load sample.", _device)
-			]));
-		}
-		[Command]
 		public void ShowSettings()
 		{
 			var settingsWindow = new UtilitiesView(_settingsService, _processEngine, _device, ConsoleMessages) { Title = "Settings" };
