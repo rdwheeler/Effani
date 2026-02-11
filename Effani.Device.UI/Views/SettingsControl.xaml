@@ -15,398 +15,421 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
 	d:DataContext="{d:DesignInstance Type=local:UtilitiesViewModel}"
     mc:Ignorable="d" d:DesignHeight="1024" d:DesignWidth="1980">
-	<UserControl.Resources>
-		<SolidColorBrush  x:Key="LevelOneColor" Color="#efefef"/>
-		<SolidColorBrush  x:Key="LevelTwoColor" Color="#dfdfdf"/>
-		<SolidColorBrush  x:Key="LevelThreeColor" Color="#d0d0d0"/>
-		<Style TargetType="GroupBox">
-			<Setter Property="FontSize" Value="15"/>
-			<Setter Property="BorderThickness" Value="1.5"/>
-		</Style>
-		<Style TargetType="dxlc:LayoutItemLabel">
-			<Setter Property="FontWeight" Value="Normal"/>
-			<Setter Property="FontSize" Value="12"/>
-		</Style>
-		<Style TargetType="dxlc:LayoutItem">
-			<Setter Property="HorizontalAlignment" Value="Right"/>
-			<Setter Property="LabelPosition" Value="Left"/>
-			<Setter Property="LabelHorizontalAlignment" Value="Stretch"/>
-			<Setter Property="FontSize" Value="12"/>
-		</Style>
-		<Style TargetType="dxlc:LayoutGroup">
-			<Setter Property="ItemSpace" Value="10"/>
-			<Setter Property="IsCollapsible" Value="True"/>
-		</Style>
-		<Style TargetType="dxe:SpinEdit" >
-			<Setter Property="MaxWidth" Value="80"/>
-			<Setter Property="MinWidth" Value="80"/>
-			<Setter Property="FontSize" Value="12"/>
-		</Style>
-		<Style TargetType="dxlc:GroupBox">
-			<Setter Property="FontWeight" Value="Bold"/>
-			<Setter Property="TitleBackground" Value="Gray"/>
-			<Setter Property="TitleForeground" Value="White"/>
-			<Setter Property="VerticalAlignment" Value="Stretch"/>
-			<Setter Property="CornerRadius" Value="7"/>
-			<Setter Property="FontSize" Value="12"/>
-			<Setter Property="Background" Value="{StaticResource LevelTwoColor}"/>
-		</Style>
-		<Style x:Key="tertiaryGroupBox" TargetType="dxlc:GroupBox">
-			<Setter Property="FontWeight" Value="Bold"/>
-			<Setter Property="TitleBackground" Value="#b1b1b1"/>
-			<Setter Property="VerticalAlignment" Value="Stretch"/>
-			<Setter Property="CornerRadius" Value="7"/>
-			<Setter Property="FontSize" Value="12"/>
-			<Setter Property="Background" Value="{StaticResource LevelThreeColor}"/>
-		</Style>
-	</UserControl.Resources>
-	<dxmvvm:Interaction.Behaviors>
-		<dxwui:WinUIDialogService>
-			<dxwui:WinUIDialogService.ViewTemplate>
-				<DataTemplate>
-					<dxlc:LayoutItem Label="How would you like to describe these settings?" LabelPosition="Top">
-						<dxe:TextEdit NullText="Settings Description" EditValue="{Binding NewSettingsDescription}"/>
-					</dxlc:LayoutItem>
-				</DataTemplate>
-			</dxwui:WinUIDialogService.ViewTemplate>
-		</dxwui:WinUIDialogService>
-	</dxmvvm:Interaction.Behaviors>
-	<DockPanel LastChildFill="True" Background="{StaticResource LevelOneColor}">
-		<StackPanel HorizontalAlignment="Left" DockPanel.Dock="Top" Margin="20,20,0,0">
-			<Label Content="Active Settings" />
-			<StackPanel Orientation="Horizontal">
-				<dxe:ComboBoxEdit
+    <UserControl.Resources>
+        <SolidColorBrush  x:Key="LevelOneColor" Color="#efefef"/>
+        <SolidColorBrush  x:Key="LevelTwoColor" Color="#dfdfdf"/>
+        <SolidColorBrush  x:Key="LevelThreeColor" Color="#d0d0d0"/>
+        <Style TargetType="GroupBox">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+        </Style>
+        <Style TargetType="dxlc:LayoutItemLabel">
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style TargetType="dxlc:LayoutItem">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="LabelPosition" Value="Left"/>
+            <Setter Property="LabelHorizontalAlignment" Value="Stretch"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style TargetType="dxlc:LayoutGroup">
+            <Setter Property="ItemSpace" Value="10"/>
+            <Setter Property="IsCollapsible" Value="True"/>
+        </Style>
+        <Style TargetType="dxe:SpinEdit" >
+            <Setter Property="MaxWidth" Value="80"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style TargetType="dxlc:GroupBox">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="TitleBackground" Value="Gray"/>
+            <Setter Property="TitleForeground" Value="White"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="CornerRadius" Value="7"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="{StaticResource LevelTwoColor}"/>
+        </Style>
+        <Style x:Key="tertiaryGroupBox" TargetType="dxlc:GroupBox">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="TitleBackground" Value="#b1b1b1"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="CornerRadius" Value="7"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="{StaticResource LevelThreeColor}"/>
+        </Style>
+    </UserControl.Resources>
+    <dxmvvm:Interaction.Behaviors>
+        <dxwui:WinUIDialogService>
+            <dxwui:WinUIDialogService.ViewTemplate>
+                <DataTemplate>
+                    <dxlc:LayoutItem Label="How would you like to describe these settings?" LabelPosition="Top">
+                        <dxe:TextEdit NullText="Settings Description" EditValue="{Binding NewSettingsDescription}"/>
+                    </dxlc:LayoutItem>
+                </DataTemplate>
+            </dxwui:WinUIDialogService.ViewTemplate>
+        </dxwui:WinUIDialogService>
+    </dxmvvm:Interaction.Behaviors>
+    <DockPanel LastChildFill="True" Background="{StaticResource LevelOneColor}">
+        <StackPanel HorizontalAlignment="Left" DockPanel.Dock="Top" Margin="20,20,0,0">
+            <Label Content="Active Settings" />
+            <StackPanel Orientation="Horizontal">
+                <dxe:ComboBoxEdit
 					FontSize="15" MinWidth="200"
 					ItemsSource="{Binding SettingsVersions}"
 					DisplayMember="Description"
 					IsTextEditable="False"
 					EditValue="{Binding ActiveSettingsVersion, Mode=OneWay}"
 					SelectedIndexChanged="ComboBoxEdit_SelectedIndexChanged">
-					<dxe:ComboBoxEdit.ItemTemplate>
-						<DataTemplate>
-							<StackPanel Orientation="Horizontal">
-								<dx:SimpleButton HorizontalAlignment="Left" Margin="0" Padding="0" BorderThickness="0" Width="20" 
+                    <dxe:ComboBoxEdit.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <dx:SimpleButton HorizontalAlignment="Left" Margin="0" Padding="0" BorderThickness="0" Width="20" 
 												 ToolTip="{DXBinding '@a($dxe:ComboBoxEdit).DataContext.ActiveSettingsVersion != @c ? `Delete these settings` : `Active settings cannot be deleted`'}" 
 												 IsEnabled="{DXBinding '@a($dxe:ComboBoxEdit).DataContext.ActiveSettingsVersion != @c'}">
-									<dx:SimpleButton.Content>
-										<Image Source="{dx:DXImage 'SvgImages/Dashboards/Delete.svg'}" />
-									</dx:SimpleButton.Content>
-									<dxmvvm:Interaction.Behaviors>
-										<dxmvvm:ConfirmationBehavior 
+                                    <dx:SimpleButton.Content>
+                                        <Image Source="{dx:DXImage 'SvgImages/Dashboards/Delete.svg'}" />
+                                    </dx:SimpleButton.Content>
+                                    <dxmvvm:Interaction.Behaviors>
+                                        <dxmvvm:ConfirmationBehavior 
 											EnableConfirmationMessage="True"
 											Command="{Binding Path=DataContext.DeleteSettingsCommand, RelativeSource={RelativeSource AncestorType={x:Type dxe:ComboBoxEdit}}}"
 											CommandParameter="{Binding}"
 											MessageText="{DXBinding '`Are you sure to delete the &quot;` + @c.Description + `&quot; settings?`'}"  
 											MessageIcon="Question" MessageTitle="Delete Settings"/>
-									</dxmvvm:Interaction.Behaviors>
-								</dx:SimpleButton>
-								<TextBlock FontSize="15" Text="{Binding Description}"/>
-							</StackPanel>
-						</DataTemplate>
-					</dxe:ComboBoxEdit.ItemTemplate>
-				</dxe:ComboBoxEdit>
-			<dx:SimpleButton Margin="5,0,0,0" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Save these settings as..." Command="{Binding SaveActiveSettingsAsNewVersionCommand}">
-				<dx:SimpleButton.Content>
-					<Image Source="{dx:DXImage 'SvgImages/Save/SaveDialog.svg'}" />
-				</dx:SimpleButton.Content>
-			</dx:SimpleButton>
-				<dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Upload.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Upload these settings to the cloud" Command="{Binding UploadSettingsCommand}"/>
-				<dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Download.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Download these settings from the cloud" Command="{Binding DownloadSettingsCommand}"/>
-			</StackPanel>
-		</StackPanel>
-		<dxlc:LayoutControl Orientation="Vertical">
-			<dxlc:FlowLayoutControl HorizontalAlignment="Stretch" DataContext="{Binding Path=Settings}" Orientation="Horizontal" ItemSpace="20">
-				<GroupBox Header="Fluid Emission">
-					<dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="Emission Volumes (μl)" ToolTip="Fluid volume dispensed to a sample well" Orientation="Vertical" >
-							<dxlc:LayoutItem Label="NADH">
-								<dxe:SpinEdit EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding NadhVolume}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="DNA Reagent">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding DnaVolume}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="KOH">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding KohVolume}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Basal Media">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding BasalVolume}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="Priming Volumes (μl)" Orientation="Horizontal">
-							<dxlc:LayoutGroup View="GroupBox" Header="Initial Priming" ToolTip="Volume dispensed during first pump priming" Orientation="Vertical" GroupBoxStyle="{StaticResource tertiaryGroupBox}">
-								<dxlc:LayoutItem Label="NADH">
-									<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding InitialNadhFluidPrimingVolume}" />
-								</dxlc:LayoutItem>
-								<dxlc:LayoutItem Label="DNA Reagent">
-									<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding InitialDnaFluidPrimingVolume}" />
-								</dxlc:LayoutItem>
-								<dxlc:LayoutItem Label="KOH">
-									<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding InitialKohFluidPrimingVolume}" />
-								</dxlc:LayoutItem>
-								<dxlc:LayoutItem Label="Basal Media">
-									<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding InitialBasalFluidPrimingVolume}" />
-								</dxlc:LayoutItem>
-							</dxlc:LayoutGroup>
-							<dxlc:LayoutGroup View="GroupBox" Header="Secondary Priming" ToolTip="Volume dispensed during second pump priming" Orientation="Vertical" GroupBoxStyle="{StaticResource tertiaryGroupBox}">
-								<dxlc:LayoutItem Label="NADH">
-									<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryNadhFluidPrimingVolume}" />
-								</dxlc:LayoutItem>
-								<dxlc:LayoutItem Label="DNA Reagent">
-									<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryDnaFluidPrimingVolume}" />
-								</dxlc:LayoutItem>
-								<dxlc:LayoutItem Label="KOH">
-									<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryKohFluidPrimingVolume}" />
-								</dxlc:LayoutItem>
-								<dxlc:LayoutItem Label="Basal Media">
-									<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryBasalFluidPrimingVolume}" />
-								</dxlc:LayoutItem>
-							</dxlc:LayoutGroup>
-						</dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="Syringe Travel (mm/μl)" Orientation="Vertical">
-							<dxlc:LayoutItem Label="NADH" ToolTip="">
-								<dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding NadhTravelPerMicroLiter}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="DNA Reagent" ToolTip="">
-								<dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding DnaTravelPerMicroLiter}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="KOH" ToolTip="">
-								<dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding KohTravelPerMicroLiter}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Basal Media" ToolTip="">
-								<dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding BasalTravelPerMicroLiter}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="Syringe Loading Positions (mm from 0)" Orientation="Vertical">
-							<dxlc:LayoutItem Label="NADH" ToolTip="">
-								<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding NadhSyringeLoadingPosition}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="DNA Reagent" ToolTip="">
-								<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding DnaSyringeLoadingPosition}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="KOH" ToolTip="">
-								<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding KohSyringeLoadingPosition}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Basal Media" ToolTip="">
-								<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding BasalSyringeLoadingPosition}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="Emission Speed" Orientation="Vertical">
-							<dxlc:LayoutItem Label="Fluid Syringe Speed (mm/s)" ToolTip="Speed at which a fluid syringe should travel">
-								<dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding NadhTravelPerMicroLiter}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Fluid Emission Pause (ms)" ToolTip="Milliseconds to wait before moving after dispensing fluid">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding FluidEmissionDwell}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-					</dxlc:LayoutGroup>
-				</GroupBox>
-				<GroupBox Header="Sensor Reading Ranges">
-					<dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="DNA Sensor" Orientation="Vertical">
-							<dxlc:LayoutItem Label="Upper Limit" ToolTip="Top of the range of values the DNA sensor should report">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding DnaSensorReadHigh}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Lower Limit" ToolTip="Bottom of the range of values the DNA sensor should report">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding DnaSensorReadLow}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="NADH Sensor" Orientation="Vertical">
-							<dxlc:LayoutItem Label="Upper Limit" ToolTip="Top of the range of values the NADH sensor should report">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding NadhSensorReadHigh}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Lower Limit" ToolTip="Bottom of the range of values the NADH sensor should report">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding NadhSensorReadLow}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-					</dxlc:LayoutGroup>
-				</GroupBox>
-				<GroupBox Header="Component Locations">
-					<dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="Emission Ports" Orientation="Vertical">
-							<dxlc:LayoutItem LabelPosition="Top" Label="NADH" ToolTip="Platform coordinates (mm x mm) of the location at which NADH is emitted">
-								<dxlc:LayoutGroup Orientation="Horizontal">
-									<dxlc:LayoutItem LabelPosition="Left" Label="X">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationX}" />
-									</dxlc:LayoutItem>
-									<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationY}" />
-									</dxlc:LayoutItem>
-								</dxlc:LayoutGroup>
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem LabelPosition="Top" Label="DNA Reagent" ToolTip="Platform coordinates (mm x mm) of the location at which DNA Reagent is emitted">
-								<dxlc:LayoutGroup Orientation="Horizontal">
-									<dxlc:LayoutItem LabelPosition="Left" Label="X">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding DnaLocationX}" />
-									</dxlc:LayoutItem>
-									<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding DnaLocationY}" />
-									</dxlc:LayoutItem>
-								</dxlc:LayoutGroup>
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem LabelPosition="Top" Label="KOH" ToolTip="Platform coordinates (mm x mm) of the location at which KOH is emitted">
-								<dxlc:LayoutGroup Orientation="Horizontal">
-									<dxlc:LayoutItem LabelPosition="Left" Label="X">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationX}" />
-									</dxlc:LayoutItem>
-									<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationY}" />
-									</dxlc:LayoutItem>
-								</dxlc:LayoutGroup>
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem LabelPosition="Top" Label="Basal Media" ToolTip="Platform coordinates (mm x mm) of the location at which Basal Media is emitted">
-								<dxlc:LayoutGroup Orientation="Horizontal">
-									<dxlc:LayoutItem LabelPosition="Left" Label="X">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding BasalLocationX}" />
-									</dxlc:LayoutItem>
-									<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding BasalLocationY}" />
-									</dxlc:LayoutItem>
-								</dxlc:LayoutGroup>
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="Sensors" Orientation="Vertical">
-							<dxlc:LayoutItem LabelPosition="Top" Label="DNA" ToolTip="Platform coordinates (mm x mm) of the location at which DNA readings are taken">
-								<dxlc:LayoutGroup Orientation="Horizontal">
-									<dxlc:LayoutItem LabelPosition="Left" Label="X">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding DnaSensorLocationX}" />
-									</dxlc:LayoutItem>
-									<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding DnaSensorLocationY}" />
-									</dxlc:LayoutItem>
-								</dxlc:LayoutGroup>
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem LabelPosition="Top" Label="NADH" ToolTip="Platform coordinates (mm x mm) of the location at which NADH readings are taken">
-								<dxlc:LayoutGroup Orientation="Horizontal">
-									<dxlc:LayoutItem LabelPosition="Left" Label="X">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhSensorLocationX}" />
-									</dxlc:LayoutItem>
-									<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhSensorLocationY}" />
-									</dxlc:LayoutItem>
-								</dxlc:LayoutGroup>
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="Tray" Orientation="Vertical">
-							<dxlc:LayoutItem LabelPosition="Top" Label="First Well Location" ToolTip="Platform coordinates (mm x mm) of the location of the lower left corner of the first sample well">
-								<dxlc:LayoutGroup Orientation="Horizontal">
-									<dxlc:LayoutItem LabelPosition="Left" Label="X">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding FirstWellLocationX}" />
-									</dxlc:LayoutItem>
-									<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding FirstWellLocationY}" />
-									</dxlc:LayoutItem>
-								</dxlc:LayoutGroup>
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem LabelPosition="Top" Label="Tray Loading Location" ToolTip="Platform coordinates (mm x mm) of the location at which sample trays are loaded">
-								<dxlc:LayoutGroup Orientation="Horizontal">
-									<dxlc:LayoutItem LabelPosition="Left" Label="X">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding TrayLoadingLocationX}" />
-									</dxlc:LayoutItem>
-									<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding TrayLoadingLocationY}" />
-									</dxlc:LayoutItem>
-								</dxlc:LayoutGroup>
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem LabelPosition="Top" Label="Tray Sterilization Location" ToolTip="Platform coordinates (mm x mm) of the location at which sample trays are sterilized">
-								<dxlc:LayoutGroup Orientation="Horizontal">
-									<dxlc:LayoutItem LabelPosition="Left" Label="X">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding TraySterilizationLocationX}" />
-									</dxlc:LayoutItem>
-									<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-										<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding TraySterilizationLocationY}" />
-									</dxlc:LayoutItem>
-								</dxlc:LayoutGroup>
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-					</dxlc:LayoutGroup>
-				</GroupBox>
-				<GroupBox Header="Electronic Settings">
-					<dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="DNA Sensor" Orientation="Vertical">
-							<dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the DNA sensor is connected">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaSensorBoardNumber}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Port Number" ToolTip="Port number at which the DNA sensor is connected">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaSensorPortNumber}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Index" ToolTip="Configuration index of the DNA sensor">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaSensorNumber}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-						<dxlc:LayoutGroup View="GroupBox" Header="NADH Sensor" Orientation="Vertical">
-							<dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the NADH sensor is connected">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhSensorBoardNumber}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Port Number" ToolTip="Port number at which the NADH sensor is connected">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhSensorPortNumber}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem Label="Index" ToolTip="Configuration index of the NADH sensor">
-								<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhSensorNumber}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-					</dxlc:LayoutGroup>
-				</GroupBox>
-				<dxlc:LayoutGroup View="GroupBox" Header="Assay Timing (ms)" Orientation="Vertical">
-					<dxlc:LayoutItem Label="Basal Media Incubation" ToolTip="Milliseconds sample stays in Basal media incubation">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding BasalIncubationTimerPeriod}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="NADH-Basal Mixing Period" ToolTip="Milliseconds to wait for NADH to mix with Basal Media">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding NadhReading1TimerPeriod}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="NADH Readings Interval" ToolTip="Milliseconds between NADH readings">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding NadhReadingsTimerPeriod}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="NADH Timer Period" ToolTip="Milliseconds sample stays in NADH solution">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding NadhIncubationDwell}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="KOH Timer Period" ToolTip="Milliseconds sample stays in KOH solution">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding KohTimerPeriod}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="DNA Reagent Timer Period" ToolTip="Milliseconds sample stays in DNA reagent">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding DnaTimerPeriod}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="Standards Establishment Period" ToolTip="Milliseconds taken for establishing standards">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding StandardsProcessingDwell}" />
-					</dxlc:LayoutItem>
-				</dxlc:LayoutGroup>
-				<dxlc:LayoutGroup View="GroupBox" Header="Sample Trays" Orientation="Vertical">
-					<dxlc:LayoutItem Label="Tray Sterilization Time (seconds)" ToolTip="Number of seconds tray will be UV sterilized">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding TraySterilizationTime}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="Well Width" ToolTip="Width (mm) of a sample well">
-						<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0.01" MaxValue="100" EditValue="{Binding WellWidth}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="Well Depth" ToolTip="Depth (mm) of a sample well">
-						<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0.01" MaxValue="100" EditValue="{Binding WellDepth}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="Vertical Well Count" ToolTip="Count of sample wells in a tray in the vertical direction">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="1" MaxValue="100" EditValue="{Binding VerticalWellCount}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem Label="Horizontal Well Count" ToolTip="Count of sample wells in a tray in the horizontal direction">
-						<dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="1" MaxValue="100" EditValue="{Binding HorizontalWellCount}" />
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem LabelPosition="Top" Label="Tray Offset (mm)" ToolTip="Distance from well 0 of a tray to well 0 of the next tray">
-						<dxlc:LayoutGroup Orientation="Horizontal">
-							<dxlc:LayoutItem LabelPosition="Left" Label="X">
-								<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding PlateOffsetX}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-								<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding PlateOffsetY}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-					</dxlc:LayoutItem>
-					<dxlc:LayoutItem LabelPosition="Top" Label="Well Offset (mm)" ToolTip="Distance between sample wells">
-						<dxlc:LayoutGroup Orientation="Horizontal">
-							<dxlc:LayoutItem LabelPosition="Left" Label="X">
-								<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding WellOffsetX}" />
-							</dxlc:LayoutItem>
-							<dxlc:LayoutItem LabelPosition="Left" Label="Y">
-								<dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding WellOffsetY}" />
-							</dxlc:LayoutItem>
-						</dxlc:LayoutGroup>
-					</dxlc:LayoutItem>
-				</dxlc:LayoutGroup>
-			</dxlc:FlowLayoutControl>
-		</dxlc:LayoutControl>
-	</DockPanel>
+                                    </dxmvvm:Interaction.Behaviors>
+                                </dx:SimpleButton>
+                                <TextBlock FontSize="15" Text="{Binding Description}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </dxe:ComboBoxEdit.ItemTemplate>
+                </dxe:ComboBoxEdit>
+                <dx:SimpleButton Margin="5,0,0,0" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Save these settings as..." Command="{Binding SaveActiveSettingsAsNewVersionCommand}">
+                    <dx:SimpleButton.Content>
+                        <Image Source="{dx:DXImage 'SvgImages/Save/SaveDialog.svg'}" />
+                    </dx:SimpleButton.Content>
+                </dx:SimpleButton>
+                <dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Upload.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Upload these settings to the cloud" Command="{Binding UploadSettingsCommand}"/>
+                <dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Download.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Download these settings from the cloud" Command="{Binding DownloadSettingsCommand}"/>
+            </StackPanel>
+        </StackPanel>
+        <dx:DXTabControl Margin="20,20,0,0" DataContext="{Binding Path=Settings}">
+            <dx:DXTabItem Header="Fluid Emission">
+                <dxlc:LayoutControl>
+                    <dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup View="GroupBox" Header="Emission Volumes (μl)" ToolTip="Fluid volume dispensed to a sample well" Orientation="Vertical" >
+                            <dxlc:LayoutItem Label="NADH">
+                                <dxe:SpinEdit EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding NadhVolume}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="DNA Reagent">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding DnaVolume}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="KOH">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding KohVolume}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Basal Media">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding BasalVolume}" />
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup View="GroupBox" Header="Priming Volumes (μl)" Orientation="Horizontal">
+                            <dxlc:LayoutGroup View="GroupBox" Header="Initial Priming" ToolTip="Volume dispensed during first pump priming" Orientation="Vertical" GroupBoxStyle="{StaticResource tertiaryGroupBox}">
+                                <dxlc:LayoutItem Label="NADH">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding InitialNadhFluidPrimingVolume}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="DNA Reagent">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding InitialDnaFluidPrimingVolume}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="KOH">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding InitialKohFluidPrimingVolume}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Basal Media">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding InitialBasalFluidPrimingVolume}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="Secondary Priming" ToolTip="Volume dispensed during second pump priming" Orientation="Vertical" GroupBoxStyle="{StaticResource tertiaryGroupBox}">
+                                <dxlc:LayoutItem Label="NADH">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryNadhFluidPrimingVolume}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="DNA Reagent">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryDnaFluidPrimingVolume}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="KOH">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryKohFluidPrimingVolume}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Basal Media">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryBasalFluidPrimingVolume}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup View="GroupBox" Header="Syringe Travel (mm/μl)" Orientation="Vertical">
+                            <dxlc:LayoutItem Label="NADH" ToolTip="">
+                                <dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding NadhTravelPerMicroLiter}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="DNA Reagent" ToolTip="">
+                                <dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding DnaTravelPerMicroLiter}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="KOH" ToolTip="">
+                                <dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding KohTravelPerMicroLiter}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Basal Media" ToolTip="">
+                                <dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding BasalTravelPerMicroLiter}" />
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup View="GroupBox" Header="Syringe Loading Positions (mm from 0)" Orientation="Vertical">
+                            <dxlc:LayoutItem Label="NADH" ToolTip="">
+                                <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding NadhSyringeLoadingPosition}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="DNA Reagent" ToolTip="">
+                                <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding DnaSyringeLoadingPosition}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="KOH" ToolTip="">
+                                <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding KohSyringeLoadingPosition}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Basal Media" ToolTip="">
+                                <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding BasalSyringeLoadingPosition}" />
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup View="GroupBox" Header="Emission Speed" Orientation="Vertical">
+                            <dxlc:LayoutItem Label="Fluid Syringe Speed (mm/s)" ToolTip="Speed at which a fluid syringe should travel">
+                                <dxe:SpinEdit IsFloatValue="True" Increment="0.00001" MinValue="0.00001" MaxValue="0.1" EditValue="{Binding NadhTravelPerMicroLiter}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Fluid Emission Pause (ms)" ToolTip="Milliseconds to wait before moving after dispensing fluid">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding FluidEmissionDwell}" />
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutControl>
+            </dx:DXTabItem>
+            <dx:DXTabItem Header="Component Properties">
+                <dxlc:LayoutControl>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Emission Port Locations" Orientation="Vertical">
+                        <dxlc:LayoutItem LabelPosition="Top" Label="NADH" ToolTip="Platform coordinates (mm x mm) of the location at which NADH is emitted">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem LabelPosition="Top" Label="DNA Reagent" ToolTip="Platform coordinates (mm x mm) of the location at which DNA Reagent is emitted">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding DnaLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding DnaLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem LabelPosition="Top" Label="KOH" ToolTip="Platform coordinates (mm x mm) of the location at which KOH is emitted">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem LabelPosition="Top" Label="Basal Media" ToolTip="Platform coordinates (mm x mm) of the location at which Basal Media is emitted">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding BasalLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding BasalLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Sensor Locations" Orientation="Vertical">
+                        <dxlc:LayoutItem LabelPosition="Top" Label="DNA" ToolTip="Platform coordinates (mm x mm) of the location at which DNA readings are taken">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding DnaSensorLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding DnaSensorLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem LabelPosition="Top" Label="NADH" ToolTip="Platform coordinates (mm x mm) of the location at which NADH readings are taken">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhSensorLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhSensorLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Tray Carrier Locations" Orientation="Vertical">
+                        <dxlc:LayoutItem LabelPosition="Top" Label="First Well Location" ToolTip="Platform coordinates (mm x mm) of the location of the lower left corner of the first sample well">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding FirstWellLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding FirstWellLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem LabelPosition="Top" Label="Tray Loading Location" ToolTip="Platform coordinates (mm x mm) of the location at which sample trays are loaded">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding TrayLoadingLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding TrayLoadingLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Sample Tray Properties" Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Well Width" ToolTip="Width (mm) of a sample well">
+                            <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0.01" MaxValue="100" EditValue="{Binding WellWidth}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Well Depth" ToolTip="Depth (mm) of a sample well">
+                            <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0.01" MaxValue="100" EditValue="{Binding WellDepth}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Vertical Well Count" ToolTip="Count of sample wells in a tray in the vertical direction">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="1" MaxValue="100" EditValue="{Binding VerticalWellCount}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Horizontal Well Count" ToolTip="Count of sample wells in a tray in the horizontal direction">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="1" MaxValue="100" EditValue="{Binding HorizontalWellCount}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem LabelPosition="Top" Label="Tray Offset (mm)" ToolTip="Distance from well 0 of a tray to well 0 of the next tray">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding PlateOffsetX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding PlateOffsetY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem LabelPosition="Top" Label="Well Offset (mm)" ToolTip="Distance between sample wells">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding WellOffsetX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding WellOffsetY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutControl>
+            </dx:DXTabItem>
+            <dx:DXTabItem Header="Electronic Settings">
+                <dxlc:LayoutControl>
+                    <dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup View="GroupBox" Header="DNA Sensor" Orientation="Vertical">
+                            <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the DNA sensor is connected">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaSensorBoardNumber}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Port Number" ToolTip="Port number at which the DNA sensor is connected">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaSensorPortNumber}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Index" ToolTip="Configuration index of the DNA sensor">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaSensorNumber}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutGroup View="GroupBox" Header="Reading Range" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Upper Limit" ToolTip="Top of the range of values the DNA sensor should report">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding DnaSensorReadHigh}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Lower Limit" ToolTip="Bottom of the range of values the DNA sensor should report">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding DnaSensorReadLow}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup View="GroupBox" Header="NADH Sensor" Orientation="Vertical">
+                            <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the NADH sensor is connected">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhSensorBoardNumber}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Port Number" ToolTip="Port number at which the NADH sensor is connected">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhSensorPortNumber}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Index" ToolTip="Configuration index of the NADH sensor">
+                                <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhSensorNumber}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutGroup View="GroupBox" Header="Reading Range" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Upper Limit" ToolTip="Top of the range of values the NADH sensor should report">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding NadhSensorReadHigh}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Lower Limit" ToolTip="Bottom of the range of values the NADH sensor should report">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10000" EditValue="{Binding NadhSensorReadLow}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutGroup>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutControl>
+            </dx:DXTabItem>
+            <dx:DXTabItem Header="Connectivity">
+                <dxlc:LayoutControl>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Connectivity" Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Effani API URL" ToolTip="Internet location of the Effani API endpoint.">
+                            <dxe:TextEdit MinWidth="300" EditValue="{Binding EffaniApiUrl}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Effani Username" ToolTip="Username (email address) of your Effani account.">
+                            <dxe:TextEdit MinWidth="300" EditValue="{Binding EffaniUsername}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Effani Password" ToolTip="Password of your Effani account.">
+                            <dxe:PasswordBoxEdit ShowPasswordButtonVisibility="Auto" MinWidth="300" EditValue="{Binding EffaniPassword}"  />
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutControl>
+            </dx:DXTabItem>
+            <dx:DXTabItem Header="Assay Timing (ms)">
+                <dxlc:LayoutControl>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Assay Timing (ms)" Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Basal Media Incubation" ToolTip="Milliseconds sample stays in Basal media incubation">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding BasalIncubationTimerPeriod}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="NADH-Basal Mixing Period" ToolTip="Milliseconds to wait for NADH to mix with Basal Media">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding NadhReading1TimerPeriod}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="NADH Readings Interval" ToolTip="Milliseconds between NADH readings">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding NadhReadingsTimerPeriod}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="NADH Timer Period" ToolTip="Milliseconds sample stays in NADH solution">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding NadhIncubationDwell}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="KOH Timer Period" ToolTip="Milliseconds sample stays in KOH solution">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding KohTimerPeriod}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="DNA Reagent Timer Period" ToolTip="Milliseconds sample stays in DNA reagent">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding DnaTimerPeriod}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Standards Establishment Period" ToolTip="Milliseconds taken for establishing standards">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding StandardsProcessingDwell}" />
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutControl>
+            </dx:DXTabItem>
+            <dx:DXTabItem Header="Sterilization">
+                <dxlc:LayoutControl>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Sample Tray Sterilization" Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Tray Sterilization Time (seconds)" ToolTip="Number of seconds tray will be UV sterilized">
+                            <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding TraySterilizationTime}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem LabelPosition="Top" Label="Tray Sterilization Location" ToolTip="Platform coordinates (mm x mm) of the location at which sample trays are sterilized">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding TraySterilizationLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding TraySterilizationLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutControl>
+            </dx:DXTabItem>
+        </dx:DXTabControl>
+    </DockPanel>
 </UserControl>

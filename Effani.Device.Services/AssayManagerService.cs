@@ -30,9 +30,10 @@ namespace Effani.Device.Services
 		}
 		public async Task<string> SaveAssay(Assay assay)
 		{
+            assay.OwnerId = _settingsService.Settings.EffaniUsername;
 			var assayData = new AssayData()
 			{
-				AssayJson = JsonSerializer.Serialize(assay),
+                AssayJson = JsonSerializer.Serialize(assay),
 				AssayName = GetAssayName(assay),
 				AssayId = assay.Id,
 				CreatedOn = assay.CollectedOn
@@ -72,7 +73,7 @@ namespace Effani.Device.Services
 					{
 						a.UploadedOn = DateTime.Now;
 						await _efContext.SaveChangesAsync();
-					}
+                    }
 				}
 				catch (FlurlHttpException ex)
 				{

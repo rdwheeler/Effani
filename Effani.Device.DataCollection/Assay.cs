@@ -443,7 +443,7 @@ namespace Effani.Device.DataCollection
 		[JsonIgnore]
 		public List<TestWell> TestWells2 { get; private set; }
 
-		public string Username { get; set; }
+		public string OwnerId { get; set; }
 
 		public Guid Id { get; set; } = Guid.NewGuid();
 		#endregion
