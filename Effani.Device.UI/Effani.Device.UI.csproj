@@ -17,6 +17,7 @@
 	  <None Remove="Resources\Download.svg" />
 	  <None Remove="Resources\effanicow.webp" />
 	  <None Remove="Resources\effani_background.jpg" />
+	  <None Remove="Resources\effani_cow.mp4" />
 	  <None Remove="Resources\Upload.svg" />
 	</ItemGroup>
 
@@ -66,6 +67,9 @@
 	  <Resource Include="Resources\effani_background.jpg">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
+	  <Content Include="Resources\effani_cow.mp4">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	  <Resource Include="Resources\Upload.svg" />
 	</ItemGroup>
 

@@ -113,8 +113,8 @@ namespace Effani.Device.UI
 			CurrentLoadingSample = SampleLoadingCollection.First();
 		}
 		public void PageStartAssayConcluded()
-		{
-			AddMessage("Assay concluded", true);
+        {
+            AddMessage("Assay concluded", true);
 			AssayFullName = _assayManagerService.SaveAssay(Assay).Result;
 
 			Assay.StatusMessages.CollectionChanged -= StatusMessages_CollectionChanged;
@@ -129,9 +129,10 @@ namespace Effani.Device.UI
 		}
 		public void PageStartCleanUp()
 		{
-			//_processEngine.QueueCommand(new SetTableTemp(0, _device));
-			//_processEngine.QueueCommand(new MoveToStartingLocations(_device));
-			_processEngine.QueueCommand(new TableToTrayLoadingLocation(_device));
+            AllSamplesLoadedAndProcessing = false;
+            //_processEngine.QueueCommand(new SetTableTemp(0, _device));
+            //_processEngine.QueueCommand(new MoveToStartingLocations(_device));
+            _processEngine.QueueCommand(new TableToTrayLoadingLocation(_device));
 		}
         public void InjectSample()
         {
@@ -271,6 +272,7 @@ namespace Effani.Device.UI
 			CurrentLoadingSample = SampleLoadingCollection.ElementAtOrDefault(currentIndex + 1);
             if (CurrentLoadingSample == null)
             {
+                AllSamplesLoadedAndProcessing = true;
                 AdvanceWizardPage?.Invoke(this, null);
             }
 		}
@@ -482,8 +484,22 @@ namespace Effani.Device.UI
 				_unloadedTestsCount = value;
 				RaisePropertyChanged(nameof(UnloadedTestsCount));
 			}
-		}
-		public string Uploading { get; }
+        }
+        public bool AllSamplesLoadedAndProcessing
+        {
+            get
+            {
+                return _allSamplesLoaded;
+            }
+            set
+            {
+                if (_allSamplesLoaded == value)
+                    return;
+                _allSamplesLoaded = value;
+                RaisePropertyChanged(nameof(AllSamplesLoadedAndProcessing));
+            }
+        }
+        public string Uploading { get; }
 		public string Username
 		{
 			get
@@ -546,12 +562,13 @@ namespace Effani.Device.UI
 		}
 		bool _preparedToLoadSample;
 		#endregion
+		public Uri BackgroundImage { get; set; } = new Uri("../Resources/effani_background.jpg", UriKind.Relative);
 		#endregion
 
 		public EventHandler AdvanceWizardPage;
 
-		#region Fields
-		bool _assayComplete;
+        #region Fields
+        bool _assayComplete;
 		bool _assayTerminated;
 		TestWell _currentLoadingSample;
 		AbalDeviceControl _device;
@@ -559,6 +576,7 @@ namespace Effani.Device.UI
 
 		bool _preparationComplete;
 		int _unloadedTestsCount;
+        bool _allSamplesLoaded;
 		ProcessEngine _processEngine;
 		bool _moveStartingPositionsComplete;
 		bool _fluidLoadingComplete;

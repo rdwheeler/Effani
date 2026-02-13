@@ -1,4 +1,5 @@
-﻿<UserControl x:Class="Effani.Device.UI.Wizard"
+﻿<UserControl Name="_userControl" 
+            x:Class="Effani.Device.UI.Wizard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -41,45 +42,21 @@
         </DataTemplate>
     </UserControl.Resources>
     <UserControl.Background>
-        <ImageBrush ImageSource="../Resources/effani_background.jpg" TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,1280,720"></ImageBrush>
+        <ImageBrush ImageSource="{DXBinding '!AllSamplesLoadedAndProcessing ? `../Resources/effani_background.jpg` : null'}" TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,1280,720"></ImageBrush>
     </UserControl.Background>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <DockPanel LastChildFill="True" Grid.Column="1">
+        <Grid Margin="0,0,0,0" Background="#fdf9fd" Visibility="{DXBinding 'AllSamplesLoadedAndProcessing ? $Visibility.Visible : $Visibility.Collapsed'}">
+            <MediaElement
+                        Name="_backgroundPlayer" 
+                        Source="Resources/effani_cow.mp4" 
+                        IsMuted="True"
+                        LoadedBehavior="Play"
+                        UnloadedBehavior="Manual"
+                        MediaEnded="MediaElement_MediaEnded">
+            </MediaElement>
+        </Grid>
+        <DockPanel LastChildFill="True">
             <dxco:Wizard DockPanel.Dock="Bottom" x:Name="wizard" VerticalAlignment="Stretch" Next="Wizard_Next" Cancel="Wizard_Cancel" AnimationType="Fade"  Margin="20,0,0,0" FontSize="17">
-                <dxco:Wizard.FooterTemplate >
-                    <DataTemplate>
-                        <dxco:WizardDialogFooter Height="300" >
-                            <Border BorderBrush="CornflowerBlue" BorderThickness="3" Background="GhostWhite" CornerRadius="10" Padding="20">
-                                <DockPanel LastChildFill="true">
-                                    <StackPanel DockPanel.Dock="Right" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                                        <dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Margin="30,0,0,5" Content="Previous Step" dxco:Wizard.IsButtonBack="True" />
-                                        <dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Margin="30,0,0,5" Content="Next Step" dxco:Wizard.IsButtonNext="True" />
-                                        <dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Margin="30,0,0,5" Content="Cancel All Testing" dxco:Wizard.IsButtonCancel="True"/>
-                                        <dxco:WizardButton FontSize="25" Height="60" Padding="20,10,20,15" Margin="30,0,0,5" Content="Shut Down" dxco:Wizard.IsButtonFinish="True" />
-                                    </StackPanel>
-                                    <DockPanel DockPanel.Dock="Left" LastChildFill="true">
-                                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,10">
-                                            <TextBlock Text="Running Command: " Margin="0,0,0,3"></TextBlock>
-                                            <TextBlock Text="{Binding ExecutingCommandText}"></TextBlock>
-                                        </StackPanel>
-                                        <Border CornerRadius="5" Background="Transparent" BorderBrush="LightSkyBlue" BorderThickness="1" Padding="1">
-                                            <ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding ProcessMessages}" Background="Transparent" BorderThickness="0" IsTabStop="False" VerticalAlignment="Stretch">
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding}" Margin="0,1,0,0"></TextBlock>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </Border>
-                                    </DockPanel>
-                                </DockPanel>
-                            </Border>
-                        </dxco:WizardDialogFooter>
-                    </DataTemplate>
-                </dxco:Wizard.FooterTemplate>
                 <dxco:WelcomeWizardPage ShowFooter="False" ShowFinish="False" ShowCancel="False" ShowNext="False" x:Name="GatherParametersPage">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -91,11 +68,11 @@
                             <StackPanel>
                                 <TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Effani Assay"/>
                                 <TextBlock TextWrapping="WrapWithOverflow" Text="Herd ID" Margin="0,15,0,0"/>
-                                <dxe:TextEdit NullText="Enter the identifier of the herd being tested." Text="{Binding HerdId, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                                <dxe:TextEdit NullText="Enter the identifier of the herd being tested." Text="{Binding HerdId, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" IsVisibleChanged="GetFocus"/>
                                 <TextBlock TextWrapping="WrapWithOverflow" Text="Number of animals to be tested" Margin="0,15,0,0"/>
                                 <dxe:SpinEdit Width="80" EditValue="{Binding NumberOfSamples, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="0"
 								EditValueType="{x:Type sys:Int32}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" IsFloatValue="False" Mask="d0" MinValue="1" MaxValue="360" AllowSpinOnMouseWheel="True" />
-                                <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding NextPageCommand}" IsEnabled="{DXBinding 'DescriptionAndNumberOfTestsComplete'}">
+                                <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding NextPageCommand}" IsEnabled="{Binding HerdIdAndNumberOfTestsComplete}">
                                     <dx:SimpleButton.Content>
                                         <StackPanel>
                                             <TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Next</TextBlock>
@@ -114,7 +91,7 @@
                                 <TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
                                 <TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" Text="Waiting for all controls to move into their starting positions..." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Collapsed : $Visibility.Visible'}"></TextBlock>
                                 <TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" Text="Load new fluid syringes into the fluid pumps. Be sure to use the syringe labeled according to the pump's label." Visibility="{DXBinding 'MoveStartingPositionsComplete ? $Visibility.Visible : $Visibility.Collapsed'}"/>
-                                <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding FluidLoadedCommand}" IsEnabled="{Binding MoveStartingPositionsComplete}">
+                                <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding FluidLoadedCommand}" IsEnabled="{Binding MoveStartingPositionsComplete}" IsEnabledChanged="GetFocus">
                                     <dx:SimpleButton.Content>
                                         <StackPanel>
                                             <TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Fluid Loaded</TextBlock>
@@ -126,7 +103,7 @@
                             <StackPanel Visibility="{DXBinding 'FluidLoadingComplete ? $Visibility.Visible : $Visibility.Collapsed'}">
                                 <TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" FontSize="40" FontWeight="Black" Text="Load Sample Trays" />
                                 <TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" Text="Open the door on the deck and load sample trays into the sample tray carriage."/>
-                                <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding TraysLoadedCommand}">
+                                <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding TraysLoadedCommand}" IsVisibleChanged="GetFocus">
                                     <dx:SimpleButton.Content>
                                         <StackPanel>
                                             <TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Trays Loaded</TextBlock>
@@ -147,7 +124,8 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock TextWrapping="WrapWithOverflow" Text="{DXBinding 'StandardsComplete ? `Enter an animal identifier for ` + CurrentLoadingSample.Label + ` to continue.` : `Waiting for standards readings to complete...`'}" Margin="0,5,0,0"/>
                                     </StackPanel>
-                                    <dxe:TextEdit NullText="Animal identifier"
+                                    <dxe:TextEdit NullText="Animal identifier" IsVisibleChanged="GetFocus"
+                                                  IsEnabledChanged="GetFocus"
                                                   IsEnabled="{Binding StandardsComplete}"
                                                   Text="{Binding CurrentLoadingSample.AnimalId, UpdateSourceTrigger=PropertyChanged}" 
                                                   ValidateOnTextInput="False" 
@@ -166,7 +144,7 @@
                                             <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
                                                 <TextBlock Text="Waiting for sample preparation to complete..." Visibility="{DXBinding '!PreparedToLoadSample ? $Visibility.Visible : $Visibility.Collapsed'}"></TextBlock>
                                                 <TextBlock TextWrapping="WrapWithOverflow" Text="Ensure the sample is loaded correctly. Press Accept when ready." Visibility="{DXBinding 'PreparedToLoadSample ? $Visibility.Visible : $Visibility.Collapsed'}"/>
-                                                <dx:SimpleButton FontSize="25" Margin="0,20,0,0" Command="{Binding AcceptSampleCommand}" Content="Accept" ToolTip="Accept this sample for testing." IsEnabled="{Binding 'PreparedToLoadSample'}"/>
+                                                <dx:SimpleButton FontSize="25" Margin="0,20,0,0" Command="{Binding AcceptSampleCommand}" Content="Accept" ToolTip="Accept this sample for testing." IsEnabled="{Binding 'PreparedToLoadSample'}" IsVisibleChanged="GetFocus"/>
                                                 <!--<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding RetrySampleCommand}" Content="Reload" ToolTip="Reload this sample." IsEnabled="{Binding 'PreparedToLoadSample'}"/>-->
                                                 <!--<dx:SimpleButton FontSize="25" Margin="0,10,0,0" Command="{Binding SkipSampleCommand}" Content="Skip" ToolTip="Skip thesting this animal." IsEnabled="{Binding 'PreparedToLoadSample'}"/>-->
                                                 <dx:SimpleButton Padding="40" Margin="0,40,0,0" HorizontalAlignment="Stretch" Command="{Binding SkipRemainingCommand}" IsEnabled="{Binding 'PreparedToLoadSample'}">
@@ -196,7 +174,7 @@
                             <TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Clean Up"/>
                             <TextBlock Margin="0,10,0,0" TextWrapping="WrapWithOverflow" Text="Remove all fluid containers."/>
                             <TextBlock Margin="0,10,0,0" TextWrapping="WrapWithOverflow" Text="Remove sample plates."/>
-                            <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding NextPageCommand}">
+                            <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding NextPageCommand}" IsVisibleChanged="GetFocus">
                                 <dx:SimpleButton.Content>
                                     <StackPanel>
                                         <TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Cleaning Complete</TextBlock>
@@ -212,7 +190,7 @@
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Concluded"/>
                             <TextBlock TextWrapping="WrapWithOverflow" Text="{DXBinding '`Assay results recorded as: ` + AssayFullName'}" Visibility="{DXBinding 'AssayFullName == null ? Visibility.Collapsed : Visibility.Visible'}"/>
-                            <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding ShowUploadCommand}">
+                            <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding ShowUploadCommand}" IsVisibleChanged="GetFocus">
                                 <dx:SimpleButton.Content>
                                     <StackPanel>
                                         <TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Open Upload Screen</TextBlock>

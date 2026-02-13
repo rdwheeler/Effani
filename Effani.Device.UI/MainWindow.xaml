@@ -13,7 +13,7 @@
 	Height="800" Width="1000">
 	<dx:ThemedWindow.Resources>
 		<Style TargetType="{x:Type Border}">
-			<Setter Property="Background" Value="GhostWhite" />
+			<Setter Property="Background" Value="White" />
 			<Setter Property="CornerRadius" Value="10" />
 			<Setter Property="BorderThickness" Value="3" />
 			<Setter Property="BorderBrush" Value="CornflowerBlue" />

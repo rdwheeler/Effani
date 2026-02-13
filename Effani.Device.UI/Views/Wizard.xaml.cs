@@ -1,6 +1,7 @@
 ﻿using DevExpress.Xpf.Controls;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Editors;
+using DevExpress.XtraScheduler.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,8 +33,7 @@ namespace Effani.Device.UI
 
 		private void Wizard_Loaded(object sender, RoutedEventArgs e)
 		{
-			var viewModel = DataContext as MainViewModel;
-			viewModel.AdvanceWizardPage += ViewModel_AdvanceWizardPage;
+			ViewModel.AdvanceWizardPage += ViewModel_AdvanceWizardPage;
 		}
 		private void ViewModel_AdvanceWizardPage(object sender, EventArgs e)
 		{
@@ -43,21 +43,19 @@ namespace Effani.Device.UI
 		private void Wizard_Next(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			var page = wizard.SelectedItem as WizardPage;
-
-			var viewModel = DataContext as MainViewModel;
 			switch (page.Name)
 			{
 				case "GatherParametersPage":
-					viewModel.PageStartLoadFluidSystem();
+					ViewModel.PageStartLoadFluidSystem();
 					break;
 				case "LoadFluidSystemPage":
-					viewModel.PageStartLoadingSamples();
+					ViewModel.PageStartLoadingSamples();
 					break;
 				case "AssayPage":
-					viewModel.PageStartCleanUp();
+					ViewModel.PageStartCleanUp();
 					break;
 				case "CleanUpPage":
-					viewModel.PageStartAssayConcluded();
+					ViewModel.PageStartAssayConcluded();
 					break;
 			}
 		}
@@ -72,9 +70,24 @@ namespace Effani.Device.UI
 
         private void AnimalIdTextEdit_Validate(object sender, ValidationEventArgs e)
         {
-            var viewModel = DataContext as MainViewModel;
-			if (viewModel != null && !String.IsNullOrWhiteSpace((string)e.Value))
-				viewModel.InjectSample();
+			if (ViewModel != null && !String.IsNullOrWhiteSpace((string)e.Value))
+				ViewModel.InjectSample();
         }
+        private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            _backgroundPlayer.Position = TimeSpan.Zero;
+            _backgroundPlayer.Play();
+        }
+        private void GetFocus(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is UIElement element && element.Visibility == Visibility.Visible)
+            {
+                element.Dispatcher.BeginInvoke(
+                    System.Windows.Threading.DispatcherPriority.Input,
+                    new Action(() => element.Focus()));
+            }
+        }
+
+        public MainViewModel ViewModel => DataContext as MainViewModel;
     }
 }
