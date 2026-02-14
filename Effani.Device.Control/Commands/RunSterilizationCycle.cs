@@ -11,13 +11,13 @@ namespace Effani.Device.Control
 		{
 			var device = (AbalDeviceControl)Device;
 			device.AccOn(0);
-			Thread.Sleep(dwell);
+			Thread.Sleep(dwell * 1000);
 			device.AccOff(0);
 			device.AccOn(1);
-			Thread.Sleep(dwell);
+			Thread.Sleep(dwell * 1000);
 			device.AccOff(1);
 		}
-		public override string Description => $"Sterilizing for {dwell/1000 * 2} seconds.";
+		public override string Description => $"Sterilizing for {dwell} * 2 seconds.";
 
 		private readonly int dwell = dwell;
 	}
