@@ -21,7 +21,7 @@
     <ROW Property="ProductCode" Value="1033:{E6138652-03A6-40F4-917C-6B74F2336430} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Effani Device"/>
-    <ROW Property="ProductVersion" Value="3.0.0"/>
+    <ROW Property="ProductVersion" Value="3.0.1"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{70DD9A04-6B09-40D9-8373-64B63F7D4B79}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -40,7 +40,25 @@
     <ROW Directory="Resources_Dir" Directory_Parent="APPDIR" DefaultDir="RESOUR~1|Resources"/>
     <ROW Directory="StartMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="STARTM~1|StartMenuFolder" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="es_Dir" Directory_Parent="APPDIR" DefaultDir="es"/>
+    <ROW Directory="lib_1_Dir" Directory_Parent="win_Dir" DefaultDir="lib"/>
+    <ROW Directory="native_22_Dir" Directory_Parent="winarm_Dir" DefaultDir="native"/>
+    <ROW Directory="native_23_Dir" Directory_Parent="winarm64_Dir" DefaultDir="native"/>
+    <ROW Directory="native_24_Dir" Directory_Parent="winx64_Dir" DefaultDir="native"/>
+    <ROW Directory="native_25_Dir" Directory_Parent="winx86_Dir" DefaultDir="native"/>
+    <ROW Directory="net8.0_Dir" Directory_Parent="lib_1_Dir" DefaultDir="net8.0"/>
+    <ROW Directory="net9.0_2_Dir" Directory_Parent="lib_1_Dir" DefaultDir="net9.0"/>
+    <ROW Directory="netcoreapp2.1_1_Dir" Directory_Parent="lib_1_Dir" DefaultDir="NETCOR~1.1|netcoreapp2.1"/>
     <ROW Directory="regid.199509.com.example_Dir" Directory_Parent="CommonAppDataFolder" DefaultDir="REGID1~1.EXA|regid.1995-09.com.example"/>
+    <ROW Directory="runtimes_Dir" Directory_Parent="APPDIR" DefaultDir="runtimes"/>
+    <ROW Directory="tr_Dir" Directory_Parent="APPDIR" DefaultDir="tr"/>
+    <ROW Directory="win_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win"/>
+    <ROW Directory="winarm64_Dir" Directory_Parent="runtimes_Dir" DefaultDir="WIN-AR~1|win-arm64"/>
+    <ROW Directory="winarm_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-arm"/>
+    <ROW Directory="winx64_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-x64"/>
+    <ROW Directory="winx86_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-x86"/>
+    <ROW Directory="zhHans_Dir" Directory_Parent="APPDIR" DefaultDir="zh-Hans"/>
+    <ROW Directory="zhHant_Dir" Directory_Parent="APPDIR" DefaultDir="zh-Hant"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AI_ExePath" ComponentId="{A85AA393-806B-47AD-AB10-5158FC2C2AE4}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
@@ -186,11 +204,31 @@
     <ROW Component="Microsoft.Bcl.AsyncInterfaces.dll" ComponentId="{859B1419-E5CA-4094-A083-DEE0F9F1788F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Bcl.AsyncInterfaces.dll"/>
     <ROW Component="Microsoft.Build.Locator.dll" ComponentId="{0F7102AE-6ABE-4583-8C60-7027E29A95BF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Build.Locator.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.dll" ComponentId="{E976EB0C-6642-4102-AFB6-810A3FC4B129}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12" ComponentId="{F8EB0A80-D5B0-4ED7-954E-810EC4DBC5E8}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7" ComponentId="{2F6EC4C5-D48A-441B-8A43-D6E18C57E34C}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8" ComponentId="{C28DA8E0-B9DB-487B-A46B-4C54C8CE40FD}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9" ComponentId="{9D35FBAE-0F5F-4665-96CC-E070F9EBB882}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9"/>
     <ROW Component="Microsoft.CodeAnalysis.CSharp.dll" ComponentId="{568AC4FF-A4BB-44EF-8E01-A546F684DD07}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_12" ComponentId="{ADAC2DEB-E843-4B60-B082-E529BB8EED65}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_7" ComponentId="{33DCAD8D-15E3-40AF-81AA-AA7BDCE9C35E}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_8" ComponentId="{50F9167E-4083-42C3-B274-93978266DE4B}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_9" ComponentId="{0714238F-EFCD-4F3B-904C-F474992F005E}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_9"/>
     <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll" ComponentId="{E20D02F9-506B-455B-8F16-547C1BEEE2FF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12" ComponentId="{A1D5E2AD-3AE9-4C44-8ED1-038F4894484B}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7" ComponentId="{274FEFFA-2540-46D0-A560-76B7ECE1414D}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8" ComponentId="{13AD1702-63DC-441C-8E8B-1188D128CF7D}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9" ComponentId="{E072DCDA-3723-4261-99EB-8232F40EA018}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9"/>
     <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.dll" ComponentId="{DBF3C12E-396A-424A-A232-55F94CB77332}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.Workspaces.dll" ComponentId="{5595B10E-4B1C-47AF-8F4C-AB9AB085FD5F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_12" ComponentId="{050179D2-64A1-45E0-834B-AED7D41FE1F0}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_7" ComponentId="{6A9026C6-9D33-4CA9-B831-CC528A9E7784}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_8" ComponentId="{E95A1394-5290-40B9-A15A-EF27AF89A12B}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_9" ComponentId="{14A0E3A8-1572-4849-B4A1-F6D69B29EF7E}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_9"/>
     <ROW Component="Microsoft.CodeAnalysis.dll" ComponentId="{38BFD89E-552B-419B-83D8-8FE31B6C422C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_12" ComponentId="{0B9C474D-D8C0-463E-B7FE-02E7ABFCE835}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_7" ComponentId="{35B98FDB-B0F1-4E72-AF63-BB744139A539}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_8" ComponentId="{6F7008F2-41AE-43B2-BF3E-BD9EF7A80EB1}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_9" ComponentId="{CDFFD7D0-0BB7-4FB5-97B6-207A087961BD}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_9"/>
     <ROW Component="Microsoft.Data.Sqlite.dll" ComponentId="{B549F9B1-1A64-40C5-8E8F-14E794FCCE31}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Data.Sqlite.dll"/>
     <ROW Component="Microsoft.EntityFrameworkCore.Abstractions.dll" ComponentId="{7FFFAA86-5D9B-4305-9D80-FC50C5B26ECB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.EntityFrameworkCore.Abstractions.dll"/>
     <ROW Component="Microsoft.EntityFrameworkCore.Design.dll" ComponentId="{70C786C7-5F16-4EAD-BA0D-B2B922D8A02D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.EntityFrameworkCore.Design.dll"/>
@@ -242,18 +280,45 @@
     <ROW Component="System.Composition.Runtime.dll" ComponentId="{3AD9E18D-CC36-41AD-A33A-B6F3FF6B7CE5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.Runtime.dll"/>
     <ROW Component="System.Composition.TypedParts.dll" ComponentId="{5A4B6407-7FC2-4850-9311-A3EF4C026129}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.TypedParts.dll"/>
     <ROW Component="System.Data.OleDb.dll" ComponentId="{F6C20DBD-880B-410D-9BA8-CCB67175AAC0}" Directory_="APPDIR" Attributes="0" KeyPath="System.Data.OleDb.dll"/>
+    <ROW Component="System.Data.OleDb.dll_1" ComponentId="{73637AF9-F438-4277-A5DB-8A63C5AB9C63}" Directory_="net8.0_Dir" Attributes="0" KeyPath="System.Data.OleDb.dll_1"/>
     <ROW Component="System.Data.SqlClient.dll" ComponentId="{D820BE1B-2065-4EBE-AE08-1A05F1A71573}" Directory_="APPDIR" Attributes="0" KeyPath="System.Data.SqlClient.dll"/>
+    <ROW Component="System.Data.SqlClient.dll_2" ComponentId="{DE23B96C-9A01-405D-8B16-FC96316BF290}" Directory_="netcoreapp2.1_1_Dir" Attributes="0" KeyPath="System.Data.SqlClient.dll_2"/>
     <ROW Component="System.IO.Ports.dll" ComponentId="{D7CF38C1-B9C3-4899-85BC-A77B29CBCC74}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Ports.dll"/>
+    <ROW Component="System.IO.Ports.dll_2" ComponentId="{6115CF3E-3CEA-4D7D-B8B7-B264D6B996AC}" Directory_="net9.0_2_Dir" Attributes="0" KeyPath="System.IO.Ports.dll_2"/>
     <ROW Component="System.Management.dll" ComponentId="{8908F016-1294-41FF-9FC4-682079233963}" Directory_="APPDIR" Attributes="0" KeyPath="System.Management.dll"/>
+    <ROW Component="System.Management.dll_1" ComponentId="{1196986C-DD76-4720-B23A-485D6C22335A}" Directory_="net9.0_2_Dir" Attributes="0" KeyPath="System.Management.dll_1"/>
     <ROW Component="System.ServiceModel.Duplex.dll" ComponentId="{54E6FEB2-0B12-481E-B794-4224DF6D0B32}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Duplex.dll"/>
     <ROW Component="System.ServiceModel.Http.dll" ComponentId="{AE25E12D-BD58-41DE-8743-64C40AF86CE3}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Http.dll"/>
+    <ROW Component="System.ServiceModel.Http.resources.dll_12" ComponentId="{69451A09-3D6C-49AB-A7E2-1F32C9C5DA76}" Directory_="es_Dir" Attributes="0" KeyPath="System.ServiceModel.Http.resources.dll_12"/>
+    <ROW Component="System.ServiceModel.Http.resources.dll_7" ComponentId="{84D30344-DA46-4315-B5FB-3D108838ED25}" Directory_="tr_Dir" Attributes="0" KeyPath="System.ServiceModel.Http.resources.dll_7"/>
+    <ROW Component="System.ServiceModel.Http.resources.dll_8" ComponentId="{1788CA6D-B88F-4CC7-B1B1-312EF4A0F07D}" Directory_="zhHans_Dir" Attributes="0" KeyPath="System.ServiceModel.Http.resources.dll_8"/>
+    <ROW Component="System.ServiceModel.Http.resources.dll_9" ComponentId="{EB0CF7AF-531E-41D2-B8F5-8DC87CC58261}" Directory_="zhHant_Dir" Attributes="0" KeyPath="System.ServiceModel.Http.resources.dll_9"/>
     <ROW Component="System.ServiceModel.NetFramingBase.dll" ComponentId="{05BFBD4B-7EF4-4D8B-A5DD-BFC8938301BE}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.dll"/>
+    <ROW Component="System.ServiceModel.NetFramingBase.resources.dll_12" ComponentId="{991DED08-6DA7-4BEE-BE97-A23507E28F0E}" Directory_="es_Dir" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.resources.dll_12"/>
+    <ROW Component="System.ServiceModel.NetFramingBase.resources.dll_7" ComponentId="{DEF3428F-8636-46BB-BDE2-95FD8BB695B4}" Directory_="tr_Dir" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.resources.dll_7"/>
+    <ROW Component="System.ServiceModel.NetFramingBase.resources.dll_8" ComponentId="{DB666E17-3F8B-4BCA-8DCE-73819BB4474E}" Directory_="zhHans_Dir" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.resources.dll_8"/>
+    <ROW Component="System.ServiceModel.NetFramingBase.resources.dll_9" ComponentId="{3973FF2B-F71E-403D-A513-E673D6FBCBC6}" Directory_="zhHant_Dir" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.resources.dll_9"/>
     <ROW Component="System.ServiceModel.NetTcp.dll" ComponentId="{BE80B193-A45B-4D24-9FCC-1505F311B64A}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.NetTcp.dll"/>
+    <ROW Component="System.ServiceModel.NetTcp.resources.dll_12" ComponentId="{5F1082BB-B31A-44A8-BAAC-468F1BE35EE4}" Directory_="es_Dir" Attributes="0" KeyPath="System.ServiceModel.NetTcp.resources.dll_12"/>
+    <ROW Component="System.ServiceModel.NetTcp.resources.dll_7" ComponentId="{ED620919-3DDC-4F39-BC0C-A07AF45B333F}" Directory_="tr_Dir" Attributes="0" KeyPath="System.ServiceModel.NetTcp.resources.dll_7"/>
+    <ROW Component="System.ServiceModel.NetTcp.resources.dll_8" ComponentId="{F238DC58-9D01-4C73-9E2A-2962F00A7484}" Directory_="zhHans_Dir" Attributes="0" KeyPath="System.ServiceModel.NetTcp.resources.dll_8"/>
+    <ROW Component="System.ServiceModel.NetTcp.resources.dll_9" ComponentId="{A842D819-F556-4D4A-B43E-6B0BDB4CB7AD}" Directory_="zhHant_Dir" Attributes="0" KeyPath="System.ServiceModel.NetTcp.resources.dll_9"/>
     <ROW Component="System.ServiceModel.Primitives.dll" ComponentId="{6F89D58C-0817-444A-A720-996FCCF6B26B}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Primitives.dll"/>
+    <ROW Component="System.ServiceModel.Primitives.resources.dll_12" ComponentId="{C7AB408E-F8F5-49F2-8BDE-A8ED2A352C60}" Directory_="es_Dir" Attributes="0" KeyPath="System.ServiceModel.Primitives.resources.dll_12"/>
+    <ROW Component="System.ServiceModel.Primitives.resources.dll_7" ComponentId="{E3A1F3FE-375D-4D1D-9978-5C9C0C2B2212}" Directory_="tr_Dir" Attributes="0" KeyPath="System.ServiceModel.Primitives.resources.dll_7"/>
+    <ROW Component="System.ServiceModel.Primitives.resources.dll_8" ComponentId="{B1539BEF-5694-4DF4-9F94-59CCFA7E1E6B}" Directory_="zhHans_Dir" Attributes="0" KeyPath="System.ServiceModel.Primitives.resources.dll_8"/>
+    <ROW Component="System.ServiceModel.Primitives.resources.dll_9" ComponentId="{6AC402C2-4777-4158-B7ED-D1D2B5B7C28E}" Directory_="zhHant_Dir" Attributes="0" KeyPath="System.ServiceModel.Primitives.resources.dll_9"/>
     <ROW Component="System.ServiceModel.Security.dll" ComponentId="{32C52A33-F86F-4DE9-95D6-7947AEF002D6}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Security.dll"/>
     <ROW Component="System.ServiceModel.dll" ComponentId="{12BB8DB6-4823-4973-B207-601ECE63E401}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.dll"/>
+    <ROW Component="e_sqlite3.dll" ComponentId="{94F635FC-F2C4-43CD-956B-BDEE57C8E847}" Directory_="native_22_Dir" Attributes="0" KeyPath="e_sqlite3.dll"/>
+    <ROW Component="e_sqlite3.dll_1" ComponentId="{1EA2401F-5E1D-4E9A-BBC7-0F1CD4BDD4ED}" Directory_="native_23_Dir" Attributes="256" KeyPath="e_sqlite3.dll_1"/>
+    <ROW Component="e_sqlite3.dll_2" ComponentId="{0E554C7C-708E-4B9A-9B4D-0485BC9702AC}" Directory_="native_24_Dir" Attributes="256" KeyPath="e_sqlite3.dll_2"/>
+    <ROW Component="e_sqlite3.dll_3" ComponentId="{76E1CF50-881F-4B8E-8800-BAEA58BB7C6D}" Directory_="native_25_Dir" Attributes="0" KeyPath="e_sqlite3.dll_3"/>
     <ROW Component="effani_cow.mp4" ComponentId="{2ACEF72F-642C-4D7E-8FFF-00052D0F1C82}" Directory_="Resources_Dir" Attributes="0" KeyPath="effani_cow.mp4" Type="0"/>
     <ROW Component="regid.199509.com.example" ComponentId="{D412578F-BCC7-467A-99D5-3A1398CA8EDF}" Directory_="regid.199509.com.example_Dir" Attributes="0"/>
+    <ROW Component="sni.dll" ComponentId="{85DCA132-7357-4391-A2BB-9AFDFBB5BF6A}" Directory_="native_23_Dir" Attributes="256" KeyPath="sni.dll"/>
+    <ROW Component="sni.dll_1" ComponentId="{20A42B8B-FDB0-4C6D-9C0C-68DEB67AFDB2}" Directory_="native_24_Dir" Attributes="256" KeyPath="sni.dll_1"/>
+    <ROW Component="sni.dll_2" ComponentId="{F2487209-4FB3-44AD-8C57-E5E90C234802}" Directory_="native_25_Dir" Attributes="0" KeyPath="sni.dll_2"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
@@ -475,6 +540,53 @@
     <ROW File="System.ServiceModel.Primitives.dll" Component_="System.ServiceModel.Primitives.dll" FileName="SYSTE~15.DLL|System.ServiceModel.Primitives.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.ServiceModel.Primitives.dll" SelfReg="false"/>
     <ROW File="System.ServiceModel.Security.dll" Component_="System.ServiceModel.Security.dll" FileName="SYSTE~16.DLL|System.ServiceModel.Security.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.ServiceModel.Security.dll" SelfReg="false"/>
     <ROW File="effani_cow.mp4" Component_="effani_cow.mp4" FileName="EFFANI~1.MP4|effani_cow.mp4" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Resources\effani_cow.mp4" SelfReg="false"/>
+    <ROW File="System.Data.OleDb.dll_1" Component_="System.Data.OleDb.dll_1" FileName="SYSTEM~1.DLL|System.Data.OleDb.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win\lib\net8.0\System.Data.OleDb.dll" SelfReg="false"/>
+    <ROW File="System.IO.Ports.dll_2" Component_="System.IO.Ports.dll_2" FileName="SYSTEM~1.DLL|System.IO.Ports.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win\lib\net9.0\System.IO.Ports.dll" SelfReg="false"/>
+    <ROW File="System.Management.dll_1" Component_="System.Management.dll_1" FileName="SYSTEM~2.DLL|System.Management.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win\lib\net9.0\System.Management.dll" SelfReg="false"/>
+    <ROW File="System.Data.SqlClient.dll_2" Component_="System.Data.SqlClient.dll_2" FileName="SYSTEM~1.DLL|System.Data.SqlClient.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll" Component_="e_sqlite3.dll" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-arm\native\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_1" Component_="e_sqlite3.dll_1" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-arm64\native\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="sni.dll" Component_="sni.dll" FileName="sni.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-arm64\native\sni.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_2" Component_="e_sqlite3.dll_2" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-x64\native\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="sni.dll_1" Component_="sni.dll_1" FileName="sni.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-x64\native\sni.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_3" Component_="e_sqlite3.dll_3" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-x86\native\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="sni.dll_2" Component_="sni.dll_2" FileName="sni.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-x86\native\sni.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_7" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_7" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_7" Component_="Microsoft.CodeAnalysis.resources.dll_7" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_7" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_7" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.resources.dll_7" Component_="System.ServiceModel.Http.resources.dll_7" FileName="SYSTEM~1.DLL|System.ServiceModel.Http.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\System.ServiceModel.Http.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetFramingBase.resources.dll_7" Component_="System.ServiceModel.NetFramingBase.resources.dll_7" FileName="SYSTEM~2.DLL|System.ServiceModel.NetFramingBase.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\System.ServiceModel.NetFramingBase.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetTcp.resources.dll_7" Component_="System.ServiceModel.NetTcp.resources.dll_7" FileName="SYSTEM~3.DLL|System.ServiceModel.NetTcp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\System.ServiceModel.NetTcp.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.resources.dll_7" Component_="System.ServiceModel.Primitives.resources.dll_7" FileName="SYSTEM~4.DLL|System.ServiceModel.Primitives.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\System.ServiceModel.Primitives.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_8" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_8" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_8" Component_="Microsoft.CodeAnalysis.resources.dll_8" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_8" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_8" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.resources.dll_8" Component_="System.ServiceModel.Http.resources.dll_8" FileName="SYSTEM~1.DLL|System.ServiceModel.Http.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\System.ServiceModel.Http.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetFramingBase.resources.dll_8" Component_="System.ServiceModel.NetFramingBase.resources.dll_8" FileName="SYSTEM~2.DLL|System.ServiceModel.NetFramingBase.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\System.ServiceModel.NetFramingBase.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetTcp.resources.dll_8" Component_="System.ServiceModel.NetTcp.resources.dll_8" FileName="SYSTEM~3.DLL|System.ServiceModel.NetTcp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\System.ServiceModel.NetTcp.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.resources.dll_8" Component_="System.ServiceModel.Primitives.resources.dll_8" FileName="SYSTEM~4.DLL|System.ServiceModel.Primitives.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\System.ServiceModel.Primitives.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_9" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_9" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_9" Component_="Microsoft.CodeAnalysis.resources.dll_9" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_9" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_9" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.resources.dll_9" Component_="System.ServiceModel.Http.resources.dll_9" FileName="SYSTEM~1.DLL|System.ServiceModel.Http.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\System.ServiceModel.Http.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetFramingBase.resources.dll_9" Component_="System.ServiceModel.NetFramingBase.resources.dll_9" FileName="SYSTEM~2.DLL|System.ServiceModel.NetFramingBase.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\System.ServiceModel.NetFramingBase.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetTcp.resources.dll_9" Component_="System.ServiceModel.NetTcp.resources.dll_9" FileName="SYSTEM~3.DLL|System.ServiceModel.NetTcp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\System.ServiceModel.NetTcp.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.resources.dll_9" Component_="System.ServiceModel.Primitives.resources.dll_9" FileName="SYSTEM~4.DLL|System.ServiceModel.Primitives.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\System.ServiceModel.Primitives.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_12" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_12" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_12" Component_="Microsoft.CodeAnalysis.resources.dll_12" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_12" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_12" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.resources.dll_12" Component_="System.ServiceModel.Http.resources.dll_12" FileName="SYSTEM~1.DLL|System.ServiceModel.Http.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\System.ServiceModel.Http.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetFramingBase.resources.dll_12" Component_="System.ServiceModel.NetFramingBase.resources.dll_12" FileName="SYSTEM~2.DLL|System.ServiceModel.NetFramingBase.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\System.ServiceModel.NetFramingBase.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetTcp.resources.dll_12" Component_="System.ServiceModel.NetTcp.resources.dll_12" FileName="SYSTEM~3.DLL|System.ServiceModel.NetTcp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\System.ServiceModel.NetTcp.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.resources.dll_12" Component_="System.ServiceModel.Primitives.resources.dll_12" FileName="SYSTEM~4.DLL|System.ServiceModel.Primitives.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\System.ServiceModel.Primitives.resources.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -821,6 +933,53 @@
     <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.dll"/>
     <ROW Feature_="MainFeature" Component_="System.ServiceModel.Security.dll"/>
     <ROW Feature_="MainFeature" Component_="effani_cow.mp4"/>
+    <ROW Feature_="MainFeature" Component_="System.Data.OleDb.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.IO.Ports.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="System.Management.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Data.SqlClient.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="sni.dll"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="sni.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="sni.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetFramingBase.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetTcp.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetFramingBase.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetTcp.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetFramingBase.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetTcp.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetFramingBase.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetTcp.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.resources.dll_12"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="effanicow.exe" SourcePath="..\Effani.Device.UI\Resources\effanicow.ico" Index="0"/>
@@ -921,7 +1080,7 @@
     <ROW XmlAttribute="xsischemaLocation" XmlElement="swidsoftware_identification_tag" Name="xsi:schemaLocation" Flags="14" Order="3" Value="http://standards.iso.org/iso/19770/-2/2008/schema.xsd software_identification_tag.xsd"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.XmlElementComponent">
-    <ROW XmlElement="swidbuild" ParentElement="swidnumeric" Name="swid:build" Condition="1" Order="2" Flags="14" Text="0" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidbuild" ParentElement="swidnumeric" Name="swid:build" Condition="1" Order="2" Flags="14" Text="1" UpdateIndexInParent="0"/>
     <ROW XmlElement="swidentitlement_required_indicator" ParentElement="swidsoftware_identification_tag" Name="swid:entitlement_required_indicator" Condition="1" Order="0" Flags="14" Text="false" UpdateIndexInParent="0"/>
     <ROW XmlElement="swidmajor" ParentElement="swidnumeric" Name="swid:major" Condition="1" Order="0" Flags="14" Text="3" UpdateIndexInParent="0"/>
     <ROW XmlElement="swidminor" ParentElement="swidnumeric" Name="swid:minor" Condition="1" Order="1" Flags="14" Text="0" UpdateIndexInParent="0"/>
