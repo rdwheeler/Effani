@@ -111,7 +111,7 @@ namespace Effani.Device.UI
 		[Command]
 		public void TraysLoaded()
 		{
-			new System.Threading.Thread(() => Assay.EstablishStandards()).Start();
+            new System.Threading.Thread(() => Assay.EstablishStandards()).Start();
 			AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
 		#endregion

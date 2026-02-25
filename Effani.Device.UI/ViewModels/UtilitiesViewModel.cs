@@ -145,9 +145,17 @@ namespace Effani.Device.UI
 
 			RaisePropertyChanged(nameof(Settings));
 			RaisePropertyChanged(nameof(ActiveSettingsVersion));
-		}
+        }
+        [Command]
+        public async void ResetActiveSettings()
+        {
+            _settingsService.ResetSettings();
 
-		public string NewSettingsDescription { get; set; }
+            RaisePropertyChanged(nameof(Settings));
+            RaisePropertyChanged(nameof(ActiveSettingsVersion));
+        }
+
+        public string NewSettingsDescription { get; set; }
 		public ObservableCollection<SettingsVersion> SelectedSettingsVersions { get; set; } = new();
 		public ObservableCollection<SettingsVersion> SettingsVersions => _settingsService.SettingsVersions;
 		public Settings Settings => _settingsService.Settings;

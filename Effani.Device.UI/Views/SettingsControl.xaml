@@ -110,8 +110,9 @@
                         <Image Source="{dx:DXImage 'SvgImages/Save/SaveDialog.svg'}" />
                     </dx:SimpleButton.Content>
                 </dx:SimpleButton>
-                <dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Upload.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Upload these settings to the cloud" Command="{Binding UploadSettingsCommand}"/>
-                <dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Download.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Download these settings from the cloud" Command="{Binding DownloadSettingsCommand}"/>
+                <dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Download.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Reset settings to their default values." Command="{Binding ResetActiveSettingsCommand}"/>
+                <!--<dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Upload.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Upload these settings to the cloud" Command="{Binding UploadSettingsCommand}"/>
+                <dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Download.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Download these settings from the cloud" Command="{Binding DownloadSettingsCommand}"/>-->
             </StackPanel>
         </StackPanel>
         <dx:DXTabControl Margin="20,20,0,0" DataContext="{Binding Path=Settings}">
@@ -384,28 +385,28 @@
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutControl>
             </dx:DXTabItem>
-            <dx:DXTabItem Header="Assay Timing (ms)">
+            <dx:DXTabItem Header="Assay Timing">
                 <dxlc:LayoutControl>
                     <dxlc:LayoutGroup View="GroupBox" Header="Assay Timing (ms)" Orientation="Vertical">
-                        <dxlc:LayoutItem Label="Basal Media Incubation" ToolTip="Milliseconds sample stays in Basal media incubation">
+                        <dxlc:LayoutItem Label="Basal Media Incubation (ms)" ToolTip="Milliseconds sample stays in Basal media incubation">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding BasalIncubationTimerPeriod}" />
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="NADH-Basal Mixing Period" ToolTip="Milliseconds to wait for NADH to mix with Basal Media">
+                        <dxlc:LayoutItem Label="NADH-Basal Mixing Period (ms)" ToolTip="Milliseconds to wait for NADH to mix with Basal Media">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding NadhReading1TimerPeriod}" />
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="NADH Readings Interval" ToolTip="Milliseconds between NADH readings">
+                        <dxlc:LayoutItem Label="NADH Readings Interval (ms)" ToolTip="Milliseconds between NADH readings">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding NadhReadingsTimerPeriod}" />
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="NADH Timer Period" ToolTip="Milliseconds sample stays in NADH solution">
+                        <dxlc:LayoutItem Label="NADH Timer Period (ms)" ToolTip="Milliseconds sample stays in NADH solution">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding NadhIncubationDwell}" />
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="KOH Timer Period" ToolTip="Milliseconds sample stays in KOH solution">
+                        <dxlc:LayoutItem Label="KOH Timer Period (ms)" ToolTip="Milliseconds sample stays in KOH solution">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding KohTimerPeriod}" />
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="DNA Reagent Timer Period" ToolTip="Milliseconds sample stays in DNA reagent">
+                        <dxlc:LayoutItem Label="DNA Reagent Timer Period (ms)" ToolTip="Milliseconds sample stays in DNA reagent">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding DnaTimerPeriod}" />
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Standards Establishment Period" ToolTip="Milliseconds taken for establishing standards">
+                        <dxlc:LayoutItem Label="Standards Establishment Period (ms)" ToolTip="Milliseconds taken for establishing standards">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding StandardsProcessingDwell}" />
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>

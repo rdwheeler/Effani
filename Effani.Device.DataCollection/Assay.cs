@@ -19,7 +19,8 @@ namespace Effani.Device.DataCollection
 			Engine = engine;
 			CollectedOn = DateTime.Now;
 			StandardsWellCount = Settings.StandardsWellCount;
-			StandardsTimer = new System.Timers.Timer(Settings.StandardsProcessingDwell) { AutoReset = false };
+            StandardsTimer = new System.Timers.Timer(1000) { AutoReset = true, Enabled = false };
+            StandardsTimerCount = Settings.StandardsProcessingDwell / 1000;
 			StandardsTimer.Elapsed += StandardsTimer_Elapsed;
 		}
 		#endregion
@@ -33,7 +34,38 @@ namespace Effani.Device.DataCollection
 			foreach (var well in TestWells)
 				well.Dispose();
 		}
-		public void EstablishStandards()
+		private void RunSterilization()
+		{
+			var sterilizationSecondsCount = Settings.TraySterilizationTime * 2;
+			TimerMessageChanged?.Invoke(this, new DataArgs<string>($"Sterilizing System& - {GetTimeString(sterilizationSecondsCount * 1000)} remaining..."));
+			var sterilizationTimer = new System.Timers.Timer(1000) { AutoReset = true };
+			Engine.QueueCommand(new StartTimer(sterilizationTimer, $"Sterilizing system ({GetTimeString(Settings.StandardsProcessingDwell)})", Device));
+			sterilizationTimer.Elapsed += (s, e) =>
+			{
+				sterilizationSecondsCount--;
+				if (sterilizationSecondsCount <= 0 || _processTerminating)
+				{
+					sterilizationTimer.Stop();
+					sterilizationTimer.Dispose();
+					TimerMessageChanged?.Invoke(this, new DataArgs<string>(null));
+				}
+				else
+				{
+					TimerMessageChanged?.Invoke(this, new DataArgs<string>($"Sterilizing System& - {GetTimeString(sterilizationSecondsCount * 1000)} remaining..."));
+				}
+			};
+			Engine.QueueJob(new Job($"Sterilizing system", [
+				new TableToTraySterilizationLocation(Device),
+				new RunSterilizationCycle(Device, Settings.TraySterilizationTime)
+			]));
+
+			while (sterilizationSecondsCount > 0)
+            {
+                Task.Delay(1000).Wait();
+            }
+        }
+
+        public void EstablishStandards()
 		{
 			_doingPrepToBaselineTimerStart = true;
 
@@ -45,11 +77,8 @@ namespace Effani.Device.DataCollection
 			}
 
 			try
-			{
-				Engine.QueuePriorityJob(new Job($"Sterilizing sample trays.", [
-					new TableToTraySterilizationLocation(Device),
-					new RunSterilizationCycle(Device, Settings.TraySterilizationTime)
-				]));
+            {
+                RunSterilization();
 
 				if (!IsPrimedStandards)
 				{
@@ -78,8 +107,9 @@ namespace Effani.Device.DataCollection
 						new AlignWellToAxis(Axis.Basal, wellTest.Well, Device),
 						new EmitFluid(Axis.Basal, Settings.BasalVolume, Device)
 					]);
-				}
-				job.Commands.Add(new StartTimer(StandardsTimer, $"Standards ({GetTimeString(Settings.StandardsProcessingDwell)})", Device));
+                }
+                TimerMessageChanged?.Invoke(this, new DataArgs<string>($"Establishing Standards& - {GetTimeString(StandardsTimerCount * 1000)} remaining..."));
+                job.Commands.Add(new StartTimer(StandardsTimer, $"Standards ({GetTimeString(Settings.StandardsProcessingDwell)})", Device));
 				Engine.QueueJob(job);
 
 				Engine.QueueJob(new Job($"Reading Low NADH from {NadhStandardsWells[0].Well.Label}.", [
@@ -216,8 +246,16 @@ namespace Effani.Device.DataCollection
 		}
 		private string GetTimeString(int count)
 		{
-			return count == 0 ? null : TimeSpan.FromMilliseconds(count).ToString("c");
-		}
+            if(count == 0)
+                return null;
+
+			var ts = TimeSpan.FromMilliseconds(count);
+			var ret = String.Format("{0:000}:{1:00}:{2:00}",
+                  (int)(ts.TotalHours),
+                  ts.Minutes,
+                  ts.Seconds);
+            return ret;
+        }
 		private void KohDwellTimer_Elapsed(object sender, DataArgs<int> e)
 		{
 			_dnaLock.Wait();
@@ -347,6 +385,13 @@ namespace Effani.Device.DataCollection
 				if (_processTerminating)
 					return;
 
+                StandardsTimerCount--;
+				if(StandardsTimerCount > 0)
+                {
+                    TimerMessageChanged?.Invoke(this, new DataArgs<string>($"Establishing Standards& - {GetTimeString(StandardsTimerCount * 1000)} remaining..."));
+                    return;
+                }
+
 				while (_doingPrepToBaselineTimerStart)
 				{
 					if (_processTerminating)
@@ -370,7 +415,11 @@ namespace Effani.Device.DataCollection
 					new ReadDna(Device, (command) => { DNA_0mcg = ParseCommandResult(command); }),
 				]));
 
-				Engine.QueueCommand(new NotifyComplete((command) => { StandardsComplete?.Invoke(this, EventArgs.Empty); }, "Notify standards establishment complete.", Device));
+                Engine.QueueCommand(new NotifyComplete((command) => 
+				{ 
+					TimerMessageChanged?.Invoke(this, new DataArgs<string>(null));
+					StandardsComplete?.Invoke(this, EventArgs.Empty); 
+				}, "Notify standards establishment complete.", Device));
 			}
 			catch (IOException ex)
 			{
@@ -434,7 +483,9 @@ namespace Effani.Device.DataCollection
 		public int NumberOfSamples { get; set; }
 		[JsonIgnore]
 		public System.Timers.Timer StandardsTimer { get; set; }
-		public int StandardsWellCount { get; set; }
+        [JsonIgnore]
+        public int StandardsTimerCount { get; set; }
+        public int StandardsWellCount { get; set; }
 		[JsonIgnore]
 		public ObservableCollection<string> StatusMessages { get; } = new();
 		public List<TestWell> TestWells { get; private set; } = new();
@@ -443,14 +494,15 @@ namespace Effani.Device.DataCollection
 		[JsonIgnore]
 		public List<TestWell> TestWells2 { get; private set; }
 
-		public string OwnerId { get; set; }
+        public string OwnerId { get; set; }
 
 		public Guid Id { get; set; } = Guid.NewGuid();
 		#endregion
 
 		#region Events
 		public event EventHandler StandardsComplete;
-		public event EventHandler Terminated;
+        public event EventHandler<DataArgs<string>> TimerMessageChanged;
+        public event EventHandler Terminated;
 		public event EventHandler<DataArgs<TestWell>> TestComplete;
 		public event EventHandler<DataArgs<TestWell>> TestInDnaPhase;
 		public event EventHandler<DataArgs<TestWell>> TestInKohPhase;

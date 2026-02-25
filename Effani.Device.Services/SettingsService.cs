@@ -42,8 +42,18 @@ namespace Effani.Device.Services
 			SettingsVersions.Add(newSettings);
 			_efContext.SaveChanges();
 			ActivateSettingsVersion(newSettings);
-		}
-		public void DeleteSettings(string id)
+        }
+        public void ResetSettings()
+        {
+			var resetSettings = new Settings();
+
+            ActiveSettingsVersion.DeviceSettings.PropertyChanged -= DeviceSettings_PropertyChanged;
+			ActiveSettingsVersion.DeviceSettings = resetSettings;
+            resetSettings.PropertyChanged += DeviceSettings_PropertyChanged;
+            _efContext.Entry(ActiveSettingsVersion).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _efContext.SaveChanges();
+        }
+        public void DeleteSettings(string id)
 		{
 			var settings = _efContext.SettingsVersions.Find(id);
 			if(settings != null)
@@ -127,7 +137,8 @@ namespace Effani.Device.Services
 		#region Public methods
 		void ActivateSettingsVersion(string id);
 		void SaveAcitveSettingsAsNew(string description);
-		Task UploadSettings();
+        void ResetSettings();
+        Task UploadSettings();
 		#endregion
 
 		#region Properties

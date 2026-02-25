@@ -92,9 +92,20 @@ namespace Effani.Device.DataCollection
 
 		#region Private methods
 		private void SetCurrentTimerDescription(int count, string prefix = null)
-		{
-			var timeString = count == 0 ? null : TimeSpan.FromMilliseconds(count * _timerDescriptionUpdateInterval).ToString("c");
-			CurrentTimerDescription = $"{prefix}{timeString}";
+        {
+            if(count == 0)
+			{
+                CurrentTimerDescription = prefix;
+                return;
+			}
+
+            var ts = TimeSpan.FromMilliseconds(count * _timerDescriptionUpdateInterval);
+            var ret = String.Format("{0:000}:{1:00}:{2:00}",
+                  (int)(ts.TotalHours),
+                  ts.Minutes,
+                  ts.Seconds);
+
+            CurrentTimerDescription = $"{prefix}{ret}";
 		}
 		protected void RaisePropertyChanged(string propertyName)
 		{

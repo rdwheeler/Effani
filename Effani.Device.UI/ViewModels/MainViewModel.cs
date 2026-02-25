@@ -53,7 +53,8 @@ namespace Effani.Device.UI
 			{
 				Assay.StatusMessages.CollectionChanged -= StatusMessages_CollectionChanged;
 				Assay.StandardsComplete -= Assay_StandardsComplete;
-				Assay.TestInNadhReadingsPhase -= Assay_TestInNadhPhase;
+                Assay.TimerMessageChanged -= Assay_TimerMessageChanged;
+                Assay.TestInNadhReadingsPhase -= Assay_TestInNadhPhase;
 				Assay.TestInDnaPhase -= Assay_TestInDnaPhase;
 				Assay.TestInKohPhase -= Assay_TestInKohPhase;
 				Assay.TestComplete -= Assay_TestComplete;
@@ -85,7 +86,8 @@ namespace Effani.Device.UI
 			Assay.Initialize(NumberOfSamples);
 			Assay.StatusMessages.CollectionChanged += StatusMessages_CollectionChanged;
 			Assay.StandardsComplete += Assay_StandardsComplete;
-			Assay.TestInNadhReadingsPhase += Assay_TestInNadhPhase;
+            Assay.TimerMessageChanged += Assay_TimerMessageChanged;
+            Assay.TestInNadhReadingsPhase += Assay_TestInNadhPhase;
 			Assay.TestInDnaPhase += Assay_TestInDnaPhase;
 			Assay.TestInKohPhase += Assay_TestInKohPhase;
 			Assay.TestComplete += Assay_TestComplete;
@@ -119,7 +121,8 @@ namespace Effani.Device.UI
 
 			Assay.StatusMessages.CollectionChanged -= StatusMessages_CollectionChanged;
 			Assay.StandardsComplete -= Assay_StandardsComplete;
-			Assay.TestInNadhReadingsPhase -= Assay_TestInNadhPhase;
+			Assay.StandardsComplete -= Assay_StandardsComplete;
+            Assay.TestInNadhReadingsPhase -= Assay_TestInNadhPhase;
 			Assay.TestInDnaPhase -= Assay_TestInDnaPhase;
 			Assay.TestInKohPhase -= Assay_TestInKohPhase;
 			Assay.TestComplete -= Assay_TestComplete;
@@ -203,8 +206,25 @@ namespace Effani.Device.UI
 					{
 						StandardsComplete = true;
 					});
-		}
-		private void Assay_Terminated(object sender, EventArgs e)
+        }
+        private void Assay_TimerMessageChanged(object sender, DataArgs<string> e)
+        {
+            Application.Current.Dispatcher
+                .Invoke(
+                    () =>
+                    {
+						if (String.IsNullOrEmpty(e.Data))
+						{
+							TimerStatusTitle = null;
+							TimerStatusMessage = null;
+							return;
+                        }
+                        var split = e.Data.Split("&");
+						TimerStatusTitle = split.First();
+                        TimerStatusMessage = split.Last();
+                    });
+        }
+        private void Assay_Terminated(object sender, EventArgs e)
 		{
 			CancelAssay();
 		}
@@ -311,11 +331,38 @@ namespace Effani.Device.UI
 						PreparedToLoadSample = true;
 					});
 		}
-		string _assayFullName;
-		#endregion
+        #endregion
 
-		#region Properties
-		public string AssayFullName
+        #region Properties
+        public string TimerStatusMessage
+        {
+            get
+            {
+                return _sterilizingStatusMessage;
+            }
+            private set
+            {
+                if (_sterilizingStatusMessage == value)
+                    return;
+                _sterilizingStatusMessage = value;
+                RaisePropertyChanged(nameof(TimerStatusMessage));
+            }
+        }
+        public string TimerStatusTitle
+        {
+            get
+            {
+                return _timerStatusTitle;
+            }
+            set
+            {
+                if (_timerStatusTitle == value)
+                    return;
+                _timerStatusTitle = value;
+                RaisePropertyChanged(nameof(TimerStatusTitle));
+            }
+        }
+        public string AssayFullName
 		{
 			get
 			{
@@ -568,6 +615,9 @@ namespace Effani.Device.UI
 		public EventHandler AdvanceWizardPage;
 
         #region Fields
+        string _assayFullName;
+        string _sterilizingStatusMessage;
+        string _timerStatusTitle;
         bool _assayComplete;
 		bool _assayTerminated;
 		TestWell _currentLoadingSample;

@@ -9,9 +9,9 @@
              xmlns:local="clr-namespace:Effani.Device.UI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<UserControl.Resources>
-	</UserControl.Resources>
-	<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -19,81 +19,90 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Assay Status" VerticalAlignment="Bottom"/>
             <StackPanel Margin="20,0,0,0" Grid.Column="1">
-				<TextBlock TextWrapping="WrapWithOverflow" FontSize="15" VerticalAlignment="Center" Text="Executing Commands:"/>
-				<dx:DropDownButton Margin="0,5,20,0" Height="50" CornerRadius="5" HorizontalContentAlignment="Left"
+                <TextBlock TextWrapping="WrapWithOverflow" FontSize="15" VerticalAlignment="Center" Text="Executing Commands:"/>
+                <dx:DropDownButton Margin="0,5,20,0" Height="50" CornerRadius="5" HorizontalContentAlignment="Left"
 								   Content="{Binding DataContext.ExecutingCommandText, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" >
                     <Border CornerRadius="3">
-						<ListBox ItemsSource="{Binding DataContext.ProcessMessages, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" BorderThickness="0" IsTabStop="False" VerticalAlignment="Stretch">
-							<ListBox.ItemTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding}" Margin="0,1,0,0"></TextBlock>
-								</DataTemplate>
-							</ListBox.ItemTemplate>
-						</ListBox>
+                        <ListBox ItemsSource="{Binding DataContext.ProcessMessages, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" BorderThickness="0" IsTabStop="False" VerticalAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" Margin="0,1,0,0"></TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </Border>
                 </dx:DropDownButton>
             </StackPanel>
         </Grid>
         <Border Margin="0,10,20,0" Background="{DXBinding '@a($dxco:Wizard).DataContext.AllSamplesLoadedAndProcessing ? `Transparent` : `White`'}">
-            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="5*" />
-					<ColumnDefinition Width="5*" />
-					<ColumnDefinition Width="5*" />
-					<ColumnDefinition Width="5*" />
-					<ColumnDefinition Width="5*" />
-				</Grid.ColumnDefinitions>
-				<DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="0">
-					<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Basal Incubation"/>
-					<ItemsControl ItemsSource="{Binding DataContext.SamplesInBasal, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</DockPanel>
-				<DockPanel Grid.Column="1">
-					<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="NADH Readings"/>
-					<ItemsControl ItemsSource="{Binding DataContext.SamplesInNadh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</DockPanel>
-				<DockPanel Grid.Column="2">
-					<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="KOH Treatment"/>
-					<ItemsControl ItemsSource="{Binding DataContext.SamplesInKoh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</DockPanel>
-				<DockPanel Grid.Column="3">
-					<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="DNA Reading"/>
-					<ItemsControl ItemsSource="{Binding DataContext.SamplesInDna, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</DockPanel>
-				<DockPanel Grid.Column="4">
-					<TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Complete"/>
-					<ItemsControl ItemsSource="{Binding DataContext.SamplesComplete, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<TextBlock Padding="0" Margin="0" FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label'}" TextWrapping="Wrap"></TextBlock>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</DockPanel>	
-			</Grid>
-		</Border>
-	</StackPanel>
+            <StackPanel>
+                <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
+                    <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="0">
+                        <TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Basal Incubation"/>
+                        <ItemsControl ItemsSource="{Binding DataContext.SamplesInBasal, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                    <DockPanel Grid.Column="1">
+                        <TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="NADH Readings"/>
+                        <ItemsControl ItemsSource="{Binding DataContext.SamplesInNadh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                    <DockPanel Grid.Column="2">
+                        <TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="KOH Treatment"/>
+                        <ItemsControl ItemsSource="{Binding DataContext.SamplesInKoh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                    <DockPanel Grid.Column="3">
+                        <TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="DNA Reading"/>
+                        <ItemsControl ItemsSource="{Binding DataContext.SamplesInDna, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                    <DockPanel Grid.Column="4">
+                        <TextBlock TextWrapping="WrapWithOverflow" DockPanel.Dock="Top" FontSize="20" Text="Complete"/>
+                        <ItemsControl ItemsSource="{Binding DataContext.SamplesComplete, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0" Margin="0" FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label'}" TextWrapping="Wrap"></TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                </Grid>
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"
+                    Visibility="{DXBinding '@a($dxco:Wizard).DataContext.TimerStatusTitle != null ? $Visibility.Visible : $Visibility.Collapsed'}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextWrapping="WrapWithOverflow" FontSize="25" Text="{Binding DataContext.TimerStatusTitle, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}"/>
+                        <TextBlock VerticalAlignment="Bottom" TextWrapping="WrapWithOverflow" FontSize="20" Text="{Binding DataContext.TimerStatusMessage, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </UserControl>

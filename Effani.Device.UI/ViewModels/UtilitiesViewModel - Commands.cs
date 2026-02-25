@@ -104,7 +104,7 @@ namespace Effani.Device.UI
 		public async Task MoveRapid(List<object> parameters)
 		{
 			var axisSpec = (AxisSpec)parameters[0];
-			var distance = (decimal)parameters[1];
+			var distance = Convert.ToDecimal(parameters[1]);
 			_processEngine.QueueCommand(new MoveRelative(distance, _device, axisSpec));
 		}
 		[Command]

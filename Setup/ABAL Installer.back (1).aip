@@ -1,0 +1,1110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="20.2.1" version="20.2.1" PreviousModules="professional" Modules="enterprise" RootPath="." Language="en" Id="{D102A0D7-9428-4339-B5C7-77451160AE07}">
+  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
+    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;MsiDriverPackagesComponent;UserAccountsComponent;ScheduledTasksComponent;SqlConnectionComponent;AutorunComponent;FirewallExceptionComponent;GameUxComponent;MsiDirectEditorComponent;SharePointSlnComponent;SilverlightSlnComponent;MultipleInstancesComponent;SccmComponent;ActSyncAppComponent;CPLAppletComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="AI_CURRENT_YEAR" Value="2026" ValueLocId="-"/>
+    <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
+    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 20.2.1 build b066527d" ValueLocId="-"/>
+    <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_DOTNET_VERSION"/>
+    <ROW Property="AI_REQUIRED_DOTNET_DISPLAY" MultiBuildValue="DefaultBuild:4.0" ValueLocId="-"/>
+    <ROW Property="AI_REQUIRED_DOTNET_VERSION" MultiBuildValue="DefaultBuild:4.0.1" ValueLocId="-"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1"/>
+    <ROW Property="ARPNOREPAIR" MultiBuildValue="DefaultBuild:1"/>
+    <ROW Property="ARPPRODUCTICON" Value="effanicow.exe" Type="8"/>
+    <ROW Property="CTRLS" Value="2"/>
+    <ROW Property="Manufacturer" Value="Effani"/>
+    <ROW Property="ProductCode" Value="1033:{E6138652-03A6-40F4-917C-6B74F2336430} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="Effani Device"/>
+    <ROW Property="ProductVersion" Value="3.0.2"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
+    <ROW Property="UpgradeCode" Value="{70DD9A04-6B09-40D9-8373-64B63F7D4B79}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="CommonAppDataFolder" Directory_Parent="TARGETDIR" DefaultDir="COMMON~1|CommonAppDataFolder" IsPseudoRoot="1"/>
+    <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
+    <ROW Directory="Resources_Dir" Directory_Parent="APPDIR" DefaultDir="RESOUR~1|Resources"/>
+    <ROW Directory="StartMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="STARTM~1|StartMenuFolder" IsPseudoRoot="1"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="es_Dir" Directory_Parent="APPDIR" DefaultDir="es"/>
+    <ROW Directory="lib_1_Dir" Directory_Parent="win_Dir" DefaultDir="lib"/>
+    <ROW Directory="native_22_Dir" Directory_Parent="winarm_Dir" DefaultDir="native"/>
+    <ROW Directory="native_23_Dir" Directory_Parent="winarm64_Dir" DefaultDir="native"/>
+    <ROW Directory="native_24_Dir" Directory_Parent="winx64_Dir" DefaultDir="native"/>
+    <ROW Directory="native_25_Dir" Directory_Parent="winx86_Dir" DefaultDir="native"/>
+    <ROW Directory="net8.0_Dir" Directory_Parent="lib_1_Dir" DefaultDir="net8.0"/>
+    <ROW Directory="net9.0_2_Dir" Directory_Parent="lib_1_Dir" DefaultDir="net9.0"/>
+    <ROW Directory="netcoreapp2.1_1_Dir" Directory_Parent="lib_1_Dir" DefaultDir="NETCOR~1.1|netcoreapp2.1"/>
+    <ROW Directory="regid.199509.com.example_Dir" Directory_Parent="CommonAppDataFolder" DefaultDir="REGID1~1.EXA|regid.1995-09.com.example"/>
+    <ROW Directory="runtimes_Dir" Directory_Parent="APPDIR" DefaultDir="runtimes"/>
+    <ROW Directory="tr_Dir" Directory_Parent="APPDIR" DefaultDir="tr"/>
+    <ROW Directory="win_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win"/>
+    <ROW Directory="winarm64_Dir" Directory_Parent="runtimes_Dir" DefaultDir="WIN-AR~1|win-arm64"/>
+    <ROW Directory="winarm_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-arm"/>
+    <ROW Directory="winx64_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-x64"/>
+    <ROW Directory="winx86_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-x86"/>
+    <ROW Directory="zhHans_Dir" Directory_Parent="APPDIR" DefaultDir="zh-Hans"/>
+    <ROW Directory="zhHant_Dir" Directory_Parent="APPDIR" DefaultDir="zh-Hant"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="AI_ExePath" ComponentId="{A85AA393-806B-47AD-AB10-5158FC2C2AE4}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
+    <ROW Component="APPDIR" ComponentId="{B2119BA0-B7A3-40D7-A7ED-CB3A27422BD6}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="DevExpress.BonusSkins.v25.1.dll" ComponentId="{6693D5AA-1B7D-4A23-AC9B-36EED46F2E10}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.BonusSkins.v25.1.dll"/>
+    <ROW Component="DevExpress.Charts.Designer.v25.1.dll" ComponentId="{3E8D137C-EF3F-453B-89C1-0F7A5160F4B1}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Charts.Designer.v25.1.dll"/>
+    <ROW Component="DevExpress.Charts.v25.1.Core.dll" ComponentId="{E3F20B02-242F-4AD7-A15F-910A698AF861}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Charts.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.CodeParser.v25.1.dll" ComponentId="{D5697BB8-70B4-432E-AAD8-369A8183A1C2}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.CodeParser.v25.1.dll"/>
+    <ROW Component="DevExpress.Data.Desktop.v25.1.dll" ComponentId="{FEB827EE-3C1F-4CA6-8E4A-1D983EA4BA43}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Data.Desktop.v25.1.dll"/>
+    <ROW Component="DevExpress.Data.v25.1.dll" ComponentId="{90B23D22-4E98-4EBE-8469-D39B88DA03FF}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Data.v25.1.dll"/>
+    <ROW Component="DevExpress.DataAccess.v25.1.UI.dll" ComponentId="{B0813547-DD32-44EB-A290-EF7D86B7B92B}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.DataAccess.v25.1.UI.dll"/>
+    <ROW Component="DevExpress.DataAccess.v25.1.dll" ComponentId="{273D531C-9266-4935-B68E-F19997C95EE2}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.DataAccess.v25.1.dll"/>
+    <ROW Component="DevExpress.DataVisualization.v25.1.Core.dll" ComponentId="{62BDCEB6-ABCB-4D26-BA2A-A8DF06223950}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.DataVisualization.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Diagram.v25.1.Core.dll" ComponentId="{3679FBDE-01D0-4671-9F77-364A0A3D9FBE}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Diagram.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Dialogs.v25.1.Core.dll" ComponentId="{84CD5213-33A9-4782-993E-AB64A14CFD28}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Dialogs.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Drawing.v25.1.dll" ComponentId="{47BFE4E8-45CB-417A-B1DC-F2B76D1CCC72}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Drawing.v25.1.dll"/>
+    <ROW Component="DevExpress.Images.v25.1.dll" ComponentId="{51D2CF7E-1BEF-4B07-A34C-37F7B27D9452}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Images.v25.1.dll"/>
+    <ROW Component="DevExpress.Map.v25.1.Core.dll" ComponentId="{DD3A8483-A561-403D-AB01-3029256DF12E}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Map.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Mvvm.v25.1.dll" ComponentId="{0F554D60-A742-4C7C-BF2D-C9856C94CEDB}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Mvvm.v25.1.dll"/>
+    <ROW Component="DevExpress.Office.v25.1.Core.dll" ComponentId="{B6BB08C4-913B-46BC-A37F-AB069DCBF82E}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Office.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Pdf.v25.1.Core.dll" ComponentId="{2264D103-30A7-487C-8D45-567BE1ED7899}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Pdf.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Pdf.v25.1.Drawing.dll" ComponentId="{D7CFD480-4D07-45FF-AC3A-19D7FF9A338A}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Pdf.v25.1.Drawing.dll"/>
+    <ROW Component="DevExpress.PivotGrid.v25.1.Core.dll" ComponentId="{46F1DFEB-1320-4FA6-A8DD-EC4882FCF409}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.PivotGrid.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Printing.v25.1.Core.dll" ComponentId="{24B06DAA-BB34-449A-B6C0-82D8280442AD}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Printing.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.RichEdit.v25.1.Core.dll" ComponentId="{A2A856B5-4C4B-4A4E-A597-32030E86291A}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.RichEdit.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.RichEdit.v25.1.Export.dll" ComponentId="{7A52B1CB-CAE2-4D01-82E3-87B869E4F8DE}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.RichEdit.v25.1.Export.dll"/>
+    <ROW Component="DevExpress.Sparkline.v25.1.Core.dll" ComponentId="{794A0F9D-3DB4-4443-83E3-296BD760113F}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Sparkline.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.SpellChecker.v25.1.Core.dll" ComponentId="{8598A72D-2E9E-4634-85CF-67356793EA65}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.SpellChecker.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Spreadsheet.v25.1.Core.dll" ComponentId="{BAAFFA29-10C2-4A12-AA18-C53225CA2F48}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Spreadsheet.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.TreeMap.v25.1.Core.dll" ComponentId="{E512C4BB-29D1-4526-BB59-0C5D5DC727CE}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.TreeMap.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Utils.v25.1.UI.dll" ComponentId="{BF9FE62D-9E97-4DB4-8C12-8FD79B5A2F94}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Utils.v25.1.UI.dll"/>
+    <ROW Component="DevExpress.Utils.v25.1.dll" ComponentId="{867EE48F-9684-4C52-B3BF-57020C9FB5F1}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Utils.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Charts.v25.1.dll" ComponentId="{4009D687-2FE5-4171-81A0-1B65C3960F02}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Charts.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.CodeView.v25.1.dll" ComponentId="{5AA41E5E-C13A-4AA7-A942-6938483EEFCD}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.CodeView.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Controls.v25.1.dll" ComponentId="{80E0017B-CDD2-4F47-8B6D-05FF1E3FA3FB}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Controls.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Core.v25.1.dll" ComponentId="{9E8111A2-D1A9-4B94-8B96-48ABA25D8A7E}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Core.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.DataAccess.v25.1.dll" ComponentId="{892B42ED-6325-4C07-A0D6-20E676AA4728}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.DataAccess.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Diagram.v25.1.dll" ComponentId="{492ED1F9-CE8E-4BF6-8063-6A607B87F68E}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Diagram.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Docking.v25.1.dll" ComponentId="{14EC4858-AE76-407A-924F-3AE7B9A9D37B}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Docking.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.DocumentViewer.v25.1.Core.dll" ComponentId="{688FD423-ABCC-49E2-A9CC-DE27DDC6B746}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.DocumentViewer.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Xpf.ExpressionEditor.v25.1.dll" ComponentId="{C3F5D347-2DC9-40A6-B2D2-501B1A158084}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.ExpressionEditor.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Grid.v25.1.Core.dll" ComponentId="{82E314A5-4242-4124-B210-93B86840ECEB}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Grid.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Xpf.Grid.v25.1.Extensions.dll" ComponentId="{28CEC026-DB02-415F-8303-751A6620E904}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Grid.v25.1.Extensions.dll"/>
+    <ROW Component="DevExpress.Xpf.Grid.v25.1.dll" ComponentId="{AD6C8F99-5D46-4C92-A8E4-029C6F9496A1}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Grid.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Layout.v25.1.Core.dll" ComponentId="{72A1FB43-BAB0-4696-9FDE-1C5D66FAB8D7}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Layout.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.Xpf.LayoutControl.v25.1.dll" ComponentId="{1826E0A1-D40A-4FA5-AE47-C01B17967610}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.LayoutControl.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.NavBar.v25.1.dll" ComponentId="{9C82767B-6C46-4C85-A71D-3239E22D848F}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.NavBar.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Office.v25.1.dll" ComponentId="{B6ADA7FC-5774-4910-B0F2-EC3CC029E1C4}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Office.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.PivotGrid.v25.1.dll" ComponentId="{DE37471E-1357-4AE7-8FD2-88F4E8CFE474}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.PivotGrid.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Printing.v25.1.dll" ComponentId="{C489A773-7964-4A24-8EB1-2AE610F3F9B9}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Printing.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.PropertyGrid.v25.1.dll" ComponentId="{F7B56D3A-4CDD-4194-9C35-6EB75F811D40}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.PropertyGrid.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.ReportDesigner.v25.1.dll" ComponentId="{F400CC7A-35FA-48F5-8255-AEE04A5CA927}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.ReportDesigner.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Ribbon.v25.1.dll" ComponentId="{FE97BE08-4A82-4A39-8A63-A82EC49901BA}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Ribbon.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.RichEdit.v25.1.dll" ComponentId="{D5D9E701-C206-4148-AB68-8D7F0D744837}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.RichEdit.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.DXStyle.v25.1.dll" ComponentId="{2D74F24E-CB2F-4ED0-A14C-8D47D2CB025C}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.DXStyle.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.LightGray.v25.1.dll" ComponentId="{38790D28-A166-43A3-956E-1724729D6F60}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.LightGray.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.MetropolisDark.v25.1.dll" ComponentId="{0DD0B11C-1E64-4FA3-A7C8-3601EDD1B0AA}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.MetropolisDark.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.MetropolisLight.v25.1.dll" ComponentId="{0A530CC3-5515-484E-9B1E-12156B32E776}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.MetropolisLight.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2007Black.v25.1.dll" ComponentId="{3C4B3B54-7F8B-466D-BDF2-EFF3606CEF5F}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2007Black.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2007Blue.v25.1.dll" ComponentId="{3DC7C10C-B32E-4FB4-8B6E-79451D542646}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2007Blue.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2007Silver.v25.1.dll" ComponentId="{78D53E69-8636-4824-BD30-BBACD67472F6}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2007Silver.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2010Black.v25.1.dll" ComponentId="{1EE15CBD-FF6B-4A21-9525-E1BFC803FCC1}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2010Black.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2010Blue.v25.1.dll" ComponentId="{9FCCDA33-9312-48FD-B4F8-066C7DA52FC5}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2010Blue.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2010Silver.v25.1.dll" ComponentId="{6D4B1D71-1939-432F-8C1B-1B20089BCA76}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2010Silver.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2013.v25.1.dll" ComponentId="{4EA08A86-BCCD-43B9-9589-4ABDD598A4D6}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2013.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2013DarkGray.v25.1.dll" ComponentId="{196A5971-3D49-4082-9D55-F9908414DADE}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2013DarkGray.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2013LightGray.v25.1.dll" ComponentId="{73CC3818-554B-4110-8846-EB3751F6F529}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2013LightGray.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2016Black.v25.1.dll" ComponentId="{0A37ACBF-FA13-4213-ABEC-81510A87DA4C}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2016Black.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2016BlackSE.v25.1.dll" ComponentId="{818FBF32-08FC-4238-B2DF-AA145134DE78}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2016BlackSE.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2016Colorful.v25.1.dll" ComponentId="{ED71B55C-13CB-4A3B-8B0C-33892008AF4D}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2016Colorful.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2016ColorfulSE.v25.1.dll" ComponentId="{DE946C47-8C2F-4D11-81F9-6F2DC5FDDCC3}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2016ColorfulSE.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2016DarkGraySE.v25.1.dll" ComponentId="{0FC4D00B-18A9-4FC6-88CA-51FDF3EE8342}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2016DarkGraySE.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2016White.v25.1.dll" ComponentId="{BBD28604-4B88-4003-BF76-CD60860D1C5B}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2016White.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2016WhiteSE.v25.1.dll" ComponentId="{EE68ACD3-18A9-4B1C-9EBC-EA43207BE7E6}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2016WhiteSE.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2019Black.v25.1.dll" ComponentId="{F75C5EE4-B43F-4478-9E98-B8CA47B73949}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2019Black.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2019Colorful.v25.1.dll" ComponentId="{C508C36A-76EF-493D-92DA-10CEE098DBBF}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2019Colorful.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2019DarkGray.v25.1.dll" ComponentId="{DB4CFCA7-AD29-45CA-8A9A-C7B4A34EDB11}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2019DarkGray.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2019HighContrast.v25.1.dll" ComponentId="{B9C8D4A8-197C-44DE-8290-B2ECD4635BAE}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2019HighContrast.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Office2019White.v25.1.dll" ComponentId="{4256A1D8-0D5D-4CAC-8261-71E3A3A3516C}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Office2019White.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Seven.v25.1.dll" ComponentId="{936D7216-C3E0-495D-B963-09B66B4AD948}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Seven.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.TouchlineDark.v25.1.dll" ComponentId="{E4432B06-AB3D-4EF5-AA6A-03C54D4DCC9D}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.TouchlineDark.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.VS2010.v25.1.dll" ComponentId="{800EAE61-18E9-4FDC-91DF-A397E758A4B0}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.VS2010.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.VS2017Blue.v25.1.dll" ComponentId="{025A13E4-104A-4E18-9152-E5BE7D548CC6}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.VS2017Blue.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.VS2017Dark.v25.1.dll" ComponentId="{5D7BCD30-9F2D-4214-B604-6CF7DEC70640}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.VS2017Dark.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.VS2017Light.v25.1.dll" ComponentId="{DDD10110-147D-47D0-849A-403D09040F66}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.VS2017Light.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.VS2019Blue.v25.1.dll" ComponentId="{513AD227-9864-422A-9194-79767787EADE}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.VS2019Blue.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.VS2019Dark.v25.1.dll" ComponentId="{CC700A9D-CEDC-4645-BF7F-2369A61332BC}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.VS2019Dark.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.VS2019Light.v25.1.dll" ComponentId="{E68612F9-45B8-4539-937D-CDA313C96FDB}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.VS2019Light.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Win10Dark.v25.1.dll" ComponentId="{7B11F76C-67DF-4198-B2B0-72F4E3120AE4}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Win10Dark.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Win10Light.v25.1.dll" ComponentId="{017EF4B4-E2A2-43C6-8824-3B06BEBF5F31}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Win10Light.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Win11Dark.v25.1.dll" ComponentId="{BBF5FB46-4A26-4CB4-AF73-7D21A099C686}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Win11Dark.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.Themes.Win11Light.v25.1.dll" ComponentId="{4990906D-03B2-4FAD-B064-3B9642D0C549}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.Themes.Win11Light.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpf.ThemesLW.v25.1.dll" ComponentId="{BEB1AC76-858A-43A7-B760-2E7355983D3F}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpf.ThemesLW.v25.1.dll"/>
+    <ROW Component="DevExpress.Xpo.v25.1.dll" ComponentId="{2C8EA025-9AC4-47F6-8F60-9905772209A8}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.Xpo.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraBars.v25.1.dll" ComponentId="{6FFD02C4-7F4B-4495-929E-F44B0F83D852}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraBars.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraCharts.v25.1.Extensions.dll" ComponentId="{7CFCDA77-DCA0-4FBF-9C77-346D95DB4CF8}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraCharts.v25.1.Extensions.dll"/>
+    <ROW Component="DevExpress.XtraCharts.v25.1.UI.dll" ComponentId="{08E184AB-65B3-4426-A5F3-A90019434CCC}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraCharts.v25.1.UI.dll"/>
+    <ROW Component="DevExpress.XtraCharts.v25.1.Wizard.dll" ComponentId="{AC2E822D-7E85-4FAD-839E-E86BC329D766}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraCharts.v25.1.Wizard.dll"/>
+    <ROW Component="DevExpress.XtraCharts.v25.1.dll" ComponentId="{F67656A3-EF93-4161-A66B-B887D5C45CC4}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraCharts.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraDiagram.v25.1.dll" ComponentId="{0F08B7F5-B4C7-42AA-8CC0-A583EE2F3146}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraDiagram.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraDialogs.v25.1.dll" ComponentId="{A2A135EB-631B-41F4-99C9-D08E3280A824}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraDialogs.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraEditors.v25.1.dll" ComponentId="{625E5550-FD85-4A0C-87FA-D884CAC04145}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraEditors.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraGantt.v25.1.dll" ComponentId="{B26937B4-5824-4164-B788-DA05C009E2C1}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraGantt.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraGauges.v25.1.Core.dll" ComponentId="{0E0F79FD-AEB8-4F89-A55D-713DE9A3AB2D}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraGauges.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.XtraGauges.v25.1.Presets.dll" ComponentId="{FEC9FA3A-7F10-41D9-9FB1-25D62AED8EB9}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraGauges.v25.1.Presets.dll"/>
+    <ROW Component="DevExpress.XtraGauges.v25.1.Win.dll" ComponentId="{7FBCB66B-8979-4CA5-97B1-CEA0FF0E544B}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraGauges.v25.1.Win.dll"/>
+    <ROW Component="DevExpress.XtraGrid.v25.1.dll" ComponentId="{C89CAD42-A5C1-4A47-AB69-0B7CAAF03B3F}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraGrid.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraLayout.v25.1.dll" ComponentId="{B6B2033D-7A22-42DA-889C-93ACA6A980D8}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraLayout.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraMap.v25.1.dll" ComponentId="{7555831B-D9F7-4070-B434-6E79F6E853A0}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraMap.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraNavBar.v25.1.dll" ComponentId="{D47B4F4C-B2B0-4E93-BB3E-C04064C701BF}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraNavBar.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraPdfViewer.v25.1.dll" ComponentId="{F198F975-1169-47ED-BE0B-A1755474B34E}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraPdfViewer.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraPivotGrid.v25.1.dll" ComponentId="{1E0C6981-0912-42D0-B338-13CBEE6C93E0}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraPivotGrid.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraPrinting.v25.1.dll" ComponentId="{0BACCA0E-F3BE-4BE2-A4F0-E523C5FBB901}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraPrinting.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraReports.v25.1.Extensions.dll" ComponentId="{489066CC-0081-4FCC-AFB7-0B7EF6281BEE}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraReports.v25.1.Extensions.dll"/>
+    <ROW Component="DevExpress.XtraReports.v25.1.dll" ComponentId="{220504B6-03D5-4992-A487-585EE11A18C0}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraReports.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraRichEdit.v25.1.dll" ComponentId="{3B51BE26-40F9-47D2-8F18-FAF48FA8CF03}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraRichEdit.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraScheduler.v25.1.Core.Desktop.dll" ComponentId="{D7500B5C-FACD-42DA-BF27-FB6E77113E61}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraScheduler.v25.1.Core.Desktop.dll"/>
+    <ROW Component="DevExpress.XtraScheduler.v25.1.Core.dll" ComponentId="{57CFDF7A-11D7-4A4C-816A-AF5EB895C2D4}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraScheduler.v25.1.Core.dll"/>
+    <ROW Component="DevExpress.XtraScheduler.v25.1.Extensions.dll" ComponentId="{27DAA059-4CA2-498F-9D49-9BA99E1FD813}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraScheduler.v25.1.Extensions.dll"/>
+    <ROW Component="DevExpress.XtraScheduler.v25.1.Reporting.Extensions.dll" ComponentId="{D0BD2E85-8C8B-4140-BB24-48554D870E45}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraScheduler.v25.1.Reporting.Extensions.dll"/>
+    <ROW Component="DevExpress.XtraScheduler.v25.1.Reporting.dll" ComponentId="{6CA4080A-27FA-4488-9B4B-9859BDAB2A04}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraScheduler.v25.1.Reporting.dll"/>
+    <ROW Component="DevExpress.XtraScheduler.v25.1.dll" ComponentId="{FB4C725B-4D29-4BD5-910F-20509375CE1F}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraScheduler.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraSpellChecker.v25.1.dll" ComponentId="{778A73F4-6319-4C5D-A070-473495F3FA7F}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraSpellChecker.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraSpreadsheet.v25.1.dll" ComponentId="{BF1F0CC0-7415-494D-BF25-4CC5856EAA97}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraSpreadsheet.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraTreeList.v25.1.dll" ComponentId="{98A36BB7-9B03-498B-98F4-AB0F70A49079}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraTreeList.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraTreeMap.v25.1.UI.dll" ComponentId="{5C61A7FD-3DC7-4944-B1E9-8DF893DAF370}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraTreeMap.v25.1.UI.dll"/>
+    <ROW Component="DevExpress.XtraTreeMap.v25.1.dll" ComponentId="{35FBCDE7-5240-4D19-A9D8-18661CFE8089}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraTreeMap.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraVerticalGrid.v25.1.dll" ComponentId="{1829D90E-447A-4971-B0E7-03C3DCABCBA4}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraVerticalGrid.v25.1.dll"/>
+    <ROW Component="DevExpress.XtraWizard.v25.1.dll" ComponentId="{7D799182-32BC-42CD-9454-AA437EE326AF}" Directory_="APPDIR" Attributes="0" KeyPath="DevExpress.XtraWizard.v25.1.dll"/>
+    <ROW Component="DriveTrain.Toolbox.dll" ComponentId="{B44FC546-03C0-438C-B802-B368902009A3}" Directory_="APPDIR" Attributes="0" KeyPath="DriveTrain.Toolbox.dll"/>
+    <ROW Component="Drivetrain.Robotics.Control.dll" ComponentId="{A811BB88-84DC-4D59-B4E5-AF717CB0B757}" Directory_="APPDIR" Attributes="0" KeyPath="Drivetrain.Robotics.Control.dll"/>
+    <ROW Component="Drivetrain.Robotics.Process.dll" ComponentId="{C8E5A16C-AA35-4D11-9E6F-A758A8884DD6}" Directory_="APPDIR" Attributes="0" KeyPath="Drivetrain.Robotics.Process.dll"/>
+    <ROW Component="Effani.Device.Control.dll" ComponentId="{C9B62190-30E4-44BD-9207-BB4DC8C04E58}" Directory_="APPDIR" Attributes="0" KeyPath="Effani.Device.Control.dll"/>
+    <ROW Component="Effani.Device.DataCollection.dll" ComponentId="{02CCC6E0-14B8-498E-BDE2-14832A5EF3DC}" Directory_="APPDIR" Attributes="0" KeyPath="Effani.Device.DataCollection.dll"/>
+    <ROW Component="Effani.Device.Services.dll" ComponentId="{F5F342E7-738F-4DD8-9105-A464B0686916}" Directory_="APPDIR" Attributes="0" KeyPath="Effani.Device.Services.dll"/>
+    <ROW Component="EffaniDevice.deps.json" ComponentId="{C2F0F495-6B24-4BFB-B8FE-F914F68EB794}" Directory_="APPDIR" Attributes="0" KeyPath="EffaniDevice.deps.json" Type="0"/>
+    <ROW Component="EffaniDevice.dll" ComponentId="{448B393F-DB75-480F-89EF-08EB1818B034}" Directory_="APPDIR" Attributes="0" KeyPath="EffaniDevice.dll"/>
+    <ROW Component="EffaniDevice.exe" ComponentId="{4A00AC59-3F15-4BBC-92B0-EFBAAB56B9C0}" Directory_="APPDIR" Attributes="256" KeyPath="EffaniDevice.exe"/>
+    <ROW Component="Flurl.Http.dll" ComponentId="{D46E1F87-C897-4116-8D9A-4059D8514E1E}" Directory_="APPDIR" Attributes="0" KeyPath="Flurl.Http.dll"/>
+    <ROW Component="Flurl.dll" ComponentId="{E2717375-7867-4FAD-AF1D-17B0274DA9B9}" Directory_="APPDIR" Attributes="0" KeyPath="Flurl.dll"/>
+    <ROW Component="Humanizer.dll" ComponentId="{0C97D50E-CF0B-4D6A-9547-C08954DF2BBD}" Directory_="APPDIR" Attributes="0" KeyPath="Humanizer.dll"/>
+    <ROW Component="KGySoft.CoreLibraries.dll" ComponentId="{A2145558-8DCF-4D7F-96FA-B03CF078893F}" Directory_="APPDIR" Attributes="0" KeyPath="KGySoft.CoreLibraries.dll"/>
+    <ROW Component="Microsoft.Bcl.AsyncInterfaces.dll" ComponentId="{859B1419-E5CA-4094-A083-DEE0F9F1788F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Bcl.AsyncInterfaces.dll"/>
+    <ROW Component="Microsoft.Build.Locator.dll" ComponentId="{0F7102AE-6ABE-4583-8C60-7027E29A95BF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Build.Locator.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.dll" ComponentId="{E976EB0C-6642-4102-AFB6-810A3FC4B129}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12" ComponentId="{F8EB0A80-D5B0-4ED7-954E-810EC4DBC5E8}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7" ComponentId="{2F6EC4C5-D48A-441B-8A43-D6E18C57E34C}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8" ComponentId="{C28DA8E0-B9DB-487B-A46B-4C54C8CE40FD}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9" ComponentId="{9D35FBAE-0F5F-4665-96CC-E070F9EBB882}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.dll" ComponentId="{568AC4FF-A4BB-44EF-8E01-A546F684DD07}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_12" ComponentId="{ADAC2DEB-E843-4B60-B082-E529BB8EED65}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_7" ComponentId="{33DCAD8D-15E3-40AF-81AA-AA7BDCE9C35E}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_8" ComponentId="{50F9167E-4083-42C3-B274-93978266DE4B}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_9" ComponentId="{0714238F-EFCD-4F3B-904C-F474992F005E}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_9"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll" ComponentId="{E20D02F9-506B-455B-8F16-547C1BEEE2FF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12" ComponentId="{A1D5E2AD-3AE9-4C44-8ED1-038F4894484B}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7" ComponentId="{274FEFFA-2540-46D0-A560-76B7ECE1414D}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8" ComponentId="{13AD1702-63DC-441C-8E8B-1188D128CF7D}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9" ComponentId="{E072DCDA-3723-4261-99EB-8232F40EA018}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.MSBuild.dll" ComponentId="{DBF3C12E-396A-424A-A232-55F94CB77332}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.MSBuild.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.dll" ComponentId="{5595B10E-4B1C-47AF-8F4C-AB9AB085FD5F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_12" ComponentId="{050179D2-64A1-45E0-834B-AED7D41FE1F0}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_7" ComponentId="{6A9026C6-9D33-4CA9-B831-CC528A9E7784}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_8" ComponentId="{E95A1394-5290-40B9-A15A-EF27AF89A12B}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_9" ComponentId="{14A0E3A8-1572-4849-B4A1-F6D69B29EF7E}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_9"/>
+    <ROW Component="Microsoft.CodeAnalysis.dll" ComponentId="{38BFD89E-552B-419B-83D8-8FE31B6C422C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_12" ComponentId="{0B9C474D-D8C0-463E-B7FE-02E7ABFCE835}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_7" ComponentId="{35B98FDB-B0F1-4E72-AF63-BB744139A539}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_8" ComponentId="{6F7008F2-41AE-43B2-BF3E-BD9EF7A80EB1}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_9" ComponentId="{CDFFD7D0-0BB7-4FB5-97B6-207A087961BD}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_9"/>
+    <ROW Component="Microsoft.Data.Sqlite.dll" ComponentId="{B549F9B1-1A64-40C5-8E8F-14E794FCCE31}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Data.Sqlite.dll"/>
+    <ROW Component="Microsoft.EntityFrameworkCore.Abstractions.dll" ComponentId="{7FFFAA86-5D9B-4305-9D80-FC50C5B26ECB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.EntityFrameworkCore.Abstractions.dll"/>
+    <ROW Component="Microsoft.EntityFrameworkCore.Design.dll" ComponentId="{70C786C7-5F16-4EAD-BA0D-B2B922D8A02D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.EntityFrameworkCore.Design.dll"/>
+    <ROW Component="Microsoft.EntityFrameworkCore.Relational.dll" ComponentId="{AB9BC36D-46AE-42B6-A5B8-09D944C6AC73}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.EntityFrameworkCore.Relational.dll"/>
+    <ROW Component="Microsoft.EntityFrameworkCore.Sqlite.dll" ComponentId="{5FADA5C0-AFAE-4B51-A61B-982C0B2C84A1}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.EntityFrameworkCore.Sqlite.dll"/>
+    <ROW Component="Microsoft.EntityFrameworkCore.dll" ComponentId="{0BE96328-3D33-4508-BFE5-5EA24E8BF7E0}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.EntityFrameworkCore.dll"/>
+    <ROW Component="Microsoft.Extensions.Caching.Abstractions.dll" ComponentId="{0338BEE4-FCE3-48C9-B2F5-FACF3B3ECC19}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Caching.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Caching.Memory.dll" ComponentId="{BE35AE32-C11A-421A-95A9-1BA14A167791}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Caching.Memory.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{9048DB02-F3F5-407D-9E06-72E5D8425390}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{44942BDF-A325-49D0-B38D-63C511D22860}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{F1976607-FC1C-4D92-A6C2-715E9EBEDF4B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{50FD9F77-709D-4666-B9A4-7CDB5368B1AE}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{635B72DB-A027-441E-95C0-E67F31D3901F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{25C38C5B-9E1E-4339-82E8-B9B631D9706B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.UserSecrets.dll" ComponentId="{E6FD6A65-1FCC-468C-9AAA-122491675A40}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{D5E9F121-9846-4CB8-9943-720C56ADDAF4}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{957DE578-975C-40C0-AD49-0233C51BD90D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjection.dll" ComponentId="{91C95277-334E-4008-9FE6-F63292DE0207}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyModel.dll" ComponentId="{83C8134C-582E-4FC1-A7E7-5BB9356E0479}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyModel.dll"/>
+    <ROW Component="Microsoft.Extensions.Diagnostics.Abstractions.dll" ComponentId="{89351E38-D145-4902-A9CA-34639BDB2B53}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Diagnostics.dll" ComponentId="{C017F590-1FE9-47B9-9582-1EFEA08262FA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{105E35AF-DCB6-4B20-9B1E-3E5B57A8D898}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{377B925C-8146-4F84-8715-8DFBDD68D96E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{DA1C534F-25CA-4D90-991C-A9F988036A14}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{DBF51722-54A2-4EF2-A200-8DC01DFAE330}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{C94D43D9-0622-4603-88C9-AC56DABA04D9}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{0CF32416-B161-4E4F-BDA7-D6F50435B569}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{5B77F132-851E-4918-81FD-1272CC568D39}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Console.dll" ComponentId="{0CD05505-6060-4867-8C21-E1AAAD26BE8D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Console.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Debug.dll" ComponentId="{93CFEA1D-9980-4476-9371-B6D79DEFD259}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventLog.dll" ComponentId="{A613520E-9AF2-413E-A6B6-7A69322E551A}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventLog.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventSource.dll" ComponentId="{C3A77153-9D2A-4684-95D2-38C2FF8FE9B9}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventSource.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.dll" ComponentId="{88BA5A18-15D2-407C-869F-EF5E1D66BC6D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll"/>
+    <ROW Component="Microsoft.Extensions.ObjectPool.dll" ComponentId="{6F391A7C-DABB-422F-B9FD-F4C094D694D0}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.ObjectPool.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.ConfigurationExtensions.dll" ComponentId="{BA576E15-D960-4356-BAB3-6DBCCE5BC0EA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{1EE64034-4173-4C8E-B48D-258D2B21EBC4}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
+    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{EF5C66DD-1190-4C3E-AEC3-FDDA0A40F468}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Component="Mono.TextTemplating.dll" ComponentId="{80DE56B9-F8F0-4B80-AC71-CB1D909A5D6E}" Directory_="APPDIR" Attributes="0" KeyPath="Mono.TextTemplating.dll"/>
+    <ROW Component="ProductInformation" ComponentId="{7853A7A8-2608-48D2-BE7B-A1DED05AE343}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="SQLitePCLRaw.batteries_v2.dll" ComponentId="{33A05243-0E2A-4ECB-9677-A8079C690941}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.batteries_v2.dll"/>
+    <ROW Component="SQLitePCLRaw.core.dll" ComponentId="{E124B9DD-86A2-4A68-BBE1-9DC5B9B5D9D3}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.core.dll"/>
+    <ROW Component="SQLitePCLRaw.provider.e_sqlite3.dll" ComponentId="{541E6D94-0090-459C-B39F-1C87A62E3327}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.provider.e_sqlite3.dll"/>
+    <ROW Component="Serilog.Sinks.Console.dll" ComponentId="{7B38BEFF-3972-4109-99C9-C57371128DEF}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.Console.dll"/>
+    <ROW Component="Serilog.Sinks.File.dll" ComponentId="{857F58C2-2751-4CFF-A7FF-23734106AD30}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.File.dll"/>
+    <ROW Component="Serilog.dll" ComponentId="{800BC3BA-8540-4844-A323-9C4A1483379D}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.dll"/>
+    <ROW Component="System.Composition.AttributedModel.dll" ComponentId="{5568D2C1-433B-4868-9B6C-199C13D40363}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.AttributedModel.dll"/>
+    <ROW Component="System.Composition.Convention.dll" ComponentId="{62674242-0C75-4103-B72F-CF36B2167D77}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.Convention.dll"/>
+    <ROW Component="System.Composition.Hosting.dll" ComponentId="{83D63D03-B408-447A-A8EB-18D1FB4A8DCD}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.Hosting.dll"/>
+    <ROW Component="System.Composition.Runtime.dll" ComponentId="{3AD9E18D-CC36-41AD-A33A-B6F3FF6B7CE5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.Runtime.dll"/>
+    <ROW Component="System.Composition.TypedParts.dll" ComponentId="{5A4B6407-7FC2-4850-9311-A3EF4C026129}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.TypedParts.dll"/>
+    <ROW Component="System.Data.OleDb.dll" ComponentId="{F6C20DBD-880B-410D-9BA8-CCB67175AAC0}" Directory_="APPDIR" Attributes="0" KeyPath="System.Data.OleDb.dll"/>
+    <ROW Component="System.Data.OleDb.dll_1" ComponentId="{73637AF9-F438-4277-A5DB-8A63C5AB9C63}" Directory_="net8.0_Dir" Attributes="0" KeyPath="System.Data.OleDb.dll_1"/>
+    <ROW Component="System.Data.SqlClient.dll" ComponentId="{D820BE1B-2065-4EBE-AE08-1A05F1A71573}" Directory_="APPDIR" Attributes="0" KeyPath="System.Data.SqlClient.dll"/>
+    <ROW Component="System.Data.SqlClient.dll_2" ComponentId="{DE23B96C-9A01-405D-8B16-FC96316BF290}" Directory_="netcoreapp2.1_1_Dir" Attributes="0" KeyPath="System.Data.SqlClient.dll_2"/>
+    <ROW Component="System.IO.Ports.dll" ComponentId="{D7CF38C1-B9C3-4899-85BC-A77B29CBCC74}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Ports.dll"/>
+    <ROW Component="System.IO.Ports.dll_2" ComponentId="{6115CF3E-3CEA-4D7D-B8B7-B264D6B996AC}" Directory_="net9.0_2_Dir" Attributes="0" KeyPath="System.IO.Ports.dll_2"/>
+    <ROW Component="System.Management.dll" ComponentId="{8908F016-1294-41FF-9FC4-682079233963}" Directory_="APPDIR" Attributes="0" KeyPath="System.Management.dll"/>
+    <ROW Component="System.Management.dll_1" ComponentId="{1196986C-DD76-4720-B23A-485D6C22335A}" Directory_="net9.0_2_Dir" Attributes="0" KeyPath="System.Management.dll_1"/>
+    <ROW Component="System.ServiceModel.Duplex.dll" ComponentId="{54E6FEB2-0B12-481E-B794-4224DF6D0B32}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Duplex.dll"/>
+    <ROW Component="System.ServiceModel.Http.dll" ComponentId="{AE25E12D-BD58-41DE-8743-64C40AF86CE3}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Http.dll"/>
+    <ROW Component="System.ServiceModel.Http.resources.dll_12" ComponentId="{69451A09-3D6C-49AB-A7E2-1F32C9C5DA76}" Directory_="es_Dir" Attributes="0" KeyPath="System.ServiceModel.Http.resources.dll_12"/>
+    <ROW Component="System.ServiceModel.Http.resources.dll_7" ComponentId="{84D30344-DA46-4315-B5FB-3D108838ED25}" Directory_="tr_Dir" Attributes="0" KeyPath="System.ServiceModel.Http.resources.dll_7"/>
+    <ROW Component="System.ServiceModel.Http.resources.dll_8" ComponentId="{1788CA6D-B88F-4CC7-B1B1-312EF4A0F07D}" Directory_="zhHans_Dir" Attributes="0" KeyPath="System.ServiceModel.Http.resources.dll_8"/>
+    <ROW Component="System.ServiceModel.Http.resources.dll_9" ComponentId="{EB0CF7AF-531E-41D2-B8F5-8DC87CC58261}" Directory_="zhHant_Dir" Attributes="0" KeyPath="System.ServiceModel.Http.resources.dll_9"/>
+    <ROW Component="System.ServiceModel.NetFramingBase.dll" ComponentId="{05BFBD4B-7EF4-4D8B-A5DD-BFC8938301BE}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.dll"/>
+    <ROW Component="System.ServiceModel.NetFramingBase.resources.dll_12" ComponentId="{991DED08-6DA7-4BEE-BE97-A23507E28F0E}" Directory_="es_Dir" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.resources.dll_12"/>
+    <ROW Component="System.ServiceModel.NetFramingBase.resources.dll_7" ComponentId="{DEF3428F-8636-46BB-BDE2-95FD8BB695B4}" Directory_="tr_Dir" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.resources.dll_7"/>
+    <ROW Component="System.ServiceModel.NetFramingBase.resources.dll_8" ComponentId="{DB666E17-3F8B-4BCA-8DCE-73819BB4474E}" Directory_="zhHans_Dir" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.resources.dll_8"/>
+    <ROW Component="System.ServiceModel.NetFramingBase.resources.dll_9" ComponentId="{3973FF2B-F71E-403D-A513-E673D6FBCBC6}" Directory_="zhHant_Dir" Attributes="0" KeyPath="System.ServiceModel.NetFramingBase.resources.dll_9"/>
+    <ROW Component="System.ServiceModel.NetTcp.dll" ComponentId="{BE80B193-A45B-4D24-9FCC-1505F311B64A}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.NetTcp.dll"/>
+    <ROW Component="System.ServiceModel.NetTcp.resources.dll_12" ComponentId="{5F1082BB-B31A-44A8-BAAC-468F1BE35EE4}" Directory_="es_Dir" Attributes="0" KeyPath="System.ServiceModel.NetTcp.resources.dll_12"/>
+    <ROW Component="System.ServiceModel.NetTcp.resources.dll_7" ComponentId="{ED620919-3DDC-4F39-BC0C-A07AF45B333F}" Directory_="tr_Dir" Attributes="0" KeyPath="System.ServiceModel.NetTcp.resources.dll_7"/>
+    <ROW Component="System.ServiceModel.NetTcp.resources.dll_8" ComponentId="{F238DC58-9D01-4C73-9E2A-2962F00A7484}" Directory_="zhHans_Dir" Attributes="0" KeyPath="System.ServiceModel.NetTcp.resources.dll_8"/>
+    <ROW Component="System.ServiceModel.NetTcp.resources.dll_9" ComponentId="{A842D819-F556-4D4A-B43E-6B0BDB4CB7AD}" Directory_="zhHant_Dir" Attributes="0" KeyPath="System.ServiceModel.NetTcp.resources.dll_9"/>
+    <ROW Component="System.ServiceModel.Primitives.dll" ComponentId="{6F89D58C-0817-444A-A720-996FCCF6B26B}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Primitives.dll"/>
+    <ROW Component="System.ServiceModel.Primitives.resources.dll_12" ComponentId="{C7AB408E-F8F5-49F2-8BDE-A8ED2A352C60}" Directory_="es_Dir" Attributes="0" KeyPath="System.ServiceModel.Primitives.resources.dll_12"/>
+    <ROW Component="System.ServiceModel.Primitives.resources.dll_7" ComponentId="{E3A1F3FE-375D-4D1D-9978-5C9C0C2B2212}" Directory_="tr_Dir" Attributes="0" KeyPath="System.ServiceModel.Primitives.resources.dll_7"/>
+    <ROW Component="System.ServiceModel.Primitives.resources.dll_8" ComponentId="{B1539BEF-5694-4DF4-9F94-59CCFA7E1E6B}" Directory_="zhHans_Dir" Attributes="0" KeyPath="System.ServiceModel.Primitives.resources.dll_8"/>
+    <ROW Component="System.ServiceModel.Primitives.resources.dll_9" ComponentId="{6AC402C2-4777-4158-B7ED-D1D2B5B7C28E}" Directory_="zhHant_Dir" Attributes="0" KeyPath="System.ServiceModel.Primitives.resources.dll_9"/>
+    <ROW Component="System.ServiceModel.Security.dll" ComponentId="{32C52A33-F86F-4DE9-95D6-7947AEF002D6}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Security.dll"/>
+    <ROW Component="System.ServiceModel.dll" ComponentId="{12BB8DB6-4823-4973-B207-601ECE63E401}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.dll"/>
+    <ROW Component="e_sqlite3.dll" ComponentId="{94F635FC-F2C4-43CD-956B-BDEE57C8E847}" Directory_="native_22_Dir" Attributes="0" KeyPath="e_sqlite3.dll"/>
+    <ROW Component="e_sqlite3.dll_1" ComponentId="{1EA2401F-5E1D-4E9A-BBC7-0F1CD4BDD4ED}" Directory_="native_23_Dir" Attributes="256" KeyPath="e_sqlite3.dll_1"/>
+    <ROW Component="e_sqlite3.dll_2" ComponentId="{0E554C7C-708E-4B9A-9B4D-0485BC9702AC}" Directory_="native_24_Dir" Attributes="256" KeyPath="e_sqlite3.dll_2"/>
+    <ROW Component="e_sqlite3.dll_3" ComponentId="{76E1CF50-881F-4B8E-8800-BAEA58BB7C6D}" Directory_="native_25_Dir" Attributes="0" KeyPath="e_sqlite3.dll_3"/>
+    <ROW Component="effani_cow.mp4" ComponentId="{2ACEF72F-642C-4D7E-8FFF-00052D0F1C82}" Directory_="Resources_Dir" Attributes="0" KeyPath="effani_cow.mp4" Type="0"/>
+    <ROW Component="regid.199509.com.example" ComponentId="{D412578F-BCC7-467A-99D5-3A1398CA8EDF}" Directory_="regid.199509.com.example_Dir" Attributes="0"/>
+    <ROW Component="sni.dll" ComponentId="{85DCA132-7357-4391-A2BB-9AFDFBB5BF6A}" Directory_="native_23_Dir" Attributes="256" KeyPath="sni.dll"/>
+    <ROW Component="sni.dll_1" ComponentId="{20A42B8B-FDB0-4C6D-9C0C-68DEB67AFDB2}" Directory_="native_24_Dir" Attributes="256" KeyPath="sni.dll_1"/>
+    <ROW Component="sni.dll_2" ComponentId="{F2487209-4FB3-44AD-8C57-E5E90C234802}" Directory_="native_25_Dir" Attributes="0" KeyPath="sni.dll_2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="EffaniDevice.exe" Component_="EffaniDevice.exe" FileName="EFFANI~1.EXE|Effani Device.exe" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani Device.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="DevExpress.BonusSkins.v25.1.dll" Component_="DevExpress.BonusSkins.v25.1.dll" FileName="DEVEXP~1.DLL|DevExpress.BonusSkins.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.BonusSkins.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Charts.Designer.v25.1.dll" Component_="DevExpress.Charts.Designer.v25.1.dll" FileName="DEVEXP~2.DLL|DevExpress.Charts.Designer.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Charts.Designer.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Charts.v25.1.Core.dll" Component_="DevExpress.Charts.v25.1.Core.dll" FileName="DEVEXP~3.DLL|DevExpress.Charts.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Charts.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.CodeParser.v25.1.dll" Component_="DevExpress.CodeParser.v25.1.dll" FileName="DEVEXP~4.DLL|DevExpress.CodeParser.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.CodeParser.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Data.Desktop.v25.1.dll" Component_="DevExpress.Data.Desktop.v25.1.dll" FileName="DEVEXP~5.DLL|DevExpress.Data.Desktop.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Data.Desktop.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Data.v25.1.dll" Component_="DevExpress.Data.v25.1.dll" FileName="DEVEXP~6.DLL|DevExpress.Data.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Data.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.DataAccess.v25.1.dll" Component_="DevExpress.DataAccess.v25.1.dll" FileName="DEVEXP~7.DLL|DevExpress.DataAccess.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.DataAccess.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.DataAccess.v25.1.UI.dll" Component_="DevExpress.DataAccess.v25.1.UI.dll" FileName="DEVEXP~8.DLL|DevExpress.DataAccess.v25.1.UI.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.DataAccess.v25.1.UI.dll" SelfReg="false"/>
+    <ROW File="DevExpress.DataVisualization.v25.1.Core.dll" Component_="DevExpress.DataVisualization.v25.1.Core.dll" FileName="DEVEXP~9.DLL|DevExpress.DataVisualization.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.DataVisualization.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Diagram.v25.1.Core.dll" Component_="DevExpress.Diagram.v25.1.Core.dll" FileName="DEVEX~10.DLL|DevExpress.Diagram.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Diagram.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Dialogs.v25.1.Core.dll" Component_="DevExpress.Dialogs.v25.1.Core.dll" FileName="DEVEX~11.DLL|DevExpress.Dialogs.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Dialogs.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Drawing.v25.1.dll" Component_="DevExpress.Drawing.v25.1.dll" FileName="DEVEX~12.DLL|DevExpress.Drawing.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Drawing.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Images.v25.1.dll" Component_="DevExpress.Images.v25.1.dll" FileName="DEVEX~13.DLL|DevExpress.Images.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Images.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Map.v25.1.Core.dll" Component_="DevExpress.Map.v25.1.Core.dll" FileName="DEVEX~14.DLL|DevExpress.Map.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Map.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Mvvm.v25.1.dll" Component_="DevExpress.Mvvm.v25.1.dll" FileName="DEVEX~15.DLL|DevExpress.Mvvm.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Mvvm.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Office.v25.1.Core.dll" Component_="DevExpress.Office.v25.1.Core.dll" FileName="DEVEX~16.DLL|DevExpress.Office.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Office.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Pdf.v25.1.Core.dll" Component_="DevExpress.Pdf.v25.1.Core.dll" FileName="DEVEX~17.DLL|DevExpress.Pdf.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Pdf.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Pdf.v25.1.Drawing.dll" Component_="DevExpress.Pdf.v25.1.Drawing.dll" FileName="DEVEX~18.DLL|DevExpress.Pdf.v25.1.Drawing.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Pdf.v25.1.Drawing.dll" SelfReg="false"/>
+    <ROW File="DevExpress.PivotGrid.v25.1.Core.dll" Component_="DevExpress.PivotGrid.v25.1.Core.dll" FileName="DEVEX~19.DLL|DevExpress.PivotGrid.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.PivotGrid.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Printing.v25.1.Core.dll" Component_="DevExpress.Printing.v25.1.Core.dll" FileName="DEVEX~20.DLL|DevExpress.Printing.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Printing.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.RichEdit.v25.1.Core.dll" Component_="DevExpress.RichEdit.v25.1.Core.dll" FileName="DEVEX~21.DLL|DevExpress.RichEdit.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.RichEdit.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.RichEdit.v25.1.Export.dll" Component_="DevExpress.RichEdit.v25.1.Export.dll" FileName="DEVEX~22.DLL|DevExpress.RichEdit.v25.1.Export.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.RichEdit.v25.1.Export.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Sparkline.v25.1.Core.dll" Component_="DevExpress.Sparkline.v25.1.Core.dll" FileName="DEVEX~23.DLL|DevExpress.Sparkline.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Sparkline.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.SpellChecker.v25.1.Core.dll" Component_="DevExpress.SpellChecker.v25.1.Core.dll" FileName="DEVEX~24.DLL|DevExpress.SpellChecker.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.SpellChecker.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Spreadsheet.v25.1.Core.dll" Component_="DevExpress.Spreadsheet.v25.1.Core.dll" FileName="DEVEX~25.DLL|DevExpress.Spreadsheet.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Spreadsheet.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.TreeMap.v25.1.Core.dll" Component_="DevExpress.TreeMap.v25.1.Core.dll" FileName="DEVEX~26.DLL|DevExpress.TreeMap.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.TreeMap.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Utils.v25.1.dll" Component_="DevExpress.Utils.v25.1.dll" FileName="DEVEX~27.DLL|DevExpress.Utils.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Utils.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Utils.v25.1.UI.dll" Component_="DevExpress.Utils.v25.1.UI.dll" FileName="DEVEX~28.DLL|DevExpress.Utils.v25.1.UI.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Utils.v25.1.UI.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Charts.v25.1.dll" Component_="DevExpress.Xpf.Charts.v25.1.dll" FileName="DEVEX~29.DLL|DevExpress.Xpf.Charts.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Charts.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.CodeView.v25.1.dll" Component_="DevExpress.Xpf.CodeView.v25.1.dll" FileName="DEVEX~30.DLL|DevExpress.Xpf.CodeView.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.CodeView.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Controls.v25.1.dll" Component_="DevExpress.Xpf.Controls.v25.1.dll" FileName="DEVEX~31.DLL|DevExpress.Xpf.Controls.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Controls.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Core.v25.1.dll" Component_="DevExpress.Xpf.Core.v25.1.dll" FileName="DEVEX~32.DLL|DevExpress.Xpf.Core.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Core.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.DataAccess.v25.1.dll" Component_="DevExpress.Xpf.DataAccess.v25.1.dll" FileName="DEVEX~33.DLL|DevExpress.Xpf.DataAccess.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.DataAccess.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Diagram.v25.1.dll" Component_="DevExpress.Xpf.Diagram.v25.1.dll" FileName="DEVEX~34.DLL|DevExpress.Xpf.Diagram.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Diagram.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Docking.v25.1.dll" Component_="DevExpress.Xpf.Docking.v25.1.dll" FileName="DEVEX~35.DLL|DevExpress.Xpf.Docking.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Docking.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.DocumentViewer.v25.1.Core.dll" Component_="DevExpress.Xpf.DocumentViewer.v25.1.Core.dll" FileName="DEVEX~36.DLL|DevExpress.Xpf.DocumentViewer.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.DocumentViewer.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.ExpressionEditor.v25.1.dll" Component_="DevExpress.Xpf.ExpressionEditor.v25.1.dll" FileName="DEVEX~37.DLL|DevExpress.Xpf.ExpressionEditor.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.ExpressionEditor.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Grid.v25.1.Core.dll" Component_="DevExpress.Xpf.Grid.v25.1.Core.dll" FileName="DEVEX~38.DLL|DevExpress.Xpf.Grid.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Grid.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Grid.v25.1.dll" Component_="DevExpress.Xpf.Grid.v25.1.dll" FileName="DEVEX~39.DLL|DevExpress.Xpf.Grid.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Grid.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Grid.v25.1.Extensions.dll" Component_="DevExpress.Xpf.Grid.v25.1.Extensions.dll" FileName="DEVEX~40.DLL|DevExpress.Xpf.Grid.v25.1.Extensions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Grid.v25.1.Extensions.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Layout.v25.1.Core.dll" Component_="DevExpress.Xpf.Layout.v25.1.Core.dll" FileName="DEVEX~41.DLL|DevExpress.Xpf.Layout.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Layout.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.LayoutControl.v25.1.dll" Component_="DevExpress.Xpf.LayoutControl.v25.1.dll" FileName="DEVEX~42.DLL|DevExpress.Xpf.LayoutControl.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.LayoutControl.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.NavBar.v25.1.dll" Component_="DevExpress.Xpf.NavBar.v25.1.dll" FileName="DEVEX~43.DLL|DevExpress.Xpf.NavBar.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.NavBar.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Office.v25.1.dll" Component_="DevExpress.Xpf.Office.v25.1.dll" FileName="DEVEX~44.DLL|DevExpress.Xpf.Office.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Office.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.PivotGrid.v25.1.dll" Component_="DevExpress.Xpf.PivotGrid.v25.1.dll" FileName="DEVEX~45.DLL|DevExpress.Xpf.PivotGrid.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.PivotGrid.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Printing.v25.1.dll" Component_="DevExpress.Xpf.Printing.v25.1.dll" FileName="DEVEX~46.DLL|DevExpress.Xpf.Printing.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Printing.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.PropertyGrid.v25.1.dll" Component_="DevExpress.Xpf.PropertyGrid.v25.1.dll" FileName="DEVEX~47.DLL|DevExpress.Xpf.PropertyGrid.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.PropertyGrid.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.ReportDesigner.v25.1.dll" Component_="DevExpress.Xpf.ReportDesigner.v25.1.dll" FileName="DEVEX~48.DLL|DevExpress.Xpf.ReportDesigner.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.ReportDesigner.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Ribbon.v25.1.dll" Component_="DevExpress.Xpf.Ribbon.v25.1.dll" FileName="DEVEX~49.DLL|DevExpress.Xpf.Ribbon.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Ribbon.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.RichEdit.v25.1.dll" Component_="DevExpress.Xpf.RichEdit.v25.1.dll" FileName="DEVEX~50.DLL|DevExpress.Xpf.RichEdit.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.RichEdit.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.DXStyle.v25.1.dll" Component_="DevExpress.Xpf.Themes.DXStyle.v25.1.dll" FileName="DEVEX~51.DLL|DevExpress.Xpf.Themes.DXStyle.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.DXStyle.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.LightGray.v25.1.dll" Component_="DevExpress.Xpf.Themes.LightGray.v25.1.dll" FileName="DEVEX~52.DLL|DevExpress.Xpf.Themes.LightGray.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.LightGray.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.MetropolisDark.v25.1.dll" Component_="DevExpress.Xpf.Themes.MetropolisDark.v25.1.dll" FileName="DEVEX~53.DLL|DevExpress.Xpf.Themes.MetropolisDark.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.MetropolisDark.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.MetropolisLight.v25.1.dll" Component_="DevExpress.Xpf.Themes.MetropolisLight.v25.1.dll" FileName="DEVEX~54.DLL|DevExpress.Xpf.Themes.MetropolisLight.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.MetropolisLight.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2007Black.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2007Black.v25.1.dll" FileName="DEVEX~55.DLL|DevExpress.Xpf.Themes.Office2007Black.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2007Black.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2007Blue.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2007Blue.v25.1.dll" FileName="DEVEX~56.DLL|DevExpress.Xpf.Themes.Office2007Blue.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2007Blue.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2007Silver.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2007Silver.v25.1.dll" FileName="DEVEX~57.DLL|DevExpress.Xpf.Themes.Office2007Silver.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2007Silver.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2010Black.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2010Black.v25.1.dll" FileName="DEVEX~58.DLL|DevExpress.Xpf.Themes.Office2010Black.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2010Black.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2010Blue.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2010Blue.v25.1.dll" FileName="DEVEX~59.DLL|DevExpress.Xpf.Themes.Office2010Blue.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2010Blue.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2010Silver.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2010Silver.v25.1.dll" FileName="DEVEX~60.DLL|DevExpress.Xpf.Themes.Office2010Silver.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2010Silver.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2013.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2013.v25.1.dll" FileName="DEVEX~61.DLL|DevExpress.Xpf.Themes.Office2013.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2013.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2013DarkGray.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2013DarkGray.v25.1.dll" FileName="DEVEX~62.DLL|DevExpress.Xpf.Themes.Office2013DarkGray.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2013DarkGray.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2013LightGray.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2013LightGray.v25.1.dll" FileName="DEVEX~63.DLL|DevExpress.Xpf.Themes.Office2013LightGray.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2013LightGray.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2016Black.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2016Black.v25.1.dll" FileName="DEVEX~64.DLL|DevExpress.Xpf.Themes.Office2016Black.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2016Black.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2016BlackSE.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2016BlackSE.v25.1.dll" FileName="DEVEX~65.DLL|DevExpress.Xpf.Themes.Office2016BlackSE.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2016BlackSE.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2016Colorful.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2016Colorful.v25.1.dll" FileName="DEVEX~66.DLL|DevExpress.Xpf.Themes.Office2016Colorful.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2016Colorful.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2016ColorfulSE.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2016ColorfulSE.v25.1.dll" FileName="DEVEX~67.DLL|DevExpress.Xpf.Themes.Office2016ColorfulSE.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2016ColorfulSE.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2016DarkGraySE.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2016DarkGraySE.v25.1.dll" FileName="DEVEX~68.DLL|DevExpress.Xpf.Themes.Office2016DarkGraySE.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2016DarkGraySE.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2016White.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2016White.v25.1.dll" FileName="DEVEX~69.DLL|DevExpress.Xpf.Themes.Office2016White.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2016White.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2016WhiteSE.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2016WhiteSE.v25.1.dll" FileName="DEVEX~70.DLL|DevExpress.Xpf.Themes.Office2016WhiteSE.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2016WhiteSE.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2019Black.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2019Black.v25.1.dll" FileName="DEVEX~71.DLL|DevExpress.Xpf.Themes.Office2019Black.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2019Black.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2019Colorful.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2019Colorful.v25.1.dll" FileName="DEVEX~72.DLL|DevExpress.Xpf.Themes.Office2019Colorful.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2019Colorful.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2019DarkGray.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2019DarkGray.v25.1.dll" FileName="DEVEX~73.DLL|DevExpress.Xpf.Themes.Office2019DarkGray.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2019DarkGray.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2019HighContrast.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2019HighContrast.v25.1.dll" FileName="DEVEX~74.DLL|DevExpress.Xpf.Themes.Office2019HighContrast.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2019HighContrast.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Office2019White.v25.1.dll" Component_="DevExpress.Xpf.Themes.Office2019White.v25.1.dll" FileName="DEVEX~75.DLL|DevExpress.Xpf.Themes.Office2019White.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Office2019White.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Seven.v25.1.dll" Component_="DevExpress.Xpf.Themes.Seven.v25.1.dll" FileName="DEVEX~76.DLL|DevExpress.Xpf.Themes.Seven.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Seven.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.TouchlineDark.v25.1.dll" Component_="DevExpress.Xpf.Themes.TouchlineDark.v25.1.dll" FileName="DEVEX~77.DLL|DevExpress.Xpf.Themes.TouchlineDark.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.TouchlineDark.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.VS2010.v25.1.dll" Component_="DevExpress.Xpf.Themes.VS2010.v25.1.dll" FileName="DEVEX~78.DLL|DevExpress.Xpf.Themes.VS2010.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.VS2010.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.VS2017Blue.v25.1.dll" Component_="DevExpress.Xpf.Themes.VS2017Blue.v25.1.dll" FileName="DEVEX~79.DLL|DevExpress.Xpf.Themes.VS2017Blue.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.VS2017Blue.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.VS2017Dark.v25.1.dll" Component_="DevExpress.Xpf.Themes.VS2017Dark.v25.1.dll" FileName="DEVEX~80.DLL|DevExpress.Xpf.Themes.VS2017Dark.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.VS2017Dark.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.VS2017Light.v25.1.dll" Component_="DevExpress.Xpf.Themes.VS2017Light.v25.1.dll" FileName="DEVEX~81.DLL|DevExpress.Xpf.Themes.VS2017Light.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.VS2017Light.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.VS2019Blue.v25.1.dll" Component_="DevExpress.Xpf.Themes.VS2019Blue.v25.1.dll" FileName="DEVEX~82.DLL|DevExpress.Xpf.Themes.VS2019Blue.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.VS2019Blue.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.VS2019Dark.v25.1.dll" Component_="DevExpress.Xpf.Themes.VS2019Dark.v25.1.dll" FileName="DEVEX~83.DLL|DevExpress.Xpf.Themes.VS2019Dark.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.VS2019Dark.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.VS2019Light.v25.1.dll" Component_="DevExpress.Xpf.Themes.VS2019Light.v25.1.dll" FileName="DEVEX~84.DLL|DevExpress.Xpf.Themes.VS2019Light.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.VS2019Light.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Win10Dark.v25.1.dll" Component_="DevExpress.Xpf.Themes.Win10Dark.v25.1.dll" FileName="DEVEX~85.DLL|DevExpress.Xpf.Themes.Win10Dark.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Win10Dark.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Win10Light.v25.1.dll" Component_="DevExpress.Xpf.Themes.Win10Light.v25.1.dll" FileName="DEVEX~86.DLL|DevExpress.Xpf.Themes.Win10Light.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Win10Light.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Win11Dark.v25.1.dll" Component_="DevExpress.Xpf.Themes.Win11Dark.v25.1.dll" FileName="DEVEX~87.DLL|DevExpress.Xpf.Themes.Win11Dark.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Win11Dark.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.Themes.Win11Light.v25.1.dll" Component_="DevExpress.Xpf.Themes.Win11Light.v25.1.dll" FileName="DEVEX~88.DLL|DevExpress.Xpf.Themes.Win11Light.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.Themes.Win11Light.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpf.ThemesLW.v25.1.dll" Component_="DevExpress.Xpf.ThemesLW.v25.1.dll" FileName="DEVEX~89.DLL|DevExpress.Xpf.ThemesLW.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpf.ThemesLW.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.Xpo.v25.1.dll" Component_="DevExpress.Xpo.v25.1.dll" FileName="DEVEX~90.DLL|DevExpress.Xpo.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.Xpo.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraBars.v25.1.dll" Component_="DevExpress.XtraBars.v25.1.dll" FileName="DEVEX~91.DLL|DevExpress.XtraBars.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraBars.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraCharts.v25.1.dll" Component_="DevExpress.XtraCharts.v25.1.dll" FileName="DEVEX~92.DLL|DevExpress.XtraCharts.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraCharts.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraCharts.v25.1.Extensions.dll" Component_="DevExpress.XtraCharts.v25.1.Extensions.dll" FileName="DEVEX~93.DLL|DevExpress.XtraCharts.v25.1.Extensions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraCharts.v25.1.Extensions.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraCharts.v25.1.UI.dll" Component_="DevExpress.XtraCharts.v25.1.UI.dll" FileName="DEVEX~94.DLL|DevExpress.XtraCharts.v25.1.UI.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraCharts.v25.1.UI.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraCharts.v25.1.Wizard.dll" Component_="DevExpress.XtraCharts.v25.1.Wizard.dll" FileName="DEVEX~95.DLL|DevExpress.XtraCharts.v25.1.Wizard.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraCharts.v25.1.Wizard.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraDiagram.v25.1.dll" Component_="DevExpress.XtraDiagram.v25.1.dll" FileName="DEVEX~96.DLL|DevExpress.XtraDiagram.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraDiagram.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraDialogs.v25.1.dll" Component_="DevExpress.XtraDialogs.v25.1.dll" FileName="DEVEX~97.DLL|DevExpress.XtraDialogs.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraDialogs.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraEditors.v25.1.dll" Component_="DevExpress.XtraEditors.v25.1.dll" FileName="DEVEX~98.DLL|DevExpress.XtraEditors.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraEditors.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraGantt.v25.1.dll" Component_="DevExpress.XtraGantt.v25.1.dll" FileName="DEVEX~99.DLL|DevExpress.XtraGantt.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraGantt.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraGauges.v25.1.Core.dll" Component_="DevExpress.XtraGauges.v25.1.Core.dll" FileName="DEVE~100.DLL|DevExpress.XtraGauges.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraGauges.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraGauges.v25.1.Presets.dll" Component_="DevExpress.XtraGauges.v25.1.Presets.dll" FileName="DEVE~101.DLL|DevExpress.XtraGauges.v25.1.Presets.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraGauges.v25.1.Presets.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraGauges.v25.1.Win.dll" Component_="DevExpress.XtraGauges.v25.1.Win.dll" FileName="DEVE~102.DLL|DevExpress.XtraGauges.v25.1.Win.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraGauges.v25.1.Win.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraGrid.v25.1.dll" Component_="DevExpress.XtraGrid.v25.1.dll" FileName="DEVE~103.DLL|DevExpress.XtraGrid.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraGrid.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraLayout.v25.1.dll" Component_="DevExpress.XtraLayout.v25.1.dll" FileName="DEVE~104.DLL|DevExpress.XtraLayout.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraLayout.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraMap.v25.1.dll" Component_="DevExpress.XtraMap.v25.1.dll" FileName="DEVE~105.DLL|DevExpress.XtraMap.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraMap.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraNavBar.v25.1.dll" Component_="DevExpress.XtraNavBar.v25.1.dll" FileName="DEVE~106.DLL|DevExpress.XtraNavBar.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraNavBar.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraPdfViewer.v25.1.dll" Component_="DevExpress.XtraPdfViewer.v25.1.dll" FileName="DEVE~107.DLL|DevExpress.XtraPdfViewer.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraPdfViewer.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraPivotGrid.v25.1.dll" Component_="DevExpress.XtraPivotGrid.v25.1.dll" FileName="DEVE~108.DLL|DevExpress.XtraPivotGrid.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraPivotGrid.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraPrinting.v25.1.dll" Component_="DevExpress.XtraPrinting.v25.1.dll" FileName="DEVE~109.DLL|DevExpress.XtraPrinting.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraPrinting.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraReports.v25.1.dll" Component_="DevExpress.XtraReports.v25.1.dll" FileName="DEVE~110.DLL|DevExpress.XtraReports.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraReports.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraReports.v25.1.Extensions.dll" Component_="DevExpress.XtraReports.v25.1.Extensions.dll" FileName="DEVE~111.DLL|DevExpress.XtraReports.v25.1.Extensions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraReports.v25.1.Extensions.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraRichEdit.v25.1.dll" Component_="DevExpress.XtraRichEdit.v25.1.dll" FileName="DEVE~112.DLL|DevExpress.XtraRichEdit.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraRichEdit.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraScheduler.v25.1.Core.Desktop.dll" Component_="DevExpress.XtraScheduler.v25.1.Core.Desktop.dll" FileName="DEVE~113.DLL|DevExpress.XtraScheduler.v25.1.Core.Desktop.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraScheduler.v25.1.Core.Desktop.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraScheduler.v25.1.Core.dll" Component_="DevExpress.XtraScheduler.v25.1.Core.dll" FileName="DEVE~114.DLL|DevExpress.XtraScheduler.v25.1.Core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraScheduler.v25.1.Core.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraScheduler.v25.1.dll" Component_="DevExpress.XtraScheduler.v25.1.dll" FileName="DEVE~115.DLL|DevExpress.XtraScheduler.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraScheduler.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraScheduler.v25.1.Extensions.dll" Component_="DevExpress.XtraScheduler.v25.1.Extensions.dll" FileName="DEVE~116.DLL|DevExpress.XtraScheduler.v25.1.Extensions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraScheduler.v25.1.Extensions.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraScheduler.v25.1.Reporting.dll" Component_="DevExpress.XtraScheduler.v25.1.Reporting.dll" FileName="DEVE~117.DLL|DevExpress.XtraScheduler.v25.1.Reporting.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraScheduler.v25.1.Reporting.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraScheduler.v25.1.Reporting.Extensions.dll" Component_="DevExpress.XtraScheduler.v25.1.Reporting.Extensions.dll" FileName="DEVE~118.DLL|DevExpress.XtraScheduler.v25.1.Reporting.Extensions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraScheduler.v25.1.Reporting.Extensions.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraSpellChecker.v25.1.dll" Component_="DevExpress.XtraSpellChecker.v25.1.dll" FileName="DEVE~119.DLL|DevExpress.XtraSpellChecker.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraSpellChecker.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraSpreadsheet.v25.1.dll" Component_="DevExpress.XtraSpreadsheet.v25.1.dll" FileName="DEVE~120.DLL|DevExpress.XtraSpreadsheet.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraSpreadsheet.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraTreeList.v25.1.dll" Component_="DevExpress.XtraTreeList.v25.1.dll" FileName="DEVE~121.DLL|DevExpress.XtraTreeList.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraTreeList.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraTreeMap.v25.1.dll" Component_="DevExpress.XtraTreeMap.v25.1.dll" FileName="DEVE~122.DLL|DevExpress.XtraTreeMap.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraTreeMap.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraTreeMap.v25.1.UI.dll" Component_="DevExpress.XtraTreeMap.v25.1.UI.dll" FileName="DEVE~123.DLL|DevExpress.XtraTreeMap.v25.1.UI.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraTreeMap.v25.1.UI.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraVerticalGrid.v25.1.dll" Component_="DevExpress.XtraVerticalGrid.v25.1.dll" FileName="DEVE~124.DLL|DevExpress.XtraVerticalGrid.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraVerticalGrid.v25.1.dll" SelfReg="false"/>
+    <ROW File="DevExpress.XtraWizard.v25.1.dll" Component_="DevExpress.XtraWizard.v25.1.dll" FileName="DEVE~125.DLL|DevExpress.XtraWizard.v25.1.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DevExpress.XtraWizard.v25.1.dll" SelfReg="false"/>
+    <ROW File="Drivetrain.Robotics.Control.dll" Component_="Drivetrain.Robotics.Control.dll" FileName="DRIVET~1.DLL|Drivetrain.Robotics.Control.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Drivetrain.Robotics.Control.dll" SelfReg="false"/>
+    <ROW File="Drivetrain.Robotics.Control.pdb" Component_="Drivetrain.Robotics.Control.dll" FileName="DRIVET~1.PDB|Drivetrain.Robotics.Control.pdb" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Drivetrain.Robotics.Control.pdb" SelfReg="false"/>
+    <ROW File="Drivetrain.Robotics.Process.dll" Component_="Drivetrain.Robotics.Process.dll" FileName="DRIVET~2.DLL|Drivetrain.Robotics.Process.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Drivetrain.Robotics.Process.dll" SelfReg="false"/>
+    <ROW File="Drivetrain.Robotics.Process.pdb" Component_="Drivetrain.Robotics.Process.dll" FileName="DRIVET~2.PDB|Drivetrain.Robotics.Process.pdb" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Drivetrain.Robotics.Process.pdb" SelfReg="false"/>
+    <ROW File="DriveTrain.Toolbox.dll" Component_="DriveTrain.Toolbox.dll" FileName="DRIVET~3.DLL|DriveTrain.Toolbox.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\DriveTrain.Toolbox.dll" SelfReg="false"/>
+    <ROW File="EffaniDevice.deps.json" Component_="EffaniDevice.deps.json" FileName="EFFANI~1.JSO|Effani Device.deps.json" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani Device.deps.json" SelfReg="false"/>
+    <ROW File="EffaniDevice.dll" Component_="EffaniDevice.dll" FileName="EFFANI~1.DLL|Effani Device.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani Device.dll" SelfReg="false"/>
+    <ROW File="EffaniDevice.dll.config" Component_="EffaniDevice.deps.json" FileName="EFFANI~1.CON|Effani Device.dll.config" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani Device.dll.config" SelfReg="false"/>
+    <ROW File="EffaniDevice.pdb" Component_="EffaniDevice.exe" FileName="EFFANI~1.PDB|Effani Device.pdb" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani Device.pdb" SelfReg="false"/>
+    <ROW File="EffaniDevice.runtimeconfig.json" Component_="EffaniDevice.deps.json" FileName="EFFANI~2.JSO|Effani Device.runtimeconfig.json" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani Device.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="Effani.Device.Control.dll" Component_="Effani.Device.Control.dll" FileName="EFFANI~2.DLL|Effani.Device.Control.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani.Device.Control.dll" SelfReg="false"/>
+    <ROW File="Effani.Device.Control.pdb" Component_="Effani.Device.Control.dll" FileName="EFFANI~2.PDB|Effani.Device.Control.pdb" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani.Device.Control.pdb" SelfReg="false"/>
+    <ROW File="Effani.Device.DataCollection.dll" Component_="Effani.Device.DataCollection.dll" FileName="EFFANI~3.DLL|Effani.Device.DataCollection.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani.Device.DataCollection.dll" SelfReg="false"/>
+    <ROW File="Effani.Device.DataCollection.pdb" Component_="Effani.Device.DataCollection.dll" FileName="EFFANI~3.PDB|Effani.Device.DataCollection.pdb" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani.Device.DataCollection.pdb" SelfReg="false"/>
+    <ROW File="Effani.Device.Services.dll" Component_="Effani.Device.Services.dll" FileName="EFFANI~4.DLL|Effani.Device.Services.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani.Device.Services.dll" SelfReg="false"/>
+    <ROW File="Effani.Device.Services.pdb" Component_="Effani.Device.Services.dll" FileName="EFFANI~4.PDB|Effani.Device.Services.pdb" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Effani.Device.Services.pdb" SelfReg="false"/>
+    <ROW File="Flurl.dll" Component_="Flurl.dll" FileName="Flurl.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Flurl.dll" SelfReg="false"/>
+    <ROW File="Flurl.Http.dll" Component_="Flurl.Http.dll" FileName="FLURLH~1.DLL|Flurl.Http.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Flurl.Http.dll" SelfReg="false"/>
+    <ROW File="Humanizer.dll" Component_="Humanizer.dll" FileName="HUMANI~1.DLL|Humanizer.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Humanizer.dll" SelfReg="false"/>
+    <ROW File="KGySoft.CoreLibraries.dll" Component_="KGySoft.CoreLibraries.dll" FileName="KGYSOF~1.DLL|KGySoft.CoreLibraries.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\KGySoft.CoreLibraries.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Bcl.AsyncInterfaces.dll" Component_="Microsoft.Bcl.AsyncInterfaces.dll" FileName="MICROS~1.DLL|Microsoft.Bcl.AsyncInterfaces.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Bcl.AsyncInterfaces.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Build.Locator.dll" Component_="Microsoft.Build.Locator.dll" FileName="MICROS~2.DLL|Microsoft.Build.Locator.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Build.Locator.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.dll" Component_="Microsoft.CodeAnalysis.CSharp.dll" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.CodeAnalysis.CSharp.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.dll" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.dll" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.dll" Component_="Microsoft.CodeAnalysis.dll" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.CodeAnalysis.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.dll" Component_="Microsoft.CodeAnalysis.Workspaces.dll" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.CodeAnalysis.Workspaces.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll" FileName="MICROS~7.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.dll" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.dll" FileName="MICROS~8.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.CodeAnalysis.Workspaces.MSBuild.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Data.Sqlite.dll" Component_="Microsoft.Data.Sqlite.dll" FileName="MICROS~9.DLL|Microsoft.Data.Sqlite.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Data.Sqlite.dll" SelfReg="false"/>
+    <ROW File="Microsoft.EntityFrameworkCore.Abstractions.dll" Component_="Microsoft.EntityFrameworkCore.Abstractions.dll" FileName="MICRO~10.DLL|Microsoft.EntityFrameworkCore.Abstractions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.EntityFrameworkCore.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.EntityFrameworkCore.Design.dll" Component_="Microsoft.EntityFrameworkCore.Design.dll" FileName="MICRO~11.DLL|Microsoft.EntityFrameworkCore.Design.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.EntityFrameworkCore.Design.dll" SelfReg="false"/>
+    <ROW File="Microsoft.EntityFrameworkCore.dll" Component_="Microsoft.EntityFrameworkCore.dll" FileName="MICRO~12.DLL|Microsoft.EntityFrameworkCore.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.EntityFrameworkCore.dll" SelfReg="false"/>
+    <ROW File="Microsoft.EntityFrameworkCore.Relational.dll" Component_="Microsoft.EntityFrameworkCore.Relational.dll" FileName="MICRO~13.DLL|Microsoft.EntityFrameworkCore.Relational.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.EntityFrameworkCore.Relational.dll" SelfReg="false"/>
+    <ROW File="Microsoft.EntityFrameworkCore.Sqlite.dll" Component_="Microsoft.EntityFrameworkCore.Sqlite.dll" FileName="MICRO~14.DLL|Microsoft.EntityFrameworkCore.Sqlite.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.EntityFrameworkCore.Sqlite.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Caching.Abstractions.dll" Component_="Microsoft.Extensions.Caching.Abstractions.dll" FileName="MICRO~15.DLL|Microsoft.Extensions.Caching.Abstractions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Caching.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Caching.Memory.dll" Component_="Microsoft.Extensions.Caching.Memory.dll" FileName="MICRO~16.DLL|Microsoft.Extensions.Caching.Memory.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Caching.Memory.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICRO~17.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICRO~18.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.CommandLine.dll" Component_="Microsoft.Extensions.Configuration.CommandLine.dll" FileName="MICRO~19.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICRO~20.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" FileName="MICRO~21.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll" FileName="MICRO~22.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Json.dll" Component_="Microsoft.Extensions.Configuration.Json.dll" FileName="MICRO~23.DLL|Microsoft.Extensions.Configuration.Json.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.UserSecrets.dll" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll" FileName="MICRO~24.DLL|Microsoft.Extensions.Configuration.UserSecrets.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Configuration.UserSecrets.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll" FileName="MICRO~25.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInjection.dll" FileName="MICRO~26.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyModel.dll" Component_="Microsoft.Extensions.DependencyModel.dll" FileName="MICRO~27.DLL|Microsoft.Extensions.DependencyModel.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.DependencyModel.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Diagnostics.Abstractions.dll" Component_="Microsoft.Extensions.Diagnostics.Abstractions.dll" FileName="MICRO~28.DLL|Microsoft.Extensions.Diagnostics.Abstractions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Diagnostics.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Diagnostics.dll" Component_="Microsoft.Extensions.Diagnostics.dll" FileName="MICRO~29.DLL|Microsoft.Extensions.Diagnostics.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Diagnostics.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll" FileName="MICRO~30.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Physical.dll" Component_="Microsoft.Extensions.FileProviders.Physical.dll" FileName="MICRO~31.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileSystemGlobbing.dll" Component_="Microsoft.Extensions.FileSystemGlobbing.dll" FileName="MICRO~32.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.Abstractions.dll" Component_="Microsoft.Extensions.Hosting.Abstractions.dll" FileName="MICRO~33.DLL|Microsoft.Extensions.Hosting.Abstractions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Hosting.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.dll" Component_="Microsoft.Extensions.Hosting.dll" FileName="MICRO~34.DLL|Microsoft.Extensions.Hosting.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Hosting.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Abstractions.dll" Component_="Microsoft.Extensions.Logging.Abstractions.dll" FileName="MICRO~35.DLL|Microsoft.Extensions.Logging.Abstractions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Logging.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Configuration.dll" Component_="Microsoft.Extensions.Logging.Configuration.dll" FileName="MICRO~36.DLL|Microsoft.Extensions.Logging.Configuration.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Logging.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Console.dll" Component_="Microsoft.Extensions.Logging.Console.dll" FileName="MICRO~37.DLL|Microsoft.Extensions.Logging.Console.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Logging.Console.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Debug.dll" Component_="Microsoft.Extensions.Logging.Debug.dll" FileName="MICRO~38.DLL|Microsoft.Extensions.Logging.Debug.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Logging.Debug.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.dll" Component_="Microsoft.Extensions.Logging.dll" FileName="MICRO~39.DLL|Microsoft.Extensions.Logging.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Logging.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventLog.dll" Component_="Microsoft.Extensions.Logging.EventLog.dll" FileName="MICRO~40.DLL|Microsoft.Extensions.Logging.EventLog.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Logging.EventLog.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventSource.dll" Component_="Microsoft.Extensions.Logging.EventSource.dll" FileName="MICRO~41.DLL|Microsoft.Extensions.Logging.EventSource.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Logging.EventSource.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.ObjectPool.dll" Component_="Microsoft.Extensions.ObjectPool.dll" FileName="MICRO~42.DLL|Microsoft.Extensions.ObjectPool.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.ObjectPool.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll" FileName="MICRO~43.DLL|Microsoft.Extensions.Options.ConfigurationExtensions.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.dll" Component_="Microsoft.Extensions.Options.dll" FileName="MICRO~44.DLL|Microsoft.Extensions.Options.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Options.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Microsoft.Extensions.Primitives.dll" FileName="MICRO~45.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
+    <ROW File="Mono.TextTemplating.dll" Component_="Mono.TextTemplating.dll" FileName="MONOTE~1.DLL|Mono.TextTemplating.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Mono.TextTemplating.dll" SelfReg="false"/>
+    <ROW File="Serilog.dll" Component_="Serilog.dll" FileName="Serilog.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Serilog.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.Console.dll" Component_="Serilog.Sinks.Console.dll" FileName="SERILO~1.DLL|Serilog.Sinks.Console.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Serilog.Sinks.Console.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.File.dll" Component_="Serilog.Sinks.File.dll" FileName="SERILO~2.DLL|Serilog.Sinks.File.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Serilog.Sinks.File.dll" SelfReg="false"/>
+    <ROW File="SQLitePCLRaw.batteries_v2.dll" Component_="SQLitePCLRaw.batteries_v2.dll" FileName="SQLITE~1.DLL|SQLitePCLRaw.batteries_v2.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\SQLitePCLRaw.batteries_v2.dll" SelfReg="false"/>
+    <ROW File="SQLitePCLRaw.core.dll" Component_="SQLitePCLRaw.core.dll" FileName="SQLITE~2.DLL|SQLitePCLRaw.core.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\SQLitePCLRaw.core.dll" SelfReg="false"/>
+    <ROW File="SQLitePCLRaw.provider.e_sqlite3.dll" Component_="SQLitePCLRaw.provider.e_sqlite3.dll" FileName="SQLITE~3.DLL|SQLitePCLRaw.provider.e_sqlite3.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\SQLitePCLRaw.provider.e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="System.Composition.AttributedModel.dll" Component_="System.Composition.AttributedModel.dll" FileName="SYSTEM~1.DLL|System.Composition.AttributedModel.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.Composition.AttributedModel.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Convention.dll" Component_="System.Composition.Convention.dll" FileName="SYSTEM~2.DLL|System.Composition.Convention.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.Composition.Convention.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Hosting.dll" Component_="System.Composition.Hosting.dll" FileName="SYSTEM~3.DLL|System.Composition.Hosting.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.Composition.Hosting.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Runtime.dll" Component_="System.Composition.Runtime.dll" FileName="SYSTEM~4.DLL|System.Composition.Runtime.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.Composition.Runtime.dll" SelfReg="false"/>
+    <ROW File="System.Composition.TypedParts.dll" Component_="System.Composition.TypedParts.dll" FileName="SYSTEM~5.DLL|System.Composition.TypedParts.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.Composition.TypedParts.dll" SelfReg="false"/>
+    <ROW File="System.Data.OleDb.dll" Component_="System.Data.OleDb.dll" FileName="SYSTEM~6.DLL|System.Data.OleDb.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.Data.OleDb.dll" SelfReg="false"/>
+    <ROW File="System.Data.SqlClient.dll" Component_="System.Data.SqlClient.dll" FileName="SYSTEM~7.DLL|System.Data.SqlClient.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.Data.SqlClient.dll" SelfReg="false"/>
+    <ROW File="System.IO.Ports.dll" Component_="System.IO.Ports.dll" FileName="SYSTEM~8.DLL|System.IO.Ports.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.IO.Ports.dll" SelfReg="false"/>
+    <ROW File="System.Management.dll" Component_="System.Management.dll" FileName="SYSTEM~9.DLL|System.Management.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.Management.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.dll" Component_="System.ServiceModel.dll" FileName="SYSTE~10.DLL|System.ServiceModel.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.ServiceModel.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Duplex.dll" Component_="System.ServiceModel.Duplex.dll" FileName="SYSTE~11.DLL|System.ServiceModel.Duplex.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.ServiceModel.Duplex.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.dll" Component_="System.ServiceModel.Http.dll" FileName="SYSTE~12.DLL|System.ServiceModel.Http.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.ServiceModel.Http.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetFramingBase.dll" Component_="System.ServiceModel.NetFramingBase.dll" FileName="SYSTE~13.DLL|System.ServiceModel.NetFramingBase.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.ServiceModel.NetFramingBase.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetTcp.dll" Component_="System.ServiceModel.NetTcp.dll" FileName="SYSTE~14.DLL|System.ServiceModel.NetTcp.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.ServiceModel.NetTcp.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.dll" Component_="System.ServiceModel.Primitives.dll" FileName="SYSTE~15.DLL|System.ServiceModel.Primitives.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.ServiceModel.Primitives.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Security.dll" Component_="System.ServiceModel.Security.dll" FileName="SYSTE~16.DLL|System.ServiceModel.Security.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\System.ServiceModel.Security.dll" SelfReg="false"/>
+    <ROW File="effani_cow.mp4" Component_="effani_cow.mp4" FileName="EFFANI~1.MP4|effani_cow.mp4" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\Resources\effani_cow.mp4" SelfReg="false"/>
+    <ROW File="System.Data.OleDb.dll_1" Component_="System.Data.OleDb.dll_1" FileName="SYSTEM~1.DLL|System.Data.OleDb.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win\lib\net8.0\System.Data.OleDb.dll" SelfReg="false"/>
+    <ROW File="System.IO.Ports.dll_2" Component_="System.IO.Ports.dll_2" FileName="SYSTEM~1.DLL|System.IO.Ports.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win\lib\net9.0\System.IO.Ports.dll" SelfReg="false"/>
+    <ROW File="System.Management.dll_1" Component_="System.Management.dll_1" FileName="SYSTEM~2.DLL|System.Management.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win\lib\net9.0\System.Management.dll" SelfReg="false"/>
+    <ROW File="System.Data.SqlClient.dll_2" Component_="System.Data.SqlClient.dll_2" FileName="SYSTEM~1.DLL|System.Data.SqlClient.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll" Component_="e_sqlite3.dll" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-arm\native\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_1" Component_="e_sqlite3.dll_1" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-arm64\native\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="sni.dll" Component_="sni.dll" FileName="sni.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-arm64\native\sni.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_2" Component_="e_sqlite3.dll_2" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-x64\native\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="sni.dll_1" Component_="sni.dll_1" FileName="sni.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-x64\native\sni.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_3" Component_="e_sqlite3.dll_3" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-x86\native\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="sni.dll_2" Component_="sni.dll_2" FileName="sni.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\runtimes\win-x86\native\sni.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_7" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_7" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_7" Component_="Microsoft.CodeAnalysis.resources.dll_7" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_7" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_7" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.resources.dll_7" Component_="System.ServiceModel.Http.resources.dll_7" FileName="SYSTEM~1.DLL|System.ServiceModel.Http.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\System.ServiceModel.Http.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetFramingBase.resources.dll_7" Component_="System.ServiceModel.NetFramingBase.resources.dll_7" FileName="SYSTEM~2.DLL|System.ServiceModel.NetFramingBase.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\System.ServiceModel.NetFramingBase.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetTcp.resources.dll_7" Component_="System.ServiceModel.NetTcp.resources.dll_7" FileName="SYSTEM~3.DLL|System.ServiceModel.NetTcp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\System.ServiceModel.NetTcp.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.resources.dll_7" Component_="System.ServiceModel.Primitives.resources.dll_7" FileName="SYSTEM~4.DLL|System.ServiceModel.Primitives.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\tr\System.ServiceModel.Primitives.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_8" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_8" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_8" Component_="Microsoft.CodeAnalysis.resources.dll_8" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_8" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_8" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.resources.dll_8" Component_="System.ServiceModel.Http.resources.dll_8" FileName="SYSTEM~1.DLL|System.ServiceModel.Http.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\System.ServiceModel.Http.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetFramingBase.resources.dll_8" Component_="System.ServiceModel.NetFramingBase.resources.dll_8" FileName="SYSTEM~2.DLL|System.ServiceModel.NetFramingBase.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\System.ServiceModel.NetFramingBase.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetTcp.resources.dll_8" Component_="System.ServiceModel.NetTcp.resources.dll_8" FileName="SYSTEM~3.DLL|System.ServiceModel.NetTcp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\System.ServiceModel.NetTcp.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.resources.dll_8" Component_="System.ServiceModel.Primitives.resources.dll_8" FileName="SYSTEM~4.DLL|System.ServiceModel.Primitives.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hans\System.ServiceModel.Primitives.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_9" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_9" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_9" Component_="Microsoft.CodeAnalysis.resources.dll_9" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_9" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_9" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.resources.dll_9" Component_="System.ServiceModel.Http.resources.dll_9" FileName="SYSTEM~1.DLL|System.ServiceModel.Http.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\System.ServiceModel.Http.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetFramingBase.resources.dll_9" Component_="System.ServiceModel.NetFramingBase.resources.dll_9" FileName="SYSTEM~2.DLL|System.ServiceModel.NetFramingBase.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\System.ServiceModel.NetFramingBase.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetTcp.resources.dll_9" Component_="System.ServiceModel.NetTcp.resources.dll_9" FileName="SYSTEM~3.DLL|System.ServiceModel.NetTcp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\System.ServiceModel.NetTcp.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.resources.dll_9" Component_="System.ServiceModel.Primitives.resources.dll_9" FileName="SYSTEM~4.DLL|System.ServiceModel.Primitives.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\zh-Hant\System.ServiceModel.Primitives.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_12" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_12" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_12" Component_="Microsoft.CodeAnalysis.resources.dll_12" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_12" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_12" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.resources.dll_12" Component_="System.ServiceModel.Http.resources.dll_12" FileName="SYSTEM~1.DLL|System.ServiceModel.Http.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\System.ServiceModel.Http.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetFramingBase.resources.dll_12" Component_="System.ServiceModel.NetFramingBase.resources.dll_12" FileName="SYSTEM~2.DLL|System.ServiceModel.NetFramingBase.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\System.ServiceModel.NetFramingBase.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.NetTcp.resources.dll_12" Component_="System.ServiceModel.NetTcp.resources.dll_12" FileName="SYSTEM~3.DLL|System.ServiceModel.NetTcp.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\System.ServiceModel.NetTcp.resources.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.resources.dll_12" Component_="System.ServiceModel.Primitives.resources.dll_12" FileName="SYSTEM~4.DLL|System.ServiceModel.Primitives.resources.dll" Attributes="0" SourcePath="..\Effani.Device.UI\bin\Release\net9.0-windows7.0\es\System.ServiceModel.Primitives.resources.dll" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
+    <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrapperUISequenceComponent">
+    <ROW Action="AI_DetectSoftware" Sequence="151"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="Setup Files" Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="..\Effani.Device.UI\Resources\effanicow.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" UseLargeSchema="true" ExeName="Effani Device Installer [|ProductVersion]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\FolderDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="PreparePrereqDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\PreparePrereqDlg.aip"/>
+    <ROW Fragment="PrerequisitesDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\PrerequisitesDlg.aip"/>
+    <ROW Fragment="ProgressPrereqDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\ProgressPrereqDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;azure\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;azure\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\WelcomeDlg.aip"/>
+    <ROW Fragment="WelcomePrereqDlg.aip" Path="&lt;AI_THEMES&gt;azure\fragments\WelcomePrereqDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiActionTextComponent">
+    <ROW Action="AI_DeleteLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
+    <ROW Action="AI_DeleteRLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
+    <ROW Action="AI_ExtractFiles" Description="Extracting files from archive" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
+    <ROW Action="AI_ExtractLzma" Description="Extracting files from archive" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
+    <ROW Action="AI_XmlCommit" Description="Committing XML file configurations." DescriptionLocId="ActionText.Description.AI_XmlCommit" Template="Committing XML file configurations." TemplateLocId="ActionText.Template.AI_XmlCommit"/>
+    <ROW Action="AI_XmlConfig" Description="Executing XML file configurations" DescriptionLocId="ActionText.Description.AI_XmlConfig" Template="Configuring XML file: &quot;[1]&quot;" TemplateLocId="ActionText.Template.AI_XmlConfig"/>
+    <ROW Action="AI_XmlInstall" Description="Generating actions to configure XML files" DescriptionLocId="ActionText.Description.AI_XmlInstall"/>
+    <ROW Action="AI_XmlRemove" Description="Executing XML file configurations" DescriptionLocId="ActionText.Description.AI_XmlRemove" Template="Configuring XML file: &quot;[1]&quot;" TemplateLocId="ActionText.Template.AI_XmlRemove"/>
+    <ROW Action="AI_XmlRollback" Description="Rolling back XML file configurations." DescriptionLocId="ActionText.Description.AI_XmlRollback" Template="Rolling back XML file configurations." TemplateLocId="ActionText.Template.AI_XmlRollback"/>
+    <ROW Action="AI_XmlUninstall" Description="Generating actions to configure XML files" DescriptionLocId="ActionText.Description.AI_XmlUninstall"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiAppSearchComponent">
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="DefaultBuild"/>
+    <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="Prereq.dll" SourcePath="&lt;AI_CUSTACTS&gt;Prereq.dll"/>
+    <ROW Name="ShortcutFlags.dll" SourcePath="&lt;AI_CUSTACTS&gt;ShortcutFlags.dll"/>
+    <ROW Name="SoftwareDetector.dll" SourcePath="&lt;AI_CUSTACTS&gt;SoftwareDetector.dll"/>
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+    <ROW Name="lzmaextractor.dll" SourcePath="&lt;AI_CUSTACTS&gt;lzmaextractor.dll"/>
+    <ROW Name="xmlCfg.dll" SourcePath="&lt;AI_CUSTACTS&gt;xmlCfg.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomePrereqDlg" Control_="Next" Event="NewDialog" Argument="PrerequisitesDlg" Condition="AI_BOOTSTRAPPER" Ordering="1"/>
+    <ROW Dialog_="PrerequisitesDlg" Control_="Next" Event="EndDialog" Argument="Return" Condition="AI_BOOTSTRAPPER" Ordering="1"/>
+    <ROW Dialog_="PrerequisitesDlg" Control_="Back" Event="NewDialog" Argument="WelcomePrereqDlg" Condition="AI_BOOTSTRAPPER" Ordering="1"/>
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="regid.199509.com.example_Dir" Component_="regid.199509.com.example" ManualDelete="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_AppSearchEx" Type="1" Source="Prereq.dll" Target="DoAppSearchEx"/>
+    <ROW Action="AI_ApplyShortcutFlags" Type="3073" Source="ShortcutFlags.dll" Target="UpdateShortcutFlags" WithoutSeq="true"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH_ORIGINAL" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DATA_SETTER" Type="51" Source="CustomActionData" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DATA_SETTER_1" Type="51" Source="CustomActionData" Target="[~]"/>
+    <ROW Action="AI_DATA_SETTER_2" Type="51" Source="CustomActionData" Target="[~]"/>
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DeleteCadLzma" Type="51" Source="AI_DeleteLzma" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DeleteLzma" Type="1025" Source="lzmaextractor.dll" Target="DeleteLZMAFiles"/>
+    <ROW Action="AI_DeleteRCadLzma" Type="51" Source="AI_DeleteRLzma" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DeleteRLzma" Type="1281" Source="lzmaextractor.dll" Target="DeleteLZMAFiles"/>
+    <ROW Action="AI_DetectSoftware" Type="257" Source="SoftwareDetector.dll" Target="OnDetectSoftware"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_ExtractCadLzma" Type="51" Source="AI_ExtractLzma" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_ExtractFiles" Type="1" Source="Prereq.dll" Target="ExtractSourceFiles" AdditionalSeq="AI_DATA_SETTER"/>
+    <ROW Action="AI_ExtractLzma" Type="1025" Source="lzmaextractor.dll" Target="ExtractLZMAFiles"/>
+    <ROW Action="AI_FindExeLzma" Type="1" Source="lzmaextractor.dll" Target="FindEXE"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_LaunchApp" Type="1" Source="aicustact.dll" Target="[#EffaniDevice.exe]"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_PinShortcuts" Type="1" Source="ShortcutFlags.dll" Target="PinShortcuts"/>
+    <ROW Action="AI_PinToStartScreen" Type="1025" Source="ShortcutFlags.dll" Target="PinToStartScreen" WithoutSeq="true"/>
+    <ROW Action="AI_PinToTaskbar" Type="1025" Source="ShortcutFlags.dll" Target="PinToTaskbar" WithoutSeq="true"/>
+    <ROW Action="AI_PrepareShortcutFlags" Type="1" Source="ShortcutFlags.dll" Target="PrepareActionData"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_RunFinishActions" Type="1" Source="aicustact.dll" Target="RunFinishActions" WithoutSeq="true"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="AI_UnpinFromStartScreen" Type="1025" Source="ShortcutFlags.dll" Target="UnpinFromStartScreen" WithoutSeq="true"/>
+    <ROW Action="AI_UnpinFromTaskbar" Type="1025" Source="ShortcutFlags.dll" Target="UnpinFromTaskbar" WithoutSeq="true"/>
+    <ROW Action="AI_UnpinShortcuts" Type="1" Source="ShortcutFlags.dll" Target="UnpinShortcuts"/>
+    <ROW Action="AI_XmlCommit" Type="11777" Source="xmlCfg.dll" Target="OnXmlCommit" WithoutSeq="true"/>
+    <ROW Action="AI_XmlConfig" Type="11265" Source="xmlCfg.dll" Target="OnXmlConfig" WithoutSeq="true"/>
+    <ROW Action="AI_XmlInstall" Type="1" Source="xmlCfg.dll" Target="OnXmlInstall" AdditionalSeq="AI_DATA_SETTER_1"/>
+    <ROW Action="AI_XmlRemove" Type="11265" Source="xmlCfg.dll" Target="OnXmlRemove" WithoutSeq="true"/>
+    <ROW Action="AI_XmlRollback" Type="11521" Source="xmlCfg.dll" Target="OnXmlRollback" WithoutSeq="true"/>
+    <ROW Action="AI_XmlUninstall" Type="1" Source="xmlCfg.dll" Target="OnXmlUninstall" AdditionalSeq="AI_DATA_SETTER_2"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
+    <ROW Feature_="MainFeature" Component_="regid.199509.com.example"/>
+    <ROW Feature_="MainFeature" Component_="EffaniDevice.exe"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.BonusSkins.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Charts.Designer.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Charts.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.CodeParser.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Data.Desktop.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Data.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.DataAccess.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.DataAccess.v25.1.UI.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.DataVisualization.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Diagram.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Dialogs.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Drawing.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Images.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Map.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Mvvm.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Office.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Pdf.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Pdf.v25.1.Drawing.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.PivotGrid.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Printing.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.RichEdit.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.RichEdit.v25.1.Export.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Sparkline.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.SpellChecker.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Spreadsheet.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.TreeMap.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Utils.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Utils.v25.1.UI.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Charts.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.CodeView.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Controls.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Core.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.DataAccess.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Diagram.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Docking.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.DocumentViewer.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.ExpressionEditor.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Grid.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Grid.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Grid.v25.1.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Layout.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.LayoutControl.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.NavBar.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Office.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.PivotGrid.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Printing.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.PropertyGrid.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.ReportDesigner.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Ribbon.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.RichEdit.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.DXStyle.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.LightGray.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.MetropolisDark.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.MetropolisLight.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2007Black.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2007Blue.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2007Silver.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2010Black.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2010Blue.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2010Silver.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2013.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2013DarkGray.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2013LightGray.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2016Black.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2016BlackSE.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2016Colorful.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2016ColorfulSE.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2016DarkGraySE.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2016White.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2016WhiteSE.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2019Black.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2019Colorful.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2019DarkGray.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2019HighContrast.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Office2019White.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Seven.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.TouchlineDark.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.VS2010.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.VS2017Blue.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.VS2017Dark.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.VS2017Light.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.VS2019Blue.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.VS2019Dark.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.VS2019Light.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Win10Dark.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Win10Light.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Win11Dark.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.Themes.Win11Light.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpf.ThemesLW.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.Xpo.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraBars.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraCharts.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraCharts.v25.1.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraCharts.v25.1.UI.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraCharts.v25.1.Wizard.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraDiagram.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraDialogs.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraEditors.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraGantt.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraGauges.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraGauges.v25.1.Presets.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraGauges.v25.1.Win.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraGrid.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraLayout.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraMap.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraNavBar.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraPdfViewer.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraPivotGrid.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraPrinting.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraReports.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraReports.v25.1.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraRichEdit.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraScheduler.v25.1.Core.Desktop.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraScheduler.v25.1.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraScheduler.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraScheduler.v25.1.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraScheduler.v25.1.Reporting.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraScheduler.v25.1.Reporting.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraSpellChecker.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraSpreadsheet.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraTreeList.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraTreeMap.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraTreeMap.v25.1.UI.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraVerticalGrid.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="DevExpress.XtraWizard.v25.1.dll"/>
+    <ROW Feature_="MainFeature" Component_="Drivetrain.Robotics.Control.dll"/>
+    <ROW Feature_="MainFeature" Component_="Drivetrain.Robotics.Process.dll"/>
+    <ROW Feature_="MainFeature" Component_="DriveTrain.Toolbox.dll"/>
+    <ROW Feature_="MainFeature" Component_="EffaniDevice.deps.json"/>
+    <ROW Feature_="MainFeature" Component_="EffaniDevice.dll"/>
+    <ROW Feature_="MainFeature" Component_="Effani.Device.Control.dll"/>
+    <ROW Feature_="MainFeature" Component_="Effani.Device.DataCollection.dll"/>
+    <ROW Feature_="MainFeature" Component_="Effani.Device.Services.dll"/>
+    <ROW Feature_="MainFeature" Component_="Flurl.dll"/>
+    <ROW Feature_="MainFeature" Component_="Flurl.Http.dll"/>
+    <ROW Feature_="MainFeature" Component_="Humanizer.dll"/>
+    <ROW Feature_="MainFeature" Component_="KGySoft.CoreLibraries.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Bcl.AsyncInterfaces.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Build.Locator.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Data.Sqlite.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.EntityFrameworkCore.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.EntityFrameworkCore.Design.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.EntityFrameworkCore.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.EntityFrameworkCore.Relational.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.EntityFrameworkCore.Sqlite.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Caching.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Caching.Memory.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.CommandLine.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInjection.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyModel.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Configuration.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Console.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Debug.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.EventLog.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.EventSource.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.ObjectPool.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Options.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Feature_="MainFeature" Component_="Mono.TextTemplating.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.Console.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.File.dll"/>
+    <ROW Feature_="MainFeature" Component_="SQLitePCLRaw.batteries_v2.dll"/>
+    <ROW Feature_="MainFeature" Component_="SQLitePCLRaw.core.dll"/>
+    <ROW Feature_="MainFeature" Component_="SQLitePCLRaw.provider.e_sqlite3.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.AttributedModel.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Convention.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Hosting.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Runtime.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.TypedParts.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Data.OleDb.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Data.SqlClient.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.IO.Ports.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Management.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Duplex.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetFramingBase.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetTcp.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Security.dll"/>
+    <ROW Feature_="MainFeature" Component_="effani_cow.mp4"/>
+    <ROW Feature_="MainFeature" Component_="System.Data.OleDb.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.IO.Ports.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="System.Management.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Data.SqlClient.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="sni.dll"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="sni.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="sni.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetFramingBase.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetTcp.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetFramingBase.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetTcp.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetFramingBase.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetTcp.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetFramingBase.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.NetTcp.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.resources.dll_12"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="effanicow.exe" SourcePath="..\Effani.Device.UI\Resources\effanicow.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1397"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="103"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99" Builds="DefaultBuild"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="102" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="199" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteRCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="198" Builds="DefaultBuild"/>
+    <ROW Action="AI_ExtractCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="197" Builds="DefaultBuild"/>
+    <ROW Action="AI_FindExeLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="196" Builds="DefaultBuild"/>
+    <ROW Action="AI_ExtractLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1549" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteRLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1548" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6599" Builds="DefaultBuild"/>
+    <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="DefaultBuild"/>
+    <ROW Action="AI_DATA_SETTER" Sequence="1398"/>
+    <ROW Action="AI_AppSearchEx" Sequence="101"/>
+    <ROW Action="AI_XmlInstall" Condition="(REMOVE &lt;&gt; &quot;ALL&quot;)" Sequence="5102"/>
+    <ROW Action="AI_DATA_SETTER_1" Condition="(REMOVE &lt;&gt; &quot;ALL&quot;)" Sequence="5101"/>
+    <ROW Action="AI_XmlUninstall" Condition="(REMOVE)" Sequence="3102"/>
+    <ROW Action="AI_DATA_SETTER_2" Condition="(REMOVE)" Sequence="3101"/>
+    <ROW Action="AI_PrepareShortcutFlags" Condition="(VersionNT &gt; 501) AND ((NOT Installed) OR (Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;)))" Sequence="4501"/>
+    <ROW Action="AI_PinShortcuts" Condition="(VersionNT &gt; 600) AND ((NOT Installed) OR (Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;)))" Sequence="6499"/>
+    <ROW Action="AI_UnpinShortcuts" Condition="(VersionNT &gt; 600) AND (REMOVE = &quot;ALL&quot;)" Sequence="3199"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="103"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="102"/>
+    <ROW Action="AI_AppSearchEx" Sequence="101"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="AI_DETECTED_DOTNET_VERSION &gt;= AI_REQUIRED_DOTNET_VERSION" Description="[ProductName] cannot be installed on systems with .NET Framework version lower than [AI_REQUIRED_DOTNET_DISPLAY]." DescriptionLocId="AI.LaunchCondition.DotNET" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="SETUPEXEDIR OR (REMOVE=&quot;ALL&quot;)" Description="This package can only be run from a bootstrapper." DescriptionLocId="AI.LaunchCondition.RequireBootstrapper" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegLocatorComponent">
+    <ROW Signature_="AI_EXE_PATH_CU" Root="1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Type="2"/>
+    <ROW Signature_="AI_EXE_PATH_LM" Root="2" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Type="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="AI_ExePath" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Value="[AI_SETUPEXEPATH]" Component_="AI_ExePath"/>
+    <ROW Registry="AdvancedInstaller" Root="-1" Key="Software\Caphyon\Advanced Installer" Name="\"/>
+    <ROW Registry="Caphyon" Root="-1" Key="Software\Caphyon" Name="\"/>
+    <ROW Registry="LZMA" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA" Name="\"/>
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="ProductCode" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]" Name="\"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="ProductVersion" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="EffaniDevice" Directory_="DesktopFolder" Name="EFFANI~1|Effani Device" Component_="EffaniDevice.exe" Target="[#EffaniDevice.exe]" Hotkey="0" Icon_="effanicow.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR" CustomFlags="1"/>
+    <ROW Shortcut="EffaniDevice_1" Directory_="StartMenuFolder" Name="EFFANI~1|Effani Device" Component_="EffaniDevice.exe" Target="[#EffaniDevice.exe]" Hotkey="0" Icon_="effanicow.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR" CustomFlags="1" Advertised="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="azure"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.PreReqComponent">
+    <ROW PrereqKey="B96F93FA27E74B02866727AAE83982D0" DisplayName=".NET Framework 4.8" SetupFileUrl="https://download.visualstudio.microsoft.com/download/pr/014120d7-d689-4305-befd-3cb711108212/0fd66638cde16859462a6243a4629a50/ndp48-x86-x64-allos-enu.exe" Location="1" ExactSize="117380440" WinNTVersions="Windows Vista x86, Windows Server 2008 x86, Windows 7 RTM x86, Windows 8 x86, Windows 10 version 1507 x86, Windows 10 version 1511 x86, Windows 10 version 1903 x86, Windows 10 version 1909 x86, Windows 10 version 2004 x86, Windows 10 version 20H2 x86, Windows 10 version 21H1 x86, Windows 10 version 21H2 x86" WinNT64Versions="Windows Vista x64, Windows Server 2008 x64, Windows 7 RTM x64, Windows Server 2008 R2 RTM x64, Windows 8 x64, Windows 10 version 1507 x64, Windows 10 version 1511 x64, Windows 10 version 1903 x64, Windows 10 version 1909 x64, Windows 10 version 2004 x64, Windows 10 version 20H2 x64, Windows 10 version 21H1 x64, Windows 10 version 21H2 x64, Windows Server 2022 x64, Windows 11 x64" Operator="1" NoUiComLine="/q /norestart" Options="xy" MD5="aebcb9fcafa2becf8bb30458a7e1f0a2" TargetName=".NET Framework 4.8"/>
+    <ATTRIBUTE name="PrereqsOrder" value="B96F93FA27E74B02866727AAE83982D0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.PreReqSearchComponent">
+    <ROW SearchKey="B96F93FA27E74B02866727AAE83982D0Release" Prereq="B96F93FA27E74B02866727AAE83982D0" SearchType="9" SearchString="HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Release" RefContent="G528048" Order="1" Property="PreReqSearch_B96F93FA27E74B02866727"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.SoftwareIdentificationComponent">
+    <ATTRIBUTE name="LocalFile" value="regid.199509.com.example_ProductNam"/>
+    <ATTRIBUTE name="SystemFile" value="regid.199509.com.example_ProductN_1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.SynchronizedFolderComponent">
+    <ROW Directory_="APPDIR" SourcePath="..\Effani.Device.UI\bin\Release\net8.0-windows" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.XmlAttributeComponent">
+    <ROW XmlAttribute="xmlnsds" XmlElement="swidsoftware_identification_tag" Name="xmlns:ds" Flags="14" Order="0" Value="http://www.w3.org/2000/09/xmldsig#"/>
+    <ROW XmlAttribute="xmlnsswid" XmlElement="swidsoftware_identification_tag" Name="xmlns:swid" Flags="14" Order="1" Value="http://standards.iso.org/iso/19770/-2/2008/schema.xsd"/>
+    <ROW XmlAttribute="xmlnsxsi" XmlElement="swidsoftware_identification_tag" Name="xmlns:xsi" Flags="14" Order="2" Value="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ROW XmlAttribute="xsischemaLocation" XmlElement="swidsoftware_identification_tag" Name="xsi:schemaLocation" Flags="14" Order="3" Value="http://standards.iso.org/iso/19770/-2/2008/schema.xsd software_identification_tag.xsd"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.XmlElementComponent">
+    <ROW XmlElement="swidbuild" ParentElement="swidnumeric" Name="swid:build" Condition="1" Order="2" Flags="14" Text="2" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidentitlement_required_indicator" ParentElement="swidsoftware_identification_tag" Name="swid:entitlement_required_indicator" Condition="1" Order="0" Flags="14" Text="false" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidmajor" ParentElement="swidnumeric" Name="swid:major" Condition="1" Order="0" Flags="14" Text="3" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidminor" ParentElement="swidnumeric" Name="swid:minor" Condition="1" Order="1" Flags="14" Text="0" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidname" ParentElement="swidproduct_version" Name="swid:name" Condition="1" Order="0" Flags="14" Text="[ProductVersion]" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidname_1" ParentElement="swidsoftware_creator" Name="swid:name" Condition="1" Order="0" Flags="14" Text="[Manufacturer]" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidname_2" ParentElement="swidsoftware_licensor" Name="swid:name" Condition="1" Order="0" Flags="14" Text="[Manufacturer]" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidname_3" ParentElement="swidtag_creator" Name="swid:name" Condition="1" Order="0" Flags="14" Text="[Manufacturer]" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidnumeric" ParentElement="swidproduct_version" Name="swid:numeric" Condition="1" Order="1" Flags="14" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidproduct_title" ParentElement="swidsoftware_identification_tag" Name="swid:product_title" Condition="1" Order="1" Flags="14" Text="[ProductName]" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidproduct_version" ParentElement="swidsoftware_identification_tag" Name="swid:product_version" Condition="1" Order="2" Flags="14" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidregid" ParentElement="swidsoftware_creator" Name="swid:regid" Condition="1" Order="1" Flags="14" Text="regid.1995-09.com.example" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidregid_1" ParentElement="swidsoftware_licensor" Name="swid:regid" Condition="1" Order="1" Flags="14" Text="regid.1995-09.com.example" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidregid_2" ParentElement="swidtag_creator" Name="swid:regid" Condition="1" Order="1" Flags="14" Text="regid.1995-09.com.example" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidreview" ParentElement="swidnumeric" Name="swid:review" Condition="1" Order="3" Flags="14" Text="0" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidsoftware_creator" ParentElement="swidsoftware_identification_tag" Name="swid:software_creator" Condition="1" Order="3" Flags="14" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidsoftware_id" ParentElement="swidsoftware_identification_tag" Name="swid:software_id" Condition="1" Order="5" Flags="14" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidsoftware_identification_tag" Name="swid:software_identification_tag" Condition="1" Order="0" Flags="14" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidsoftware_licensor" ParentElement="swidsoftware_identification_tag" Name="swid:software_licensor" Condition="1" Order="4" Flags="14" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidtag_creator" ParentElement="swidsoftware_identification_tag" Name="swid:tag_creator" Condition="1" Order="6" Flags="14" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidtag_creator_regid" ParentElement="swidsoftware_id" Name="swid:tag_creator_regid" Condition="1" Order="1" Flags="14" Text="regid.1995-09.com.example" UpdateIndexInParent="0"/>
+    <ROW XmlElement="swidunique_id" ParentElement="swidsoftware_id" Name="swid:unique_id" Condition="1" Order="0" Flags="14" Text="[ProductName]" UpdateIndexInParent="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.XmlFileComponent">
+    <ROW XmlFile="regid.199509.com.example_ProductN_1" FileName="REGID1~1.SWI|regid.1995-09.com.example_[|ProductName].swidtag" DirProperty="regid.199509.com.example_Dir" Component="ProductInformation" RootElement="swidsoftware_identification_tag" Flags="153" Version="1.0" Encoding="UTF-8" IndentUnits="2"/>
+    <ROW XmlFile="regid.199509.com.example_ProductNam" FileName="REGID1~1.SWI|regid.1995-09.com.example_[|ProductName].swidtag" DirProperty="APPDIR" Component="ProductInformation" RootElement="swidsoftware_identification_tag" Flags="153" Version="1.0" Encoding="UTF-8" IndentUnits="2"/>
+  </COMPONENT>
+</DOCUMENT>
