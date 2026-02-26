@@ -110,7 +110,7 @@
                         <Image Source="{dx:DXImage 'SvgImages/Save/SaveDialog.svg'}" />
                     </dx:SimpleButton.Content>
                 </dx:SimpleButton>
-                <dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Download.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Reset settings to their default values." Command="{Binding ResetActiveSettingsCommand}"/>
+                <dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Reset.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Reset settings to their default values." Command="{Binding ResetActiveSettingsCommand}"/>
                 <!--<dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Upload.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Upload these settings to the cloud" Command="{Binding UploadSettingsCommand}"/>
                 <dx:SimpleButton Margin="5,0,0,0" Glyph="../resources/Download.svg" CornerRadius="5" Width="40" Padding="3" Background="AliceBlue" Height="40" ToolTip="Download these settings from the cloud" Command="{Binding DownloadSettingsCommand}"/>-->
             </StackPanel>
