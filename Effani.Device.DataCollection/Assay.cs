@@ -392,6 +392,8 @@ namespace Effani.Device.DataCollection
                     return;
                 }
 
+                StandardsTimer.Enabled = false;
+
 				while (_doingPrepToBaselineTimerStart)
 				{
 					if (_processTerminating)
