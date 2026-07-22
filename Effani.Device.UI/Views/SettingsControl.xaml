@@ -228,10 +228,10 @@
                         <dxlc:LayoutItem LabelPosition="Top" Label="KOH" ToolTip="Platform coordinates (mm x mm) of the location at which KOH is emitted">
                             <dxlc:LayoutGroup Orientation="Horizontal">
                                 <dxlc:LayoutItem LabelPosition="Left" Label="X">
-                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationX}" />
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding KohLocationX}" />
                                 </dxlc:LayoutItem>
                                 <dxlc:LayoutItem LabelPosition="Left" Label="Y">
-                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding NadhLocationY}" />
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding KohLocationY}" />
                                 </dxlc:LayoutItem>
                             </dxlc:LayoutGroup>
                         </dxlc:LayoutItem>
@@ -406,7 +406,7 @@
                         <dxlc:LayoutItem Label="DNA Reagent Timer Period (ms)" ToolTip="Milliseconds sample stays in DNA reagent">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding DnaTimerPeriod}" />
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Standards Establishment Period (ms)" ToolTip="Milliseconds taken for establishing standards">
+                        <dxlc:LayoutItem Label="Standards Establishment Period (seconds)" ToolTip="Milliseconds taken for establishing standards">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding StandardsProcessingDwell}" />
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>

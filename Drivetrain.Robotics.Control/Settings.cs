@@ -1456,13 +1456,16 @@ namespace Drivetrain.Robotics.Control
 		int _aspirationDwell = 8000;
 		int _aspirationSuctionToggleBoardNumber = 1;
 		int _aspirationSuctionTogglePortNumber = 2;
+
 		int _basalIncubationTimerPeriod = 3600000;
 		Coordinate _basalLocation = new(166, 254);
 		decimal _basalSyringeLoadingPosition = 22m;
 		decimal _basalTravelPerMicroLiter = 0.00153m;
 		int _basalVolume = 300;
 		Coordinate _biopsyLocation = new(245, 110);
+
 		int _comPortNumber = 4;
+
 		int _dnaAspirationVolume = 50;
 		Coordinate _dnaLocation = new(337, 304.5m);
 		int _dnaSensorBoardNumber = 2;
@@ -1475,23 +1478,29 @@ namespace Drivetrain.Robotics.Control
 		int _dnaTimerPeriod = 360000;
 		decimal _dnaTravelPerMicroLiter = 0.00153m;
 		int _dnaVolume = 200;
+
 		string _effaniApiUrl = "https://www.effani.com/umbraco/api";
 		string _effaniPassword;
 		string _effaniUsername;
+
 		Coordinate _firstWellLocation = new(0, 0);
 		int _fluidEmissionDwell = 10000;
 		decimal _fluidSyringeSpeed = 5m;
+
 		int _horizontalWellCount = 8;
+
 		int _initialBasalFluidPrimingVolume = 1500;
 		int _initialDnaFluidPrimingVolume = 1500;
 		int _initialKohFluidPrimingVolume = 300;
 		int _initialNadhFluidPrimingVolume = 300;
+
 		int _kohAspirationVolume = 50;
 		Coordinate _kohLocation = new(334.5m, 254);
 		decimal _kohSyringeLoadingPosition = 74m;
 		int _kohTimerPeriod = 14400000;
 		decimal _kohTravelPerMicroLiter = 0.00897m;
 		int _kohVolume = 20;
+
 		int _nadhIncubationDwell = 120000;
 		Coordinate _nadhLocation = new(168, 305);
 		int _nadhReading1TimerPeriod = 360000;
@@ -1505,8 +1514,11 @@ namespace Drivetrain.Robotics.Control
 		decimal _nadhSyringeLoadingPosition = 74m;
 		decimal _nadhTravelPerMicroLiter = 0.00897m;
 		int _nadhVolume = 20;
+
 		Coordinate _plateOffset = new(87.48m, 0);
-		bool _saveAssayFiles = true;
+
+		bool _saveAssayFiles = false;
+
 		int _secondaryBasalFluidPrimingVolume = 200;
 		int _secondaryDnaFluidPrimingVolume = 200;
 		int _secondaryKohFluidPrimingVolume = 20;
@@ -1514,6 +1526,7 @@ namespace Drivetrain.Robotics.Control
 		int _sensorReadDwell = 6000;
 		int _standardsProcessingDwell = 360000;
 		int _standardsWellCount = 6;
+
 		int _tableAxisSpeed = 4000;
 		int _testMediaAspirationVolume = 50;
 		int _timerDescriptionUpdateInterval = 1000;
@@ -1521,7 +1534,9 @@ namespace Drivetrain.Robotics.Control
 		Coordinate _traySterilizationLocation = new(320, 20);
 		int _traySterilizationTime = 6;
 		decimal _trayTemperature = 38.777778m;
+
 		int _verticalWellCount = 12;
+
 		Coordinate _wasteLocation = new(0, 0);
 		decimal _wellDepth = 12m;
 		Coordinate _wellOffset = new(9, 9);
