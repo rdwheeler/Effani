@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="20.3.2" version="20.3.2" Modules="update" RootPath="." Language="en" Id="{78B3D27E-48F7-44C6-B07C-9FD0E7F3435A}">
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;aiu-ue.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;aiu-ue_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.UpdaterEditorComponent">
+    <ROW Section="Update" Key="Name" Value="Effani Device"/>
+    <ROW Section="Update" Key="ProductVersion" Value="3.1.4.0" ValueLocId="-"/>
+    <ROW Section="Update" Key="URL" Value="http://www.drivetrainsystems.com/downloads/Effani Device Installer 3.1.4.exe" ValueLocId="-"/>
+    <ROW Section="Update" Key="Size" Value="Setup Files\Effani Device Installer 3.1.4.exe" ValueLocId="-"/>
+    <ROW Section="Update" Key="SHA256" Value="Setup Files\Effani Device Installer 3.1.4.exe" ValueLocId="-"/>
+    <ROW Section="Update" Key="MD5" Value="Setup Files\Effani Device Installer 3.1.4.exe" ValueLocId="-"/>
+    <ROW Section="Update" Key="ServerFileName" Value="Effani Device Installer 3.1.4.exe" ValueLocId="-"/>
+    <ROW Section="Update" Key="Flags" Value="Critical" ValueLocId="-"/>
+    <ROW Section="Update" Key="AppIdName" Value="Effani" ValueLocId="-"/>
+    <ROW Section="Update" Key="AppIdPublisherId" Value="DriveTrain Systems" ValueLocId="-"/>
+    <ROW Section="Update" Key="Version" Value="3.1.4" ValueLocId="-"/>
+    <ROW Section="Update" Key="AutoCloseApplication" Value="[APPDIR]Effani.exe|;Effani" ValueLocId="-"/>
+    <ATTRIBUTE name="OutputFileName" value=".txt"/>
+  </COMPONENT>
+</DOCUMENT>
