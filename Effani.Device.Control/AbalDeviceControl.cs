@@ -1,6 +1,7 @@
 ﻿using Drivetrain.Robotics.Control;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Effani.Device.Control
@@ -11,7 +12,8 @@ namespace Effani.Device.Control
 			: base (settings)
 		{
 			Axes = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => v);
-		}
+            PrimingStopwatches = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => new Stopwatch());
+        }
 
 		public void MoveAbsolute(Axis axis, decimal location, decimal? speed = null)
 		{
@@ -201,7 +203,8 @@ namespace Effani.Device.Control
 		}
 
 		public Dictionary<Axis, AxisSpec> Axes { get; private set; }
-		public List<AxisSpec> FluidAxes => Axes.Values.Where(x => x is FluidAxis).ToList();
+        public Dictionary<Axis, Stopwatch> PrimingStopwatches { get; private set; }
+        public List<AxisSpec> FluidAxes => Axes.Values.Where(x => x is FluidAxis).ToList();
 		public List<AxisSpec> ZAxes => Axes.Values.Where(x => x is BiopsyZAxis).ToList();
 	}
 }

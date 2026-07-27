@@ -161,6 +161,9 @@
                                 <dxlc:LayoutItem Label="Basal Media">
                                     <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryBasalFluidPrimingVolume}" />
                                 </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Reprime Pump Interval (min)" HorizontalAlignment="Center" Margin="0,0,0,608" VerticalAlignment="Stretch">
+                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="600" EditValue="{Binding ReprimePumpInterval}" />
+                                </dxlc:LayoutItem>
                             </dxlc:LayoutGroup>
                         </dxlc:LayoutGroup>
                         <dxlc:LayoutGroup View="GroupBox" Header="Syringe Travel (mm/μl)" Orientation="Vertical">
@@ -370,21 +373,6 @@
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutControl>
             </dx:DXTabItem>
-            <dx:DXTabItem Header="Connectivity">
-                <dxlc:LayoutControl>
-                    <dxlc:LayoutGroup View="GroupBox" Header="Connectivity" Orientation="Vertical">
-                        <dxlc:LayoutItem Label="Effani API URL" ToolTip="Internet location of the Effani API endpoint.">
-                            <dxe:TextEdit MinWidth="300" EditValue="{Binding EffaniApiUrl}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Effani Username" ToolTip="Username (email address) of your Effani account.">
-                            <dxe:TextEdit MinWidth="300" EditValue="{Binding EffaniUsername}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Effani Password" ToolTip="Password of your Effani account.">
-                            <dxe:PasswordBoxEdit ShowPasswordButtonVisibility="Auto" MinWidth="300" EditValue="{Binding EffaniPassword}"  />
-                        </dxlc:LayoutItem>
-                    </dxlc:LayoutGroup>
-                </dxlc:LayoutControl>
-            </dx:DXTabItem>
             <dx:DXTabItem Header="Assay Timing">
                 <dxlc:LayoutControl>
                     <dxlc:LayoutGroup View="GroupBox" Header="Assay Timing (ms)" Orientation="Vertical">
@@ -427,6 +415,21 @@
                                     <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding TraySterilizationLocationY}" />
                                 </dxlc:LayoutItem>
                             </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutControl>
+            </dx:DXTabItem>
+            <dx:DXTabItem Header="Connectivity">
+                <dxlc:LayoutControl>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Connectivity" Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Effani API URL" ToolTip="Internet location of the Effani API endpoint.">
+                            <dxe:TextEdit MinWidth="300" EditValue="{Binding EffaniApiUrl}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Effani Username" ToolTip="Username (email address) of your Effani account.">
+                            <dxe:TextEdit MinWidth="300" EditValue="{Binding EffaniUsername}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Effani Password" ToolTip="Password of your Effani account.">
+                            <dxe:PasswordBoxEdit ShowPasswordButtonVisibility="Auto" MinWidth="300" EditValue="{Binding EffaniPassword}"  />
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutControl>

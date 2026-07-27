@@ -1079,6 +1079,20 @@ namespace Drivetrain.Robotics.Control
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PlateOffset)));
             }
         }
+        public int ReprimePumpInterval
+        {
+            get
+            {
+                return _reprimePumpInterval;
+            }
+            set
+            {
+                if (_reprimePumpInterval == value)
+                    return;
+                _reprimePumpInterval = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReprimePumpInterval)));
+            }
+        }
         public bool SaveAssayFiles
         {
             get
@@ -1498,6 +1512,7 @@ namespace Drivetrain.Robotics.Control
         int _sensorReadDwell = 6000;
         int _standardsProcessingDwell = 360000;
         int _standardsWellCount = 6;
+        int _reprimePumpInterval = 20;
         int _tableAxisSpeed = 4000;
         int _testMediaAspirationVolume = 50;
         int _timerDescriptionUpdateInterval = 1000;

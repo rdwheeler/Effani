@@ -4,6 +4,7 @@ using Effani.Device.Control;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Timers;
@@ -64,7 +65,6 @@ namespace Effani.Device.DataCollection
                 Task.Delay(1000).Wait();
             }
         }
-
         public void EstablishStandards()
 		{
 			_doingPrepToBaselineTimerStart = true;
@@ -378,7 +378,7 @@ namespace Effani.Device.DataCollection
 				return -1;
 			}
 		}
-		private void StandardsTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void StandardsTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			try
 			{
@@ -520,12 +520,13 @@ namespace Effani.Device.DataCollection
 		SemaphoreSlim _nadhReadingLock = new SemaphoreSlim(1, 1);
 		bool _processTerminating;
 		public SemaphoreSlim _dnaLock = new SemaphoreSlim(1, 1);
-		#endregion
+    }
+        #endregion
 
-		public enum FluidType
+    public enum FluidType
 		{
 			//General = 0,
 			Koh = 1
 		}
-	}
+}
 }
