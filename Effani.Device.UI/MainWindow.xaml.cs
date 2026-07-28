@@ -30,6 +30,12 @@ namespace Effani.Device.UI
 		}
 		protected override void OnClosing(CancelEventArgs e)
 		{
+			var vm = DataContext as MainViewModel;
+			if (!vm.ConfirmClosing())
+			{
+				e.Cancel = true;
+				return;
+			}
 			(DataContext as MainViewModel).Dispose();
 			base.OnClosing(e);
 		}

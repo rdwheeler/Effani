@@ -194,6 +194,11 @@ namespace Effani.Device.UI
 			_processEngine.QueueCommand(new EmitFluid(axisSpec.Axis, EmitFluidVolume, _device));
 		}
 		[Command]
+		public async Task ReprimeIfNeeded(AxisSpec axisSpec)
+		{
+			_processEngine.QueueCommand(new ReprimeIfNeeded(axisSpec.Axis, _device));
+		}
+		[Command]
 		public async Task ApplyConfig()
 		{
 			_device.ApplyConfig();

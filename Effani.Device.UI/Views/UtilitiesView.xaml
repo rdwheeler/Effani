@@ -81,8 +81,10 @@
 								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.AlignToFirstWellCommand}" CommandParameter="{Binding}" Content="Align First Well" />
 								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.AlignToNextWellCommand}" CommandParameter="{Binding}" Content="Align Next Well" />
 								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.AlignToLastWellCommand}" CommandParameter="{Binding}" Content="Align Last Well" />
+								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.ReprimeIfNeededCommand}" CommandParameter="{Binding}" 
+										Visibility="{DXBinding '@DataContext.GetType() == typeof($control:FluidAxis) ? $Visibility.Visible : $Visibility.Collapsed'}" Content="Reprime If Needed" />
 								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ElementName=axesList, Path=DataContext.EmitFluidCommand}" CommandParameter="{Binding}"
-														 Visibility="{DXBinding '@DataContext.GetType() == typeof($control:FluidAxis) ? $Visibility.Visible : $Visibility.Collapsed'}">
+										Visibility="{DXBinding '@DataContext.GetType() == typeof($control:FluidAxis) ? $Visibility.Visible : $Visibility.Collapsed'}">
 									<dx:SimpleButton.Content>
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="Dispense Fluid" />

@@ -184,7 +184,8 @@ namespace Effani.Device.DataCollection
 				job.Commands.AddRange(
 				[
                     // add NADH to well
-                    new AlignWellToAxis(Axis.Nadh, testWell.Well, Device),
+					new ReprimeIfNeeded(Axis.Nadh, Device),
+					new AlignWellToAxis(Axis.Nadh, testWell.Well, Device),
 					new EmitFluid(Axis.Nadh, Settings.NadhVolume, Device),
 					new StartTimer(testWell.NadhReadings1Timer, $"{testWell.Label} NADH Readings 1 ({GetTimeString(Settings.NadhReadingsTimerPeriod)})", Device)
 				]);
@@ -277,7 +278,8 @@ namespace Effani.Device.DataCollection
 				job.Commands.AddRange(
 				[
                     // add DNA reagent to well
-                    new AlignWellToAxis(Axis.DnaReagent, testWell.Well, Device),
+					new ReprimeIfNeeded(Axis.DnaReagent, Device),
+					new AlignWellToAxis(Axis.DnaReagent, testWell.Well, Device),
 					new EmitFluid(Axis.DnaReagent, Settings.DnaVolume, Device),
 					new StartTimer(testWell.DnaIncubationTimer, $"{testWell.Label} DNA ({GetTimeString(Settings.DnaTimerPeriod)})", Device)
 				]);
@@ -346,6 +348,7 @@ namespace Effani.Device.DataCollection
 						job.Commands.AddRange(
 						[
 							// add KOH to well
+							new ReprimeIfNeeded(Axis.Koh, Device),
 							new AlignWellToAxis(Axis.Koh, testWell.Well, Device),
 							new EmitFluid(Axis.Koh, Settings.KohVolume, Device),
 						]);
@@ -524,9 +527,8 @@ namespace Effani.Device.DataCollection
         #endregion
 
     public enum FluidType
-		{
-			//General = 0,
-			Koh = 1
-		}
-}
+	{
+		//General = 0,
+		Koh = 1
+	}
 }

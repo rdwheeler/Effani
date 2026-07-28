@@ -15,6 +15,7 @@ using System.Windows;
 using Drivetrain;
 using DevExpress.Utils.Extensions;
 using Effani.Device.Services;
+using DevExpress.Xpf.Core;
 
 namespace Effani.Device.UI
 {
@@ -80,6 +81,13 @@ namespace Effani.Device.UI
 			AddMessage("Assay canceled", true);
 			AssayComplete = true;
 			AdvanceWizardPage?.Invoke(this, new EventArgs());
+		}
+		public bool ConfirmClosing()
+		{
+			string messageBoxText = $"Are you sure you want to cancel this assay and close the program?";
+			string caption = "Confirm Closing";
+
+			return DXMessageBox.Show(messageBoxText, caption, MessageBoxButton.YesNo) == MessageBoxResult.Yes;
 		}
 		public void PageStartLoadFluidSystem()
 		{
@@ -151,7 +159,8 @@ namespace Effani.Device.UI
                 _processEngine.QueuePriorityJob(job);
             }
             _processEngine.QueuePriorityJob(new Job($"Dispensing {_config.Settings.BasalVolume}µg basal media to {CurrentLoadingSample.Label}.", [
-                new AlignWellToAxis(Axis.Basal, CurrentLoadingSample.Well, _device),
+				new ReprimeIfNeeded(Axis.Basal, _device),
+				new AlignWellToAxis(Axis.Basal, CurrentLoadingSample.Well, _device),
                 new EmitFluid(Axis.Basal, _config.Settings.BasalVolume, _device)
             ]));
             _processEngine.QueuePriorityJob(new Job($"Aligning {CurrentLoadingSample.Label} for biopsy sample loading.", [
@@ -331,10 +340,11 @@ namespace Effani.Device.UI
 						PreparedToLoadSample = true;
 					});
 		}
-        #endregion
+		#endregion
 
-        #region Properties
-        public string TimerStatusMessage
+		#region Properties
+		protected IDialogService DialogService { get { return GetService<IDialogService>(); } }
+		public string TimerStatusMessage
         {
             get
             {

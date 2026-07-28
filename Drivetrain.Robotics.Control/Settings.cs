@@ -1079,7 +1079,7 @@ namespace Drivetrain.Robotics.Control
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PlateOffset)));
             }
         }
-        public int ReprimePumpInterval
+        public decimal ReprimePumpInterval
         {
             get
             {
@@ -1512,7 +1512,7 @@ namespace Drivetrain.Robotics.Control
         int _sensorReadDwell = 6000;
         int _standardsProcessingDwell = 360000;
         int _standardsWellCount = 6;
-        int _reprimePumpInterval = 20;
+		decimal _reprimePumpInterval = 20;
         int _tableAxisSpeed = 4000;
         int _testMediaAspirationVolume = 50;
         int _timerDescriptionUpdateInterval = 1000;

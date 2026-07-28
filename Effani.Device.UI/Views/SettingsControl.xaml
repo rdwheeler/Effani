@@ -161,8 +161,8 @@
                                 <dxlc:LayoutItem Label="Basal Media">
                                     <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding SecondaryBasalFluidPrimingVolume}" />
                                 </dxlc:LayoutItem>
-                                <dxlc:LayoutItem Label="Reprime Pump Interval (min)" HorizontalAlignment="Center" Margin="0,0,0,608" VerticalAlignment="Stretch">
-                                    <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="600" EditValue="{Binding ReprimePumpInterval}" />
+                                <dxlc:LayoutItem Label="Reprime Pump Interval (min)">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="600" EditValue="{Binding ReprimePumpInterval}" />
                                 </dxlc:LayoutItem>
                             </dxlc:LayoutGroup>
                         </dxlc:LayoutGroup>

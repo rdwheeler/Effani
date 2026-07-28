@@ -2,28 +2,34 @@
 using System;
 using System.Linq;
 using Drivetrain.Robotics.Process;
+using System.Diagnostics;
 
 namespace Effani.Device.Control
 {
-    public class ReprimeIfNeeded(Axis axis, AbalDeviceControl device) : Command(device)
+    public class ReprimeIfNeeded : Command
     {
-        protected override void Run()
+		public ReprimeIfNeeded(Axis axis, AbalDeviceControl device) : base(device)
+		{
+			Axis = axis;
+            _description = $"Re-prime {axis} pump if needed. Current pump idle time: {GetPumpIdleSeconds()} sec.";
+		}
+		protected override void Run()
         {
             var device = Device as AbalDeviceControl;
             if (axisSpec is null)
-                throw new ApplicationException($"Unknown axis {axis} in {nameof(EmitFluid)}");
-            _description = $"Re-prime {axis} pump if needed.";
+                throw new ApplicationException($"Unknown axis {Axis} in {nameof(EmitFluid)}");
 
-            if (device.PrimingStopwatches.TryGetValue(Axis, out var stopwatch))
+            var stopwatch = GetStopwatch();
+            if (stopwatch == null)
                 return;
 
-            long idleTime = stopwatch.ElapsedMilliseconds;
-            if (idleTime * 60000 < Device.Settings.ReprimePumpInterval)
+            long idleSec = GetPumpIdleSeconds();
+            if (idleSec < Device.Settings.ReprimePumpInterval * 60)
                 return;
 
             int primingVolume = GetPrimingVolume();
 
-            _description = $"Re-priming {axis} pump ({primingVolume}µg) after a {idleTime}sec idle period.";
+            _description = $"Re-priming {Axis} pump ({primingVolume}µg) after a {idleSec} sec idle period.";
             (Device as AbalDeviceControl).TableGoTo(device.Configuration.Settings.WasteLocation);
             device.EmitFluid(axisSpec, primingVolume);
             stopwatch.Reset();
@@ -31,7 +37,7 @@ namespace Effani.Device.Control
         }
         private int GetPrimingVolume()
         {
-            return axis switch
+            return Axis switch
             {
                 Axis.DnaReagent => Device.Settings.SecondaryDnaFluidPrimingVolume,
                 Axis.Koh => Device.Settings.SecondaryKohFluidPrimingVolume,
@@ -40,10 +46,24 @@ namespace Effani.Device.Control
                 _ => 0,
             };
         }
+        private Stopwatch GetStopwatch()
+        {
+            if ((Device as AbalDeviceControl).PrimingStopwatches.TryGetValue(Axis, out var stopwatch))
+                return stopwatch;
+            else
+                return null;
+		}
+        private long GetPumpIdleSeconds()
+        {
+            var stopwatch = GetStopwatch();
+			if (stopwatch == null)
+				return 0;
+			return stopwatch.ElapsedMilliseconds / 1000;
+		}
 
         public override string Description => _description;
 
-        public Axis Axis { get; } = axis;
+        public Axis Axis { get; private set; }
 
         private string _description;
 		private FluidAxis axisSpec
@@ -51,7 +71,7 @@ namespace Effani.Device.Control
 			get
 			{
 				var device = Device as AbalDeviceControl;
-				device.Axes.TryGetValue(axis, out var axisSpec);
+				device.Axes.TryGetValue(Axis, out var axisSpec);
 				return axisSpec as FluidAxis;
 			}
         }

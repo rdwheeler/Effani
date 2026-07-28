@@ -13,6 +13,12 @@ namespace Effani.Device.Control
 			if (axisSpec is null)
 				throw new ApplicationException($"Unknown axis {axis} in {nameof(EmitFluid)}");
 
+			if (device.PrimingStopwatches.TryGetValue(Axis, out var stopwatch))
+			{
+				stopwatch.Reset();
+				stopwatch.Start();
+			}
+
 			device.EmitFluid(axisSpec, MicroLiters);
 		}
 
