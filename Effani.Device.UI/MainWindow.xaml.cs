@@ -27,6 +27,7 @@ namespace Effani.Device.UI
 		{
 			InitializeComponent();
 			DataContext = new MainViewModel(deviceService, assayManagerService, settingsService);
+            ControlBoxButtonSet = ControlBoxButtons.None;
 		}
 		protected override void OnClosing(CancelEventArgs e)
 		{

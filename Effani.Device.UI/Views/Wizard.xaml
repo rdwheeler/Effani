@@ -36,9 +36,9 @@
             <Setter Property="Visibility" Value="Hidden"/>
         </Style>
         <DataTemplate x:Key="sideContentTemplate">
-            <StackPanel Width="1000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid Width="1000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <local:StatusDisplay></local:StatusDisplay>
-            </StackPanel>
+            </Grid>
         </DataTemplate>
     </UserControl.Resources>
     <UserControl.Background>
@@ -164,9 +164,9 @@
                     </Border>
                 </dxco:WizardPage>
                 <dxco:WizardPage SideContentTemplate="{StaticResource sideContentTemplate}" ShowNext="False" ShowFinish="False" ShowBack="False" ShowCancel="False" x:Name="AssayPage" ShowSideContent="False">
-                    <StackPanel HorizontalAlignment="Stretch">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <local:StatusDisplay></local:StatusDisplay>
-                    </StackPanel>
+                    </Grid>
                 </dxco:WizardPage>
                 <dxco:WizardPage ShowNext="False" ShowBack="False" ShowCancel="False" ShowFinish="False" x:Name="CleanUpPage">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center">

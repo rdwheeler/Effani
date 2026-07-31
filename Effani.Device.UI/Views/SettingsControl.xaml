@@ -207,7 +207,7 @@
             </dx:DXTabItem>
             <dx:DXTabItem Header="Component Properties">
                 <dxlc:LayoutControl>
-                    <dxlc:LayoutGroup View="GroupBox" Header="Emission Port Locations" Orientation="Vertical">
+                    <dxlc:LayoutGroup View="GroupBox" Header="Fluid Port Locations" Orientation="Vertical">
                         <dxlc:LayoutItem LabelPosition="Top" Label="NADH" ToolTip="Platform coordinates (mm x mm) of the location at which NADH is emitted">
                             <dxlc:LayoutGroup Orientation="Horizontal">
                                 <dxlc:LayoutItem LabelPosition="Left" Label="X">
@@ -245,6 +245,16 @@
                                 </dxlc:LayoutItem>
                                 <dxlc:LayoutItem LabelPosition="Left" Label="Y">
                                     <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding BasalLocationY}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem LabelPosition="Top" Label="KOH Aspiration" ToolTip="Platform coordinates (mm x mm) of the location at which KOH is aspirated">
+                            <dxlc:LayoutGroup Orientation="Horizontal">
+                                <dxlc:LayoutItem LabelPosition="Left" Label="X">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding AspirateKohLocationX}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem LabelPosition="Left" Label="Y">
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding AspirateKohLocationY}" />
                                 </dxlc:LayoutItem>
                             </dxlc:LayoutGroup>
                         </dxlc:LayoutItem>
@@ -325,6 +335,17 @@
                                     <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding WellOffsetY}" />
                                 </dxlc:LayoutItem>
                             </dxlc:LayoutGroup>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Aspiration Pump Properties" Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Aspirate KOH Needle Start Position" ToolTip="The starting position (mm) of a the KOH aspiration needle">
+                            <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding AspirateKohActuatorStartPosition}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Aspirate KOH Distrance to Tray" ToolTip="The distance (mm) between the tip of the KOH aspiration needle and the top of the sample tray">
+                            <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="100" EditValue="{Binding AspirateKohDistanceToPlate}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Aspirate Travel Per Microliter" ToolTip="The distance (mm) the aspiration needle travels in order to remove 1μl">
+                            <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="100" EditValue="{Binding AspirateTravelPerMicroLiter}" />
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutControl>

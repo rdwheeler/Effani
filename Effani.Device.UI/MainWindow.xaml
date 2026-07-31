@@ -19,8 +19,8 @@
 			<Setter Property="BorderBrush" Value="CornflowerBlue" />
 			<Setter Property="Padding" Value="20" />
 		</Style>
-	</dx:ThemedWindow.Resources>
-	<dx:ThemedWindow.HeaderItems>
+    </dx:ThemedWindow.Resources>
+    <dx:ThemedWindow.HeaderItems>
 		<dx:SimpleButton Command="{Binding ShowUploadCommand}" BorderThickness="0" Margin="0,5,0,5">
 			<dx:SimpleButton.Content>
 				<Image Source="{dx:DXImage 'SvgImages/Icon Builder/Weather_Cloudy.svg'}" />

@@ -218,11 +218,12 @@
 						<dxlc:LayoutControl Orientation="Vertical">
 							<dxlc:LayoutGroup Header="Actuators" View="GroupBox" Orientation="Vertical">
 								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding HomeAllCommand}" Content="Home All" />
-									<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AlignForWasteCommand}" Content="Align For Waste" />
-									<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AlignForTrayLoadingCommand}" Content="Align For Tray Loading" />
-									<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AlignForSterilizationCommand}" Content="Align For Sterilization" />
-								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding PrimeFluidCommand}" Content="Prime Fluid" />
-							</dxlc:LayoutGroup>
+								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AlignForWasteCommand}" Content="Align For Waste" />
+								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AlignForTrayLoadingCommand}" Content="Align For Tray Loading" />
+								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AlignForSterilizationCommand}" Content="Align For Sterilization" />
+                                <dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding PrimeFluidCommand}" Content="Prime Fluid" />
+                                <dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding AspirateKohCommand}" Content="Aspirate KOH" />
+                            </dxlc:LayoutGroup>
 							<dxlc:LayoutGroup Header="Sterilization" View="GroupBox" Orientation="Vertical">
 								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ChamberUvOnCommand}" Content="Chamber UV On" />
 									<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ChamberUvOffCommand}" Content="Chamber UV Off" />
