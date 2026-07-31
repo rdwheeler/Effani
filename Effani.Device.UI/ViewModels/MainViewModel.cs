@@ -32,7 +32,6 @@ namespace Effani.Device.UI
 			_processEngine.MessageReceived += ProcessEngine_MessageReceived;
 			_processEngine.BeginExecutingCommand += ProcessEngine_BeginExecutingCommand;
 			_processEngine.EndExecutingCommand += ProcessEngine_EndExecutingCommand;
-			Assay = new DataCollection.Assay(_device, _processEngine);
 		}
 		#endregion
 
@@ -90,8 +89,9 @@ namespace Effani.Device.UI
 			return DXMessageBox.Show(messageBoxText, caption, MessageBoxButton.YesNo) == MessageBoxResult.Yes;
 		}
 		public void PageStartLoadFluidSystem()
-		{
-			Assay.Initialize(NumberOfSamples);
+        {
+            Assay = new DataCollection.Assay(_device, _processEngine);
+            Assay.Initialize(NumberOfSamples, HerdId);
 			Assay.StatusMessages.CollectionChanged += StatusMessages_CollectionChanged;
 			Assay.StandardsComplete += Assay_StandardsComplete;
             Assay.TimerMessageChanged += Assay_TimerMessageChanged;
@@ -392,19 +392,21 @@ namespace Effani.Device.UI
 		{
 			get
 			{
-				return Assay?.HerdId;
+				return _herdId;
 			}
 			set
 			{
-				if(Assay == null)
+				if (_herdId == value)
 					return;
-				if (Assay.HerdId == value)
-					return;
-				Assay.HerdId = value;
-				RaisePropertyChanged(nameof(HerdId));
+                _herdId = value;
+                if (Assay != null)
+                    Assay.HerdId = value;
+                RaisePropertyChanged(nameof(HerdId));
 				RaisePropertyChanged(nameof(HerdIdAndNumberOfTestsComplete));
 			}
 		}
+
+        private string _herdId;
 		public DataCollection.Assay Assay { get; private set; }
 		public bool AssayComplete
 		{
@@ -468,18 +470,22 @@ namespace Effani.Device.UI
 		{
 			get
 			{
-				return Assay.NumberOfSamples;
+				return _numberOfSamples;
 			}
 			set
 			{
-				if (Assay.NumberOfSamples == value)
+				if (_numberOfSamples == value)
 					return;
-				Assay.NumberOfSamples = value;
+                _numberOfSamples = value;
+                if (Assay != null)
+					Assay.NumberOfSamples = value;
 				RaisePropertyChanged(nameof(NumberOfSamples));
 				RaisePropertyChanged(nameof(HerdIdAndNumberOfTestsComplete));
 				UnloadedTestsCount = value;
 			}
 		}
+
+        private int _numberOfSamples;
 		public bool StandardsComplete
 		{
 			get

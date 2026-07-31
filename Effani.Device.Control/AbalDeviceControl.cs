@@ -14,7 +14,12 @@ namespace Effani.Device.Control
 			Axes = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => v);
             PrimingStopwatches = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => new Stopwatch());
         }
-
+        public override void Dispose()
+        {
+            foreach(var t in PrimingStopwatches.Values)
+                t.Reset();
+            base.Dispose();
+        }
 		public void MoveAbsolute(Axis axis, decimal location, decimal? speed = null)
 		{
 			if(!Axes.TryGetValue(axis, out var axisSpec))

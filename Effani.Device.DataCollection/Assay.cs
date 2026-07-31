@@ -135,8 +135,10 @@ namespace Effani.Device.DataCollection
 				_doingPrepToBaselineTimerStart = false;
 			}
 		}
-		public void Initialize(int numberOfTests)
+		public void Initialize(int numberOfSamples, string herdId)
 		{
+            NumberOfSamples = numberOfSamples;
+			HerdId = herdId;
 			var currentTestNumber = 1;
 			foreach (var well in Device.Configuration.DeviceSpecification.Plates.SelectMany(p => p.Wells))
 			{
@@ -145,7 +147,7 @@ namespace Effani.Device.DataCollection
 					test.InitializeTimers();
 				TestWells.Add(test);
 				currentTestNumber++;
-				if (currentTestNumber > numberOfTests + Settings.StandardsWellCount)
+				if (currentTestNumber > numberOfSamples + Settings.StandardsWellCount)
 					break;
 			}
 			DnaStandardsWells = TestWells.Take(4).ToList();

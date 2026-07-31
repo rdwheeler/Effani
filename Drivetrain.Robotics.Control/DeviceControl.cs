@@ -55,7 +55,7 @@ namespace Drivetrain.Robotics.Control
 		{
 			WriteWhenReady($"M98 P\"config.g\"");
 		}
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			_disposing = true;
 			_serialPort.Close();

@@ -870,13 +870,13 @@ namespace Drivetrain.Robotics.Control
         {
             get
             {
-                return _nadhReading1TimerPeriod;
+                return _nadhBasalMixingTimerPeriod;
             }
             set
             {
-                if (_nadhReading1TimerPeriod == value)
+                if (_nadhBasalMixingTimerPeriod == value)
                     return;
-                _nadhReading1TimerPeriod = value;
+                _nadhBasalMixingTimerPeriod = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhReading1TimerPeriod)));
             }
         }
@@ -1453,8 +1453,8 @@ namespace Drivetrain.Robotics.Control
         int _aspirationDwell = 8000;
         int _aspirationSuctionToggleBoardNumber = 1;
         int _aspirationSuctionTogglePortNumber = 2;
-        int _basalIncubationTimerPeriod = 3600000;
-        Coordinate _basalLocation = new(166, 254);
+        int _basalIncubationTimerPeriod = 900000;
+        Coordinate _basalLocation = new(165, 257);
         decimal _basalSyringeLoadingPosition = 22m;
         decimal _basalTravelPerMicroLiter = 0.00153m;
         int _basalVolume = 300;
@@ -1462,9 +1462,9 @@ namespace Drivetrain.Robotics.Control
         int _comPortNumber = 4;
         bool _debug;
         int _dnaAspirationVolume = 50;
-        Coordinate _dnaLocation = new(337, 304.5m);
+        Coordinate _dnaLocation = new(331, 304);
         int _dnaSensorBoardNumber = 2;
-        Coordinate _dnaSensorLocation = new(332, 378);
+        Coordinate _dnaSensorLocation = new(329, 379);
         int _dnaSensorNumber = 0;
         int _dnaSensorPortNumber = 6;
         int _dnaSensorReadHigh = 10000;
@@ -1480,27 +1480,27 @@ namespace Drivetrain.Robotics.Control
         int _fluidEmissionDwell = 10000;
         decimal _fluidSyringeSpeed = 5m;
         int _horizontalWellCount = 8;
-        int _initialBasalFluidPrimingVolume = 1500;
-        int _initialDnaFluidPrimingVolume = 1500;
-        int _initialKohFluidPrimingVolume = 300;
-        int _initialNadhFluidPrimingVolume = 300;
+        int _initialBasalFluidPrimingVolume = 1000;
+        int _initialDnaFluidPrimingVolume = 1000;
+        int _initialKohFluidPrimingVolume = 100;
+        int _initialNadhFluidPrimingVolume = 100;
         int _kohAspirationVolume = 50;
-        Coordinate _kohLocation = new(334.5m, 254);
-        decimal _kohSyringeLoadingPosition = 74m;
-        int _kohTimerPeriod = 14400000;
+        Coordinate _kohLocation = new(331, 256);
+        decimal _kohSyringeLoadingPosition = 64m;
+        int _kohTimerPeriod = 480000;
         decimal _kohTravelPerMicroLiter = 0.00897m;
         int _kohVolume = 20;
         int _nadhIncubationDwell = 120000;
-        Coordinate _nadhLocation = new(168, 305);
-        int _nadhReading1TimerPeriod = 360000;
-        int _nadhReadingsTimerPeriod = 1800000;
+        Coordinate _nadhLocation = new(166, 304);
+        int _nadhBasalMixingTimerPeriod = 360000;
+        int _nadhReadingsTimerPeriod = 480000;
         int _nadhSensorBoardNumber = 1;
-        Coordinate _nadhSensorLocation = new(171, 380.5m);
+        Coordinate _nadhSensorLocation = new(168, 382.5m);
         int _nadhSensorNumber = 1;
         int _nadhSensorPortNumber = 6;
         int _nadhSensorReadHigh = 10000;
         int _nadhSensorReadLow = 0;
-        decimal _nadhSyringeLoadingPosition = 74m;
+        decimal _nadhSyringeLoadingPosition = 64m;
         decimal _nadhTravelPerMicroLiter = 0.00897m;
         int _nadhVolume = 20;
         Coordinate _plateOffset = new(87.48m, 0);
