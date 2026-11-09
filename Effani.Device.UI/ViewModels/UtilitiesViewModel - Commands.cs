@@ -65,6 +65,9 @@ namespace Effani.Device.UI
 				var fileLocation = _config
 					.GenerateConfigFiles(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
 				string messageBoxText = $"Config generated at {fileLocation}";
+				var warnings = _config.GetConnectionWarnings();
+				if (warnings.Count > 0)
+					messageBoxText += $"\n\nWARNING - check the board connections in Electronic Settings:\n- {string.Join("\n- ", warnings)}";
 				string caption = "Generate Config";
 
 				DXMessageBox.Show(messageBoxText, caption);
@@ -204,9 +207,9 @@ namespace Effani.Device.UI
 			_device.ApplyConfig();
 		}
 		[Command]
-		public async Task AspirateKoh(AxisSpec axisSpec)
+		public async Task Aspirate(AxisSpec axisSpec)
 		{
-			_processEngine.QueueCommand(new AspirateKoh(_config.Settings.KohAspirationVolume, _device));
+			_processEngine.QueueCommand(new Aspirate(_config.Settings.KohAspirationVolume, _device));
 		}
 		[Command]
 		public async Task UploadSettings()

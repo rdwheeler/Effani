@@ -5,8 +5,8 @@ namespace Drivetrain.Robotics.Control
 {
 	public class TableAxis : AxisSpec
 	{
-		public TableAxis(Axis axis, int board, int port, int maximumMovement, EndstopLocation endstopLocation, Direction direction, int maxSpeed, decimal? startingPosition = null)
-			: base(axis, board, port, startingPosition)
+		public TableAxis(Axis axis, BoardPort driverPort, BoardPort endstopPort, int maximumMovement, EndstopLocation endstopLocation, Direction direction, int maxSpeed, decimal? startingPosition = null)
+			: base(axis, driverPort, endstopPort, startingPosition)
 		{
 			Maximum = maximumMovement;
 			StepsPerMillimeter = 400;
@@ -17,7 +17,7 @@ namespace Drivetrain.Robotics.Control
 				Direction = direction,
 				Endstop = new EndstopSpec($"{Label} Endstop")
                 {
-                    SensorPort = $"{(board > 0 ? board + "." : null)}io{port}.in",
+                    SensorPort = endstopPort.InputDesignation,
                     Signal = PinSignal.High,
 					Location = endstopLocation,
 					FirstHomingSpeed = 3000

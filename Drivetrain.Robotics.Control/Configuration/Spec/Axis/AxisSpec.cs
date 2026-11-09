@@ -6,16 +6,20 @@ namespace Drivetrain.Robotics.Control
 {
 	public class AxisSpec : Spec
 	{
-		public AxisSpec(Axis axis, int board, int port, decimal? startingPosition = null)
+		public AxisSpec(Axis axis, BoardPort driverPort, BoardPort endstopPort, decimal? startingPosition = null)
 			: base(axis.GetAttribute<DisplayAttribute>().Name)
 		{
 			Axis = axis;
-			DriverPort = $"{board}.{port}";
+			DriverPort = driverPort.DriverDesignation;
+			DriverBoardPort = driverPort;
+			EndstopBoardPort = endstopPort;
 			Designation = axis.GetAttribute<DisplayAttribute>().ShortName;
 			StartingPosition = startingPosition ?? 0;
 		}
 		public string? Designation { get; set; }
 		public string? DriverPort { get; set; }
+		public BoardPort DriverBoardPort { get; private set; }
+		public BoardPort EndstopBoardPort { get; private set; }
 		public int Minimum { get; set; }
 		public int Maximum { get; set; }
 		public decimal StartingPosition { get; set; }

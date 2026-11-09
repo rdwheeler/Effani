@@ -20,8 +20,7 @@ namespace Drivetrain.Robotics.Control
 		{
 			get
 			{
-				var boardDesignation = Board > 0 ? $"{Board}." : null;
-				return $"{boardDesignation}io{Port}.in";
+				return new BoardPort(Board, Port).InputDesignation;
 			}
 		}
 		public int Board { get; set; } 

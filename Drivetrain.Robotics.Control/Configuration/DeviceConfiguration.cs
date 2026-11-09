@@ -38,6 +38,63 @@ namespace Drivetrain.Robotics.Control
 				return ex.Message;
 			}
 		}
+		/// <summary>
+		/// Checks the configured board connections against each other and the installed hardware.
+		/// Returns one message per problem found; an empty list means nothing suspicious was found.
+		/// </summary>
+		public List<string> GetConnectionWarnings()
+		{
+			var warnings = new List<string>();
+			var boardCount = Math.Max(1, Settings.ControllerBoardCount);
+			var lastBoard = boardCount - 1;
+			var boardNames = string.Join(" and ", Enumerable.Range(0, boardCount));
+
+			void CheckBoard(string what, int board)
+			{
+				if (board < 0 || board > lastBoard)
+					warnings.Add($"{what} is on board {board}, but only board{(boardCount == 1 ? "" : "s")} {boardNames} exist{(boardCount == 1 ? "s" : "")} ({boardCount} controller board{(boardCount == 1 ? "" : "s")} configured).");
+			}
+			void CheckDuplicates(string kind, IEnumerable<(string Label, string Name)> uses)
+			{
+				foreach (var group in uses.GroupBy(u => u.Name).Where(g => g.Count() > 1))
+					warnings.Add($"{kind} {group.Key} is assigned to more than one item: {string.Join(", ", group.Select(g => g.Label))}.");
+			}
+
+			var axes = DeviceSpecification!.Axes;
+			foreach (var axis in axes)
+			{
+				CheckBoard($"{axis.Label} motor driver", axis.DriverBoardPort.Board);
+				CheckBoard($"{axis.Label} endstop", axis.EndstopBoardPort.Board);
+				if (axis.DriverBoardPort.Port < 0 || axis.DriverBoardPort.Port >= DriversPerBoard)
+					warnings.Add($"{axis.Label} motor driver port {axis.DriverBoardPort.Port} does not exist; each board has drivers 0 to {DriversPerBoard - 1}.");
+			}
+			CheckDuplicates("Motor driver", axes.Select(a => (a.Label, a.DriverBoardPort.DriverDesignation)));
+
+			var sensors = DeviceSpecification.Sensors;
+			foreach (var sensor in sensors)
+				CheckBoard(sensor.Label, sensor.Board);
+			CheckDuplicates("Input port",
+				axes.Select(a => ($"{a.Label} endstop", a.EndstopBoardPort.InputDesignation))
+					.Concat(sensors.Select(s => (s.Label, s.PortDesignation!))));
+
+			var outputs = GetActuatorOutputs();
+			foreach (var output in outputs)
+				CheckBoard(output.Label, output.Port.Board);
+			CheckDuplicates("Output port", outputs.Select(o => (o.Label, o.Port.OutputDesignation)));
+
+			return warnings;
+		}
+		private const int SuctionActuatorIndex = 5;
+		/// <summary>Installed drivers per board (Duet 3 Mini 5+: drivers 0-4).</summary>
+		private const int DriversPerBoard = 5;
+		private List<(int Index, string Label, BoardPort Port)> GetActuatorOutputs() => new()
+		{
+			(0, "tray UV", new BoardPort(Settings.TrayUvBoardNumber, Settings.TrayUvPortNumber)),
+			(1, "chamber UV", new BoardPort(Settings.ChamberUvBoardNumber, Settings.ChamberUvPortNumber)),
+			(2, "NADH laser", new BoardPort(Settings.NadhLaserBoardNumber, Settings.NadhLaserPortNumber)),
+			(3, "DNA laser", new BoardPort(Settings.DnaLaserBoardNumber, Settings.DnaLaserPortNumber)),
+			(SuctionActuatorIndex, "aspiration suction", new BoardPort(Settings.AspirationSuctionToggleBoardNumber, Settings.AspirationSuctionTogglePortNumber)),
+		};
 		private void WriteConfig(string folder)
 		{
 			var configTextBuilder = new StringBuilder();
@@ -48,7 +105,7 @@ M83 ; relative extruder moves
 M550 P""ABAL"" ; set hostname
 
 ; Network
-M552 S2 ; configure WiFi adapter
+M552 S1 ; configure WiFi adapter
 M586 P0 S1 ; configure HTTP
 M586 P1 S1 ; configure FTP
 M586 P2 S1 ; configure Telnet
@@ -136,38 +193,15 @@ M669 K0 ; configure Cartesian kinematics
             }
             var t = configTextBuilder.ToString();
             configTextBuilder.AppendLine("\r\n; Actuators");
-			configTextBuilder.AppendLine(@"M950 P0 C""2.out5"" ; tray UV");
-			configTextBuilder.AppendLine(@"M950 P1 C""1.out6"" ; chamber UV");
-			configTextBuilder.AppendLine(@"M950 P2 C""out6"" ; NADH laser");
-			configTextBuilder.AppendLine(@"M950 P3 C""2.out6"" ; DNA laser");
-			//var aspirationPressureToggleBoardNumber = AspirationPressureToggleBoardNumber == 0 ? null : $"{AspirationPressureToggleBoardNumber}.";
-			//configTextBuilder.AppendLine(@$"M950 P4 C""{aspirationPressureToggleBoardNumber}out{AspirationPressureTogglePortNumber}"" ; aspiration emission switch");
-			var aspirationSuctionToggleBoardNumber = Settings.AspirationSuctionToggleBoardNumber == 0 ? null : $"{Settings.AspirationSuctionToggleBoardNumber}.";
-			configTextBuilder.AppendLine(@$"M950 P5 C""{aspirationSuctionToggleBoardNumber}out{Settings.AspirationSuctionTogglePortNumber}"" ; aspiration emission switch");
+			foreach (var (index, label, port) in GetActuatorOutputs().Where(o => o.Index != SuctionActuatorIndex))
+				configTextBuilder.AppendLine($@"M950 P{index} C""{port.OutputDesignation}"" ; {label}");
+			var suction = GetActuatorOutputs().Single(o => o.Index == SuctionActuatorIndex);
+			configTextBuilder.AppendLine(@$"M950 P{suction.Index} C""{suction.Port.OutputDesignation}"" ; aspiration emission switch");
 			configTextBuilder.AppendLine("\r\n; Sensors");
 			foreach (var sensor in DeviceSpecification.Sensors)
 			{
 				configTextBuilder.AppendLine($@"M308 S{sensor.SensorNumber} P""{sensor.PortDesignation}"" Y""linear-analog"" A""{sensor.Label}"" F0 B{sensor.ReadLow} C{sensor.ReadHigh}");
 			}
-			//configTextBuilder.AppendLine(@"M308 S3 P""2.temp0"" Y""thermistor"" A""Tray Heater"" T10000 B3950 ; configure tray heat sensor");
-			//configTextBuilder.AppendLine("\r\n; Heaters");
-			//configTextBuilder.AppendLine(@"M950 H0 C""1.out0"" T3 ; create tray heater");
-			//configTextBuilder.AppendLine($"M143 H0 P0 T0 C0 S100 A0 ; configure heater monitor");
-			//configTextBuilder.AppendLine(@"M307 H0 R2.43 D5.5 E1.35 K0.56 B1 ; configure model of heater");
-			//configTextBuilder.AppendLine(@"M950 H1 C""1.out1"" T3 ; create tray heater");
-			//configTextBuilder.AppendLine($"M143 H1 P0 T1 C0 S100 A0 ; configure heater monitor");
-			//configTextBuilder.AppendLine(@"M307 H1 R2.43 D5.5 E1.35 K0.56 B1 ; configure model of heater");
-			//configTextBuilder.AppendLine(@"M950 H2 C""2.out0"" T3 ; create tray heater");
-			//configTextBuilder.AppendLine($"M143 H2 P0 T2 C0 S100 A0 ; configure heater monitor");
-			//configTextBuilder.AppendLine(@"M307 H2 R2.43 D5.5 E1.35 K0.56 B1 ; configure model of heater");
-			//configTextBuilder.AppendLine(@"M950 H3 C""2.out1"" T3 ; create tray heater");
-			//configTextBuilder.AppendLine($"M143 H3 P0 T3 C0 S100 A0 ; configure heater monitor");
-			//configTextBuilder.AppendLine(@"M307 H3 R2.43 D5.5 E1.35 K0.56 B1 ; configure model of heater");
-			//configTextBuilder.AppendLine("\r\n; Heated beds");
-			//configTextBuilder.AppendLine(@"M140 P0 H0 ; configure bed heater to use the heater^");
-			//configTextBuilder.AppendLine(@"M140 P1 H1 ; configure bed heater to use the heater^");
-			//configTextBuilder.AppendLine(@"M140 P2 H2 ; configure bed heater to use the heater^");
-			//configTextBuilder.AppendLine(@"M140 P3 H3 ; configure bed heater to use the heater^");
 
 			File.WriteAllBytes(Path.Combine(folder, "config.g"), Encoding.ASCII.GetBytes(configTextBuilder.ToString()));
 		}
@@ -204,15 +238,31 @@ G90 ; absolute positioning
 		{
 			DeviceSpecification = new DeviceSpecification();
 			DeviceSpecification.DeviceName = DeviceSpecification.Label;
-			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX, 0, 0, 500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
-			DeviceSpecification.Axes.Add((AxisSpec)new TableAxis(Axis.TableY, 0, 1, 500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
+			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX,
+				new BoardPort(Settings.TableXDriverBoardNumber, Settings.TableXDriverPortNumber),
+				new BoardPort(Settings.TableXEndstopBoardNumber, Settings.TableXEndstopPortNumber),
+				500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
+			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableY,
+				new BoardPort(Settings.TableYDriverBoardNumber, Settings.TableYDriverPortNumber),
+				new BoardPort(Settings.TableYEndstopBoardNumber, Settings.TableYEndstopPortNumber),
+				500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
 			DeviceSpecification.Axes.AddRange(GetAspirateAxes());
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent, 1, 4, Settings.DnaLocation, Settings.DnaSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh, 2, 1, Settings.KohLocation, Settings.KohSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh, 2, 3, Settings.NadhLocation, Settings.NadhSyringeLoadingPosition));
-			var basal1 = new FluidAxis(Axis.Basal, 0, 5, Settings.BasalLocation, Settings.BasalSyringeLoadingPosition);
-            basal1.Driver.Endstop.SensorPort = ($"1.io0.in");
-            DeviceSpecification.Axes.Add(basal1);
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent,
+				new BoardPort(Settings.DnaReagentDriverBoardNumber, Settings.DnaReagentDriverPortNumber),
+				new BoardPort(Settings.DnaReagentEndstopBoardNumber, Settings.DnaReagentEndstopPortNumber),
+				Settings.DnaLocation, Settings.DnaSyringeLoadingPosition));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh,
+				new BoardPort(Settings.KohDriverBoardNumber, Settings.KohDriverPortNumber),
+				new BoardPort(Settings.KohEndstopBoardNumber, Settings.KohEndstopPortNumber),
+				Settings.KohLocation, Settings.KohSyringeLoadingPosition));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh,
+				new BoardPort(Settings.NadhDriverBoardNumber, Settings.NadhDriverPortNumber),
+				new BoardPort(Settings.NadhEndstopBoardNumber, Settings.NadhEndstopPortNumber),
+				Settings.NadhLocation, Settings.NadhSyringeLoadingPosition));
+			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Basal,
+				new BoardPort(Settings.BasalDriverBoardNumber, Settings.BasalDriverPortNumber),
+				new BoardPort(Settings.BasalEndstopBoardNumber, Settings.BasalEndstopPortNumber),
+				Settings.BasalLocation, Settings.BasalSyringeLoadingPosition));
 
 			DeviceSpecification.Sensors.Add(new DnaSensorSpec("DNA Sensor", Settings.DnaSensorNumber, Settings.DnaSensorBoardNumber, Settings.DnaSensorPortNumber, Settings.DnaSensorReadHigh, Settings.DnaSensorReadLow, Settings.DnaSensorLocation));
 			DeviceSpecification.Sensors.Add(new NadhSensorSpec("NADH Sensor", Settings.NadhSensorNumber, Settings.NadhSensorBoardNumber, Settings.NadhSensorPortNumber, Settings.NadhSensorReadHigh, Settings.NadhSensorReadLow, Settings.NadhSensorLocation));
@@ -249,9 +299,10 @@ G90 ; absolute positioning
 		{
 			var ret = new List<AxisSpec>();
 			//ret.Add(new AspirateZAxis(Axis.AspirateFluid, 0, 4, Settings.AspirateFluidLocation, Settings.AspirateFluidActuatorStartPosition));
-			var aspirate1Z = new AspirateZAxis(Axis.AspirateKoh, 1, 1, Settings.AspirateKohLocation, Settings.AspirateKohActuatorStartPosition);
-            aspirate1Z.Driver.Endstop.SensorPort = ($"1.io1.in");
-            ret.Add(aspirate1Z);
+			ret.Add(new AspirateZAxis(Axis.Aspirate,
+				new BoardPort(Settings.AspirateDriverBoardNumber, Settings.AspirateDriverPortNumber),
+				new BoardPort(Settings.AspirateEndstopBoardNumber, Settings.AspirateEndstopPortNumber),
+				Settings.AspirateLocation, Settings.AspirateActuatorStartPosition));
 
             return ret;
 		}

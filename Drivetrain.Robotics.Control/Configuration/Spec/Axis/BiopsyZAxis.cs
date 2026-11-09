@@ -5,8 +5,8 @@ namespace Drivetrain.Robotics.Control
 {
 	public class BiopsyZAxis : AxisSpec
 	{
-		public BiopsyZAxis(Axis axis, int board, int port, decimal? startingPosition = null)
-			: base(axis, board, port, startingPosition)
+		public BiopsyZAxis(Axis axis, BoardPort driverPort, BoardPort endstopPort, decimal? startingPosition = null)
+			: base(axis, driverPort, endstopPort, startingPosition)
 		{
 			Maximum = 100;
 			StepsPerMillimeter = 3200m;
@@ -17,7 +17,7 @@ namespace Drivetrain.Robotics.Control
 				Direction = Direction.Backwards,
 				Endstop = new EndstopSpec(Label)
                 {
-                    SensorPort = $"{(board > 0 ? board + "." : null)}io{port}.in",
+                    SensorPort = endstopPort.InputDesignation,
                     Signal = PinSignal.Low,
 					Location = EndstopLocation.LowEnd,
                     FirstHomingSpeed = 1000

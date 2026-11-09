@@ -33,6 +33,7 @@ namespace Effani.Device.DataCollection
 			NadhReadings5Count = settings.NadhReadingsTimerPeriod / _timerDescriptionUpdateInterval;
 			KohDwellCount = settings.KohTimerPeriod / _timerDescriptionUpdateInterval;
 			DnaIncubationCount = settings.DnaTimerPeriod / _timerDescriptionUpdateInterval;
+			_totalCount = RemainingCount;
 		}
 		#endregion
 
@@ -278,6 +279,16 @@ namespace Effani.Device.DataCollection
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// Total processing time (ms) this test takes from the start of basal incubation through the end of DNA incubation.
+		/// </summary>
+		[JsonIgnore]
+		public long TotalProcessingMilliseconds => (long)_totalCount * _timerDescriptionUpdateInterval;
+		/// <summary>
+		/// Processing time (ms) still to run for this test. Phases whose timers have not started yet count in full.
+		/// </summary>
+		[JsonIgnore]
+		public long RemainingProcessingMilliseconds => (long)RemainingCount * _timerDescriptionUpdateInterval;
 		[JsonIgnore]
 		#region CurrentTimerDescription
 		public string CurrentTimerDescription
@@ -364,6 +375,11 @@ namespace Effani.Device.DataCollection
 		readonly EventHandler<DataArgs<int>> _dnaIncubationTimerCallback;
 		readonly EventHandler<DataArgs<int>> _kohDwellDnaTimerCallback;
 		readonly EventHandler<DataArgs<int>> _nadhReadingsTimerCallback;
+		private int RemainingCount =>
+			Math.Max(0, BasalIncubationCount) + Math.Max(0, NadhReadings1Count) + Math.Max(0, NadhReadings2Count) +
+			Math.Max(0, NadhReadings3Count) + Math.Max(0, NadhReadings4Count) + Math.Max(0, NadhReadings5Count) +
+			Math.Max(0, KohDwellCount) + Math.Max(0, DnaIncubationCount);
+		private int _totalCount;
 		private int BasalIncubationCount;
 		private int NadhReadings1Count;
 		private int NadhReadings2Count;

@@ -203,5 +203,15 @@
                 </dxco:WizardPage>
             </dxco:Wizard>
         </DockPanel>
+        <Border VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="40,0,40,15" Padding="12,8" CornerRadius="7" Background="#E6FFFFFF"
+                Visibility="{DXBinding 'LoadedSampleCount > 0 &amp;&amp; !AssayComplete ? $Visibility.Visible : $Visibility.Collapsed'}">
+            <StackPanel>
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Right" FontSize="15" Text="{Binding ProcessingTimeRemaining}"/>
+                    <TextBlock FontSize="15" Text="{DXBinding '`Processing ` + LoadedSampleCount + ` loaded sample` + (LoadedSampleCount == 1 ? `` : `s`)'}"/>
+                </DockPanel>
+                <ProgressBar Margin="0,6,0,0" Height="16" Minimum="0" Maximum="100" Value="{Binding ProcessingProgress, Mode=OneWay}"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

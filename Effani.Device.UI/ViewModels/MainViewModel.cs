@@ -32,12 +32,16 @@ namespace Effani.Device.UI
 			_processEngine.MessageReceived += ProcessEngine_MessageReceived;
 			_processEngine.BeginExecutingCommand += ProcessEngine_BeginExecutingCommand;
 			_processEngine.EndExecutingCommand += ProcessEngine_EndExecutingCommand;
+			_progressTimer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+			_progressTimer.Tick += (s, e) => UpdateProcessingProgress();
+			_progressTimer.Start();
 		}
 		#endregion
 
 		#region Public methods
 		public void Dispose()
 		{
+			_progressTimer.Stop();
 			foreach (var t in SamplesComplete)
 				t.Dispose();
 			foreach (var t in SamplesInDna)
@@ -68,6 +72,33 @@ namespace Effani.Device.UI
 			_processEngine = null;
 			_device.Dispose();
 			_device = null;
+		}
+		/// <summary>
+		/// Recomputes overall progress across every sample accepted so far. Samples are accepted one at a time while
+		/// earlier ones are already processing, so the totals grow as samples are added: progress is the share of all
+		/// loaded samples' processing time that has elapsed, and time remaining is when the last loaded sample finishes
+		/// (samples run in parallel).
+		/// </summary>
+		public void UpdateProcessingProgress()
+		{
+			var loaded = SamplesInBasal.Concat(SamplesInNadh).Concat(SamplesInKoh).Concat(SamplesInDna).Concat(SamplesComplete)
+				.Select(s => s.TestWell).ToList();
+			LoadedSampleCount = loaded.Count;
+			if (loaded.Count == 0)
+			{
+				ProcessingProgress = 0;
+				ProcessingTimeRemaining = null;
+				return;
+			}
+
+			var total = loaded.Sum(t => t.TotalProcessingMilliseconds);
+			var remaining = loaded.Sum(t => t.RemainingProcessingMilliseconds);
+			ProcessingProgress = total <= 0 ? 100 : Math.Clamp(100d * (total - remaining) / total, 0, 100);
+
+			var finishesIn = TimeSpan.FromMilliseconds(loaded.Max(t => t.RemainingProcessingMilliseconds));
+			ProcessingTimeRemaining = finishesIn <= TimeSpan.Zero
+				? "Finishing..."
+				: $"{(int)finishesIn.TotalHours:00}:{finishesIn.Minutes:00}:{finishesIn.Seconds:00} remaining";
 		}
 		public void CancelAssay()
 		{
@@ -109,7 +140,7 @@ namespace Effani.Device.UI
 				new HomeAxis(Axis.Basal, _device),
 				new HomeAxis(Axis.DnaReagent, _device),
 				new HomeAxis(Axis.Nadh, _device),
-				new HomeAxis(Axis.AspirateKoh, _device),
+				new HomeAxis(Axis.Aspirate, _device),
 				//new HomeAxis(Axis.AspirateFluid, _device),
 				new MoveToStartingLocations(_device),
                 new TableToTrayLoadingLocation(_device),
@@ -548,6 +579,41 @@ namespace Effani.Device.UI
 				RaisePropertyChanged(nameof(UnloadedTestsCount));
 			}
         }
+        #region Processing progress
+        public double ProcessingProgress
+        {
+            get => _processingProgress;
+            private set
+            {
+                if (_processingProgress == value)
+                    return;
+                _processingProgress = value;
+                RaisePropertyChanged(nameof(ProcessingProgress));
+            }
+        }
+        public string ProcessingTimeRemaining
+        {
+            get => _processingTimeRemaining;
+            private set
+            {
+                if (_processingTimeRemaining == value)
+                    return;
+                _processingTimeRemaining = value;
+                RaisePropertyChanged(nameof(ProcessingTimeRemaining));
+            }
+        }
+        public int LoadedSampleCount
+        {
+            get => _loadedSampleCount;
+            private set
+            {
+                if (_loadedSampleCount == value)
+                    return;
+                _loadedSampleCount = value;
+                RaisePropertyChanged(nameof(LoadedSampleCount));
+            }
+        }
+        #endregion
         public bool AllSamplesLoadedAndProcessing
         {
             get
@@ -631,6 +697,10 @@ namespace Effani.Device.UI
 		public EventHandler AdvanceWizardPage;
 
         #region Fields
+        System.Windows.Threading.DispatcherTimer _progressTimer;
+        double _processingProgress;
+        string _processingTimeRemaining;
+        int _loadedSampleCount;
         string _assayFullName;
         string _sterilizingStatusMessage;
         string _timerStatusTitle;

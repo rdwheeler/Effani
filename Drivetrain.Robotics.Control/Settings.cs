@@ -12,68 +12,68 @@ namespace Drivetrain.Robotics.Control
     public class Settings : INotifyPropertyChanged
     {
         #region Properties
-        public decimal AspirateKohActuatorStartPosition
+        public decimal AspirateActuatorStartPosition
         {
             get
             {
-                return _aspirateKohActuatorStartPosition;
+                return _aspirateActuatorStartPosition;
             }
             set
             {
-                if (_aspirateKohActuatorStartPosition == value)
+                if (_aspirateActuatorStartPosition == value)
                     return;
-                _aspirateKohActuatorStartPosition = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateKohActuatorStartPosition)));
+                _aspirateActuatorStartPosition = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateActuatorStartPosition)));
             }
         }
-        public decimal AspirateKohDistanceToPlate
+        public decimal AspirateDistanceToPlate
         {
             get
             {
-                return _aspirateKohDistanceToPlate;
+                return _aspirateDistanceToPlate;
             }
             set
             {
-                if (_aspirateKohDistanceToPlate == value)
+                if (_aspirateDistanceToPlate == value)
                     return;
-                _aspirateKohDistanceToPlate = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateKohDistanceToPlate)));
+                _aspirateDistanceToPlate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateDistanceToPlate)));
             }
         }
-        public Coordinate AspirateKohLocation
+        public Coordinate AspirateLocation
         {
             get
             {
-                return _aspirateKohLocation;
+                return _aspirateLocation;
             }
             set
             {
-                if (_aspirateKohLocation == value)
+                if (_aspirateLocation == value)
                     return;
-                _aspirateKohLocation = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateKohLocation)));
+                _aspirateLocation = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateLocation)));
             }
         }
         [JsonIgnore]
         [NotMapped]
-        public decimal AspirateKohLocationX
+        public decimal AspirateLocationX
         {
-            get => AspirateKohLocation.X;
+            get => AspirateLocation.X;
             set
             {
-                AspirateKohLocation.X = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateKohLocation)));
+                AspirateLocation.X = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateLocation)));
             }
         }
         [JsonIgnore]
         [NotMapped]
-        public decimal AspirateKohLocationY
+        public decimal AspirateLocationY
         {
-            get => AspirateKohLocation.Y;
+            get => AspirateLocation.Y;
             set
             {
-                AspirateKohLocation.Y = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateKohLocation)));
+                AspirateLocation.Y = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateLocation)));
             }
         }
         public decimal AspiratePositioningSpeed
@@ -286,6 +286,20 @@ namespace Drivetrain.Robotics.Control
             {
                 BiopsyLocation.Y = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BiopsyLocation)));
+            }
+        }
+        public int ControllerBoardCount
+        {
+            get
+            {
+                return _controllerBoardCount;
+            }
+            set
+            {
+                if (_controllerBoardCount == value)
+                    return;
+                _controllerBoardCount = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ControllerBoardCount)));
             }
         }
         public int ComPortNumber
@@ -1439,14 +1453,521 @@ namespace Drivetrain.Robotics.Control
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WellWidth)));
             }
         }
+
+        #region Board connections
+        public int TableXDriverBoardNumber
+        {
+            get
+            {
+                return _tableXDriverBoardNumber;
+            }
+            set
+            {
+                if (_tableXDriverBoardNumber == value)
+                    return;
+                _tableXDriverBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXDriverBoardNumber)));
+            }
+        }
+        public int TableXDriverPortNumber
+        {
+            get
+            {
+                return _tableXDriverPortNumber;
+            }
+            set
+            {
+                if (_tableXDriverPortNumber == value)
+                    return;
+                _tableXDriverPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXDriverPortNumber)));
+            }
+        }
+        public int TableXEndstopBoardNumber
+        {
+            get
+            {
+                return _tableXEndstopBoardNumber;
+            }
+            set
+            {
+                if (_tableXEndstopBoardNumber == value)
+                    return;
+                _tableXEndstopBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXEndstopBoardNumber)));
+            }
+        }
+        public int TableXEndstopPortNumber
+        {
+            get
+            {
+                return _tableXEndstopPortNumber;
+            }
+            set
+            {
+                if (_tableXEndstopPortNumber == value)
+                    return;
+                _tableXEndstopPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXEndstopPortNumber)));
+            }
+        }
+        public int TableYDriverBoardNumber
+        {
+            get
+            {
+                return _tableYDriverBoardNumber;
+            }
+            set
+            {
+                if (_tableYDriverBoardNumber == value)
+                    return;
+                _tableYDriverBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYDriverBoardNumber)));
+            }
+        }
+        public int TableYDriverPortNumber
+        {
+            get
+            {
+                return _tableYDriverPortNumber;
+            }
+            set
+            {
+                if (_tableYDriverPortNumber == value)
+                    return;
+                _tableYDriverPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYDriverPortNumber)));
+            }
+        }
+        public int TableYEndstopBoardNumber
+        {
+            get
+            {
+                return _tableYEndstopBoardNumber;
+            }
+            set
+            {
+                if (_tableYEndstopBoardNumber == value)
+                    return;
+                _tableYEndstopBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYEndstopBoardNumber)));
+            }
+        }
+        public int TableYEndstopPortNumber
+        {
+            get
+            {
+                return _tableYEndstopPortNumber;
+            }
+            set
+            {
+                if (_tableYEndstopPortNumber == value)
+                    return;
+                _tableYEndstopPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYEndstopPortNumber)));
+            }
+        }
+        public int AspirateDriverBoardNumber
+        {
+            get
+            {
+                return _aspirateDriverBoardNumber;
+            }
+            set
+            {
+                if (_aspirateDriverBoardNumber == value)
+                    return;
+                _aspirateDriverBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateDriverBoardNumber)));
+            }
+        }
+        public int AspirateDriverPortNumber
+        {
+            get
+            {
+                return _aspirateDriverPortNumber;
+            }
+            set
+            {
+                if (_aspirateDriverPortNumber == value)
+                    return;
+                _aspirateDriverPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateDriverPortNumber)));
+            }
+        }
+        public int AspirateEndstopBoardNumber
+        {
+            get
+            {
+                return _aspirateEndstopBoardNumber;
+            }
+            set
+            {
+                if (_aspirateEndstopBoardNumber == value)
+                    return;
+                _aspirateEndstopBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateEndstopBoardNumber)));
+            }
+        }
+        public int AspirateEndstopPortNumber
+        {
+            get
+            {
+                return _aspirateEndstopPortNumber;
+            }
+            set
+            {
+                if (_aspirateEndstopPortNumber == value)
+                    return;
+                _aspirateEndstopPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateEndstopPortNumber)));
+            }
+        }
+        public int DnaReagentDriverBoardNumber
+        {
+            get
+            {
+                return _dnaReagentDriverBoardNumber;
+            }
+            set
+            {
+                if (_dnaReagentDriverBoardNumber == value)
+                    return;
+                _dnaReagentDriverBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentDriverBoardNumber)));
+            }
+        }
+        public int DnaReagentDriverPortNumber
+        {
+            get
+            {
+                return _dnaReagentDriverPortNumber;
+            }
+            set
+            {
+                if (_dnaReagentDriverPortNumber == value)
+                    return;
+                _dnaReagentDriverPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentDriverPortNumber)));
+            }
+        }
+        public int DnaReagentEndstopBoardNumber
+        {
+            get
+            {
+                return _dnaReagentEndstopBoardNumber;
+            }
+            set
+            {
+                if (_dnaReagentEndstopBoardNumber == value)
+                    return;
+                _dnaReagentEndstopBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentEndstopBoardNumber)));
+            }
+        }
+        public int DnaReagentEndstopPortNumber
+        {
+            get
+            {
+                return _dnaReagentEndstopPortNumber;
+            }
+            set
+            {
+                if (_dnaReagentEndstopPortNumber == value)
+                    return;
+                _dnaReagentEndstopPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentEndstopPortNumber)));
+            }
+        }
+        public int KohDriverBoardNumber
+        {
+            get
+            {
+                return _kohDriverBoardNumber;
+            }
+            set
+            {
+                if (_kohDriverBoardNumber == value)
+                    return;
+                _kohDriverBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohDriverBoardNumber)));
+            }
+        }
+        public int KohDriverPortNumber
+        {
+            get
+            {
+                return _kohDriverPortNumber;
+            }
+            set
+            {
+                if (_kohDriverPortNumber == value)
+                    return;
+                _kohDriverPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohDriverPortNumber)));
+            }
+        }
+        public int KohEndstopBoardNumber
+        {
+            get
+            {
+                return _kohEndstopBoardNumber;
+            }
+            set
+            {
+                if (_kohEndstopBoardNumber == value)
+                    return;
+                _kohEndstopBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohEndstopBoardNumber)));
+            }
+        }
+        public int KohEndstopPortNumber
+        {
+            get
+            {
+                return _kohEndstopPortNumber;
+            }
+            set
+            {
+                if (_kohEndstopPortNumber == value)
+                    return;
+                _kohEndstopPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohEndstopPortNumber)));
+            }
+        }
+        public int NadhDriverBoardNumber
+        {
+            get
+            {
+                return _nadhDriverBoardNumber;
+            }
+            set
+            {
+                if (_nadhDriverBoardNumber == value)
+                    return;
+                _nadhDriverBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhDriverBoardNumber)));
+            }
+        }
+        public int NadhDriverPortNumber
+        {
+            get
+            {
+                return _nadhDriverPortNumber;
+            }
+            set
+            {
+                if (_nadhDriverPortNumber == value)
+                    return;
+                _nadhDriverPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhDriverPortNumber)));
+            }
+        }
+        public int NadhEndstopBoardNumber
+        {
+            get
+            {
+                return _nadhEndstopBoardNumber;
+            }
+            set
+            {
+                if (_nadhEndstopBoardNumber == value)
+                    return;
+                _nadhEndstopBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhEndstopBoardNumber)));
+            }
+        }
+        public int NadhEndstopPortNumber
+        {
+            get
+            {
+                return _nadhEndstopPortNumber;
+            }
+            set
+            {
+                if (_nadhEndstopPortNumber == value)
+                    return;
+                _nadhEndstopPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhEndstopPortNumber)));
+            }
+        }
+        public int BasalDriverBoardNumber
+        {
+            get
+            {
+                return _basalDriverBoardNumber;
+            }
+            set
+            {
+                if (_basalDriverBoardNumber == value)
+                    return;
+                _basalDriverBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalDriverBoardNumber)));
+            }
+        }
+        public int BasalDriverPortNumber
+        {
+            get
+            {
+                return _basalDriverPortNumber;
+            }
+            set
+            {
+                if (_basalDriverPortNumber == value)
+                    return;
+                _basalDriverPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalDriverPortNumber)));
+            }
+        }
+        public int BasalEndstopBoardNumber
+        {
+            get
+            {
+                return _basalEndstopBoardNumber;
+            }
+            set
+            {
+                if (_basalEndstopBoardNumber == value)
+                    return;
+                _basalEndstopBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalEndstopBoardNumber)));
+            }
+        }
+        public int BasalEndstopPortNumber
+        {
+            get
+            {
+                return _basalEndstopPortNumber;
+            }
+            set
+            {
+                if (_basalEndstopPortNumber == value)
+                    return;
+                _basalEndstopPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalEndstopPortNumber)));
+            }
+        }
+        public int TrayUvBoardNumber
+        {
+            get
+            {
+                return _trayUvBoardNumber;
+            }
+            set
+            {
+                if (_trayUvBoardNumber == value)
+                    return;
+                _trayUvBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrayUvBoardNumber)));
+            }
+        }
+        public int TrayUvPortNumber
+        {
+            get
+            {
+                return _trayUvPortNumber;
+            }
+            set
+            {
+                if (_trayUvPortNumber == value)
+                    return;
+                _trayUvPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrayUvPortNumber)));
+            }
+        }
+        public int ChamberUvBoardNumber
+        {
+            get
+            {
+                return _chamberUvBoardNumber;
+            }
+            set
+            {
+                if (_chamberUvBoardNumber == value)
+                    return;
+                _chamberUvBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ChamberUvBoardNumber)));
+            }
+        }
+        public int ChamberUvPortNumber
+        {
+            get
+            {
+                return _chamberUvPortNumber;
+            }
+            set
+            {
+                if (_chamberUvPortNumber == value)
+                    return;
+                _chamberUvPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ChamberUvPortNumber)));
+            }
+        }
+        public int NadhLaserBoardNumber
+        {
+            get
+            {
+                return _nadh532LaserBoardNumber;
+            }
+            set
+            {
+                if (_nadh532LaserBoardNumber == value)
+                    return;
+                _nadh532LaserBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhLaserBoardNumber)));
+            }
+        }
+        public int NadhLaserPortNumber
+        {
+            get
+            {
+                return _nadh532LaserPortNumber;
+            }
+            set
+            {
+                if (_nadh532LaserPortNumber == value)
+                    return;
+                _nadh532LaserPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhLaserPortNumber)));
+            }
+        }
+        public int DnaLaserBoardNumber
+        {
+            get
+            {
+                return _dna488LaserBoardNumber;
+            }
+            set
+            {
+                if (_dna488LaserBoardNumber == value)
+                    return;
+                _dna488LaserBoardNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaLaserBoardNumber)));
+            }
+        }
+        public int DnaLaserPortNumber
+        {
+            get
+            {
+                return _dna488LaserPortNumber;
+            }
+            set
+            {
+                if (_dna488LaserPortNumber == value)
+                    return;
+                _dna488LaserPortNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaLaserPortNumber)));
+            }
+        }
+        #endregion
         #endregion
 
         #region Fields
         DateTime VersionDate { get; set; }
 
-        decimal _aspirateKohActuatorStartPosition = 470m;
-        decimal _aspirateKohDistanceToPlate = 11m;
-        Coordinate _aspirateKohLocation = new(330, 203);
+        decimal _aspirateActuatorStartPosition = 470m;
+        decimal _aspirateDistanceToPlate = 11m;
+        Coordinate _aspirateLocation = new(330, 203);
         decimal _aspiratePositioningSpeed = 200m;
         decimal _aspirateStirSpeed = 200m;
         decimal _aspirateTravelPerMicroLiter = 0.013m;
@@ -1460,13 +1981,12 @@ namespace Drivetrain.Robotics.Control
         int _basalVolume = 300;
         Coordinate _biopsyLocation = new(245, 110);
         int _comPortNumber = 4;
+        int _controllerBoardCount = 2;
         bool _debug;
         int _dnaAspirationVolume = 50;
         Coordinate _dnaLocation = new(331, 304);
-        int _dnaSensorBoardNumber = 2;
         Coordinate _dnaSensorLocation = new(329, 379);
         int _dnaSensorNumber = 0;
-        int _dnaSensorPortNumber = 6;
         int _dnaSensorReadHigh = 10000;
         int _dnaSensorReadLow = 0;
         decimal _dnaSyringeLoadingPosition = 22m;
@@ -1494,10 +2014,8 @@ namespace Drivetrain.Robotics.Control
         Coordinate _nadhLocation = new(166, 304);
         int _nadhBasalMixingTimerPeriod = 360000;
         int _nadhReadingsTimerPeriod = 480000;
-        int _nadhSensorBoardNumber = 1;
         Coordinate _nadhSensorLocation = new(168, 382.5m);
         int _nadhSensorNumber = 1;
-        int _nadhSensorPortNumber = 6;
         int _nadhSensorReadHigh = 10000;
         int _nadhSensorReadLow = 0;
         decimal _nadhSyringeLoadingPosition = 64m;
@@ -1525,6 +2043,48 @@ namespace Drivetrain.Robotics.Control
         decimal _wellDepth = 12m;
         Coordinate _wellOffset = new(9, 9);
         decimal _wellWidth = 6.67m;
+
+        // Board connections (board 0 is the main board; expansion boards are numbered by CAN address)
+        int _tableXDriverBoardNumber = 1;
+        int _tableXDriverPortNumber = 0;
+        int _tableXEndstopBoardNumber = 1;
+        int _tableXEndstopPortNumber = 0;
+        int _tableYDriverBoardNumber = 1;
+        int _tableYDriverPortNumber = 2;
+        int _tableYEndstopBoardNumber = 1;
+        int _tableYEndstopPortNumber = 2;
+        int _aspirateDriverBoardNumber = 0;
+        int _aspirateDriverPortNumber = 0;
+        int _aspirateEndstopBoardNumber = 0;
+        int _aspirateEndstopPortNumber = 0;
+        int _dnaReagentDriverBoardNumber = 0;
+        int _dnaReagentDriverPortNumber = 4;
+        int _dnaReagentEndstopBoardNumber = 0;
+        int _dnaReagentEndstopPortNumber = 4;
+        int _kohDriverBoardNumber = 0;
+        int _kohDriverPortNumber = 2;
+        int _kohEndstopBoardNumber = 0;
+        int _kohEndstopPortNumber = 2;
+        int _nadhDriverBoardNumber = 0;
+        int _nadhDriverPortNumber = 1;
+        int _nadhEndstopBoardNumber = 0;
+        int _nadhEndstopPortNumber = 1;
+        int _basalDriverBoardNumber = 0;
+        int _basalDriverPortNumber = 3;
+        int _basalEndstopBoardNumber = 0;
+        int _basalEndstopPortNumber = 3;
+        int _trayUvBoardNumber = 0;
+        int _trayUvPortNumber = 6;
+        int _chamberUvBoardNumber = 0;
+        int _chamberUvPortNumber = 5;
+        int _nadh532LaserBoardNumber = 0;
+        int _nadh532LaserPortNumber = 2;
+        int _nadhSensorBoardNumber = 1;
+        int _nadhSensorPortNumber = 5;
+        int _dna488LaserBoardNumber = 0;
+        int _dna488LaserPortNumber = 1;
+        int _dnaSensorBoardNumber = 1;
+        int _dnaSensorPortNumber = 6;
         #endregion
 
         #region Events

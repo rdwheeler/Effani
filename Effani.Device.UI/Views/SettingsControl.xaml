@@ -117,8 +117,9 @@
         </StackPanel>
         <dx:DXTabControl Margin="20,20,0,0" DataContext="{Binding Path=Settings}">
             <dx:DXTabItem Header="Fluid Emission">
-                <dxlc:LayoutControl>
+                <dxlc:LayoutControl Orientation="Horizontal">
                     <dxlc:LayoutGroup>
+                    <dxlc:FlowLayoutControl Orientation="Horizontal" ItemSpace="10">
                         <dxlc:LayoutGroup View="GroupBox" Header="Emission Volumes (μl)" ToolTip="Fluid volume dispensed to a sample well" Orientation="Vertical" >
                             <dxlc:LayoutItem Label="NADH">
                                 <dxe:SpinEdit EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding NadhVolume}" />
@@ -202,11 +203,12 @@
                                 <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding FluidEmissionDwell}" />
                             </dxlc:LayoutItem>
                         </dxlc:LayoutGroup>
+                    </dxlc:FlowLayoutControl>
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutControl>
             </dx:DXTabItem>
             <dx:DXTabItem Header="Component Properties">
-                <dxlc:LayoutControl>
+                <dxlc:LayoutControl Orientation="Horizontal">
                     <dxlc:LayoutGroup View="GroupBox" Header="Fluid Port Locations" Orientation="Vertical">
                         <dxlc:LayoutItem LabelPosition="Top" Label="NADH" ToolTip="Platform coordinates (mm x mm) of the location at which NADH is emitted">
                             <dxlc:LayoutGroup Orientation="Horizontal">
@@ -251,10 +253,10 @@
                         <dxlc:LayoutItem LabelPosition="Top" Label="KOH Aspiration" ToolTip="Platform coordinates (mm x mm) of the location at which KOH is aspirated">
                             <dxlc:LayoutGroup Orientation="Horizontal">
                                 <dxlc:LayoutItem LabelPosition="Left" Label="X">
-                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding AspirateKohLocationX}" />
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding AspirateLocationX}" />
                                 </dxlc:LayoutItem>
                                 <dxlc:LayoutItem LabelPosition="Left" Label="Y">
-                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding AspirateKohLocationY}" />
+                                    <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding AspirateLocationY}" />
                                 </dxlc:LayoutItem>
                             </dxlc:LayoutGroup>
                         </dxlc:LayoutItem>
@@ -338,11 +340,11 @@
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
                     <dxlc:LayoutGroup View="GroupBox" Header="Aspiration Pump Properties" Orientation="Vertical">
-                        <dxlc:LayoutItem Label="Aspirate KOH Needle Start Position" ToolTip="The starting position (mm) of a the KOH aspiration needle">
-                            <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding AspirateKohActuatorStartPosition}" />
+                        <dxlc:LayoutItem Label="Aspirate Needle Start Position" ToolTip="The starting position (mm) of a the KOH aspiration needle">
+                            <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="1000" EditValue="{Binding AspirateActuatorStartPosition}" />
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Aspirate KOH Distrance to Tray" ToolTip="The distance (mm) between the tip of the KOH aspiration needle and the top of the sample tray">
-                            <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="100" EditValue="{Binding AspirateKohDistanceToPlate}" />
+                        <dxlc:LayoutItem Label="Aspirate Distrance to Tray" ToolTip="The distance (mm) between the tip of the KOH aspiration needle and the top of the sample tray">
+                            <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="100" EditValue="{Binding AspirateDistanceToPlate}" />
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="Aspirate Travel Per Microliter" ToolTip="The distance (mm) the aspiration needle travels in order to remove 1μl">
                             <dxe:SpinEdit IsFloatValue="True" Increment="1" MinValue="0" MaxValue="100" EditValue="{Binding AspirateTravelPerMicroLiter}" />
@@ -351,7 +353,7 @@
                 </dxlc:LayoutControl>
             </dx:DXTabItem>
             <dx:DXTabItem Header="Electronic Settings">
-                <dxlc:LayoutControl>
+                <dxlc:LayoutControl Orientation="Horizontal">
                     <dxlc:LayoutGroup>
                         <dxlc:LayoutGroup View="GroupBox" Header="DNA Sensor" Orientation="Vertical">
                             <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the DNA sensor is connected">
@@ -392,10 +394,161 @@
                             </dxlc:LayoutGroup>
                         </dxlc:LayoutGroup>
                     </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup View="GroupBox" Header="Controller Boards" Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Board Count" ToolTip="Number of controller boards installed (board 0 is the main board). Used to warn about connections to boards that do not exist.">
+                            <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="1" MaxValue="10" EditValue="{Binding ControllerBoardCount}" />
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <dxlc:LayoutGroup View="GroupBox" Header="Axis Motor Drivers and Endstops" Orientation="Vertical">
+                          <dxlc:FlowLayoutControl Orientation="Horizontal" ItemSpace="10">
+                            <dxlc:LayoutGroup View="GroupBox" Header="Table X" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Driver Board" ToolTip="Control board number to which the Table X axis motor driver is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TableXDriverBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Driver Port" ToolTip="Motor driver port number on the board of the Table X axis">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TableXDriverPortNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Board" ToolTip="Control board number to which the Table X axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TableXEndstopBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Port" ToolTip="Input (io) port number at which the Table X axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TableXEndstopPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="Table Y" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Driver Board" ToolTip="Control board number to which the Table Y axis motor driver is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TableYDriverBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Driver Port" ToolTip="Motor driver port number on the board of the Table Y axis">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TableYDriverPortNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Board" ToolTip="Control board number to which the Table Y axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TableYEndstopBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Port" ToolTip="Input (io) port number at which the Table Y axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TableYEndstopPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="Aspirate" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Driver Board" ToolTip="Control board number to which the Aspirate axis motor driver is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding AspirateDriverBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Driver Port" ToolTip="Motor driver port number on the board of the Aspirate axis">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding AspirateDriverPortNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Board" ToolTip="Control board number to which the Aspirate axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding AspirateEndstopBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Port" ToolTip="Input (io) port number at which the Aspirate axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding AspirateEndstopPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="DNA Reagent" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Driver Board" ToolTip="Control board number to which the DNA Reagent axis motor driver is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaReagentDriverBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Driver Port" ToolTip="Motor driver port number on the board of the DNA Reagent axis">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaReagentDriverPortNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Board" ToolTip="Control board number to which the DNA Reagent axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaReagentEndstopBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Port" ToolTip="Input (io) port number at which the DNA Reagent axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaReagentEndstopPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="KOH" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Driver Board" ToolTip="Control board number to which the KOH axis motor driver is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding KohDriverBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Driver Port" ToolTip="Motor driver port number on the board of the KOH axis">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding KohDriverPortNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Board" ToolTip="Control board number to which the KOH axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding KohEndstopBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Port" ToolTip="Input (io) port number at which the KOH axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding KohEndstopPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="NADH" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Driver Board" ToolTip="Control board number to which the NADH axis motor driver is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhDriverBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Driver Port" ToolTip="Motor driver port number on the board of the NADH axis">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhDriverPortNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Board" ToolTip="Control board number to which the NADH axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhEndstopBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Port" ToolTip="Input (io) port number at which the NADH axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhEndstopPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="Basal" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Driver Board" ToolTip="Control board number to which the Basal axis motor driver is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding BasalDriverBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Driver Port" ToolTip="Motor driver port number on the board of the Basal axis">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding BasalDriverPortNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Board" ToolTip="Control board number to which the Basal axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding BasalEndstopBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Endstop Port" ToolTip="Input (io) port number at which the Basal axis endstop is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding BasalEndstopPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                          </dxlc:FlowLayoutControl>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup View="GroupBox" Header="Switched Outputs" Orientation="Vertical">
+                          <dxlc:FlowLayoutControl Orientation="Horizontal" ItemSpace="10">
+                            <dxlc:LayoutGroup View="GroupBox" Header="Tray UV" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the Tray UV output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TrayUvBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Port Number" ToolTip="Output (out) port number at which the Tray UV output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding TrayUvPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="Chamber UV" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the Chamber UV output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding ChamberUvBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Port Number" ToolTip="Output (out) port number at which the Chamber UV output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding ChamberUvPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="NADH Laser" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the NADH Laser output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhLaserBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Port Number" ToolTip="Output (out) port number at which the NADH Laser output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhLaserPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="DNA Laser" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the DNA Laser output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaLaserBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Port Number" ToolTip="Output (out) port number at which the DNA Laser output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaLaserPortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                            <dxlc:LayoutGroup View="GroupBox" Header="Aspiration Suction" Orientation="Vertical">
+                                <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the Aspiration Suction output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding AspirationSuctionToggleBoardNumber}" />
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutItem Label="Port Number" ToolTip="Output (out) port number at which the Aspiration Suction output is connected">
+                                    <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding AspirationSuctionTogglePortNumber}" />
+                                </dxlc:LayoutItem>
+                            </dxlc:LayoutGroup>
+                          </dxlc:FlowLayoutControl>
+                        </dxlc:LayoutGroup>
                 </dxlc:LayoutControl>
             </dx:DXTabItem>
             <dx:DXTabItem Header="Assay Timing">
-                <dxlc:LayoutControl>
+                <dxlc:LayoutControl Orientation="Horizontal">
                     <dxlc:LayoutGroup View="GroupBox" Header="Assay Timing (ms)" Orientation="Vertical">
                         <dxlc:LayoutItem Label="Basal Media Incubation (ms)" ToolTip="Milliseconds sample stays in Basal media incubation">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="144000000" EditValue="{Binding BasalIncubationTimerPeriod}" />
@@ -422,7 +575,7 @@
                 </dxlc:LayoutControl>
             </dx:DXTabItem>
             <dx:DXTabItem Header="Sterilization">
-                <dxlc:LayoutControl>
+                <dxlc:LayoutControl Orientation="Horizontal">
                     <dxlc:LayoutGroup View="GroupBox" Header="Sample Tray Sterilization" Orientation="Vertical">
                         <dxlc:LayoutItem Label="Tray Sterilization Time (seconds)" ToolTip="Number of seconds tray will be UV sterilized">
                             <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="60000" EditValue="{Binding TraySterilizationTime}" />
@@ -441,7 +594,7 @@
                 </dxlc:LayoutControl>
             </dx:DXTabItem>
             <dx:DXTabItem Header="Connectivity">
-                <dxlc:LayoutControl>
+                <dxlc:LayoutControl Orientation="Horizontal">
                     <dxlc:LayoutGroup View="GroupBox" Header="Connectivity" Orientation="Vertical">
                         <dxlc:LayoutItem Label="Effani API URL" ToolTip="Internet location of the Effani API endpoint.">
                             <dxe:TextEdit MinWidth="300" EditValue="{Binding EffaniApiUrl}" />

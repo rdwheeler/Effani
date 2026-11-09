@@ -10,8 +10,8 @@ namespace Drivetrain.Robotics.Control
 		TableX,
 		[Display(ShortName = "Y", Name = "Table Y")]
 		TableY,
-		[Display(ShortName = "U", Name = "Aspirate KOH")]
-		AspirateKoh,
+		[Display(ShortName = "U", Name = "Aspirate")]
+		Aspirate,
 		[Display(ShortName = "V", Name = "DNA Reagent")]
 		DnaReagent,
 		[Display(ShortName = "W", Name = "KOH")]

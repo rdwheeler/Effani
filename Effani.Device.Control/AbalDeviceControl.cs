@@ -92,12 +92,12 @@ namespace Effani.Device.Control
 			MoveRelative(axisSpec.Axis, distance, Settings.FluidSyringeSpeed);
 			Pause(Settings.FluidEmissionDwell);
 		}
-		public void AspirateKoh(int microLiters)
+		public void Aspirate(int microLiters)
 		{
-			MoveAbsolute(Axis.AspirateKoh, (Settings.AspirateKohActuatorStartPosition + Settings.AspirateKohDistanceToPlate), Settings.AspiratePositioningSpeed);
+			MoveAbsolute(Axis.Aspirate, (Settings.AspirateActuatorStartPosition + Settings.AspirateDistanceToPlate), Settings.AspiratePositioningSpeed);
 			var distance = CalcAspirateTravelMmForMl(microLiters);
-			DoStirringDescent(Axes[Axis.AspirateKoh], distance);
-			MoveAbsolute(Axis.AspirateKoh, Settings.AspirateKohActuatorStartPosition);
+			DoStirringDescent(Axes[Axis.Aspirate], distance);
+			MoveAbsolute(Axis.Aspirate, Settings.AspirateActuatorStartPosition);
 		}
 		//public void AspirationPressureOn()
 		//{

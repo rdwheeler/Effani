@@ -233,12 +233,12 @@ namespace Effani.Device.DataCollection
 			var axis = fluidType switch
 			{
 				//FluidType.General => Axis.AspirateFluid,
-				FluidType.Koh => Axis.AspirateKoh
+				FluidType.Koh => Axis.Aspirate
 			};
 			Command removeCommand = fluidType switch
 			{
 				//FluidType.General => new AspirateFluid(volume, Device),
-				FluidType.Koh => new AspirateKoh(volume, Device),
+				FluidType.Koh => new Aspirate(volume, Device),
 				_ => null
 			};
 			var ret = new List<Command>();
