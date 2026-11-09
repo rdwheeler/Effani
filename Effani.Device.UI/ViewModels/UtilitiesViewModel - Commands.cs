@@ -62,6 +62,8 @@ namespace Effani.Device.UI
 		{
 			try
 			{
+				// The active settings object is replaced when a settings version is activated or reset, so point the configuration at the current one.
+				_config.Settings = _settingsService.Settings;
 				var fileLocation = _config
 					.GenerateConfigFiles(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
 				string messageBoxText = $"Config generated at {fileLocation}";

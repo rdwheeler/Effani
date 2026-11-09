@@ -34,6 +34,12 @@ namespace Effani.Device.DataCollection
 			KohDwellCount = settings.KohTimerPeriod / _timerDescriptionUpdateInterval;
 			DnaIncubationCount = settings.DnaTimerPeriod / _timerDescriptionUpdateInterval;
 			_totalCount = RemainingCount;
+
+			_basalIncubationTotal = BasalIncubationCount;
+			_nadhReadings1Total = NadhReadings1Count;
+			_nadhReadingsTotal = NadhReadings2Count;
+			_kohDwellTotal = KohDwellCount;
+			_dnaIncubationTotal = DnaIncubationCount;
 		}
 		#endregion
 
@@ -78,7 +84,7 @@ namespace Effani.Device.DataCollection
 			KohDwellTimer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
 			DnaIncubationTimer = new Timer(TimeSpan.FromMilliseconds(_timerDescriptionUpdateInterval)) { AutoReset = false };
 
-			SetCurrentTimerDescription(BasalIncubationCount);
+			SetCurrentTimerDescription(BasalIncubationCount, _basalIncubationTotal);
 
 			BasalIncubationTimer.Elapsed += BasalIncubationTimer_Elapsed;
 			NadhReadings1Timer.Elapsed += NadhReadings1Timer_Elapsed;
@@ -92,8 +98,11 @@ namespace Effani.Device.DataCollection
 		#endregion
 
 		#region Private methods
-		private void SetCurrentTimerDescription(int count, string prefix = null)
+		private void SetCurrentTimerDescription(int count, int total, string prefix = null)
         {
+			// Set progress before the description so listeners that react to the description see the matching progress.
+			CurrentStageProgress = count <= 0 || total <= 0 ? 100 : Math.Clamp(100.0 * (total - count) / total, 0, 100);
+
             if(count == 0)
 			{
                 CurrentTimerDescription = prefix;
@@ -131,14 +140,14 @@ namespace Effani.Device.DataCollection
 			BasalIncubationCount--;
 			if (BasalIncubationCount <= 0)
 			{
-				SetCurrentTimerDescription(0, "1@waiting");
+				SetCurrentTimerDescription(0, 0, "1@waiting");
 				BasalIncubationTimer.Elapsed -= BasalIncubationTimer_Elapsed;
 				BasalIncubationTimer = DisposeTimer(BasalIncubationTimer);
 				Task.Run(() => _basalIncubationTimerCallback.Invoke(this, new DataArgs<int>(0)));
 			}
 			else
 			{
-				SetCurrentTimerDescription(BasalIncubationCount);
+				SetCurrentTimerDescription(BasalIncubationCount, _basalIncubationTotal);
 				BasalIncubationTimer.Start();
 			}
 		}
@@ -151,14 +160,14 @@ namespace Effani.Device.DataCollection
 			NadhReadings1Count--;
 			if (NadhReadings1Count <= 0)
 			{
-				SetCurrentTimerDescription(0, "2@waiting");
+				SetCurrentTimerDescription(0, 0, "2@waiting");
 				NadhReadings1Timer.Elapsed -= NadhReadings1Timer_Elapsed;
 				NadhReadings1Timer = DisposeTimer(NadhReadings1Timer);
 				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(1)));
 			}
 			else
 			{
-				SetCurrentTimerDescription(NadhReadings1Count);
+				SetCurrentTimerDescription(NadhReadings1Count, _nadhReadings1Total);
 				NadhReadings1Timer.Start();
 			}
 		}
@@ -170,14 +179,14 @@ namespace Effani.Device.DataCollection
 			NadhReadings2Count--;
 			if (NadhReadings2Count <= 0)
 			{
-				SetCurrentTimerDescription(0, "3@waiting");
+				SetCurrentTimerDescription(0, 0, "3@waiting");
 				NadhReadings2Timer.Elapsed -= NadhReadings2Timer_Elapsed;
 				NadhReadings2Timer = DisposeTimer(NadhReadings2Timer);
 				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(2)));
 			}
 			else
 			{
-				SetCurrentTimerDescription(NadhReadings2Count, "2@");
+				SetCurrentTimerDescription(NadhReadings2Count, _nadhReadingsTotal, "2@");
 				NadhReadings2Timer.Start();
 			}
 		}
@@ -189,14 +198,14 @@ namespace Effani.Device.DataCollection
 			NadhReadings3Count--;
 			if (NadhReadings3Count <= 0)
 			{
-				SetCurrentTimerDescription(0, "4@waiting");
+				SetCurrentTimerDescription(0, 0, "4@waiting");
 				NadhReadings3Timer.Elapsed -= NadhReadings3Timer_Elapsed;
 				NadhReadings3Timer = DisposeTimer(NadhReadings3Timer);
 				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(3)));
 			}
 			else
 			{
-				SetCurrentTimerDescription(NadhReadings3Count, "3@");
+				SetCurrentTimerDescription(NadhReadings3Count, _nadhReadingsTotal, "3@");
 				NadhReadings3Timer.Start();
 			}
 		}
@@ -208,14 +217,14 @@ namespace Effani.Device.DataCollection
 			NadhReadings4Count--;
 			if (NadhReadings4Count <= 0)
 			{
-				SetCurrentTimerDescription(0, "5@waiting");
+				SetCurrentTimerDescription(0, 0, "5@waiting");
 				NadhReadings4Timer.Elapsed -= NadhReadings4Timer_Elapsed;
 				NadhReadings4Timer = DisposeTimer(NadhReadings4Timer);
 				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(4)));
 			}
 			else
 			{
-				SetCurrentTimerDescription(NadhReadings4Count, "4@");
+				SetCurrentTimerDescription(NadhReadings4Count, _nadhReadingsTotal, "4@");
 				NadhReadings4Timer.Start();
 			}
 		}
@@ -227,14 +236,14 @@ namespace Effani.Device.DataCollection
 			NadhReadings5Count--;
 			if (NadhReadings5Count <= 0)
 			{
-				SetCurrentTimerDescription(0, "waiting");
+				SetCurrentTimerDescription(0, 0, "waiting");
 				NadhReadings5Timer.Elapsed -= NadhReadings5Timer_Elapsed;
 				NadhReadings5Timer = DisposeTimer(NadhReadings5Timer);
 				Task.Run(() => _nadhReadingsTimerCallback.Invoke(this, new DataArgs<int>(5)));
 			}
 			else
 			{
-				SetCurrentTimerDescription(NadhReadings5Count, "5@");
+				SetCurrentTimerDescription(NadhReadings5Count, _nadhReadingsTotal, "5@");
 				NadhReadings5Timer.Start();
 			}
 		}
@@ -246,14 +255,14 @@ namespace Effani.Device.DataCollection
 			KohDwellCount--;
 			if (KohDwellCount <= 0)
 			{
-				SetCurrentTimerDescription(0, "waiting");
+				SetCurrentTimerDescription(0, 0, "waiting");
 				KohDwellTimer.Elapsed -= KohDwellTimer_Elapsed;
 				KohDwellTimer = DisposeTimer(KohDwellTimer);
 				Task.Run(() => _kohDwellDnaTimerCallback.Invoke(this, new DataArgs<int>(6)));
 			}
 			else
 			{
-				SetCurrentTimerDescription(KohDwellCount);
+				SetCurrentTimerDescription(KohDwellCount, _kohDwellTotal);
 				KohDwellTimer.Start();
 			}
 		}
@@ -265,14 +274,14 @@ namespace Effani.Device.DataCollection
 			DnaIncubationCount--;
 			if (DnaIncubationCount <= 0)
 			{
-				SetCurrentTimerDescription(0);
+				SetCurrentTimerDescription(0, 0);
 				DnaIncubationTimer.Elapsed -= DnaIncubationTimer_Elapsed;
 				DnaIncubationTimer = DisposeTimer(DnaIncubationTimer);
 				Task.Run(() => _dnaIncubationTimerCallback.Invoke(this, new DataArgs<int>(7)));
 			}
 			else
 			{
-				SetCurrentTimerDescription(DnaIncubationCount);
+				SetCurrentTimerDescription(DnaIncubationCount, _dnaIncubationTotal);
 				DnaIncubationTimer.Start();
 			}
 		}
@@ -289,6 +298,11 @@ namespace Effani.Device.DataCollection
 		/// </summary>
 		[JsonIgnore]
 		public long RemainingProcessingMilliseconds => (long)RemainingCount * _timerDescriptionUpdateInterval;
+		/// <summary>
+		/// Percentage (0-100) of the current stage's timer that has elapsed.
+		/// </summary>
+		[JsonIgnore]
+		public double CurrentStageProgress { get; private set; }
 		[JsonIgnore]
 		#region CurrentTimerDescription
 		public string CurrentTimerDescription
@@ -375,6 +389,11 @@ namespace Effani.Device.DataCollection
 		readonly EventHandler<DataArgs<int>> _dnaIncubationTimerCallback;
 		readonly EventHandler<DataArgs<int>> _kohDwellDnaTimerCallback;
 		readonly EventHandler<DataArgs<int>> _nadhReadingsTimerCallback;
+		private readonly int _basalIncubationTotal;
+		private readonly int _nadhReadings1Total;
+		private readonly int _nadhReadingsTotal;
+		private readonly int _kohDwellTotal;
+		private readonly int _dnaIncubationTotal;
 		private int RemainingCount =>
 			Math.Max(0, BasalIncubationCount) + Math.Max(0, NadhReadings1Count) + Math.Max(0, NadhReadings2Count) +
 			Math.Max(0, NadhReadings3Count) + Math.Max(0, NadhReadings4Count) + Math.Max(0, NadhReadings5Count) +

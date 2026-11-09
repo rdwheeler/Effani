@@ -20,7 +20,7 @@ namespace Drivetrain.Robotics.Control
 		{
 			get
 			{
-				return new BoardPort(Board, Port).InputDesignation;
+				return new BoardPort(Board, Port).TempDesignation;
 			}
 		}
 		public int Board { get; set; } 

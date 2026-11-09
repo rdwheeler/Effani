@@ -10,6 +10,21 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <DataTemplate x:Key="StageSampleTemplate">
+            <StackPanel Margin="0,0,10,6">
+                <TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label'}" TextWrapping="Wrap"/>
+                <Grid Height="20" Margin="0,2,0,0" Visibility="{DXBinding 'StageInProgress ? $Visibility.Visible : $Visibility.Collapsed'}">
+                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding StageProgress, Mode=OneWay}"/>
+                    <TextBlock FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StageStatusText}"/>
+                </Grid>
+                <Border Height="20" Margin="0,2,0,0" CornerRadius="3" Background="#FF2E7D32"
+                        Visibility="{DXBinding 'StageComplete ? $Visibility.Visible : $Visibility.Collapsed'}">
+                    <TextBlock FontSize="12" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Run Text="&#x2713; "/><Run Text="{Binding StageStatusText, Mode=OneWay}"/>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -75,33 +90,13 @@
                                 <ColumnDefinition Width="5*" />
                                 <ColumnDefinition Width="5*" />
                             </Grid.ColumnDefinitions>
-                            <ItemsControl Grid.Column="0" VerticalAlignment="Top" ItemsSource="{Binding DataContext.SamplesInBasal, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
+                            <ItemsControl Grid.Column="0" VerticalAlignment="Top" ItemsSource="{Binding DataContext.SamplesInBasal, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" ItemTemplate="{StaticResource StageSampleTemplate}">
                             </ItemsControl>
-                            <ItemsControl Grid.Column="1" VerticalAlignment="Top" ItemsSource="{Binding DataContext.SamplesInNadh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
+                            <ItemsControl Grid.Column="1" VerticalAlignment="Top" ItemsSource="{Binding DataContext.SamplesInNadh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" ItemTemplate="{StaticResource StageSampleTemplate}">
                             </ItemsControl>
-                            <ItemsControl Grid.Column="2" VerticalAlignment="Top" ItemsSource="{Binding DataContext.SamplesInKoh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
+                            <ItemsControl Grid.Column="2" VerticalAlignment="Top" ItemsSource="{Binding DataContext.SamplesInKoh, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" ItemTemplate="{StaticResource StageSampleTemplate}">
                             </ItemsControl>
-                            <ItemsControl Grid.Column="3" VerticalAlignment="Top" ItemsSource="{Binding DataContext.SamplesInDna, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock FontSize="15" Text="{DXBinding 'AnimalId + ` ` + Label + ` ` + CurrentTimerDescription'}" TextWrapping="Wrap"></TextBlock>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
+                            <ItemsControl Grid.Column="3" VerticalAlignment="Top" ItemsSource="{Binding DataContext.SamplesInDna, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False" ItemTemplate="{StaticResource StageSampleTemplate}">
                             </ItemsControl>
                             <ItemsControl Grid.Column="4" VerticalAlignment="Top" ItemsSource="{Binding DataContext.SamplesComplete, RelativeSource={RelativeSource AncestorType=dxco:Wizard}}" Background="Transparent" BorderThickness="0" IsTabStop="False">
                                 <ItemsControl.ItemTemplate>

@@ -359,7 +359,7 @@
                             <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the DNA sensor is connected">
                                 <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaSensorBoardNumber}" />
                             </dxlc:LayoutItem>
-                            <dxlc:LayoutItem Label="Port Number" ToolTip="Port number at which the DNA sensor is connected">
+                            <dxlc:LayoutItem Label="Temp Input" ToolTip="Temperature input (tempN) to which the DNA sensor is connected">
                                 <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding DnaSensorPortNumber}" />
                             </dxlc:LayoutItem>
                             <dxlc:LayoutItem Label="Index" ToolTip="Configuration index of the DNA sensor">
@@ -378,7 +378,7 @@
                             <dxlc:LayoutItem Label="Board Number" ToolTip="Control board number to which the NADH sensor is connected">
                                 <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhSensorBoardNumber}" />
                             </dxlc:LayoutItem>
-                            <dxlc:LayoutItem Label="Port Number" ToolTip="Port number at which the NADH sensor is connected">
+                            <dxlc:LayoutItem Label="Temp Input" ToolTip="Temperature input (tempN) to which the NADH sensor is connected">
                                 <dxe:SpinEdit IsFloatValue="False" Increment="1" MinValue="0" MaxValue="10" EditValue="{Binding NadhSensorPortNumber}" />
                             </dxlc:LayoutItem>
                             <dxlc:LayoutItem Label="Index" ToolTip="Configuration index of the NADH sensor">
@@ -397,6 +397,9 @@
                         <dxlc:LayoutGroup View="GroupBox" Header="Controller Boards" Orientation="Vertical">
                         <dxlc:LayoutItem Label="Board Count" ToolTip="Number of controller boards installed (board 0 is the main board). Used to warn about connections to boards that do not exist.">
                             <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="1" MaxValue="10" EditValue="{Binding ControllerBoardCount}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Input Ports Per Board" ToolTip="Number of IO input ports on each board (io0.in to io{N-1}.in). Used to warn about endstops on ports that do not exist.">
+                            <dxe:SpinEdit IsFloatValue="False" EditValueType="{x:Type sys:Int32}" Increment="1" MinValue="1" MaxValue="32" EditValue="{Binding InputPortsPerBoard}" />
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
                     <dxlc:LayoutGroup View="GroupBox" Header="Axis Motor Drivers and Endstops" Orientation="Vertical">

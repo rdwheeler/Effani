@@ -30,6 +30,12 @@ namespace Effani.Device.DataCollection
 				Application.Current.Dispatcher.Invoke(() =>
 				{
 					RaisePropertyChanged(nameof(CurrentTimerDescription));
+					RaisePropertyChanged(nameof(StageProgress));
+					RaisePropertyChanged(nameof(StageComplete));
+					RaisePropertyChanged(nameof(StageInProgress));
+					RaisePropertyChanged(nameof(StageReading));
+					RaisePropertyChanged(nameof(StageTimeRemaining));
+					RaisePropertyChanged(nameof(StageStatusText));
 				});
 			}
 		}
@@ -37,6 +43,36 @@ namespace Effani.Device.DataCollection
 
 		#region Properties
 		public string CurrentTimerDescription => TestWell.CurrentTimerDescription;
+		/// <summary>
+		/// The NADH reading number from a "N@" prefix on the timer description, or null when there is none.
+		/// </summary>
+		public string StageReading
+		{
+			get
+			{
+				var description = CurrentTimerDescription;
+				var at = description?.IndexOf('@') ?? -1;
+				return at > 0 ? description.Substring(0, at) : null;
+			}
+		}
+		/// <summary>
+		/// The timer description without its "N@" prefix: either the time remaining or "waiting".
+		/// </summary>
+		public string StageTimeRemaining
+		{
+			get
+			{
+				var description = CurrentTimerDescription;
+				var at = description?.IndexOf('@') ?? -1;
+				return at >= 0 ? description.Substring(at + 1) : description;
+			}
+		}
+		public bool StageComplete => StageTimeRemaining == "waiting";
+		public bool StageInProgress => !StageComplete && !string.IsNullOrEmpty(StageTimeRemaining);
+		public double StageProgress => TestWell.CurrentStageProgress;
+		public string StageStatusText => StageComplete
+			? (StageReading is null ? "Stage complete" : $"Stage complete, waiting for reading {StageReading}")
+			: (StageReading is null ? StageTimeRemaining : $"Reading {StageReading}: {StageTimeRemaining}");
 		public decimal DnaValue { get; set; }
 		public string Label => TestWell.Label;
 		public string AnimalId => TestWell.AnimalId;

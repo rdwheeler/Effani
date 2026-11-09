@@ -16,7 +16,8 @@ namespace Drivetrain.Robotics.Control
 		public DeviceConfiguration(Settings settings)
 		{
 			Settings = settings;
-			BuildDeviceSpec();
+			DeviceSpecification = CreateDeviceSpec();
+			AddPlates(DeviceSpecification);
 		}
 		public string GenerateConfigFiles(string drive)
 		{
@@ -26,8 +27,10 @@ namespace Drivetrain.Robotics.Control
 				var sysFolder = Path.Combine(mainFolder, @"sys");
 				if(!Directory.Exists(sysFolder))
 					Directory.CreateDirectory(sysFolder);
-				WriteConfig(sysFolder);
-				WriteHome(sysFolder);
+				// Build from the current settings: DeviceSpecification is only a snapshot taken when this object was created.
+				var spec = CreateDeviceSpec();
+				WriteConfig(sysFolder, spec);
+				WriteHome(sysFolder, spec);
 				var zipFilePath = Path.Combine(mainFolder, "config.zip");
 				File.Delete(zipFilePath);
 				ZipFile.CreateFromDirectory(sysFolder, zipFilePath);
@@ -44,6 +47,7 @@ namespace Drivetrain.Robotics.Control
 		/// </summary>
 		public List<string> GetConnectionWarnings()
 		{
+			var spec = CreateDeviceSpec();
 			var warnings = new List<string>();
 			var boardCount = Math.Max(1, Settings.ControllerBoardCount);
 			var lastBoard = boardCount - 1;
@@ -60,7 +64,7 @@ namespace Drivetrain.Robotics.Control
 					warnings.Add($"{kind} {group.Key} is assigned to more than one item: {string.Join(", ", group.Select(g => g.Label))}.");
 			}
 
-			var axes = DeviceSpecification!.Axes;
+			var axes = spec.Axes;
 			foreach (var axis in axes)
 			{
 				CheckBoard($"{axis.Label} motor driver", axis.DriverBoardPort.Board);
@@ -70,12 +74,20 @@ namespace Drivetrain.Robotics.Control
 			}
 			CheckDuplicates("Motor driver", axes.Select(a => (a.Label, a.DriverBoardPort.DriverDesignation)));
 
-			var sensors = DeviceSpecification.Sensors;
+			var sensors = spec.Sensors;
 			foreach (var sensor in sensors)
 				CheckBoard(sensor.Label, sensor.Board);
-			CheckDuplicates("Input port",
-				axes.Select(a => ($"{a.Label} endstop", a.EndstopBoardPort.InputDesignation))
-					.Concat(sensors.Select(s => (s.Label, s.PortDesignation!))));
+			var inputCount = Settings.InputPortsPerBoard;
+			void CheckInputPort(string what, BoardPort port)
+			{
+				if (port.Port < 0 || port.Port >= inputCount)
+					warnings.Add($"{what} is on {port.InputDesignation}, but each board only has input ports 0 to {inputCount - 1} ({inputCount} input ports per board configured).");
+			}
+			foreach (var axis in axes)
+				CheckInputPort($"{axis.Label} endstop", axis.EndstopBoardPort);
+
+			CheckDuplicates("Input port", axes.Select(a => ($"{a.Label} endstop", a.EndstopBoardPort.InputDesignation)));
+			CheckDuplicates("Temperature input", sensors.Select(s => (s.Label, s.PortDesignation!)));
 
 			var outputs = GetActuatorOutputs();
 			foreach (var output in outputs)
@@ -95,7 +107,7 @@ namespace Drivetrain.Robotics.Control
 			(3, "DNA laser", new BoardPort(Settings.DnaLaserBoardNumber, Settings.DnaLaserPortNumber)),
 			(SuctionActuatorIndex, "aspiration suction", new BoardPort(Settings.AspirationSuctionToggleBoardNumber, Settings.AspirationSuctionTogglePortNumber)),
 		};
-		private void WriteConfig(string folder)
+		private void WriteConfig(string folder, DeviceSpecification spec)
 		{
 			var configTextBuilder = new StringBuilder();
 			configTextBuilder.Append(@"
@@ -116,7 +128,7 @@ G4 S4
 ; Smart Drivers
 "
 				);
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				configTextBuilder.AppendLine($"M569 P{x.DriverPort} S{(x.Driver.Direction == Direction.Forwards ? 1 : 0)} D2 ; {x.Label} {x.Designation}");
 			}
@@ -133,49 +145,49 @@ M595 P0
 "
 				);
 			configTextBuilder.Append($"M584");
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				configTextBuilder.Append($" {x.Designation}{x.DriverPort}");
 			}
 			configTextBuilder.Append($" ; set axis mapping\r\n");
 			configTextBuilder.Append($"M350");
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				configTextBuilder.Append($" {x.Designation}16");
 			}
 			configTextBuilder.Append($" I1 ; configure microstepping with interpolation\r\n");
 			configTextBuilder.Append($"M906");
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				configTextBuilder.Append($" {x.Designation}{x.Driver.Current}");
 			}
 			configTextBuilder.Append($" ; set axis driver currents\r\n");
 			configTextBuilder.Append($"M92");
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				configTextBuilder.Append($" {x.Designation}{x.StepsPerMillimeter}");
 			}
 			configTextBuilder.Append($" ; configure steps per mm\r\n");
 			configTextBuilder.Append($"M208");
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				configTextBuilder.Append($" {x.Designation}{x.Minimum}:{x.Maximum}");
 			}
 			configTextBuilder.Append($" ; set minimum and maximum axis limits\r\n");
 			configTextBuilder.Append($"M566");
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				configTextBuilder.Append($" {x.Designation}900");
 			}
 			configTextBuilder.Append($" ; set maximum instantaneous speed changes (mm/min)\r\n");
 			configTextBuilder.Append($"M203");
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				configTextBuilder.Append($" {x.Designation}{x.MaxSpeed}");
 			}
 			configTextBuilder.Append($" ; set maximum speeds (mm/min)\r\n");
 			configTextBuilder.Append($"M201");
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				configTextBuilder.Append($" {x.Designation}500");
 			}
@@ -187,7 +199,7 @@ M669 K0 ; configure Cartesian kinematics
 
 ; Endstops
 ");
-            foreach (var x in DeviceSpecification.Axes)
+            foreach (var x in spec.Axes)
             {
                 configTextBuilder.AppendLine($"M574 {x.Designation}{(x.Driver.Endstop.Location == EndstopLocation.LowEnd ? "1" : "2")} P\"{(x.Driver.Endstop.Signal == PinSignal.High ? null : "!")}{x.Driver.Endstop.SensorPort}\" S1");
             }
@@ -198,23 +210,23 @@ M669 K0 ; configure Cartesian kinematics
 			var suction = GetActuatorOutputs().Single(o => o.Index == SuctionActuatorIndex);
 			configTextBuilder.AppendLine(@$"M950 P{suction.Index} C""{suction.Port.OutputDesignation}"" ; aspiration emission switch");
 			configTextBuilder.AppendLine("\r\n; Sensors");
-			foreach (var sensor in DeviceSpecification.Sensors)
+			foreach (var sensor in spec.Sensors)
 			{
 				configTextBuilder.AppendLine($@"M308 S{sensor.SensorNumber} P""{sensor.PortDesignation}"" Y""linear-analog"" A""{sensor.Label}"" F0 B{sensor.ReadLow} C{sensor.ReadHigh}");
 			}
 
 			File.WriteAllBytes(Path.Combine(folder, "config.g"), Encoding.ASCII.GetBytes(configTextBuilder.ToString()));
 		}
-		private void WriteHome(string folder)
+		private void WriteHome(string folder, DeviceSpecification spec)
 		{
-			for (int i = 0; i < DeviceSpecification.Axes.Count; i++)
+			for (int i = 0; i < spec.Axes.Count; i++)
 			{
 				var homeTextBuilder = new StringBuilder();
 				homeTextBuilder.Append(@"
 ; Home
 "
 				);
-				var x = DeviceSpecification.Axes[i];
+				var x = spec.Axes[i];
 				var direction = x.Driver.Endstop.Location == EndstopLocation.HighEnd ? null : "-";
 				var distance = x.Maximum - x.Minimum + 5;
 				homeTextBuilder.Append(@$"
@@ -227,49 +239,53 @@ G90 ; absolute positioning
 				File.WriteAllBytes(Path.Combine(folder, $"home{x.Designation}.g"), Encoding.ASCII.GetBytes(homeTextBuilder.ToString()));
 			}
 			var homeAllBuilder = new StringBuilder();
-			foreach (var x in DeviceSpecification.Axes)
+			foreach (var x in spec.Axes)
 			{
 				homeAllBuilder.AppendLine($"M98 P\"home{x.Designation}.g\" ; home {x.Label} axis");
 			}
 			File.WriteAllBytes(Path.Combine(folder, $"homeall.g"), Encoding.ASCII.GetBytes(homeAllBuilder.ToString()));
 		}
 
-		private void BuildDeviceSpec()
+		/// <summary>Builds the axes and sensors from the current <see cref="Settings"/> values (plates are added separately by <see cref="AddPlates"/>).</summary>
+		private DeviceSpecification CreateDeviceSpec()
 		{
-			DeviceSpecification = new DeviceSpecification();
-			DeviceSpecification.DeviceName = DeviceSpecification.Label;
-			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableX,
+			var spec = new DeviceSpecification();
+			spec.DeviceName = spec.Label;
+			spec.Axes.Add(new TableAxis(Axis.TableX,
 				new BoardPort(Settings.TableXDriverBoardNumber, Settings.TableXDriverPortNumber),
 				new BoardPort(Settings.TableXEndstopBoardNumber, Settings.TableXEndstopPortNumber),
 				500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
-			DeviceSpecification.Axes.Add(new TableAxis(Axis.TableY,
+			spec.Axes.Add(new TableAxis(Axis.TableY,
 				new BoardPort(Settings.TableYDriverBoardNumber, Settings.TableYDriverPortNumber),
 				new BoardPort(Settings.TableYEndstopBoardNumber, Settings.TableYEndstopPortNumber),
 				500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
-			DeviceSpecification.Axes.AddRange(GetAspirateAxes());
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.DnaReagent,
+			spec.Axes.AddRange(GetAspirateAxes());
+			spec.Axes.Add(new FluidAxis(Axis.DnaReagent,
 				new BoardPort(Settings.DnaReagentDriverBoardNumber, Settings.DnaReagentDriverPortNumber),
 				new BoardPort(Settings.DnaReagentEndstopBoardNumber, Settings.DnaReagentEndstopPortNumber),
 				Settings.DnaLocation, Settings.DnaSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Koh,
+			spec.Axes.Add(new FluidAxis(Axis.Koh,
 				new BoardPort(Settings.KohDriverBoardNumber, Settings.KohDriverPortNumber),
 				new BoardPort(Settings.KohEndstopBoardNumber, Settings.KohEndstopPortNumber),
 				Settings.KohLocation, Settings.KohSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Nadh,
+			spec.Axes.Add(new FluidAxis(Axis.Nadh,
 				new BoardPort(Settings.NadhDriverBoardNumber, Settings.NadhDriverPortNumber),
 				new BoardPort(Settings.NadhEndstopBoardNumber, Settings.NadhEndstopPortNumber),
 				Settings.NadhLocation, Settings.NadhSyringeLoadingPosition));
-			DeviceSpecification.Axes.Add(new FluidAxis(Axis.Basal,
+			spec.Axes.Add(new FluidAxis(Axis.Basal,
 				new BoardPort(Settings.BasalDriverBoardNumber, Settings.BasalDriverPortNumber),
 				new BoardPort(Settings.BasalEndstopBoardNumber, Settings.BasalEndstopPortNumber),
 				Settings.BasalLocation, Settings.BasalSyringeLoadingPosition));
 
-			DeviceSpecification.Sensors.Add(new DnaSensorSpec("DNA Sensor", Settings.DnaSensorNumber, Settings.DnaSensorBoardNumber, Settings.DnaSensorPortNumber, Settings.DnaSensorReadHigh, Settings.DnaSensorReadLow, Settings.DnaSensorLocation));
-			DeviceSpecification.Sensors.Add(new NadhSensorSpec("NADH Sensor", Settings.NadhSensorNumber, Settings.NadhSensorBoardNumber, Settings.NadhSensorPortNumber, Settings.NadhSensorReadHigh, Settings.NadhSensorReadLow, Settings.NadhSensorLocation));
-
-			DeviceSpecification.Plates.Add(new Plate(new Coordinate(0, 0)));
-			DeviceSpecification.Plates.Add(new Plate(new Coordinate(1, 0)));
-			Plate currentPlate = DeviceSpecification.Plates[0];
+			spec.Sensors.Add(new DnaSensorSpec("DNA Sensor", Settings.DnaSensorNumber, Settings.DnaSensorBoardNumber, Settings.DnaSensorPortNumber, Settings.DnaSensorReadHigh, Settings.DnaSensorReadLow, Settings.DnaSensorLocation));
+			spec.Sensors.Add(new NadhSensorSpec("NADH Sensor", Settings.NadhSensorNumber, Settings.NadhSensorBoardNumber, Settings.NadhSensorPortNumber, Settings.NadhSensorReadHigh, Settings.NadhSensorReadLow, Settings.NadhSensorLocation));
+			return spec;
+		}
+		private void AddPlates(DeviceSpecification spec)
+		{
+			spec.Plates.Add(new Plate(new Coordinate(0, 0)));
+			spec.Plates.Add(new Plate(new Coordinate(1, 0)));
+			Plate currentPlate = spec.Plates[0];
 			var wellsPerPlate = (Settings.HorizontalWellCount * Settings.VerticalWellCount);
 			for (int index = 0; index < 2 * wellsPerPlate; index++)
 			{
@@ -287,11 +303,11 @@ G90 ; absolute positioning
 				}
 				if (currentPlate.Wells.Count() == wellsPerPlate)
 				{
-					if(currentPlate == DeviceSpecification.Plates.Last())
+					if(currentPlate == spec.Plates.Last())
 						break;
 
-					currentPlate = DeviceSpecification.Plates
-						.ElementAt(DeviceSpecification.Plates.IndexOf(currentPlate) + 1);
+					currentPlate = spec.Plates
+						.ElementAt(spec.Plates.IndexOf(currentPlate) + 1);
 				}
 			}
 		}

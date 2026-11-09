@@ -302,6 +302,21 @@ namespace Drivetrain.Robotics.Control
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ControllerBoardCount)));
             }
         }
+        /// <summary>Number of IO input ports (io0.in to io{N-1}.in) on each controller board.</summary>
+        public int InputPortsPerBoard
+        {
+            get
+            {
+                return _inputPortsPerBoard;
+            }
+            set
+            {
+                if (_inputPortsPerBoard == value)
+                    return;
+                _inputPortsPerBoard = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputPortsPerBoard)));
+            }
+        }
         public int ComPortNumber
         {
             get
@@ -1982,12 +1997,13 @@ namespace Drivetrain.Robotics.Control
         Coordinate _biopsyLocation = new(245, 110);
         int _comPortNumber = 4;
         int _controllerBoardCount = 2;
+        int _inputPortsPerBoard = 7;
         bool _debug;
         int _dnaAspirationVolume = 50;
         Coordinate _dnaLocation = new(331, 304);
         Coordinate _dnaSensorLocation = new(329, 379);
         int _dnaSensorNumber = 0;
-        int _dnaSensorReadHigh = 10000;
+        int _dnaSensorReadHigh = 4095;
         int _dnaSensorReadLow = 0;
         decimal _dnaSyringeLoadingPosition = 22m;
         int _dnaTimerPeriod = 360000;
@@ -2016,7 +2032,7 @@ namespace Drivetrain.Robotics.Control
         int _nadhReadingsTimerPeriod = 480000;
         Coordinate _nadhSensorLocation = new(168, 382.5m);
         int _nadhSensorNumber = 1;
-        int _nadhSensorReadHigh = 10000;
+        int _nadhSensorReadHigh = 4095;
         int _nadhSensorReadLow = 0;
         decimal _nadhSyringeLoadingPosition = 64m;
         decimal _nadhTravelPerMicroLiter = 0.00897m;
@@ -2052,7 +2068,7 @@ namespace Drivetrain.Robotics.Control
         int _tableYDriverBoardNumber = 1;
         int _tableYDriverPortNumber = 2;
         int _tableYEndstopBoardNumber = 1;
-        int _tableYEndstopPortNumber = 2;
+        int _tableYEndstopPortNumber = 1;
         int _aspirateDriverBoardNumber = 0;
         int _aspirateDriverPortNumber = 0;
         int _aspirateEndstopBoardNumber = 0;
@@ -2079,12 +2095,12 @@ namespace Drivetrain.Robotics.Control
         int _chamberUvPortNumber = 5;
         int _nadh532LaserBoardNumber = 0;
         int _nadh532LaserPortNumber = 2;
-        int _nadhSensorBoardNumber = 1;
-        int _nadhSensorPortNumber = 5;
+        int _nadhSensorBoardNumber = 0;
+        int _nadhSensorPortNumber = 0;
         int _dna488LaserBoardNumber = 0;
         int _dna488LaserPortNumber = 1;
-        int _dnaSensorBoardNumber = 1;
-        int _dnaSensorPortNumber = 6;
+        int _dnaSensorBoardNumber = 0;
+        int _dnaSensorPortNumber = 1;
         #endregion
 
         #region Events
