@@ -74,6 +74,24 @@ namespace Drivetrain.Robotics.Control
 			}
 			CheckDuplicates("Motor driver", axes.Select(a => (a.Label, a.DriverBoardPort.DriverDesignation)));
 
+			// the needle positions used when aspirating must lie within the axis travel
+			var aspirate = axes.FirstOrDefault(a => a.Axis == Axis.Aspirate);
+			if (aspirate != null)
+			{
+				var largestVolume = new[] { Settings.KohAspirationVolume, Settings.DnaAspirationVolume, Settings.TestMediaAspirationVolume }.Max();
+				var platePosition = Settings.AspirateActuatorStartPosition - Settings.AspirateDistanceToPlate; // the needle starts at the top of its travel and descends toward lower coordinates
+				foreach (var (what, position) in new[]
+				{
+					("start position", Settings.AspirateActuatorStartPosition),
+					("plate position (start - distance to plate)", platePosition),
+					($"lowest position when aspirating {largestVolume} µl", platePosition - (Settings.AspirateTravelPerMicroLiter * largestVolume)),
+				})
+				{
+					if (position < aspirate.Minimum || position > aspirate.Maximum)
+						warnings.Add($"Aspirate needle {what} is {position:0.##} mm, which is outside the aspirate axis travel ({aspirate.Minimum} to {aspirate.Maximum} mm).");
+				}
+			}
+
 			var sensors = spec.Sensors;
 			foreach (var sensor in sensors)
 				CheckBoard(sensor.Label, sensor.Board);
@@ -96,6 +114,8 @@ namespace Drivetrain.Robotics.Control
 
 			return warnings;
 		}
+		/// <summary>Escapes text for use inside a G-code string literal (a double quote is written as two double quotes).</summary>
+		private static string EscapeGCodeString(string? text) => (text ?? "").Replace("\"", "\"\"");
 		private const int SuctionActuatorIndex = 5;
 		/// <summary>Installed drivers per board (Duet 3 Mini 5+: drivers 0-4).</summary>
 		private const int DriversPerBoard = 5;
@@ -117,7 +137,10 @@ M83 ; relative extruder moves
 M550 P""ABAL"" ; set hostname
 
 ; Network
-M552 S1 ; configure WiFi adapter
+");
+			if (!string.IsNullOrWhiteSpace(Settings.WifiSsid))
+				configTextBuilder.AppendLine($@"M587 S""{EscapeGCodeString(Settings.WifiSsid)}"" P""{EscapeGCodeString(Settings.WifiPassword)}"" ; add WiFi network");
+			configTextBuilder.Append(@"M552 S1 ; configure WiFi adapter
 M586 P0 S1 ; configure HTTP
 M586 P1 S1 ; configure FTP
 M586 P2 S1 ; configure Telnet
@@ -177,7 +200,7 @@ M595 P0
 			configTextBuilder.Append($"M566");
 			foreach (var x in spec.Axes)
 			{
-				configTextBuilder.Append($" {x.Designation}900");
+				configTextBuilder.Append($" {x.Designation}{x.MaxInstantaneousSpeedChange}");
 			}
 			configTextBuilder.Append($" ; set maximum instantaneous speed changes (mm/min)\r\n");
 			configTextBuilder.Append($"M203");
@@ -189,7 +212,7 @@ M595 P0
 			configTextBuilder.Append($"M201");
 			foreach (var x in spec.Axes)
 			{
-				configTextBuilder.Append($" {x.Designation}500");
+				configTextBuilder.Append($" {x.Designation}{x.Acceleration}");
 			}
 			configTextBuilder.Append($" ; set accelerations (mm/s^2)\r\n");
 			configTextBuilder.Append(@"
@@ -231,9 +254,9 @@ M669 K0 ; configure Cartesian kinematics
 				var distance = x.Maximum - x.Minimum + 5;
 				homeTextBuilder.Append(@$"
 G91 ; relative positioning
-G1 H1 {x.Designation}{direction}{distance} F{x.Driver.Endstop.FirstHomingSpeed} ; coarse home
+G1 H1 {x.Designation}{direction}{distance} F{Math.Min(x.Driver.Endstop.FirstHomingSpeed, x.MaxSpeed)} ; coarse home
 G1 {x.Designation}5 F6000 ; move back 5mm
-G1 H1 {x.Designation}{direction}{distance} F{x.Driver.Endstop.SecondHomingSpeed} ; fine home
+G1 H1 {x.Designation}{direction}{distance} F{Math.Min(x.Driver.Endstop.SecondHomingSpeed, x.MaxSpeed)} ; fine home
 G90 ; absolute positioning
 				");
 				File.WriteAllBytes(Path.Combine(folder, $"home{x.Designation}.g"), Encoding.ASCII.GetBytes(homeTextBuilder.ToString()));
@@ -251,31 +274,31 @@ G90 ; absolute positioning
 		{
 			var spec = new DeviceSpecification();
 			spec.DeviceName = spec.Label;
-			spec.Axes.Add(new TableAxis(Axis.TableX,
+			spec.Axes.Add(WithMotorSettings(Settings.TableXStepsPerMillimeter, Settings.TableXTravelLength, Settings.TableXMotorCurrent, Settings.TableAxisSpeed, Settings.TableXAcceleration, Settings.TableXMaxInstantaneousSpeedChange, new TableAxis(Axis.TableX,
 				new BoardPort(Settings.TableXDriverBoardNumber, Settings.TableXDriverPortNumber),
 				new BoardPort(Settings.TableXEndstopBoardNumber, Settings.TableXEndstopPortNumber),
-				500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
-			spec.Axes.Add(new TableAxis(Axis.TableY,
+				500, Settings.TableXEndstopLocation, Settings.TableXDirection, Settings.TableAxisSpeed)));
+			spec.Axes.Add(WithMotorSettings(Settings.TableYStepsPerMillimeter, Settings.TableYTravelLength, Settings.TableYMotorCurrent, Settings.TableAxisSpeed, Settings.TableYAcceleration, Settings.TableYMaxInstantaneousSpeedChange, new TableAxis(Axis.TableY,
 				new BoardPort(Settings.TableYDriverBoardNumber, Settings.TableYDriverPortNumber),
 				new BoardPort(Settings.TableYEndstopBoardNumber, Settings.TableYEndstopPortNumber),
-				500, EndstopLocation.LowEnd, Direction.Backwards, Settings.TableAxisSpeed));
+				500, Settings.TableYEndstopLocation, Settings.TableYDirection, Settings.TableAxisSpeed)));
 			spec.Axes.AddRange(GetAspirateAxes());
-			spec.Axes.Add(new FluidAxis(Axis.DnaReagent,
+			spec.Axes.Add(WithMotorSettings(Settings.DnaReagentStepsPerMillimeter, Settings.DnaReagentTravelLength, Settings.DnaReagentMotorCurrent, Settings.DnaReagentMaxSpeed, Settings.DnaReagentAcceleration, Settings.DnaReagentMaxInstantaneousSpeedChange, WithMotion(Settings.DnaReagentDirection, Settings.DnaReagentEndstopLocation, new FluidAxis(Axis.DnaReagent,
 				new BoardPort(Settings.DnaReagentDriverBoardNumber, Settings.DnaReagentDriverPortNumber),
 				new BoardPort(Settings.DnaReagentEndstopBoardNumber, Settings.DnaReagentEndstopPortNumber),
-				Settings.DnaLocation, Settings.DnaSyringeLoadingPosition));
-			spec.Axes.Add(new FluidAxis(Axis.Koh,
+				Settings.DnaLocation, Settings.DnaSyringeLoadingPosition))));
+			spec.Axes.Add(WithMotorSettings(Settings.KohStepsPerMillimeter, Settings.KohTravelLength, Settings.KohMotorCurrent, Settings.KohMaxSpeed, Settings.KohAcceleration, Settings.KohMaxInstantaneousSpeedChange, WithMotion(Settings.KohDirection, Settings.KohEndstopLocation, new FluidAxis(Axis.Koh,
 				new BoardPort(Settings.KohDriverBoardNumber, Settings.KohDriverPortNumber),
 				new BoardPort(Settings.KohEndstopBoardNumber, Settings.KohEndstopPortNumber),
-				Settings.KohLocation, Settings.KohSyringeLoadingPosition));
-			spec.Axes.Add(new FluidAxis(Axis.Nadh,
+				Settings.KohLocation, Settings.KohSyringeLoadingPosition))));
+			spec.Axes.Add(WithMotorSettings(Settings.NadhStepsPerMillimeter, Settings.NadhTravelLength, Settings.NadhMotorCurrent, Settings.NadhMaxSpeed, Settings.NadhAcceleration, Settings.NadhMaxInstantaneousSpeedChange, WithMotion(Settings.NadhDirection, Settings.NadhEndstopLocation, new FluidAxis(Axis.Nadh,
 				new BoardPort(Settings.NadhDriverBoardNumber, Settings.NadhDriverPortNumber),
 				new BoardPort(Settings.NadhEndstopBoardNumber, Settings.NadhEndstopPortNumber),
-				Settings.NadhLocation, Settings.NadhSyringeLoadingPosition));
-			spec.Axes.Add(new FluidAxis(Axis.Basal,
+				Settings.NadhLocation, Settings.NadhSyringeLoadingPosition))));
+			spec.Axes.Add(WithMotorSettings(Settings.BasalStepsPerMillimeter, Settings.BasalTravelLength, Settings.BasalMotorCurrent, Settings.BasalMaxSpeed, Settings.BasalAcceleration, Settings.BasalMaxInstantaneousSpeedChange, WithMotion(Settings.BasalDirection, Settings.BasalEndstopLocation, new FluidAxis(Axis.Basal,
 				new BoardPort(Settings.BasalDriverBoardNumber, Settings.BasalDriverPortNumber),
 				new BoardPort(Settings.BasalEndstopBoardNumber, Settings.BasalEndstopPortNumber),
-				Settings.BasalLocation, Settings.BasalSyringeLoadingPosition));
+				Settings.BasalLocation, Settings.BasalSyringeLoadingPosition))));
 
 			spec.Sensors.Add(new DnaSensorSpec("DNA Sensor", Settings.DnaSensorNumber, Settings.DnaSensorBoardNumber, Settings.DnaSensorPortNumber, Settings.DnaSensorReadHigh, Settings.DnaSensorReadLow, Settings.DnaSensorLocation));
 			spec.Sensors.Add(new NadhSensorSpec("NADH Sensor", Settings.NadhSensorNumber, Settings.NadhSensorBoardNumber, Settings.NadhSensorPortNumber, Settings.NadhSensorReadHigh, Settings.NadhSensorReadLow, Settings.NadhSensorLocation));
@@ -311,14 +334,51 @@ G90 ; absolute positioning
 				}
 			}
 		}
+		private static AxisSpec WithMotorSettings(decimal stepsPerMillimeter, int travelLength, int motorCurrent, int maxSpeed, int acceleration, int maxInstantaneousSpeedChange, AxisSpec axis)
+		{
+			axis.StepsPerMillimeter = stepsPerMillimeter;
+			axis.Maximum = travelLength;
+			axis.Driver.Current = motorCurrent;
+			axis.MaxSpeed = maxSpeed;
+			axis.Acceleration = acceleration;
+			axis.MaxInstantaneousSpeedChange = maxInstantaneousSpeedChange;
+			// the position moved to at startup must stay within the travel
+			axis.StartingPosition = Math.Clamp(axis.StartingPosition, axis.Minimum, axis.Maximum);
+			return axis;
+		}
+		/// <summary>
+		/// Applies the aspirate actuator settings. The axis keeps its home coordinate (the end with the endstop), so existing
+		/// positions stay valid, and only the usable stroke is limited: with a high-end endstop the lower limit is the maximum minus the stroke.
+		/// </summary>
+		private AxisSpec WithAspirateSettings(AxisSpec axis)
+		{
+			axis.StepsPerMillimeter = Settings.AspirateStepsPerMillimeter;
+			axis.Driver.Current = Settings.AspirateMotorCurrent;
+			axis.MaxSpeed = Settings.AspirateMaxSpeed;
+			axis.Acceleration = Settings.AspirateAcceleration;
+			axis.MaxInstantaneousSpeedChange = Settings.AspirateMaxInstantaneousSpeedChange;
+			if (axis.Driver.Endstop.Location == EndstopLocation.HighEnd)
+				axis.Minimum = axis.Maximum - Settings.AspirateTravelLength;
+			else
+				axis.Maximum = axis.Minimum + Settings.AspirateTravelLength;
+			// the needle moves to the end of its travel at startup (the aspirate routine uses the Aspirate Needle Start Position setting instead)
+			axis.StartingPosition = axis.Maximum;
+			return axis;
+		}
+		private static AxisSpec WithMotion(Direction direction, EndstopLocation endstopLocation, AxisSpec axis)
+		{
+			axis.Driver.Direction = direction;
+			axis.Driver.Endstop.Location = endstopLocation;
+			return axis;
+		}
 		private List<AxisSpec> GetAspirateAxes()
 		{
 			var ret = new List<AxisSpec>();
 			//ret.Add(new AspirateZAxis(Axis.AspirateFluid, 0, 4, Settings.AspirateFluidLocation, Settings.AspirateFluidActuatorStartPosition));
-			ret.Add(new AspirateZAxis(Axis.Aspirate,
+			ret.Add(WithAspirateSettings(WithMotion(Settings.AspirateDirection, Settings.AspirateEndstopLocation, new AspirateZAxis(Axis.Aspirate,
 				new BoardPort(Settings.AspirateDriverBoardNumber, Settings.AspirateDriverPortNumber),
 				new BoardPort(Settings.AspirateEndstopBoardNumber, Settings.AspirateEndstopPortNumber),
-				Settings.AspirateLocation, Settings.AspirateActuatorStartPosition));
+				Settings.AspirateLocation, Settings.AspirateActuatorStartPosition))));
 
             return ret;
 		}

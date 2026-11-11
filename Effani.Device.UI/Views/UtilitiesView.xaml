@@ -255,7 +255,7 @@
 				</DockPanel>
 			</dx:DXTabItem>
             <dx:DXTabItem Header="Debug" Visibility="{DXBinding 'Settings.Debug ? $Visibility.Visible : $Visibility.Collapsed'}" >
-				<StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+				<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GenerateConfigFilesCommand}" Content="Generate Config" />
 					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="0" Content="Diagnostics 0" />
 					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="1" Content="Diagnostics 1" />

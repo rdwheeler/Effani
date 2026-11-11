@@ -13,7 +13,7 @@ namespace Drivetrain.Robotics.Control
 			MaxSpeed = maxSpeed;
 			Driver = new DriverSpec(Label)
 			{
-				Current = 2000,
+				Current = 400, // 17HS13-0404S1 motor: 0.4 A per phase
 				Direction = direction,
 				Endstop = new EndstopSpec($"{Label} Endstop")
                 {

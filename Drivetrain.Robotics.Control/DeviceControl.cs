@@ -168,10 +168,16 @@ namespace Drivetrain.Robotics.Control
 		{
 			WriteWhenReady($"M140 S{temperature}");
 		}
+		/// <summary>Turns the controller's WiFi network interface on (M552 S1) or off (M552 S0).</summary>
+		public void SetWifiEnabled(bool enabled)
+		{
+			WriteWhenReady($"M552 S{(enabled ? 1 : 0)}");
+		}
 		public void SetWifi(string ssid, string password)
 		{
 			WriteWhenReady($"M552 S0");
-			WriteWhenReady($"M587 S\"{ssid}\" P\"{password}\"");
+			// a double quote inside a G-code string is written as two double quotes
+			WriteWhenReady($"M587 S\"{(ssid ?? "").Replace("\"", "\"\"")}\" P\"{(password ?? "").Replace("\"", "\"\"")}\"");
 			WriteWhenReady($"M552 S1");
 		}
 		#endregion

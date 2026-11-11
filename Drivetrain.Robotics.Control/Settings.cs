@@ -317,6 +317,767 @@ namespace Drivetrain.Robotics.Control
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputPortsPerBoard)));
             }
         }
+        // Direction of motor movement for each axis (written to config.g as the S parameter of M569)
+        public Direction TableXDirection
+        {
+            get
+            {
+                return _tableXDirection;
+            }
+            set
+            {
+                if (_tableXDirection == value)
+                    return;
+                _tableXDirection = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXDirection)));
+            }
+        }
+        public Direction TableYDirection
+        {
+            get
+            {
+                return _tableYDirection;
+            }
+            set
+            {
+                if (_tableYDirection == value)
+                    return;
+                _tableYDirection = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYDirection)));
+            }
+        }
+        public Direction AspirateDirection
+        {
+            get
+            {
+                return _aspirateDirection;
+            }
+            set
+            {
+                if (_aspirateDirection == value)
+                    return;
+                _aspirateDirection = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateDirection)));
+            }
+        }
+        public Direction DnaReagentDirection
+        {
+            get
+            {
+                return _dnaReagentDirection;
+            }
+            set
+            {
+                if (_dnaReagentDirection == value)
+                    return;
+                _dnaReagentDirection = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentDirection)));
+            }
+        }
+        public Direction KohDirection
+        {
+            get
+            {
+                return _kohDirection;
+            }
+            set
+            {
+                if (_kohDirection == value)
+                    return;
+                _kohDirection = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohDirection)));
+            }
+        }
+        public Direction NadhDirection
+        {
+            get
+            {
+                return _nadhDirection;
+            }
+            set
+            {
+                if (_nadhDirection == value)
+                    return;
+                _nadhDirection = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhDirection)));
+            }
+        }
+        public Direction BasalDirection
+        {
+            get
+            {
+                return _basalDirection;
+            }
+            set
+            {
+                if (_basalDirection == value)
+                    return;
+                _basalDirection = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalDirection)));
+            }
+        }
+        // Which end of each axis's travel the endstop is at (sets the M574 end and the homing direction)
+        public EndstopLocation TableXEndstopLocation
+        {
+            get
+            {
+                return _tableXEndstopLocation;
+            }
+            set
+            {
+                if (_tableXEndstopLocation == value)
+                    return;
+                _tableXEndstopLocation = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXEndstopLocation)));
+            }
+        }
+        public EndstopLocation TableYEndstopLocation
+        {
+            get
+            {
+                return _tableYEndstopLocation;
+            }
+            set
+            {
+                if (_tableYEndstopLocation == value)
+                    return;
+                _tableYEndstopLocation = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYEndstopLocation)));
+            }
+        }
+        public EndstopLocation AspirateEndstopLocation
+        {
+            get
+            {
+                return _aspirateEndstopLocation;
+            }
+            set
+            {
+                if (_aspirateEndstopLocation == value)
+                    return;
+                _aspirateEndstopLocation = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateEndstopLocation)));
+            }
+        }
+        public EndstopLocation DnaReagentEndstopLocation
+        {
+            get
+            {
+                return _dnaReagentEndstopLocation;
+            }
+            set
+            {
+                if (_dnaReagentEndstopLocation == value)
+                    return;
+                _dnaReagentEndstopLocation = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentEndstopLocation)));
+            }
+        }
+        public EndstopLocation KohEndstopLocation
+        {
+            get
+            {
+                return _kohEndstopLocation;
+            }
+            set
+            {
+                if (_kohEndstopLocation == value)
+                    return;
+                _kohEndstopLocation = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohEndstopLocation)));
+            }
+        }
+        public EndstopLocation NadhEndstopLocation
+        {
+            get
+            {
+                return _nadhEndstopLocation;
+            }
+            set
+            {
+                if (_nadhEndstopLocation == value)
+                    return;
+                _nadhEndstopLocation = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhEndstopLocation)));
+            }
+        }
+        public EndstopLocation BasalEndstopLocation
+        {
+            get
+            {
+                return _basalEndstopLocation;
+            }
+            set
+            {
+                if (_basalEndstopLocation == value)
+                    return;
+                _basalEndstopLocation = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalEndstopLocation)));
+            }
+        }
+        // Motion parameters of the fluid pump actuators (written to config.g as M92, M208, M906, M203, M201 and M566)
+        public decimal DnaReagentStepsPerMillimeter
+        {
+            get
+            {
+                return _dnaReagentStepsPerMillimeter;
+            }
+            set
+            {
+                if (_dnaReagentStepsPerMillimeter == value)
+                    return;
+                _dnaReagentStepsPerMillimeter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentStepsPerMillimeter)));
+            }
+        }
+        public int DnaReagentTravelLength
+        {
+            get
+            {
+                return _dnaReagentTravelLength;
+            }
+            set
+            {
+                if (_dnaReagentTravelLength == value)
+                    return;
+                _dnaReagentTravelLength = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentTravelLength)));
+            }
+        }
+        public int DnaReagentMotorCurrent
+        {
+            get
+            {
+                return _dnaReagentMotorCurrent;
+            }
+            set
+            {
+                if (_dnaReagentMotorCurrent == value)
+                    return;
+                _dnaReagentMotorCurrent = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentMotorCurrent)));
+            }
+        }
+        public int DnaReagentMaxSpeed
+        {
+            get
+            {
+                return _dnaReagentMaxSpeed;
+            }
+            set
+            {
+                if (_dnaReagentMaxSpeed == value)
+                    return;
+                _dnaReagentMaxSpeed = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentMaxSpeed)));
+            }
+        }
+        public int DnaReagentAcceleration
+        {
+            get
+            {
+                return _dnaReagentAcceleration;
+            }
+            set
+            {
+                if (_dnaReagentAcceleration == value)
+                    return;
+                _dnaReagentAcceleration = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentAcceleration)));
+            }
+        }
+        public int DnaReagentMaxInstantaneousSpeedChange
+        {
+            get
+            {
+                return _dnaReagentMaxInstantaneousSpeedChange;
+            }
+            set
+            {
+                if (_dnaReagentMaxInstantaneousSpeedChange == value)
+                    return;
+                _dnaReagentMaxInstantaneousSpeedChange = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DnaReagentMaxInstantaneousSpeedChange)));
+            }
+        }
+        public decimal KohStepsPerMillimeter
+        {
+            get
+            {
+                return _kohStepsPerMillimeter;
+            }
+            set
+            {
+                if (_kohStepsPerMillimeter == value)
+                    return;
+                _kohStepsPerMillimeter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohStepsPerMillimeter)));
+            }
+        }
+        public int KohTravelLength
+        {
+            get
+            {
+                return _kohTravelLength;
+            }
+            set
+            {
+                if (_kohTravelLength == value)
+                    return;
+                _kohTravelLength = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohTravelLength)));
+            }
+        }
+        public int KohMotorCurrent
+        {
+            get
+            {
+                return _kohMotorCurrent;
+            }
+            set
+            {
+                if (_kohMotorCurrent == value)
+                    return;
+                _kohMotorCurrent = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohMotorCurrent)));
+            }
+        }
+        public int KohMaxSpeed
+        {
+            get
+            {
+                return _kohMaxSpeed;
+            }
+            set
+            {
+                if (_kohMaxSpeed == value)
+                    return;
+                _kohMaxSpeed = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohMaxSpeed)));
+            }
+        }
+        public int KohAcceleration
+        {
+            get
+            {
+                return _kohAcceleration;
+            }
+            set
+            {
+                if (_kohAcceleration == value)
+                    return;
+                _kohAcceleration = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohAcceleration)));
+            }
+        }
+        public int KohMaxInstantaneousSpeedChange
+        {
+            get
+            {
+                return _kohMaxInstantaneousSpeedChange;
+            }
+            set
+            {
+                if (_kohMaxInstantaneousSpeedChange == value)
+                    return;
+                _kohMaxInstantaneousSpeedChange = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KohMaxInstantaneousSpeedChange)));
+            }
+        }
+        public decimal NadhStepsPerMillimeter
+        {
+            get
+            {
+                return _nadhStepsPerMillimeter;
+            }
+            set
+            {
+                if (_nadhStepsPerMillimeter == value)
+                    return;
+                _nadhStepsPerMillimeter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhStepsPerMillimeter)));
+            }
+        }
+        public int NadhTravelLength
+        {
+            get
+            {
+                return _nadhTravelLength;
+            }
+            set
+            {
+                if (_nadhTravelLength == value)
+                    return;
+                _nadhTravelLength = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhTravelLength)));
+            }
+        }
+        public int NadhMotorCurrent
+        {
+            get
+            {
+                return _nadhMotorCurrent;
+            }
+            set
+            {
+                if (_nadhMotorCurrent == value)
+                    return;
+                _nadhMotorCurrent = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhMotorCurrent)));
+            }
+        }
+        public int NadhMaxSpeed
+        {
+            get
+            {
+                return _nadhMaxSpeed;
+            }
+            set
+            {
+                if (_nadhMaxSpeed == value)
+                    return;
+                _nadhMaxSpeed = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhMaxSpeed)));
+            }
+        }
+        public int NadhAcceleration
+        {
+            get
+            {
+                return _nadhAcceleration;
+            }
+            set
+            {
+                if (_nadhAcceleration == value)
+                    return;
+                _nadhAcceleration = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhAcceleration)));
+            }
+        }
+        public int NadhMaxInstantaneousSpeedChange
+        {
+            get
+            {
+                return _nadhMaxInstantaneousSpeedChange;
+            }
+            set
+            {
+                if (_nadhMaxInstantaneousSpeedChange == value)
+                    return;
+                _nadhMaxInstantaneousSpeedChange = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NadhMaxInstantaneousSpeedChange)));
+            }
+        }
+        public decimal BasalStepsPerMillimeter
+        {
+            get
+            {
+                return _basalStepsPerMillimeter;
+            }
+            set
+            {
+                if (_basalStepsPerMillimeter == value)
+                    return;
+                _basalStepsPerMillimeter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalStepsPerMillimeter)));
+            }
+        }
+        public int BasalTravelLength
+        {
+            get
+            {
+                return _basalTravelLength;
+            }
+            set
+            {
+                if (_basalTravelLength == value)
+                    return;
+                _basalTravelLength = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalTravelLength)));
+            }
+        }
+        public int BasalMotorCurrent
+        {
+            get
+            {
+                return _basalMotorCurrent;
+            }
+            set
+            {
+                if (_basalMotorCurrent == value)
+                    return;
+                _basalMotorCurrent = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalMotorCurrent)));
+            }
+        }
+        public int BasalMaxSpeed
+        {
+            get
+            {
+                return _basalMaxSpeed;
+            }
+            set
+            {
+                if (_basalMaxSpeed == value)
+                    return;
+                _basalMaxSpeed = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalMaxSpeed)));
+            }
+        }
+        public int BasalAcceleration
+        {
+            get
+            {
+                return _basalAcceleration;
+            }
+            set
+            {
+                if (_basalAcceleration == value)
+                    return;
+                _basalAcceleration = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalAcceleration)));
+            }
+        }
+        public int BasalMaxInstantaneousSpeedChange
+        {
+            get
+            {
+                return _basalMaxInstantaneousSpeedChange;
+            }
+            set
+            {
+                if (_basalMaxInstantaneousSpeedChange == value)
+                    return;
+                _basalMaxInstantaneousSpeedChange = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BasalMaxInstantaneousSpeedChange)));
+            }
+        }
+        // Motion parameters of the table axes (written to config.g as M92, M208, M906, M201 and M566)
+        public decimal TableXStepsPerMillimeter
+        {
+            get
+            {
+                return _tableXStepsPerMillimeter;
+            }
+            set
+            {
+                if (_tableXStepsPerMillimeter == value)
+                    return;
+                _tableXStepsPerMillimeter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXStepsPerMillimeter)));
+            }
+        }
+        public int TableXTravelLength
+        {
+            get
+            {
+                return _tableXTravelLength;
+            }
+            set
+            {
+                if (_tableXTravelLength == value)
+                    return;
+                _tableXTravelLength = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXTravelLength)));
+            }
+        }
+        public int TableXMotorCurrent
+        {
+            get
+            {
+                return _tableXMotorCurrent;
+            }
+            set
+            {
+                if (_tableXMotorCurrent == value)
+                    return;
+                _tableXMotorCurrent = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXMotorCurrent)));
+            }
+        }
+        public int TableXAcceleration
+        {
+            get
+            {
+                return _tableXAcceleration;
+            }
+            set
+            {
+                if (_tableXAcceleration == value)
+                    return;
+                _tableXAcceleration = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXAcceleration)));
+            }
+        }
+        public int TableXMaxInstantaneousSpeedChange
+        {
+            get
+            {
+                return _tableXMaxInstantaneousSpeedChange;
+            }
+            set
+            {
+                if (_tableXMaxInstantaneousSpeedChange == value)
+                    return;
+                _tableXMaxInstantaneousSpeedChange = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableXMaxInstantaneousSpeedChange)));
+            }
+        }
+        public decimal TableYStepsPerMillimeter
+        {
+            get
+            {
+                return _tableYStepsPerMillimeter;
+            }
+            set
+            {
+                if (_tableYStepsPerMillimeter == value)
+                    return;
+                _tableYStepsPerMillimeter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYStepsPerMillimeter)));
+            }
+        }
+        public int TableYTravelLength
+        {
+            get
+            {
+                return _tableYTravelLength;
+            }
+            set
+            {
+                if (_tableYTravelLength == value)
+                    return;
+                _tableYTravelLength = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYTravelLength)));
+            }
+        }
+        public int TableYMotorCurrent
+        {
+            get
+            {
+                return _tableYMotorCurrent;
+            }
+            set
+            {
+                if (_tableYMotorCurrent == value)
+                    return;
+                _tableYMotorCurrent = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYMotorCurrent)));
+            }
+        }
+        public int TableYAcceleration
+        {
+            get
+            {
+                return _tableYAcceleration;
+            }
+            set
+            {
+                if (_tableYAcceleration == value)
+                    return;
+                _tableYAcceleration = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYAcceleration)));
+            }
+        }
+        public int TableYMaxInstantaneousSpeedChange
+        {
+            get
+            {
+                return _tableYMaxInstantaneousSpeedChange;
+            }
+            set
+            {
+                if (_tableYMaxInstantaneousSpeedChange == value)
+                    return;
+                _tableYMaxInstantaneousSpeedChange = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TableYMaxInstantaneousSpeedChange)));
+            }
+        }
+        // Motion parameters of the aspirate needle actuator (written to config.g as M92, M208, M906, M203, M201 and M566)
+        public decimal AspirateStepsPerMillimeter
+        {
+            get
+            {
+                return _aspirateStepsPerMillimeter;
+            }
+            set
+            {
+                if (_aspirateStepsPerMillimeter == value)
+                    return;
+                _aspirateStepsPerMillimeter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateStepsPerMillimeter)));
+            }
+        }
+        public int AspirateTravelLength
+        {
+            get
+            {
+                return _aspirateTravelLength;
+            }
+            set
+            {
+                if (_aspirateTravelLength == value)
+                    return;
+                _aspirateTravelLength = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateTravelLength)));
+            }
+        }
+        public int AspirateMotorCurrent
+        {
+            get
+            {
+                return _aspirateMotorCurrent;
+            }
+            set
+            {
+                if (_aspirateMotorCurrent == value)
+                    return;
+                _aspirateMotorCurrent = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateMotorCurrent)));
+            }
+        }
+        public int AspirateMaxSpeed
+        {
+            get
+            {
+                return _aspirateMaxSpeed;
+            }
+            set
+            {
+                if (_aspirateMaxSpeed == value)
+                    return;
+                _aspirateMaxSpeed = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateMaxSpeed)));
+            }
+        }
+        public int AspirateAcceleration
+        {
+            get
+            {
+                return _aspirateAcceleration;
+            }
+            set
+            {
+                if (_aspirateAcceleration == value)
+                    return;
+                _aspirateAcceleration = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateAcceleration)));
+            }
+        }
+        public int AspirateMaxInstantaneousSpeedChange
+        {
+            get
+            {
+                return _aspirateMaxInstantaneousSpeedChange;
+            }
+            set
+            {
+                if (_aspirateMaxInstantaneousSpeedChange == value)
+                    return;
+                _aspirateMaxInstantaneousSpeedChange = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AspirateMaxInstantaneousSpeedChange)));
+            }
+        }
         public int ComPortNumber
         {
             get
@@ -603,6 +1364,35 @@ namespace Drivetrain.Robotics.Control
                     return;
                 _effaniUsername = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EffaniUsername)));
+            }
+        }
+        /// <summary>Name of the WiFi network the controller board is configured with (M587).</summary>
+        public string WifiSsid
+        {
+            get
+            {
+                return _wifiSsid;
+            }
+            set
+            {
+                if (_wifiSsid == value)
+                    return;
+                _wifiSsid = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WifiSsid)));
+            }
+        }
+        public string WifiPassword
+        {
+            get
+            {
+                return _wifiPassword;
+            }
+            set
+            {
+                if (_wifiPassword == value)
+                    return;
+                _wifiPassword = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WifiPassword)));
             }
         }
         public Coordinate FirstWellLocation
@@ -1980,7 +2770,7 @@ namespace Drivetrain.Robotics.Control
         #region Fields
         DateTime VersionDate { get; set; }
 
-        decimal _aspirateActuatorStartPosition = 470m;
+        decimal _aspirateActuatorStartPosition = 90m;
         decimal _aspirateDistanceToPlate = 11m;
         Coordinate _aspirateLocation = new(330, 203);
         decimal _aspiratePositioningSpeed = 200m;
@@ -1991,13 +2781,67 @@ namespace Drivetrain.Robotics.Control
         int _aspirationSuctionTogglePortNumber = 2;
         int _basalIncubationTimerPeriod = 900000;
         Coordinate _basalLocation = new(165, 257);
-        decimal _basalSyringeLoadingPosition = 22m;
+        decimal _basalSyringeLoadingPosition = 117m;
         decimal _basalTravelPerMicroLiter = 0.00153m;
         int _basalVolume = 300;
         Coordinate _biopsyLocation = new(245, 110);
         int _comPortNumber = 4;
         int _controllerBoardCount = 2;
         int _inputPortsPerBoard = 7;
+        Direction _tableXDirection = Direction.Backwards;
+        Direction _tableYDirection = Direction.Backwards;
+        Direction _aspirateDirection = Direction.Forwards;
+        Direction _dnaReagentDirection = Direction.Forwards;
+        Direction _kohDirection = Direction.Forwards;
+        Direction _nadhDirection = Direction.Forwards;
+        Direction _basalDirection = Direction.Forwards;
+        EndstopLocation _tableXEndstopLocation = EndstopLocation.LowEnd;
+        EndstopLocation _tableYEndstopLocation = EndstopLocation.LowEnd;
+        EndstopLocation _aspirateEndstopLocation = EndstopLocation.LowEnd;
+        EndstopLocation _dnaReagentEndstopLocation = EndstopLocation.HighEnd;
+        EndstopLocation _kohEndstopLocation = EndstopLocation.HighEnd;
+        EndstopLocation _nadhEndstopLocation = EndstopLocation.HighEnd;
+        EndstopLocation _basalEndstopLocation = EndstopLocation.HighEnd;
+        decimal _dnaReagentStepsPerMillimeter = 1259.84m;
+        int _dnaReagentTravelLength = 117;
+        int _dnaReagentMotorCurrent = 1500;
+        int _dnaReagentMaxSpeed = 2286;
+        int _dnaReagentAcceleration = 500;
+        int _dnaReagentMaxInstantaneousSpeedChange = 900;
+        decimal _kohStepsPerMillimeter = 1259.84m;
+        int _kohTravelLength = 117;
+        int _kohMotorCurrent = 1500;
+        int _kohMaxSpeed = 2286;
+        int _kohAcceleration = 500;
+        int _kohMaxInstantaneousSpeedChange = 900;
+        decimal _nadhStepsPerMillimeter = 1259.84m;
+        int _nadhTravelLength = 117;
+        int _nadhMotorCurrent = 1500;
+        int _nadhMaxSpeed = 2286;
+        int _nadhAcceleration = 500;
+        int _nadhMaxInstantaneousSpeedChange = 900;
+        decimal _basalStepsPerMillimeter = 1259.84m;
+        int _basalTravelLength = 117;
+        int _basalMotorCurrent = 1500;
+        int _basalMaxSpeed = 2286;
+        int _basalAcceleration = 500;
+        int _basalMaxInstantaneousSpeedChange = 900;
+        decimal _aspirateStepsPerMillimeter = 1259.84m;
+        int _aspirateTravelLength = 90;
+        int _aspirateMotorCurrent = 500;
+        int _aspirateMaxSpeed = 4000;
+        int _aspirateAcceleration = 500;
+        int _aspirateMaxInstantaneousSpeedChange = 900;
+        decimal _tableXStepsPerMillimeter = 400m;
+        int _tableXTravelLength = 500;
+        int _tableXMotorCurrent = 400;
+        int _tableXAcceleration = 500;
+        int _tableXMaxInstantaneousSpeedChange = 900;
+        decimal _tableYStepsPerMillimeter = 400m;
+        int _tableYTravelLength = 500;
+        int _tableYMotorCurrent = 400;
+        int _tableYAcceleration = 500;
+        int _tableYMaxInstantaneousSpeedChange = 900;
         bool _debug;
         int _dnaAspirationVolume = 50;
         Coordinate _dnaLocation = new(331, 304);
@@ -2005,13 +2849,15 @@ namespace Drivetrain.Robotics.Control
         int _dnaSensorNumber = 0;
         int _dnaSensorReadHigh = 4095;
         int _dnaSensorReadLow = 0;
-        decimal _dnaSyringeLoadingPosition = 22m;
+        decimal _dnaSyringeLoadingPosition = 117m;
         int _dnaTimerPeriod = 360000;
         decimal _dnaTravelPerMicroLiter = 0.00153m;
         int _dnaVolume = 200;
         string _effaniApiUrl = "https://www.effani.com/umbraco/api";
         string _effaniPassword;
         string _effaniUsername;
+        string _wifiSsid = "";
+        string _wifiPassword = "";
         Coordinate _firstWellLocation = new(0, 0);
         int _fluidEmissionDwell = 10000;
         decimal _fluidSyringeSpeed = 5m;
@@ -2022,7 +2868,7 @@ namespace Drivetrain.Robotics.Control
         int _initialNadhFluidPrimingVolume = 100;
         int _kohAspirationVolume = 50;
         Coordinate _kohLocation = new(331, 256);
-        decimal _kohSyringeLoadingPosition = 64m;
+        decimal _kohSyringeLoadingPosition = 117m;
         int _kohTimerPeriod = 480000;
         decimal _kohTravelPerMicroLiter = 0.00897m;
         int _kohVolume = 20;
@@ -2034,7 +2880,7 @@ namespace Drivetrain.Robotics.Control
         int _nadhSensorNumber = 1;
         int _nadhSensorReadHigh = 4095;
         int _nadhSensorReadLow = 0;
-        decimal _nadhSyringeLoadingPosition = 64m;
+        decimal _nadhSyringeLoadingPosition = 117m;
         decimal _nadhTravelPerMicroLiter = 0.00897m;
         int _nadhVolume = 20;
         Coordinate _plateOffset = new(87.48m, 0);

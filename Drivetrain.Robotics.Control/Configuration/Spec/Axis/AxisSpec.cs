@@ -28,6 +28,9 @@ namespace Drivetrain.Robotics.Control
 		public int MaxSpeed { get; set; } = 500;
 
 		public int Acceleration { get; set; } = 500;
+
+		/// <summary>Maximum instantaneous speed change (jerk) in mm/min.</summary>
+		public int MaxInstantaneousSpeedChange { get; set; } = 900;
 		public DriverSpec Driver { get; set; }
 		public Axis Axis { get; set; }
 	}

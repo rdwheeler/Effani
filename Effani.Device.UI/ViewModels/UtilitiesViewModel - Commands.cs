@@ -69,10 +69,26 @@ namespace Effani.Device.UI
 				string messageBoxText = $"Config generated at {fileLocation}";
 				var warnings = _config.GetConnectionWarnings();
 				if (warnings.Count > 0)
-					messageBoxText += $"\n\nWARNING - check the board connections in Electronic Settings:\n- {string.Join("\n- ", warnings)}";
+					messageBoxText += $"\n\nWARNING - check these settings in Electronic Settings:\n- {string.Join("\n- ", warnings)}";
 				string caption = "Generate Config";
 
-				DXMessageBox.Show(messageBoxText, caption);
+				if (!System.IO.File.Exists(fileLocation))
+				{
+					// generation failed: fileLocation holds the error message
+					DXMessageBox.Show(messageBoxText, caption);
+					return;
+				}
+				var openFolder = new UICommand { Id = "open", Caption = "Open Folder", IsDefault = true };
+				var close = new UICommand { Id = "close", Caption = "Close", IsCancel = true };
+				var dialog = new DXDialogWindow(caption, new[] { openFolder, close })
+				{
+					Content = new System.Windows.Controls.TextBlock { Text = messageBoxText, TextWrapping = TextWrapping.Wrap, MaxWidth = 600, Margin = new Thickness(15) },
+					SizeToContent = SizeToContent.WidthAndHeight,
+					WindowStartupLocation = WindowStartupLocation.CenterOwner,
+					Owner = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive) ?? Application.Current.MainWindow
+				};
+				if (dialog.ShowDialogWindow() == openFolder)
+					System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("explorer.exe", $"/select,\"{fileLocation}\"") { UseShellExecute = true });
 			}
 			catch (Exception ex)
 			{
@@ -232,6 +248,26 @@ namespace Effani.Device.UI
 					break;
 			}
 			Mouse.OverrideCursor = Cursors.Arrow;
+		}
+		[Command]
+		public async Task EnableWifi()
+		{
+			_processEngine.QueueCommand(new SetWifiEnabled(true, _device));
+		}
+		[Command]
+		public async Task DisableWifi()
+		{
+			_processEngine.QueueCommand(new SetWifiEnabled(false, _device));
+		}
+		[Command]
+		public async Task SetWifi()
+		{
+			if (string.IsNullOrWhiteSpace(Settings.WifiSsid))
+			{
+				DXMessageBox.Show("Enter a WiFi SSID first.", "Set WiFi");
+				return;
+			}
+			_processEngine.QueueCommand(new SetWifi(Settings.WifiSsid, Settings.WifiPassword, _device));
 		}
 		[Command]
 		public async Task Send()

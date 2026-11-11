@@ -94,7 +94,7 @@ namespace Effani.Device.Control
 		}
 		public void Aspirate(int microLiters)
 		{
-			MoveAbsolute(Axis.Aspirate, (Settings.AspirateActuatorStartPosition + Settings.AspirateDistanceToPlate), Settings.AspiratePositioningSpeed);
+			MoveAbsolute(Axis.Aspirate, (Settings.AspirateActuatorStartPosition - Settings.AspirateDistanceToPlate), Settings.AspiratePositioningSpeed);
 			var distance = CalcAspirateTravelMmForMl(microLiters);
 			DoStirringDescent(Axes[Axis.Aspirate], distance);
 			MoveAbsolute(Axis.Aspirate, Settings.AspirateActuatorStartPosition);
@@ -166,7 +166,7 @@ namespace Effani.Device.Control
 		}
 		private void DoStirringDescent(AxisSpec axis, decimal distance)
 		{
-			MoveRelative(axis, distance, Configuration.Settings.AspirateStirSpeed);
+			MoveRelative(axis, -distance, Configuration.Settings.AspirateStirSpeed); // needle starts at the top of its travel, so descending moves toward lower coordinates
 			Pause(Configuration.Settings.AspirationDwell);
 			//var repetitions = 1;
 			//var descentFactor = distance / (repetitions * 4);

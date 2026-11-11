@@ -149,6 +149,10 @@ namespace Effani.Device.UI
         [Command]
         public async void ResetActiveSettings()
         {
+            if (DevExpress.Xpf.Core.DXMessageBox.Show("Reset all settings to their default values? Any changes to the active settings will be lost.",
+                    "Reset Settings", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK)
+                return;
+
             _settingsService.ResetSettings();
 
             RaisePropertyChanged(nameof(Settings));
