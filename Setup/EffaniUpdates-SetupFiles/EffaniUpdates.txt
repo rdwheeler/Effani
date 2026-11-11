@@ -1,0 +1,13 @@
+;aiu;
+
+[Update]
+Name = Effani
+ProductVersion = 4.0.1.0
+URL = https://www.dropbox.com/scl/fi/57wbeef7g6ihg3zzo1hb5/Effani-Installer-4.0.0.exe?rlkey=1r084yd1uiuxltpzm8hhai7w5&dl=0
+Size = 179655814
+SHA256 = 8BD3A7F9802DA037B989EF923637A2CFD154ABDA6274B73F2250643B50C38FA9
+MD5 = b9c6244e2d6ff93e8328b6935e1f4e3f
+ServerFileName = Effani Installer 4.0.1.exe
+Flags = Critical
+RegistryKey = HKUD\Software\DriveTrain Systems\Effani\Version
+Version = 4.0.1.0
