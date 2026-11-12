@@ -5,11 +5,11 @@ using Drivetrain.Robotics.Process;
 
 namespace Effani.Device.Control
 {
-	public class EmitFluid(Axis axis, int microLiters, AbalDeviceControl device) : Command(device)
+	public class EmitFluid(Axis axis, int microLiters, EffaniDeviceControl device) : Command(device)
 	{
 		protected override void Run()
 		{
-			var device = Device as AbalDeviceControl;
+			var device = Device as EffaniDeviceControl;
 			if (axisSpec is null)
 				throw new ApplicationException($"Unknown axis {axis} in {nameof(EmitFluid)}");
 
@@ -30,7 +30,7 @@ namespace Effani.Device.Control
 		{
 			get
 			{
-				var device = Device as AbalDeviceControl;
+				var device = Device as EffaniDeviceControl;
 				device.Axes.TryGetValue(axis, out var axisSpec);
 				return axisSpec as FluidAxis;
 			}

@@ -12,6 +12,7 @@
 		<UseWindowsForms>False</UseWindowsForms>
 		<ApplicationIcon>Resources\effanicow.ico</ApplicationIcon>
 		<AssemblyName>Effani Device</AssemblyName>
+		<Version>4.0.1</Version> <!-- keep in step with ProductVersion in Setup\Effani Installer.aip -->
 	</PropertyGroup>
 
 	<ItemGroup>

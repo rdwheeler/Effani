@@ -215,6 +215,11 @@
 			<dx:DXTabItem Header="Utilities">
 				<DockPanel LastChildFill="True">
 					<DockPanel DockPanel.Dock="Left">
+						<StackPanel DockPanel.Dock="Bottom" Margin="12,6,6,8">
+							<TextBlock Opacity="0.7" Text="{Binding SoftwareVersion, StringFormat=Software version {0}}" />
+							<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="0,6,0,0" HorizontalAlignment="Left" Command="{Binding CheckForUpdatesCommand}" Content="Check for Updates" />
+							<TextBlock Margin="0,4,0,0" Opacity="0.7" TextWrapping="Wrap" MaxWidth="220" Text="{Binding UpdateStatus}" />
+						</StackPanel>
 						<dxlc:LayoutControl Orientation="Vertical">
 							<dxlc:LayoutGroup Header="Actuators" View="GroupBox" Orientation="Vertical">
 								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding HomeAllCommand}" Content="Home All" />
@@ -229,6 +234,12 @@
 									<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding ChamberUvOffCommand}" Content="Chamber UV Off" />
 									<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding TrayUvOnCommand}" Content="Tray UV On" />
 								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding TrayUvOffCommand}" Content="Tray UV Off" />
+							</dxlc:LayoutGroup>
+							<dxlc:LayoutGroup Header="Debug" View="GroupBox" Orientation="Vertical">
+								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GenerateConfigFilesCommand}" Content="Generate Config" />
+								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="0" Content="Diagnostics 0" />
+								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="1" Content="Diagnostics 1" />
+								<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="2" Content="Diagnostics 2" />
 							</dxlc:LayoutGroup>
 						</dxlc:LayoutControl>
 					</DockPanel>
@@ -253,14 +264,6 @@
 						</DockPanel>
 					</DockPanel>
 				</DockPanel>
-			</dx:DXTabItem>
-            <dx:DXTabItem Header="Debug" Visibility="{DXBinding 'Settings.Debug ? $Visibility.Visible : $Visibility.Collapsed'}" >
-				<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GenerateConfigFilesCommand}" Content="Generate Config" />
-					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="0" Content="Diagnostics 0" />
-					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="1" Content="Diagnostics 1" />
-					<dx:SimpleButton CornerRadius="3" Padding="5,3,5,3" Margin="3" Command="{Binding GetBoardDiagnosticsCommand}" CommandParameter="2" Content="Diagnostics 2" />
-				</StackPanel>
 			</dx:DXTabItem>
 		</dx:DXTabControl>
 	</Grid>

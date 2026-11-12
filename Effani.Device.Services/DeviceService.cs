@@ -13,11 +13,12 @@ namespace Effani.Device.Services
 	{
 		public DeviceService(ISettingsService settingsService)
 		{
-			_device = new AbalDeviceControl(settingsService.Settings);
+			_device = new EffaniDeviceControl(() => settingsService.Settings);
+			_device.Initialize();
 			_processEngine = new ProcessEngine();
 		}
 
-		public AbalDeviceControl GetDevice()
+		public EffaniDeviceControl GetDevice()
 		{
 			return _device;
 		}
@@ -26,13 +27,13 @@ namespace Effani.Device.Services
 			return _processEngine;
 		}
 
-		private AbalDeviceControl _device;
+		private EffaniDeviceControl _device;
 		private ProcessEngine _processEngine;
 	}
 
 	public interface IDeviceService
 	{
 		ProcessEngine GetProcessEngine();
-		AbalDeviceControl GetDevice();
+		EffaniDeviceControl GetDevice();
 	}
 }

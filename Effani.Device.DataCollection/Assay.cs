@@ -14,7 +14,7 @@ namespace Effani.Device.DataCollection
 	public class Assay : IDisposable
 	{
 		#region Constructors
-		public Assay(AbalDeviceControl device, ProcessEngine engine)
+		public Assay(EffaniDeviceControl device, ProcessEngine engine)
 		{
 			Device = device;
 			Engine = engine;
@@ -34,6 +34,11 @@ namespace Effani.Device.DataCollection
 			StandardsTimer.Dispose();
 			foreach (var well in TestWells)
 				well.Dispose();
+		}
+		/// <summary>Stops the assay: timers and tests in progress are stopped. Used when the user cancels the assay.</summary>
+		public void Cancel()
+		{
+			Terminate("Assay canceled");
 		}
 		private void RunSterilization()
 		{
@@ -456,7 +461,7 @@ namespace Effani.Device.DataCollection
 		public Settings Settings => Device.Configuration.Settings;
 		public DateTime CollectedOn { get; set; }
 		[JsonIgnore]
-		public AbalDeviceControl Device { get; private set; }
+		public EffaniDeviceControl Device { get; private set; }
 		[JsonIgnore]
 		public List<TestWell> DnaStandardsWells { get; private set; }
 		[JsonIgnore]

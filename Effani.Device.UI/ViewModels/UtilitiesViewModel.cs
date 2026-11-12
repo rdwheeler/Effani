@@ -22,7 +22,7 @@ namespace Effani.Device.UI
 	public partial class UtilitiesViewModel : ViewModelBase, IDisposable
 	{
 		#region Constructors
-		public UtilitiesViewModel(ISettingsService settingsService, ProcessEngine processEngine, AbalDeviceControl device, ObservableCollection<string> consoleMessages)
+		public UtilitiesViewModel(ISettingsService settingsService, ProcessEngine processEngine, EffaniDeviceControl device, ObservableCollection<string> consoleMessages)
 		{
 			ConsoleMessages = consoleMessages;
 			_device = device;
@@ -42,6 +42,20 @@ namespace Effani.Device.UI
 
 		#region Properties
 		public ObservableCollection<string> ConsoleMessages { get; init; }
+		/// <summary>The version of the running software (major.minor.build).</summary>
+		public string SoftwareVersion { get; } = typeof(UtilitiesViewModel).Assembly.GetName().Version?.ToString(3) ?? "unknown";
+		/// <summary>The outcome of the last check for a new software version, or the progress of a check under way.</summary>
+		public string UpdateStatus
+		{
+			get => _updateStatus;
+			private set
+			{
+				_updateStatus = value;
+				RaisePropertyChanged(nameof(UpdateStatus));
+			}
+		}
+		/// <summary>True when an assay is running; settings the device control uses are locked while it is.</summary>
+		public bool IsAssayRunning { get; init; }
 		public Well CurrentWell
 		{
 			get
@@ -174,10 +188,13 @@ namespace Effani.Device.UI
 		#region Fields
 		DeviceConfiguration _config => _device.Configuration;
 		Well _currentWell;
-		readonly AbalDeviceControl _device;
+		readonly EffaniDeviceControl _device;
 		int _emitFluidVolume;
 		readonly ProcessEngine _processEngine;
 		string _sendCommandText;
+		string _updateStatus = "";
+		bool _checkingForUpdates;
+		readonly UpdateChecker _updateChecker = new();
 		readonly ISettingsService _settingsService;
 		#endregion
 	}

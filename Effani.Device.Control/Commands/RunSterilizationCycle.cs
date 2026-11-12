@@ -4,12 +4,12 @@ using Drivetrain.Robotics.Process;
 
 namespace Effani.Device.Control
 {
-	public class RunSterilizationCycle(AbalDeviceControl device, int dwell) : Command(device)
+	public class RunSterilizationCycle(EffaniDeviceControl device, int dwell) : Command(device)
 	{
 
 		protected override void Run()
 		{
-			var device = (AbalDeviceControl)Device;
+			var device = (EffaniDeviceControl)Device;
 			device.AccOn(0);
 			Thread.Sleep(dwell * 1000);
 			device.AccOff(0);

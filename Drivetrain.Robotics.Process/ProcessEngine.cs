@@ -33,11 +33,24 @@ namespace Drivetrain.Robotics.Process
 		}
 		public void QueueJob(Job job)
 		{
+			Interlocked.Increment(ref _unfinishedJobs);
 			JobQueue.Enqueue(job);
 		}
 		public void QueuePriorityJob(Job job)
 		{
+			Interlocked.Increment(ref _unfinishedJobs);
 			PriorityJobQueue.Enqueue(job);
+		}
+		/// <summary>Discards every queued job and stops the job that is currently running after the command it is executing.</summary>
+		public void ClearPendingJobs()
+		{
+			HoldQueueForHighPriorityJob = false;
+			while (JobQueue.TryDequeue(out _))
+				Interlocked.Decrement(ref _unfinishedJobs);
+			while (PriorityJobQueue.TryDequeue(out _))
+				Interlocked.Decrement(ref _unfinishedJobs);
+			if (_executingJob)
+				_abortCurrentJob = true;
 		}
 		public void TerminateProcess()
 		{
@@ -48,18 +61,42 @@ namespace Drivetrain.Robotics.Process
 		#region Private methods
 		private void DoJob(Job job)
 		{
+			try
+			{
+				RunJob(job);
+			}
+			finally
+			{
+				// only now is the job no longer pending: this covers the moment between taking it off its queue and starting it
+				Interlocked.Decrement(ref _unfinishedJobs);
+			}
+		}
+		private void RunJob(Job job)
+		{
 			if (job.Description is not null)
 				EnqueueMessage($"Begin {job.Description}");
 
-			foreach (var command in job.Commands)
+			_executingJob = true;
+			try
 			{
-				var descriptionPrefix = job.Description is null ? String.Empty : "     ";
-				EnqueueMessage($"{descriptionPrefix}{command.Description}");
-				BeginExecutingCommand?.Invoke(this, new DataArgs<Command>(command));
-				command.Execute();
-				EndExecutingCommand?.Invoke(this, new DataArgs<Command>(command));
-				if (command is ReadSensor)
-					EnqueueMessage($"{descriptionPrefix}Result of {command.Description}: {command.Result}");
+				foreach (var command in job.Commands)
+				{
+					if (_abortCurrentJob)
+						break;
+
+					var descriptionPrefix = job.Description is null ? String.Empty : "     ";
+					EnqueueMessage($"{descriptionPrefix}{command.Description}");
+					BeginExecutingCommand?.Invoke(this, new DataArgs<Command>(command));
+					command.Execute();
+					EndExecutingCommand?.Invoke(this, new DataArgs<Command>(command));
+					if (command is ReadSensor)
+						EnqueueMessage($"{descriptionPrefix}Result of {command.Description}: {command.Result}");
+				}
+			}
+			finally
+			{
+				_executingJob = false;
+				_abortCurrentJob = false;
 			}
 
 			if (job.Description is not null)
@@ -108,6 +145,11 @@ namespace Drivetrain.Robotics.Process
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// True while any job is queued (including jobs held back by <see cref="HoldQueueForHighPriorityJob"/>) or executing.
+		/// Anything that rebuilds the device configuration should wait until this is false.
+		/// </summary>
+		public bool IsBusy => Volatile.Read(ref _unfinishedJobs) > 0;
 		public ConcurrentQueue<string> Data { get; } = new();
 		public bool HoldQueueForHighPriorityJob { get; set; }
 		public ConcurrentQueue<Job> JobQueue { get; } = new();
@@ -126,6 +168,9 @@ namespace Drivetrain.Robotics.Process
 		Thread? _processThread;
 		Thread? _publishThread;
 		private bool _stopEngine;
+		private int _unfinishedJobs;
+		private volatile bool _executingJob;
+		private volatile bool _abortCurrentJob;
 		#endregion
 	}
 }

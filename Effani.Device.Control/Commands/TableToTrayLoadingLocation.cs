@@ -6,11 +6,11 @@ using Drivetrain.Robotics.Process;
 
 namespace Effani.Device.Control
 {
-	public class TableToTrayLoadingLocation(AbalDeviceControl device) : Command(device)
+	public class TableToTrayLoadingLocation(EffaniDeviceControl device) : Command(device)
 	{
 		protected override void Run()
 		{
-			(Device as AbalDeviceControl).TableGoTo(Device.Configuration.Settings.TrayLoadingLocation);
+			(Device as EffaniDeviceControl).TableGoTo(Device.Configuration.Settings.TrayLoadingLocation);
 		}
 
 		public override string Description => $"Move table to tray loading location.";

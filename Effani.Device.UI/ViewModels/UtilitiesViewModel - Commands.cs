@@ -57,6 +57,21 @@ namespace Effani.Device.UI
 			else if (parameter is SensorSpec sensorSpec)
 				_processEngine.QueueCommand(new AlignWellToLocation(sensorSpec.Location, well, _device));
 		}
+		/// <summary>Reports the outcome of sending the generated files to the controller board; runs on the process engine thread.</summary>
+		private void SendConfigFilesComplete(string? error)
+		{
+			Application.Current.Dispatcher.BeginInvoke(() =>
+			{
+				var now = DateTime.Now.ToString("H:mm:ss");
+				if (error is null)
+				{
+					ConsoleMessages.Insert(0, $"{now} Generated config files sent to the controller board; the board was rebooted.");
+					return;
+				}
+				ConsoleMessages.Insert(0, $"{now} Sending the generated config files to the controller board failed: {error}");
+				DXMessageBox.Show($"The config files were generated but could not be sent to the controller board (it was not rebooted).\n\n{error}", "Send Config Files");
+			});
+		}
 		[Command]
 		public async Task GenerateConfigFiles()
 		{
@@ -65,7 +80,7 @@ namespace Effani.Device.UI
 				// The active settings object is replaced when a settings version is activated or reset, so point the configuration at the current one.
 				_config.Settings = _settingsService.Settings;
 				var fileLocation = _config
-					.GenerateConfigFiles(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+					.GenerateConfigFiles(SettingsService.DataFolder);
 				string messageBoxText = $"Config generated at {fileLocation}";
 				var warnings = _config.GetConnectionWarnings();
 				if (warnings.Count > 0)
@@ -78,7 +93,14 @@ namespace Effani.Device.UI
 					DXMessageBox.Show(messageBoxText, caption);
 					return;
 				}
-				var openFolder = new UICommand { Id = "open", Caption = "Open Folder", IsDefault = true };
+				if (IsAssayRunning)
+						messageBoxText += "\n\nThe generated files were NOT sent to the controller board because an assay is running.";
+					else
+					{
+						_processEngine.QueueCommand(new SendConfigFiles(_config.GeneratedFiles, SendConfigFilesComplete, _device));
+						messageBoxText += "\n\nSending the generated files to the controller board, which will then be rebooted. The result will appear in the console messages.";
+					}
+					var openFolder = new UICommand { Id = "open", Caption = "Open Folder", IsDefault = true };
 				var close = new UICommand { Id = "close", Caption = "Close", IsCancel = true };
 				var dialog = new DXDialogWindow(caption, new[] { openFolder, close })
 				{
@@ -268,6 +290,39 @@ namespace Effani.Device.UI
 				return;
 			}
 			_processEngine.QueueCommand(new SetWifi(Settings.WifiSsid, Settings.WifiPassword, _device));
+		}
+		[Command]
+		public async Task CheckForUpdates()
+		{
+			if (_checkingForUpdates)
+				return;
+			_checkingForUpdates = true;
+			try
+			{
+				UpdateStatus = "Checking for updates...";
+				var current = typeof(UtilitiesViewModel).Assembly.GetName().Version ?? new Version(0, 0);
+				var result = await _updateChecker.CheckAsync(current);
+				UpdateStatus = result.Message;
+				if (!result.IsUpdateAvailable)
+					return;
+
+				if (IsAssayRunning)
+				{
+					UpdateStatus += " Install it once the assay has finished.";
+					return;
+				}
+				var prompt = $"{result.Message}\n\nThe updater will close this program to install it. Run the updater now?";
+				if (DXMessageBox.Show(prompt, "Software Update", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+					UpdateChecker.StartUpdater();
+			}
+			catch (Exception ex)
+			{
+				UpdateStatus = $"Could not start the updater: {ex.Message}";
+			}
+			finally
+			{
+				_checkingForUpdates = false;
+			}
 		}
 		[Command]
 		public async Task Send()

@@ -34,6 +34,22 @@ namespace Effani.Device.UI
 		private void Wizard_Loaded(object sender, RoutedEventArgs e)
 		{
 			ViewModel.AdvanceWizardPage += ViewModel_AdvanceWizardPage;
+			ViewModel.ResetWizardPage -= ViewModel_ResetWizardPage;
+			ViewModel.ResetWizardPage += ViewModel_ResetWizardPage;
+			ViewModel.GoToCleanUpPage -= ViewModel_GoToCleanUpPage;
+			ViewModel.GoToCleanUpPage += ViewModel_GoToCleanUpPage;
+		}
+		private void ViewModel_GoToCleanUpPage(object sender, EventArgs e)
+		{
+			ViewModel.PageStartCleanUp();
+			wizard.SelectedItem = CleanUpPage;
+		}
+		private void ViewModel_ResetWizardPage(object sender, EventArgs e)
+		{
+			// the first page's editors only push their values to the view model, so clear them here
+			HerdIdTextEdit.EditValue = null;
+			NumberOfSamplesEdit.EditValue = null;
+			wizard.SelectedIndex = 0;
 		}
 		private void ViewModel_AdvanceWizardPage(object sender, EventArgs e)
 		{

@@ -4,11 +4,11 @@ using Drivetrain.Robotics.Process;
 
 namespace Effani.Device.Control
 {
-	public class MoveToStartingLocation(Axis axisSpec, AbalDeviceControl device) : Command(device)
+	public class MoveToStartingLocation(Axis axisSpec, EffaniDeviceControl device) : Command(device)
 	{
 		protected override void Run()
 		{
-			var device = Device as AbalDeviceControl;
+			var device = Device as EffaniDeviceControl;
 
 			if (_axisSpec == null)
 				throw new ApplicationException($"Unknown axis {_axis} in {nameof(MoveToStartingLocation)}");
@@ -21,7 +21,7 @@ namespace Effani.Device.Control
 		{
 			get
 			{
-				var device = Device as AbalDeviceControl;
+				var device = Device as EffaniDeviceControl;
 				device.Axes.TryGetValue(_axis, out var axisSpec);
 				return axisSpec;
 			}

@@ -6,18 +6,37 @@ using System.Linq;
 
 namespace Effani.Device.Control
 {
-	public class AbalDeviceControl : DeviceControl
+	public class EffaniDeviceControl : DeviceControl
 	{
-		public AbalDeviceControl(Settings settings)
-			: base (settings)
+		public EffaniDeviceControl(Func<Settings> settingsProvider)
+			: base (settingsProvider)
 		{
-			Axes = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => v);
-            PrimingStopwatches = Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => new Stopwatch());
         }
+		/// <summary>
+		/// Picks up the current settings: the configuration, axis specifications and priming timers are rebuilt from them the next
+		/// time they are needed, and the serial port is chosen again. Call only while no assay is running.
+		/// </summary>
+		public void RefreshSettings()
+		{
+			ResetConfiguration();
+			SelectPort(Settings);
+		}
+		protected override void OnConfigurationReset()
+		{
+			lock (_derivedLock)
+			{
+				_axes = null;
+				_primingStopwatches = null;
+			}
+		}
         public override void Dispose()
         {
-            foreach(var t in PrimingStopwatches.Values)
-                t.Reset();
+            lock (_derivedLock)
+            {
+                if (_primingStopwatches != null)
+                    foreach (var t in _primingStopwatches.Values)
+                        t.Reset();
+            }
             base.Dispose();
         }
 		public void MoveAbsolute(Axis axis, decimal location, decimal? speed = null)
@@ -207,8 +226,27 @@ namespace Effani.Device.Control
 			//MoveRelativeCounterClockwiseArc(backMultiAxis, Configuration.AspirateStirSpeed);
 		}
 
-		public Dictionary<Axis, AxisSpec> Axes { get; private set; }
-        public Dictionary<Axis, Stopwatch> PrimingStopwatches { get; private set; }
+		/// <summary>The axis specifications of the current configuration (built on first use).</summary>
+		public Dictionary<Axis, AxisSpec> Axes
+		{
+			get
+			{
+				lock (_derivedLock)
+					return _axes ??= Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => v);
+			}
+		}
+		/// <summary>One stopwatch per axis, timing since the axis was last primed; restarted whenever the configuration is rebuilt.</summary>
+        public Dictionary<Axis, Stopwatch> PrimingStopwatches
+		{
+			get
+			{
+				lock (_derivedLock)
+					return _primingStopwatches ??= Configuration.DeviceSpecification.Axes.ToDictionary(k => k.Axis, v => new Stopwatch());
+			}
+		}
+		private readonly object _derivedLock = new();
+		private Dictionary<Axis, AxisSpec>? _axes;
+		private Dictionary<Axis, Stopwatch>? _primingStopwatches;
         public List<AxisSpec> FluidAxes => Axes.Values.Where(x => x is FluidAxis).ToList();
 		public List<AxisSpec> ZAxes => Axes.Values.Where(x => x is BiopsyZAxis).ToList();
 	}

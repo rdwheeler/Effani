@@ -112,6 +112,35 @@ namespace Effani.Device.UI
 			AssayComplete = true;
 			AdvanceWizardPage?.Invoke(this, new EventArgs());
 		}
+		/// <summary>Clears everything left over from the previous assay so the wizard can start over from its first page.</summary>
+		public void ResetForNewAssay()
+		{
+			_processEngine.HoldQueueForHighPriorityJob = false;
+			foreach (var list in new[] { SamplesComplete, SamplesInDna, SamplesInKoh, SamplesInNadh, SamplesInBasal })
+			{
+				foreach (var t in list)
+					t.Dispose();
+				list.Clear();
+			}
+			SampleLoadingCollection.Clear();
+			CurrentLoadingSample = null;
+			PreparedToLoadSample = false;
+			PreparingToLoadSample = false;
+			StandardsComplete = false;
+			MoveStartingPositionsComplete = false;
+			FluidLoadingComplete = false;
+			AllSamplesLoadedAndProcessing = false;
+			AssayComplete = false;
+			AssayTerminated = false;
+			AssayFullName = null;
+			TimerStatusTitle = null;
+			TimerStatusMessage = null;
+			HerdId = null;
+			NumberOfSamples = 0;
+			UnloadedTestsCount = 0;
+			ProcessMessages.Clear();
+			UpdateProcessingProgress();
+		}
 		public bool ConfirmClosing()
 		{
 			string messageBoxText = $"Are you sure you want to cancel this assay and close the program?";
@@ -121,6 +150,9 @@ namespace Effani.Device.UI
 		}
 		public void PageStartLoadFluidSystem()
         {
+            // settings may have been changed (or replaced by activating or resetting a settings version) since the app started or the last
+            // assay: pick them up, and choose the controller's serial port, as the assay starts
+            _device.RefreshSettings();
             Assay = new DataCollection.Assay(_device, _processEngine);
             Assay.Initialize(NumberOfSamples, HerdId);
 			Assay.StatusMessages.CollectionChanged += StatusMessages_CollectionChanged;
@@ -695,6 +727,8 @@ namespace Effani.Device.UI
 		#endregion
 
 		public EventHandler AdvanceWizardPage;
+		public EventHandler ResetWizardPage;
+		public EventHandler GoToCleanUpPage;
 
         #region Fields
         System.Windows.Threading.DispatcherTimer _progressTimer;
@@ -707,7 +741,7 @@ namespace Effani.Device.UI
         bool _assayComplete;
 		bool _assayTerminated;
 		TestWell _currentLoadingSample;
-		AbalDeviceControl _device;
+		EffaniDeviceControl _device;
 		DeviceConfiguration _config => _device.Configuration;
 
 		bool _preparationComplete;

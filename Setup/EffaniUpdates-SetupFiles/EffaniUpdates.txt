@@ -2,12 +2,13 @@
 
 [Update]
 Name = Effani
-ProductVersion = 4.0.1.0
-URL = https://www.dropbox.com/scl/fi/57wbeef7g6ihg3zzo1hb5/Effani-Installer-4.0.0.exe?rlkey=1r084yd1uiuxltpzm8hhai7w5&dl=0
-Size = 179655814
-SHA256 = 8BD3A7F9802DA037B989EF923637A2CFD154ABDA6274B73F2250643B50C38FA9
-MD5 = b9c6244e2d6ff93e8328b6935e1f4e3f
-ServerFileName = Effani Installer 4.0.1.exe
+ProductVersion = 4.0.0.0
+URL = https://www.dropbox.com/scl/fi/ryq1emteueqti0befrna4/Effani-Installer-4.0.0.exe?rlkey=hxmmb6sue1x9h06krvqsw1wuo&dl=0
+Size = 179147474
+SHA256 = 9205B1C9F146CFB1695467B7A2B03F7B92EA3CBC3DD5B07CB218203010BE6951
+MD5 = 08d25a0e41e701095de714fd2e491690
+ServerFileName = Effani Installer 4.0.0.exe
 Flags = Critical
-RegistryKey = HKUD\Software\DriveTrain Systems\Effani\Version
-Version = 4.0.1.0
+RegistryKey = WOW6432Node\DriveTrain Systems\Effani\Version
+Version = 4.0.0.0
+AutoCloseApplication = [APPDIR]Effani Device.exe

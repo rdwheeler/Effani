@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.IO.Ports;
 using System.Linq;
-using System.Management;
 using System.Text;
 
 namespace Drivetrain.Robotics.Control
@@ -10,39 +9,43 @@ namespace Drivetrain.Robotics.Control
 	public class DeviceControl : IDisposable
 	{
 		#region Constructors
-		public DeviceControl(Settings settings)
+		/// <param name="settingsProvider">
+		/// Returns the settings currently in effect. It is called whenever the <see cref="Configuration"/> has to be (re)built, so
+		/// settings that were changed, activated or reset in the meantime are picked up (see <see cref="ResetConfiguration"/>).
+		/// </param>
+		public DeviceControl(Func<Settings> settingsProvider)
 		{
-			Configuration = new DeviceConfiguration(settings);
-			_serialPort = new SerialPort();
-			_serialPort.BaudRate = 9600; // SetPortBaudRate(_serialPort.BaudRate);
-			_serialPort.Parity = Parity.None; // SetPortParity(_serialPort.Parity);
-			_serialPort.DataBits = 8; // SetPortDataBits(_serialPort.DataBits);
-			_serialPort.StopBits = StopBits.One; // SetPortStopBits(_serialPort.StopBits);
-			_serialPort.Handshake = Handshake.None; // SetPortHandshake(_serialPort.Handshake);
-			_serialPort.ReadTimeout = 500;
-			_serialPort.WriteTimeout = 500;
-			using (var searcher = new ManagementObjectSearcher("SELECT * FROM WIN32_SerialPort"))
-			{
-				string[] portnames = SerialPort.GetPortNames();
-				var ports = searcher.Get().Cast<ManagementBaseObject>().ToList();
-				foreach (var port in ports)
-				{
-					if (port["Caption"].ToString().Contains("duet", StringComparison.OrdinalIgnoreCase))
-					{
-						_serialPort.PortName = port["DeviceID"].ToString();
-						break;
-					}
-				}
-				if (String.IsNullOrEmpty(_serialPort.PortName))
-					_serialPort.PortName = $"COM{settings.ComPortNumber}";
-			}
-
-			_publishThread = new Thread(InitializeReadData);
-			_publishThread.Start();
+			_settingsProvider = settingsProvider;
 		}
 		#endregion
 
 		#region Public methods
+		/// <summary>
+		/// Creates the serial port object and starts the thread that publishes data read from it. Safe to call more than once;
+		/// it is also called by the first operation that needs the port, so calling it explicitly is only needed to start
+		/// publishing <see cref="DataReceived"/> early. Does not open the port.
+		/// </summary>
+		public void Initialize()
+		{
+			lock (_initializeLock)
+			{
+				if (_initialized)
+					return;
+
+				var port = new SerialPort();
+				port.BaudRate = 9600; // SetPortBaudRate(port.BaudRate);
+				port.Parity = Parity.None; // SetPortParity(port.Parity);
+				port.DataBits = 8; // SetPortDataBits(port.DataBits);
+				port.StopBits = StopBits.One; // SetPortStopBits(port.StopBits);
+				port.Handshake = Handshake.None; // SetPortHandshake(port.Handshake);
+				port.ReadTimeout = 500;
+				port.WriteTimeout = 500;
+				_serialPort = port;
+				_publishThread = new Thread(InitializeReadData);
+				_publishThread.Start();
+				_initialized = true;
+			}
+		}
 		public void AccOff(int accDesignation)
 		{
 			WriteWhenReady($"M42 P{accDesignation} S0");
@@ -58,8 +61,24 @@ namespace Drivetrain.Robotics.Control
 		public virtual void Dispose()
 		{
 			_disposing = true;
-			_serialPort.Close();
+			if (_initialized)
+				_serialPort.Close();
 		}
+		/// <summary>
+		/// Discards the device configuration so that it is rebuilt from the current settings the next time it is needed.
+		/// Call this only while nothing is running (no assay, empty process queue): anything holding axis specifications
+		/// from the old configuration keeps using the old values.
+		/// </summary>
+		public void ResetConfiguration()
+		{
+			lock (_configurationLock)
+			{
+				_configuration = null;
+				OnConfigurationReset();
+			}
+		}
+		/// <summary>Called, with the configuration lock held, when the configuration is discarded; derived classes drop what they built from it.</summary>
+		protected virtual void OnConfigurationReset() { }
 		public void GetBoardDiagnostics(int boardId)
 		{
 			WriteWhenReady($"M122 B{boardId}");
@@ -164,6 +183,81 @@ namespace Drivetrain.Robotics.Control
 			var last = first.Split(",")[0];
 			return last;
 		}
+		/// <summary>
+		/// Uploads a local text file to the controller board over the serial connection (M28/M29). The file is written to a temporary
+		/// name and only renamed over <paramref name="remotePath"/> once it has been received completely, so a failed upload never
+		/// leaves a partial file in its place. Returns null on success, otherwise an error message.
+		/// </summary>
+		public string? SendFile(string localPath, string remotePath)
+		{
+			var tempPath = remotePath + ".tmp";
+			var started = false;
+			try
+			{
+				var lines = File.ReadAllLines(localPath).Where(l => !String.IsNullOrWhiteSpace(l)).ToList();
+				OpenPortIfNeeded();
+
+				while (_fileAck.Wait(0)) { }
+				_countFileAcks = true;
+				SendFileLine($"M28 \"{tempPath}\"");
+				started = true;
+				foreach (var line in lines)
+					SendFileLine(line);
+				SendFileLine("M29");
+				started = false;
+				SendFileLine($"M471 S\"{tempPath}\" T\"{remotePath}\" D1");
+				return null;
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex, $"Error sending {localPath} to {remotePath}");
+				if (started)
+				{
+					try { _serialPort.WriteLine("M29"); } catch { }
+				}
+				return $"Error: {ex.Message}";
+			}
+			finally
+			{
+				_countFileAcks = false;
+			}
+		}
+		/// <summary>
+		/// Reboots the controller board (M999). The board does not reply and its USB connection drops, so the serial port is
+		/// closed afterwards and the next command reopens it. Returns null on success, otherwise an error message.
+		/// </summary>
+		public string? Reboot()
+		{
+			try
+			{
+				OpenPortIfNeeded();
+				_serialPort.WriteLine("M999");
+				Thread.Sleep(500);
+				_serialPort.Close();
+				return null;
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex, "Error rebooting the controller board");
+				return $"Error: {ex.Message}";
+			}
+		}
+		/// <summary>
+		/// Chooses the serial port to talk to: the port named by <see cref="Settings.ComPortNumber"/>.
+		/// If the choice changes, an open port is closed so the next command opens the new one.
+		/// </summary>
+		public void SelectPort(Settings settings)
+		{
+			Initialize();
+			var name = $"COM{settings.ComPortNumber}";
+
+			_portSelected = true;
+			if (_serialPort.PortName == name)
+				return;
+			if (_serialPort.IsOpen)
+				_serialPort.Close();
+			_serialPort.PortName = name;
+		}
 		public void SetTrayTemperature(decimal temperature)
 		{
 			WriteWhenReady($"M140 S{temperature}");
@@ -235,7 +329,9 @@ namespace Drivetrain.Robotics.Control
 			{
 				if(!String.IsNullOrEmpty(message))
 				{
-					if(message == STR_ready)
+					if (_countFileAcks && message.Trim() == "ok")
+						_fileAck.Release();
+					else if(message == STR_ready)
 						_readyFound = true;
 					else if(_saveResponses && message != "ok")
 						_responses.Enqueue(message);
@@ -243,6 +339,21 @@ namespace Drivetrain.Robotics.Control
 						ReadData.Enqueue(message);
 				}
 			}
+		}
+		private void OpenPortIfNeeded()
+		{
+			Initialize();
+			if (_serialPort.IsOpen)
+				return;
+			if (!_portSelected)
+				SelectPort(Settings);
+			_serialPort.Open();
+		}
+		private void SendFileLine(string line)
+		{
+			_serialPort.WriteLine(line);
+			if (!_fileAck.Wait(5000))
+				throw new TimeoutException($"The controller board did not acknowledge: {line}");
 		}
 		private void WaitForReady()
 		{
@@ -256,8 +367,7 @@ namespace Drivetrain.Robotics.Control
 		}
 		private void WriteNow(string data, string responseKey = null)
 		{
-			if (!_serialPort.IsOpen)
-				_serialPort.Open();
+			OpenPortIfNeeded();
 
 			_serialPort.WriteLine($"{data}");
 		}
@@ -265,8 +375,7 @@ namespace Drivetrain.Robotics.Control
 		{
 			try
 			{
-				if (!_serialPort.IsOpen)
-					_serialPort.Open();
+				OpenPortIfNeeded();
 
 				if (responseKey == null)
 				{
@@ -292,9 +401,25 @@ namespace Drivetrain.Robotics.Control
 		#endregion
 
 		#region Properties
-		public DeviceConfiguration? Configuration { get; private set; }
+		/// <summary>The device configuration, created from the current settings the first time it is needed (and again after <see cref="ResetConfiguration"/>).</summary>
+		public DeviceConfiguration Configuration
+		{
+			get
+			{
+				lock (_configurationLock)
+					return _configuration ??= new DeviceConfiguration(_settingsProvider());
+			}
+		}
 
-		public Settings? Settings => Configuration.Settings;
+		/// <summary>The settings the configuration was built from; the current settings if no configuration has been built yet.</summary>
+		public Settings Settings
+		{
+			get
+			{
+				lock (_configurationLock)
+					return _configuration?.Settings ?? _settingsProvider();
+			}
+		}
 		public ConcurrentQueue<string> ReadData { get; set; } = new();
 		#endregion
 
@@ -303,11 +428,19 @@ namespace Drivetrain.Robotics.Control
 		#endregion
 
 		#region Fields
-		Thread _publishThread;
+		readonly Func<Settings> _settingsProvider;
+		readonly object _configurationLock = new();
+		DeviceConfiguration? _configuration;
+		readonly object _initializeLock = new();
+		bool _initialized;
+		Thread? _publishThread;
 		ConcurrentQueue<string> _responses = new();
-		SerialPort _serialPort;
+		SerialPort _serialPort = null!; // created by Initialize()
 		bool _saveResponses;
 		bool _disposing;
+		bool _portSelected;
+		readonly SemaphoreSlim _fileAck = new(0);
+		volatile bool _countFileAcks;
 
 		private const string STR_sensorKey = "Sensor";
 		private const string STR_ready = "ready";

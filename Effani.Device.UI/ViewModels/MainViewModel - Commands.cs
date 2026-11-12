@@ -45,6 +45,42 @@ namespace Effani.Device.UI
 			PrepareNextSampleForLoading();
 		}
 		[Command]
+		public void CancelAssayToCleanUp()
+		{
+			if (DXMessageBox.Show("Cancel this assay and go to clean up? Samples that are not finished will be abandoned.", "Cancel Assay",
+					MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+				return;
+
+			_processEngine.ClearPendingJobs();
+			if (Assay != null)
+			{
+				var finished = SamplesComplete.Select(s => s.TestWell).ToHashSet();
+				foreach (var test in Assay.AllTestWells.Where(t => !finished.Contains(t)))
+					test.Canceled = true;
+				Assay.Cancel();
+			}
+			SamplesInBasal.Clear();
+			SamplesInNadh.Clear();
+			SamplesInKoh.Clear();
+			SamplesInDna.Clear();
+			PreparedToLoadSample = false;
+			PreparingToLoadSample = false;
+			CurrentLoadingSample = null;
+			NumberOfSamples = SamplesComplete.Count();
+			UnloadedTestsCount = 0;
+			TimerStatusTitle = null;
+			TimerStatusMessage = null;
+			AddMessage("Assay canceled", true);
+			AssayComplete = true;
+			GoToCleanUpPage?.Invoke(this, new EventArgs());
+		}
+		[Command]
+		public void StartNewAssay()
+		{
+			ResetForNewAssay();
+			ResetWizardPage?.Invoke(this, new EventArgs());
+		}
+		[Command]
 		public void NextPage()
 		{
 			AdvanceWizardPage?.Invoke(this, new EventArgs());
@@ -64,7 +100,7 @@ namespace Effani.Device.UI
 		[Command]
 		public void ShowSettings()
 		{
-			var settingsWindow = new UtilitiesView(_settingsService, _processEngine, _device, ConsoleMessages) { Title = "Settings" };
+			var settingsWindow = new UtilitiesView(_settingsService, _processEngine, _device, ConsoleMessages, Assay != null) { Title = "Settings" };
 			settingsWindow.ShowDialog();
 		}
 		[Command]

@@ -5,11 +5,11 @@ using Drivetrain.Robotics.Process;
 
 namespace Effani.Device.Control
 {
-	public class Aspirate(int microLiters, AbalDeviceControl device) : Command(device)
+	public class Aspirate(int microLiters, EffaniDeviceControl device) : Command(device)
 	{
 		protected override void Run()
 		{
-			(Device as AbalDeviceControl).Aspirate(MicroLiters);
+			(Device as EffaniDeviceControl).Aspirate(MicroLiters);
 		}
 
 		public override string Description => $"Aspirate {MicroLiters}μl of KOH.";

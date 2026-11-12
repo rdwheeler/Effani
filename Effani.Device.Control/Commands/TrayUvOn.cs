@@ -3,11 +3,11 @@ using Drivetrain.Robotics.Process;
 
 namespace Effani.Device.Control
 {
-	public class TrayUvOn(AbalDeviceControl device) : Command(device)
+	public class TrayUvOn(EffaniDeviceControl device) : Command(device)
 	{
 		protected override void Run()
 		{
-			var device = (AbalDeviceControl)Device;
+			var device = (EffaniDeviceControl)Device;
 			device.AccOn(0);
 		}
 

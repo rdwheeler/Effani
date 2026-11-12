@@ -68,9 +68,9 @@
                             <StackPanel>
                                 <TextBlock TextWrapping="WrapWithOverflow" FontSize="40" FontWeight="Black" Text="Effani Assay"/>
                                 <TextBlock TextWrapping="WrapWithOverflow" Text="Herd ID" Margin="0,15,0,0"/>
-                                <dxe:TextEdit NullText="Enter the identifier of the herd being tested." Text="{Binding HerdId, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" IsVisibleChanged="GetFocus"/>
+                                <dxe:TextEdit x:Name="HerdIdTextEdit" NullText="Enter the identifier of the herd being tested." Text="{Binding HerdId, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" IsVisibleChanged="GetFocus"/>
                                 <TextBlock TextWrapping="WrapWithOverflow" Text="Number of animals to be tested" Margin="0,15,0,0"/>
-                                <dxe:SpinEdit Width="80" EditValue="{Binding NumberOfSamples, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="0"
+                                <dxe:SpinEdit x:Name="NumberOfSamplesEdit" Width="80" EditValue="{Binding NumberOfSamples, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Text="0"
 								EditValueType="{x:Type sys:Int32}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" IsFloatValue="False" Mask="d0" MinValue="1" MaxValue="360" AllowSpinOnMouseWheel="True" />
                                 <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding NextPageCommand}" IsEnabled="{Binding HerdIdAndNumberOfTestsComplete}">
                                     <dx:SimpleButton.Content>
@@ -86,6 +86,7 @@
                 </dxco:WelcomeWizardPage>
                 <dxco:WizardPage ShowFinish="False" ShowBack="False" ShowNext="False" ShowCancel="False" x:Name="LoadFluidSystemPage">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <StackPanel>
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
                             <StackPanel MaxWidth="800" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{DXBinding 'FluidLoadingComplete ? $Visibility.Collapsed : $Visibility.Visible'}">
                                 <TextBlock TextWrapping="WrapWithOverflow" MaxWidth="500" HorizontalAlignment="Left" FontSize="40" FontWeight="Black" Text="Load Fluid System"/>
@@ -113,6 +114,10 @@
                                 </dx:SimpleButton>
                             </StackPanel>
                         </StackPanel>
+                        <dx:SimpleButton Margin="0,40,0,0" HorizontalAlignment="Center" Padding="20,10" FontSize="15" Content="Cancel Assay"
+                                         ToolTip="Cancel this assay and skip to clean up." Command="{Binding CancelAssayToCleanUpCommand}"
+                                         Visibility="{DXBinding 'AssayComplete ? $Visibility.Collapsed : $Visibility.Visible'}"/>
+                      </StackPanel>
                     </Border>
                 </dxco:WizardPage>
                 <dxco:WizardPage SideContentTemplate="{StaticResource sideContentTemplate}" ShowFinish="False" ShowNext="False" ShowBack="False" ShowCancel="False" x:Name="LoadingSamplesPage" AllowNext="{DXBinding 'CurrentLoadingSample == null'}" ShowSideContent="True">
@@ -195,6 +200,14 @@
                                     <StackPanel>
                                         <TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Open Upload Screen</TextBlock>
                                         <TextBlock TextAlignment="Center" MaxWidth="500" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Text="If you would like to upload these assay results to Effani now, press here to open the Assay Upload screen."/>
+                                    </StackPanel>
+                                </dx:SimpleButton.Content>
+                            </dx:SimpleButton>
+                            <dx:SimpleButton Margin="0,20,0,0" HorizontalAlignment="Stretch" Command="{Binding StartNewAssayCommand}">
+                                <dx:SimpleButton.Content>
+                                    <StackPanel>
+                                        <TextBlock FontSize="25" TextAlignment="Center" VerticalAlignment="Center">Start New Assay</TextBlock>
+                                        <TextBlock TextAlignment="Center" MaxWidth="500" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Press here to go back to the beginning and set up another assay."/>
                                     </StackPanel>
                                 </dx:SimpleButton.Content>
                             </dx:SimpleButton>

@@ -7,7 +7,7 @@ namespace Effani.Device.Control
 	public class AlignWellToAxis : MoveTableAbsolute
 	{
 
-		public AlignWellToAxis(Axis axis, Well well, AbalDeviceControl device) : base(device)
+		public AlignWellToAxis(Axis axis, Well well, EffaniDeviceControl device) : base(device)
 		{
 			_axis = axis;
 			_well = well;
@@ -25,7 +25,7 @@ namespace Effani.Device.Control
 		{
 			get
 			{
-				if(!(Device as AbalDeviceControl).Axes.TryGetValue(_axis, out var axisSpec))
+				if(!(Device as EffaniDeviceControl).Axes.TryGetValue(_axis, out var axisSpec))
 					return null;
 				return axisSpec as LocatedAxis;
 			}

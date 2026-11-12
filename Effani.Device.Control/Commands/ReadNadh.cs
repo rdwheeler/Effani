@@ -5,11 +5,11 @@ using Drivetrain.Robotics.Process;
 
 namespace Effani.Device.Control
 {
-	public class ReadNadh(AbalDeviceControl device, Action<ReadSensor> resultCallback) : ReadSensor(device, resultCallback)
+	public class ReadNadh(EffaniDeviceControl device, Action<ReadSensor> resultCallback) : ReadSensor(device, resultCallback)
 	{
 		protected override void Run()
 		{
-			var device = (AbalDeviceControl)Device;
+			var device = (EffaniDeviceControl)Device;
 			device.LaserNadhOn();
 			SensorDesignator = Device.Configuration.Settings.NadhSensorNumber;
 			PauseTime = Device.Configuration.Settings.SensorReadDwell;

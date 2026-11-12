@@ -7,7 +7,7 @@ namespace Effani.Device.Control
 {
 	public class MoveAxisAbsolute : MoveAbsolute
 	{
-		public MoveAxisAbsolute(Axis axis, decimal position, AbalDeviceControl device) : base(position, device)
+		public MoveAxisAbsolute(Axis axis, decimal position, EffaniDeviceControl device) : base(position, device)
 		{
 			_device = device;
 			if (!_device.Axes.TryGetValue(axis, out var axisSpec))
@@ -15,7 +15,7 @@ namespace Effani.Device.Control
 
 			AxisSpec = axisSpec;
 		}
-		private readonly AbalDeviceControl _device;
+		private readonly EffaniDeviceControl _device;
 
 	}
 }

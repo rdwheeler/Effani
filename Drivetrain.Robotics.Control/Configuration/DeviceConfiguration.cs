@@ -19,6 +19,20 @@ namespace Drivetrain.Robotics.Control
 			DeviceSpecification = CreateDeviceSpec();
 			AddPlates(DeviceSpecification);
 		}
+		/// <summary>
+		/// Points the configuration at <paramref name="settings"/> (the active settings object is replaced when a settings version is
+		/// activated or reset) and rebuilds the device specification, which is otherwise only a snapshot taken at construction.
+		/// </summary>
+		public void Refresh(Settings settings)
+		{
+			Settings = settings;
+			var spec = CreateDeviceSpec();
+			AddPlates(spec);
+			DeviceSpecification = spec;
+		}
+		/// <summary>Full paths of the files written by the last <see cref="GenerateConfigFiles"/> call (config.g is last).</summary>
+		public IReadOnlyList<string> GeneratedFiles => _generatedFiles.OrderBy(f => Path.GetFileName(f) == "config.g").ToList();
+		private readonly List<string> _generatedFiles = new();
 		public string GenerateConfigFiles(string drive)
 		{
 			try
@@ -29,6 +43,7 @@ namespace Drivetrain.Robotics.Control
 					Directory.CreateDirectory(sysFolder);
 				// Build from the current settings: DeviceSpecification is only a snapshot taken when this object was created.
 				var spec = CreateDeviceSpec();
+				_generatedFiles.Clear();
 				WriteConfig(sysFolder, spec);
 				WriteHome(sysFolder, spec);
 				var zipFilePath = Path.Combine(mainFolder, "config.zip");
@@ -238,7 +253,12 @@ M669 K0 ; configure Cartesian kinematics
 				configTextBuilder.AppendLine($@"M308 S{sensor.SensorNumber} P""{sensor.PortDesignation}"" Y""linear-analog"" A""{sensor.Label}"" F0 B{sensor.ReadLow} C{sensor.ReadHigh}");
 			}
 
-			File.WriteAllBytes(Path.Combine(folder, "config.g"), Encoding.ASCII.GetBytes(configTextBuilder.ToString()));
+			WriteGeneratedFile(Path.Combine(folder, "config.g"), configTextBuilder.ToString());
+		}
+		private void WriteGeneratedFile(string path, string text)
+		{
+			File.WriteAllBytes(path, Encoding.ASCII.GetBytes(text));
+			_generatedFiles.Add(path);
 		}
 		private void WriteHome(string folder, DeviceSpecification spec)
 		{
@@ -259,14 +279,14 @@ G1 {x.Designation}5 F6000 ; move back 5mm
 G1 H1 {x.Designation}{direction}{distance} F{Math.Min(x.Driver.Endstop.SecondHomingSpeed, x.MaxSpeed)} ; fine home
 G90 ; absolute positioning
 				");
-				File.WriteAllBytes(Path.Combine(folder, $"home{x.Designation}.g"), Encoding.ASCII.GetBytes(homeTextBuilder.ToString()));
+				WriteGeneratedFile(Path.Combine(folder, $"home{x.Designation}.g"), homeTextBuilder.ToString());
 			}
 			var homeAllBuilder = new StringBuilder();
 			foreach (var x in spec.Axes)
 			{
 				homeAllBuilder.AppendLine($"M98 P\"home{x.Designation}.g\" ; home {x.Label} axis");
 			}
-			File.WriteAllBytes(Path.Combine(folder, $"homeall.g"), Encoding.ASCII.GetBytes(homeAllBuilder.ToString()));
+			WriteGeneratedFile(Path.Combine(folder, $"homeall.g"), homeAllBuilder.ToString());
 		}
 
 		/// <summary>Builds the axes and sensors from the current <see cref="Settings"/> values (plates are added separately by <see cref="AddPlates"/>).</summary>

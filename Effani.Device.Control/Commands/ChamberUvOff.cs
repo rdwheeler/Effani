@@ -4,11 +4,11 @@ using Drivetrain.Robotics.Process;
 
 namespace Effani.Device.Control
 {
-	public class ChamberUvOff(AbalDeviceControl device) : Command(device)
+	public class ChamberUvOff(EffaniDeviceControl device) : Command(device)
 	{
 		protected override void Run()
 		{
-			var device = (AbalDeviceControl)Device;
+			var device = (EffaniDeviceControl)Device;
 			device.AccOff(1);
 		}
 

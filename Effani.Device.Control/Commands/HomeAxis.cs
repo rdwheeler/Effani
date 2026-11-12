@@ -9,10 +9,10 @@ namespace Effani.Device.Control
 	{
 		private readonly Axis _axis;
 
-		public HomeAxis(Axis axis, AbalDeviceControl device) : base(device)
+		public HomeAxis(Axis axis, EffaniDeviceControl device) : base(device)
 		{
 			_axis = axis;
-			AxisSpec = (Device as AbalDeviceControl).Axes[_axis];
+			AxisSpec = (Device as EffaniDeviceControl).Axes[_axis];
 		}
 	}
 }
